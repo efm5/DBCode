@@ -356,6 +356,10 @@ namespace DBCode {
          public const int WS_EX_NOACTIVATE = 0x08000000;
          public const int WS_EX_LAYERED = 0x00080000;
 
+         public const uint SWP_NOMOVE = 0x0002;
+         public const uint SWP_NOSIZE = 0x0001;
+         public const uint SWP_NOACTIVATE = 0x0010;
+
          public const uint TIMED_MESSAGEBOX_FLAGS = 0x00000000 | 0x00010000 | 0x00001000 | 0x00000030;
          public static readonly IntPtr HWND_BROADCAST = new IntPtr(0xffff);
          public static bool gBackgroundWorkerFinished = false;

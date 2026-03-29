@@ -36,7 +36,7 @@
          mOpaqueTSMI = new ToolStripMenuItem();
          mMinimalTSMI = new ToolStripMenuItem();
          mFeaturesTSMI = new ToolStripMenuItem();
-         mAlwaysOnTopTSMI = new ToolStripMenuItem();
+         mReturnToTopTSMI = new ToolStripMenuItem();
          mMainTextBox = new RichTextBox();
          mStatusStrip = new StatusStrip();
          mTransferTSB = new ToolStripButton();
@@ -132,15 +132,15 @@
          mFeaturesTSMI.Checked = true;
          mFeaturesTSMI.Click += FeaturesTSMI_Click;
 
-         mAlwaysOnTopTSMI.Name = "alwaysOnTopTSMI";
-         mAlwaysOnTopTSMI.Text = "&Always on Top";
-         mAlwaysOnTopTSMI.CheckOnClick = true;
-         mAlwaysOnTopTSMI.ShortcutKeys = Keys.Control | Keys.H;
-         mAlwaysOnTopTSMI.Click += AlwaysOnTopTSMI_Click;
+         mReturnToTopTSMI.Name = "returnToTopTSMI";
+         mReturnToTopTSMI.Text = "&Return To Top";
+         mReturnToTopTSMI.CheckOnClick = true;
+         mReturnToTopTSMI.ShortcutKeys = Keys.Control | Keys.H;
+         mReturnToTopTSMI.Click += ReturnToTopTSMI_Click;
 
          mModeMenuItem.DropDownItems.Add(mMinimalTSMI);
          mModeMenuItem.DropDownItems.Add(mFeaturesTSMI);
-         mModeMenuItem.DropDownItems.Add(mAlwaysOnTopTSMI);
+         mModeMenuItem.DropDownItems.Add(mReturnToTopTSMI);
 
          mMenuStrip.Items.Add(mTargetingMenuItem);
          mMenuStrip.Items.Add(mVisibilityMenuItem);
@@ -165,13 +165,13 @@
          mTransferTSB.Name = "transferTSB";
          mTransferTSB.Text = "&Transfer";
          mTransferTSB.Tag = PasteMode.Transfer;
-         mTransferTSB.Click += Paste_Click;
+         mTransferTSB.Click += TransMove_Click;
 
          mTransportTSB.DisplayStyle = ToolStripItemDisplayStyle.Text;
          mTransportTSB.Name = "transportTSB";
          mTransportTSB.Text = "Trans&port";
          mTransportTSB.Tag = PasteMode.Transport;
-         mTransportTSB.Click += Paste_Click;
+         mTransportTSB.Click += TransMove_Click;
 
          mTargetingStatusLabel.Name = "targetingStatusLabel";
          mTargetingStatusLabel.Text = "Untargeted";

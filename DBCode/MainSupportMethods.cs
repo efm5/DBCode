@@ -28,6 +28,23 @@
          return mIcons[(int)pWhich];
       }
 
+      private void ReturnToTop() {
+         if (mForceActivation) {
+            BringToTop_Activate();
+         }
+         else {
+            BringToTop_NoActivate();
+         }
+      }
+
+      private void BringToTop_Activate() {
+         SetForegroundWindow(Handle);
+      }
+
+      private void BringToTop_NoActivate() {
+         SetWindowPos(Handle, mInsertAfterWindow, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+      }
+
       private static void Paste(PasteMode pPasteMode) {
          IntPtr pTarget = ResolveTargetWindow();
          if (pTarget == IntPtr.Zero)
@@ -132,7 +149,7 @@
       }
 
       private void InitializeIcon() {
-         Icon = mIcons[(int)Icons.StatusUntargeted];
+         Icon = mIcons[(int)Icons.StatusTargeted];
       }
 
       private static void UpdateOpacityMenuChecks(double pOpacity) {

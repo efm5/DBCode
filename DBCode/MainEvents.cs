@@ -69,9 +69,8 @@
          ApplyViewMode(ViewMode.Features);
       }
 
-      private void AlwaysOnTopTSMI_Click(object pSender, EventArgs pEventArgs) {
-         bool isChecked = mAlwaysOnTopTSMI.Checked;
-         TopMost = isChecked;
+      private void ReturnToTopTSMI_Click(object pSender, EventArgs pEventArgs) {
+         mReturnToTop = mReturnToTopTSMI.Checked;
       }
 
       private void PreferencesMenuItem_Click(object pSender, EventArgs pEventArgs) {
@@ -85,13 +84,17 @@
          MessageBox.Show(this, messageText, captionText, MessageBoxButtons.OK, MessageBoxIcon.Information);
       }
 
-      private void Paste_Click(object pSender, EventArgs pEventArgs) {
+      private void TransMove_Click(object pSender, EventArgs pEventArgs) {
          ToolStripButton toolStripButton = pSender as ToolStripButton;
          if (toolStripButton == null)
             return;
          PasteMode pasteMode = toolStripButton == mTransferTSB ? PasteMode.Transfer : PasteMode.Transport;
 
          Paste(pasteMode);
+         if (mReturnToTop) {
+            TopMost = true;
+            TopMost = false;
+         }
       }
 
       private void RevertTSB_Click(object pSender, EventArgs pEventArgs) {

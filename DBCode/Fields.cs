@@ -17,11 +17,14 @@
    }
 
    internal static class Fields {
+      public static bool mForceActivation = true;
       public static bool mIsTargetingEnabled = false;
       public static bool mPreMinimalControlBox = true;
+      public static bool mReturnToTop = true;
       public static Button mPreferencesCloseButton;
       public static Icon[] mIcons = new Icon[4];
       public static IntPtr mTargetWindow = IntPtr.Zero;
+      public static readonly IntPtr mInsertAfterWindow = new IntPtr(0);
       public static MenuStrip mMenuStrip;
       public static Panel mPreferencesPanel;
       public static Rectangle mPrePreferencesBounds;
@@ -47,7 +50,7 @@
       public static ToolStripButton mRevertTSB;
       public static ToolStripButton mTransferTSB;
       public static ToolStripButton mTransportTSB;
-      public static ToolStripMenuItem mAlwaysOnTopTSMI;
+      public static ToolStripMenuItem mReturnToTopTSMI;
       public static ToolStripMenuItem mFeaturesTSMI;
       public static ToolStripMenuItem mFiftyTSMI;
       public static ToolStripMenuItem mHelpMenuItem;
