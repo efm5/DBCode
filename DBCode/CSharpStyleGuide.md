@@ -1,4 +1,4 @@
-Ed’s Unified C# Coding Style Guide
+Ed’s C# Coding Style Guide
 (For Visual Studio 2026, .NET 10, C# 14, WinForms)
 
 This guide defines the explicit, deterministic, Dragon‑friendly coding style used throughout the DBCode project. All generated code must follow these rules unless explicitly overridden.
