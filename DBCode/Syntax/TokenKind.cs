@@ -1,9 +1,5 @@
-﻿using System;
-
-namespace DBCode.Syntax
-{
-   internal enum TokenKind
-   {
+﻿namespace DBCode.Syntax {
+   internal enum TokenKind {
       Unknown,
       Whitespace,
       Identifier,

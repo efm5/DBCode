@@ -37,7 +37,7 @@
          mMinimalTSMI = new ToolStripMenuItem();
          mFeaturesTSMI = new ToolStripMenuItem();
          mAlwaysOnTopTSMI = new ToolStripMenuItem();
-         mMainTextBox = new TextBox();
+         mMainTextBox = new RichTextBox();
          mStatusStrip = new StatusStrip();
          mTransferTSB = new ToolStripButton();
          mTransportTSB = new ToolStripButton();
@@ -149,8 +149,7 @@
          mMenuStrip.Items.Add(mHelpMenuItem);
 
          mMainTextBox.Multiline = true;
-         mMainTextBox.ScrollBars = ScrollBars.Both;
-         mMainTextBox.AcceptsReturn = true;
+         mMainTextBox.ScrollBars = RichTextBoxScrollBars.Both;
          mMainTextBox.AcceptsTab = true;
          mMainTextBox.WordWrap = false;
          mMainTextBox.Dock = DockStyle.Fill;

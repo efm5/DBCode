@@ -1,9 +1,5 @@
-﻿using System;
-
-namespace DBCode.Syntax
-{
-   internal enum LanguageKind
-   {
+﻿namespace DBCode.Syntax {
+   internal enum LanguageKind {
       CSharp,
       C,
       Cpp,

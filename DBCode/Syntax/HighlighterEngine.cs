@@ -1,49 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-
-namespace DBCode.Syntax
-{
-   internal sealed class HighlighterEngine
-   {
+﻿namespace DBCode.Syntax {
+   internal sealed class HighlighterEngine {
       private readonly RichTextBox mRichTextBox;
-      private readonly Timer mTimer;
+      private readonly System.Windows.Forms.Timer mTimer;
       private LanguageKind mLanguage;
 
-      internal HighlighterEngine(RichTextBox pRichTextBox, LanguageKind pLanguage)
-      {
+      internal HighlighterEngine(RichTextBox pRichTextBox, LanguageKind pLanguage) {
          mRichTextBox = pRichTextBox;
          mLanguage = pLanguage;
 
-         mTimer = new Timer
-         {
+         mTimer = new System.Windows.Forms.Timer {
             Interval = 400
          };
          mTimer.Tick += OnTimerTick;
       }
 
-      internal void SetLanguage(LanguageKind pLanguage)
-      {
+      internal void SetLanguage(LanguageKind pLanguage) {
          mLanguage = pLanguage;
       }
 
-      internal void OnTextChanged()
-      {
+      internal void OnTextChanged() {
          mTimer.Stop();
          mTimer.Start();
       }
 
-      private void OnTimerTick(object? pSender, EventArgs pArgs)
-      {
+      private void OnTimerTick(object pSender, EventArgs pArgs) {
          mTimer.Stop();
          HighlightNow();
       }
 
-      private void HighlightNow()
-      {
+      private void HighlightNow() {
          string text = mRichTextBox.Text;
-         if (text.Length == 0)
-         {
+         if (text.Length == 0) {
             return;
          }
 
@@ -56,8 +43,7 @@ namespace DBCode.Syntax
          int selectionLength = mRichTextBox.SelectionLength;
 
          mRichTextBox.SuspendLayout();
-         try
-         {
+         try {
             mRichTextBox.Select(0, mRichTextBox.TextLength);
             mRichTextBox.SelectionColor = System.Drawing.Color.Black;
 
@@ -65,8 +51,7 @@ namespace DBCode.Syntax
 
             mRichTextBox.Select(selectionStart, selectionLength);
          }
-         finally
-         {
+         finally {
             mRichTextBox.ResumeLayout();
          }
       }

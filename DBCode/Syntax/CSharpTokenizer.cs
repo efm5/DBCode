@@ -1,32 +1,23 @@
-﻿using System.Collections.Generic;
-
-namespace DBCode.Syntax
-{
-   internal sealed class CSharpTokenizer : ITokenizer
-   {
+﻿namespace DBCode.Syntax {
+   internal sealed class CSharpTokenizer : ITokenizer {
       private readonly ILanguageDefinition mDefinition;
 
-      internal CSharpTokenizer(ILanguageDefinition pDefinition)
-      {
+      internal CSharpTokenizer(ILanguageDefinition pDefinition) {
          mDefinition = pDefinition;
       }
 
       public LanguageKind Language => LanguageKind.CSharp;
 
-      public IReadOnlyList<Token> Tokenize(string pText)
-      {
+      public IReadOnlyList<Token> Tokenize(string pText) {
          var tokens = new List<Token>();
          int index = 0;
 
-         while (index < pText.Length)
-         {
+         while (index < pText.Length) {
             char c = pText[index];
 
-            if (char.IsWhiteSpace(c))
-            {
+            if (char.IsWhiteSpace(c)) {
                int start = index;
-               while (index < pText.Length && char.IsWhiteSpace(pText[index]))
-               {
+               while (index < pText.Length && char.IsWhiteSpace(pText[index])) {
                   index++;
                }
 
@@ -34,13 +25,11 @@ namespace DBCode.Syntax
                continue;
             }
 
-            if (IsIdentifierStart(c))
-            {
+            if (IsIdentifierStart(c)) {
                int start = index;
                index++;
 
-               while (index < pText.Length && IsIdentifierPart(pText[index]))
-               {
+               while (index < pText.Length && IsIdentifierPart(pText[index])) {
                   index++;
                }
 
@@ -62,16 +51,13 @@ namespace DBCode.Syntax
          return tokens;
       }
 
-      private static bool IsIdentifierStart(char pChar)
-      {
+      private static bool IsIdentifierStart(char pChar) {
          return char.IsLetter(pChar) || pChar == '_' ||
             char.GetUnicodeCategory(pChar) == System.Globalization.UnicodeCategory.LetterNumber;
       }
 
-      private static bool IsIdentifierPart(char pChar)
-      {
-         if (IsIdentifierStart(pChar))
-         {
+      private static bool IsIdentifierPart(char pChar) {
+         if (IsIdentifierStart(pChar)) {
             return true;
          }
 

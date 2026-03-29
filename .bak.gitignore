@@ -14,11 +14,6 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
-# User-specific files
-today’s summary.txt
-CreateSyntaxFiles.ps1
-end of day push.txt
-
 # Mono auto generated files
 mono_crash.*
 
