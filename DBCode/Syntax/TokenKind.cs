@@ -1,0 +1,19 @@
+﻿using System;
+
+namespace DBCode.Syntax
+{
+   internal enum TokenKind
+   {
+      Unknown,
+      Whitespace,
+      Identifier,
+      Keyword,
+      Number,
+      StringLiteral,
+      CharLiteral,
+      Comment,
+      Preprocessor,
+      Operator,
+      Punctuation
+   }
+}
