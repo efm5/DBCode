@@ -1,0 +1,5 @@
+# Prefer nullable reference types in generated code
+dotnet_style_prefer_nullable_reference_types = true:suggestion
+dotnet_style_require_accessibility_modifiers = always
+dotnet_style_prefer_null_propagation = true
+dotnet_style_prefer_is_null_check_over_reference_equality_method = true

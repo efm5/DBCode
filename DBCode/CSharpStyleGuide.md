@@ -69,6 +69,11 @@ NULLABILITY
 • Fields must be initialized deterministically.
 • Avoid ? unless semantically required.
 • Avoid ! except for designer‑generated fields.
+### Event Handler Sender Nullability Rule
+All event handlers must declare the sender parameter as `object? pSender`. WinForms and other
+.NET event sources may legally pass null as the sender, and this annotation prevents unnecessary
+nullability warnings. Handlers that do not use `pSender` still follow this rule for consistency.
+
 
 EXCEPTIONS AND ERROR HANDLING
 
@@ -115,6 +120,17 @@ Break again if still too long:
 SomeReallyLongMethodName(someReallyLongParameter, anotherReallyReallyReallyLongParameter, andYetAnotherReallyRealleLongParameter,
 goingForSomethingEvenLongerThanExpected, YetAnotherReallyReallyReallyLongParameter, andEvenYetAnotherReallyRealleLongParameter,
 goingFinallyForSomethingEvenLongerThanExpected);
+
+### Foreach Variable Naming Rule
+The loop variable in a foreach statement follows the same naming rules as any local variable:
+camelCase, descriptive, and without the `p` prefix (which is reserved exclusively for method
+parameters). Example:
+   foreach (ToolStripMenuItem tsmi in menu.DropDownItems.OfType<ToolStripMenuItem>()) {
+
+### Foreach Type Filtering Rule
+When iterating over a heterogeneous collection (e.g., ControlCollection, ToolStripItemCollection),
+always use `.OfType<T>()` to guarantee type safety and avoid runtime casting. This ensures explicit,
+predictable behavior and eliminates nullability warnings related to invalid casts.
 
 P/INVOKE RULES
 

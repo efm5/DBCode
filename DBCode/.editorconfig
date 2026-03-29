@@ -1,0 +1,40 @@
+root = true
+
+# ---------------------------------------------
+# DBCode Coding Standards (Solution-Level)
+# ---------------------------------------------
+
+# Prefer nullable reference types in generated code
+dotnet_style_prefer_nullable_reference_types = true:suggestion
+
+# Require explicit accessibility modifiers (public/private/etc.)
+dotnet_style_require_accessibility_modifiers = always
+
+# Prefer null-propagation (x?.y)
+dotnet_style_prefer_null_propagation = true
+
+# Prefer modern null checks (x is null)
+dotnet_style_prefer_is_null_check_over_reference_equality_method = true
+
+# Parameter naming rule: parameters must begin with 'p'
+dotnet_naming_rule.parameters_must_be_prefixed_with_p.severity = warning
+dotnet_naming_rule.parameters_must_be_prefixed_with_p.symbols = parameters
+dotnet_naming_rule.parameters_must_be_prefixed_with_p.style = prefix_p
+
+dotnet_naming_symbols.parameters.applicable_kinds = parameter
+dotnet_naming_symbols.parameters.applicable_accessibilities = *
+dotnet_naming_symbols.parameters.required_modifiers = *
+
+dotnet_naming_style.prefix_p.required_prefix = p
+dotnet_naming_style.prefix_p.capitalization = camel_case
+
+# Local variables: camelCase, no prefixes
+dotnet_naming_rule.locals_must_be_camel_case.severity = suggestion
+dotnet_naming_rule.locals_must_be_camel_case.symbols = locals
+dotnet_naming_rule.locals_must_be_camel_case.style = camel_case_style
+
+dotnet_naming_symbols.locals.applicable_kinds = local
+dotnet_naming_symbols.locals.applicable_accessibilities = *
+dotnet_naming_symbols.locals.required_modifiers = *
+
+dotnet_naming_style.camel_case_style.capitalization = camel_case

@@ -153,13 +153,10 @@
       }
 
       private static void UpdateOpacityMenuChecks(double pOpacity) {
-         ToolStripMenuItem pItem = null;
-         double itemOpacity = 0.0;
-
-         foreach (ToolStripMenuItem pItemLoop in mVisibilityMenuItem.DropDownItems) {
-            pItem = pItemLoop;
-            itemOpacity = (double)pItem.Tag;
-            pItem.Checked = Math.Abs(itemOpacity - pOpacity) < 0.001;
+         foreach (ToolStripMenuItem tsmi in mVisibilityMenuItem.DropDownItems.OfType<ToolStripMenuItem>()) {
+            if (tsmi.Tag != null)
+               tsmi.Checked = Math.Abs((double)tsmi.Tag - pOpacity) < 0.001;
+            //else we could warn the programmer of the problem
          }
       }
 
