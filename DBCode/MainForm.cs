@@ -5,12 +5,19 @@
          MinimumSize = new Size(700, 200);
 
          Assembly assembly = Assembly.GetExecutingAssembly();
-         FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-         mVersionString = fileVersionInfo.FileVersion;
-         if (mVersionString == null)
-            mVersionString = "0.0.0.1";
-
-         mVersionStatusLabel.Text = "v: " + mVersionString;
+         FileVersionInfo? fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+         if (fileVersionInfo == null)
+            mVersionString = "0.0.0.0";
+         else {
+            if (fileVersionInfo.FileVersion == null)
+               mVersionString = "0.0.0.0";
+            else {
+               mVersionString = fileVersionInfo.FileVersion;
+               if (mVersionString == null)
+                  mVersionString = "0.0.0.0";
+            }
+         }
+         mVersionStatusLabel?.Text = "v: " + mVersionString;
          mCurrentViewMode = ViewMode.Features;
          mIsTargetingEnabled = false;
          mTargetWindowName = string.Empty;

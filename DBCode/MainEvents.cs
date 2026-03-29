@@ -1,7 +1,7 @@
 ﻿namespace DBCode {
    public sealed partial class MainForm : Form {
       #region main form
-      private void MainForm_Load(object pSender, EventArgs pEventArgs) {
+      private void MainForm_Load(object? pSender, EventArgs pEventArgs) {
          Size savedSize = Settings.Default.FormSize;
          Point savedLocation = Settings.Default.FormLocation;
          double savedOpacity = Settings.Default.FormOpacity;
@@ -20,7 +20,7 @@
          ApplyViewMode(ViewMode.Features);
       }
 
-      private void MainForm_FormClosing(object pSender, FormClosingEventArgs pEventArgs) {
+      private void MainForm_FormClosing(object? pSender, FormClosingEventArgs pEventArgs) {
          Settings.Default.FormOpacity = Opacity;
          Settings.Default.FormSize = Size;
          Settings.Default.FormLocation = Location;
@@ -28,26 +28,30 @@
       }
       #endregion
 
-      private void TargetedTSMI_Click(object pSender, EventArgs pEventArgs) {
+      private void TargetedTSMI_Click(object? pSender, EventArgs pEventArgs) {
          if (pSender == null)
             return;
+         ToolStripMenuItem? toolStripMenuItem = pSender as ToolStripMenuItem;
+         if (toolStripMenuItem == null)
+            return;
 
-         if (mTargetedTSMI.Checked)
+         if (toolStripMenuItem.Checked)
             EnterTargetedMode();
          else
             EnterUntargetedMode();
       }
 
-      private void RetargetTSMI_Click(object pSender, EventArgs pEventArgs) {
-         mTargetWindowName = "Retargeted Window";
-         mIsTargetingEnabled = true;
-         mTargetedTSMI.Checked = true;
+      private void RetargetTSMI_Click(object? pSender, EventArgs pEventArgs) {
+         if ((mTargetedTSMI == null) || !mTargetedTSMI.Checked) {
+            mIsTargetingEnabled = false;
+            return;
+         }
          UpdateTargetingStatusLabel();
       }
 
-      private void VisibilityTSMI_Click(object pSender, EventArgs pEventArgs) {
-         ToolStripMenuItem clickedTSMI = pSender as ToolStripMenuItem;
-         object tagObject = clickedTSMI == null ? null : clickedTSMI.Tag;
+      private void VisibilityTSMI_Click(object? pSender, EventArgs pEventArgs) {
+         ToolStripMenuItem? clickedTSMI = pSender as ToolStripMenuItem;
+         object? tagObject = clickedTSMI == null ? null : clickedTSMI.Tag;
          double opacityValue = 0.0;
 
          if (clickedTSMI == null)
@@ -61,31 +65,35 @@
          UpdateOpacityMenuChecks(opacityValue);
       }
 
-      private void MinimalTSMI_Click(object pSender, EventArgs pEventArgs) {
+      private void MinimalTSMI_Click(object? pSender, EventArgs pEventArgs) {
          ApplyViewMode(ViewMode.Minimal);
       }
 
-      private void FeaturesTSMI_Click(object pSender, EventArgs pEventArgs) {
+      private void FeaturesTSMI_Click(object? pSender, EventArgs pEventArgs) {
          ApplyViewMode(ViewMode.Features);
       }
 
-      private void ReturnToTopTSMI_Click(object pSender, EventArgs pEventArgs) {
+      private void ReturnToTopTSMI_Click(object? pSender, EventArgs pEventArgs) {
+         if (mReturnToTopTSMI == null) {
+            mReturnToTop = false;
+            return;
+         }
          mReturnToTop = mReturnToTopTSMI.Checked;
       }
 
-      private void PreferencesMenuItem_Click(object pSender, EventArgs pEventArgs) {
+      private void PreferencesMenuItem_Click(object? pSender, EventArgs pEventArgs) {
          ShowPreferencesPanel();
       }
 
-      private void HelpMenuItem_Click(object pSender, EventArgs pEventArgs) {
+      private void HelpMenuItem_Click(object? pSender, EventArgs pEventArgs) {
          string messageText = "Help is not yet implemented.";
          string captionText = "Help";
 
          MessageBox.Show(this, messageText, captionText, MessageBoxButtons.OK, MessageBoxIcon.Information);
       }
 
-      private void TransMove_Click(object pSender, EventArgs pEventArgs) {
-         ToolStripButton toolStripButton = pSender as ToolStripButton;
+      private void TransMove_Click(object? pSender, EventArgs pEventArgs) {
+         ToolStripButton? toolStripButton = pSender as ToolStripButton;
          if (toolStripButton == null)
             return;
          PasteMode pasteMode = toolStripButton == mTransferTSB ? PasteMode.Transfer : PasteMode.Transport;
@@ -97,11 +105,11 @@
          }
       }
 
-      private void RevertTSB_Click(object pSender, EventArgs pEventArgs) {
+      private void RevertTSB_Click(object? pSender, EventArgs pEventArgs) {
          ApplyViewMode(ViewMode.Features);
       }
 
-      private void ExitTSB_Click(object pSender, EventArgs pEventArgs) {
+      private void ExitTSB_Click(object? pSender, EventArgs pEventArgs) {
          Close();
       }
    }

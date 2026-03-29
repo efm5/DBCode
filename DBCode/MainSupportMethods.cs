@@ -87,7 +87,7 @@
          //#pragma warning disable IDE0028//efm5 warning
          IntPtr pWindow = GetMostSuitableWindow();
          //#pragma warning restore IDE0028
-         if (pWindow == IntPtr.Zero) {
+         if ((pWindow == IntPtr.Zero) && (mTargetedTSMI != null)) {
             mTargetedTSMI.Checked = false;
             EnterUntargetedMode();
             return;
@@ -107,11 +107,13 @@
       }
 
       private static void UpdateTargetingStatusLabel() {
+         if (mTargetingStatusLabel == null)
+            return;
          float fontSize = mTargetingStatusLabel.Font.Size;
 
          if (mIsTargetingEnabled) {
             mTargetingStatusLabel.Image = GetSizedImage(Icons.StatusTargeted, fontSize);
-            mTargetingStatusLabel.Text = mTargetWindowName;
+            mTargetingStatusLabel.Text = GetWindowTitle(mTargetWindow);
          }
          else {
             mTargetingStatusLabel.Image = GetSizedImage(Icons.StatusUntargeted, fontSize);
@@ -120,29 +122,31 @@
       }
 
       private static void LoadEmbeddedIcons() {
-         Assembly assembly = Assembly.GetExecutingAssembly();
          const string throwPrefix = "Error loading embedded icon resource: ";
-
+         Assembly? assembly = Assembly.GetExecutingAssembly();
+         if (assembly == null)
+            throw new InvalidOperationException(throwPrefix + "Assembly is null.");
          string resourceName = "DBCode.CurlyTargetedIcon.ico";
-         using Stream stream1 = assembly.GetManifestResourceStream(resourceName);
+         using Stream? stream1 = assembly.GetManifestResourceStream(resourceName);
+
          if (stream1 is null)
             throw new InvalidOperationException(throwPrefix + resourceName);
          mIcons[(int)Icons.CurlyTargeted] = new Icon(stream1);
 
          resourceName = "DBCode.CurlyUntargetedIcon.ico";
-         using Stream stream2 = assembly.GetManifestResourceStream(resourceName);
+         using Stream? stream2 = assembly.GetManifestResourceStream(resourceName);
          if (stream2 is null)
             throw new InvalidOperationException(throwPrefix + resourceName);
          mIcons[(int)Icons.CurlyUntargeted] = new Icon(stream2);
 
          resourceName = "DBCode.StatusTargetedIcon.ico";
-         using Stream stream3 = assembly.GetManifestResourceStream(resourceName);
+         using Stream? stream3 = assembly.GetManifestResourceStream(resourceName);
          if (stream3 is null)
             throw new InvalidOperationException(throwPrefix + resourceName);
          mIcons[(int)Icons.StatusTargeted] = new Icon(stream3);
 
          resourceName = "DBCode.StatusUntargetedIcon.ico";
-         using Stream stream4 = assembly.GetManifestResourceStream(resourceName);
+         using Stream? stream4 = assembly.GetManifestResourceStream(resourceName);
          if (stream4 is null)
             throw new InvalidOperationException(throwPrefix + resourceName);
          mIcons[(int)Icons.StatusUntargeted] = new Icon(stream4);
@@ -153,6 +157,8 @@
       }
 
       private static void UpdateOpacityMenuChecks(double pOpacity) {
+         if (mVisibilityMenuItem == null)
+            return;
          foreach (ToolStripMenuItem tsmi in mVisibilityMenuItem.DropDownItems.OfType<ToolStripMenuItem>()) {
             if (tsmi.Tag != null)
                tsmi.Checked = Math.Abs((double)tsmi.Tag - pOpacity) < 0.001;
@@ -180,12 +186,12 @@
          mPreMinimalText = currentText;
          mPreMinimalControlBox = currentControlBox;
 
-         mMenuStrip.Visible = false;
+         mMenuStrip?.Visible = false;
          Text = string.Empty;
          ControlBox = false;
 
-         mMinimalTSMI.Checked = true;
-         mFeaturesTSMI.Checked = false;
+         mMinimalTSMI?.Checked = true;
+         mFeaturesTSMI?.Checked = false;
       }
 
       private void EnterFeaturesView() {
@@ -197,10 +203,10 @@
 
          Text = restoredText;
          ControlBox = restoredControlBox;
-         mMenuStrip.Visible = true;
+         mMenuStrip?.Visible = true;
 
-         mMinimalTSMI.Checked = false;
-         mFeaturesTSMI.Checked = true;
+         mMinimalTSMI?.Checked = false;
+         mFeaturesTSMI?.Checked = true;
       }
 
       public static void TimedMessage(string pMessage, string pTitle = "", int pDuration = 4500) {

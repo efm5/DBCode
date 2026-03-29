@@ -17,15 +17,17 @@ namespace DBCode {
          }
       }
 
-      private static void OnUiThreadException(object pSender, ThreadExceptionEventArgs pE) {
+      private static void OnUiThreadException(object? pSender, ThreadExceptionEventArgs pE) {
          ShowFatalErrorAndExit(pE.Exception, "An unexpected error occurred.");
       }
 
-      private static void OnNonUiThreadException(object pSender, UnhandledExceptionEventArgs pE) {
+      private static void OnNonUiThreadException(object? pSender, UnhandledExceptionEventArgs pE) {
          ShowFatalErrorAndExit(pE.ExceptionObject as Exception, "An unexpected error occurred.");
       }
 
-      private static void ShowFatalErrorAndExit(Exception pException, string pMessage) {
+      private static void ShowFatalErrorAndExit(Exception? pException, string pMessage) {
+         if (pException == null)
+            return;
          MessageBox.Show(
             $"{pMessage}\n\n{pException}",
             "DBCode – Fatal Error",

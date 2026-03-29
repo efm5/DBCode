@@ -23,7 +23,7 @@
          mTimer.Start();
       }
 
-      private void OnTimerTick(object pSender, EventArgs pArgs) {
+      private void OnTimerTick(object? pSender, EventArgs pArgs) {
          mTimer.Stop();
          HighlightNow();
       }
