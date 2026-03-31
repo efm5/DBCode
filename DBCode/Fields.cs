@@ -121,6 +121,7 @@ namespace DBCode {
                   //#pragma warning restore IDE0044
                   //#pragma warning restore IDE0051
                   //#pragma warning restore IDE0052
+                  //efm5 since these are all comment out why don't I remove them
                   mComboBoxMaxDropdownHeight = 800, mComboBoxMaxDropdownWidth = 1000, mBookmarkRow = 0, mDoTabIndexBase = 80000, mDoIncrement = 1,
          mDoPanelHeight = 0, mFindPosition, mFindLength, mScalingGroupBoxTopLinePad = 0, mSelectionStart, mSelectionLength, mMenuLeftOffset = 30, mEM = 10,
          mIndent = 5, mCancelOffset = 15, mOkOffset = 15, mTitleBarHeight, mGroupTopPad = 2, mScalePad = 1, mTransitionSteps = 5, mTransitionInterval = 8,
