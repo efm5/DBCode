@@ -21,7 +21,7 @@
       }
 
       private void OnTimerTick(object? pSender, EventArgs pArgs) {
-         mTimer.Stop();
+         mTimer?.Stop();
          HighlightNow();
       }
 
@@ -55,7 +55,7 @@
          }
          finally {
             mIsHighlighting = false;
-            mTimer.Enabled = true;
+            mTimer?.Enabled = true;
          }
       }
    }

@@ -16,6 +16,9 @@ dotnet_style_prefer_null_propagation = true
 # Prefer modern null checks (x is null)
 dotnet_style_prefer_is_null_check_over_reference_equality_method = true
 
+# Do NOT suggest converting private fields to auto-properties
+dotnet_diagnostic.IDE0032.severity = none
+
 # Parameter naming rule: parameters must begin with 'p'
 dotnet_naming_rule.parameters_must_be_prefixed_with_p.severity = warning
 dotnet_naming_rule.parameters_must_be_prefixed_with_p.symbols = parameters

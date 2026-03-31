@@ -1,4 +1,6 @@
-﻿namespace DBCode.Syntax {
+﻿
+
+namespace DBCode.Syntax {
    internal sealed class CSharpHighlighter : IHighlighter {
       public LanguageKind Language => LanguageKind.CSharp;
 
@@ -19,7 +21,7 @@
             TokenKind.CharLiteral => Color.Brown,
             TokenKind.Comment => Color.Green,
             TokenKind.Number => Color.DarkCyan,
-            TokenKind.Preprocessor => Color.Purple,
+            TokenKind.PreprocessorDirective => Color.Purple,
             _ => Color.Black
          };
       }

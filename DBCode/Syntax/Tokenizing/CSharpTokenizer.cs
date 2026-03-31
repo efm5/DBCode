@@ -1,8 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace DBCode.Syntax.Tokenizing {
+   internal sealed class CSharpTokenizer : ITokenizer {
+      private readonly List<ITokenReader> mReaders;
 
-namespace DBCode.Syntax.Tokenizing {
-   internal class CSharpTokenizer {
+      internal CSharpTokenizer(ILanguageDefinition pDefinition) {
+         mReaders = [
+            new WhitespaceReader(),
+            new CommentReader(),
+            new PreprocessorReader(),
+            new StringReader(),
+            new CharReader(),
+            new NumberReader(),
+            new KeywordReader(pDefinition),
+            new OperatorReader()
+         ];
+      }
+
+      public LanguageKind Language {
+         get { return LanguageKind.CSharp; }
+      }
+
+      public IReadOnlyList<Token> Tokenize(string pText) {
+         var tokens = new List<Token>();
+         int length = pText.Length;
+         int index = 0;
+
+         while (index < length) {
+            Token token = new Token(TokenKind.Unknown, index, 0);
+            int newIndex = index;
+            bool matched = false;
+
+            foreach (ITokenReader reader in mReaders) {
+               if (reader.TryRead(pText, index, out Token tempToken, out int tempIndex)) {
+                  token = tempToken;
+                  newIndex = tempIndex;
+                  matched = true;
+                  break;
+               }
+            }
+
+            if (!matched) {
+               token = new Token(TokenKind.Unknown, index, 1);
+               newIndex = index + 1;
+            }
+
+            tokens.Add(token);
+            index = newIndex;
+         }
+
+         return tokens;
+      }
    }
 }
