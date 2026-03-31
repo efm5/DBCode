@@ -83,6 +83,78 @@ EXCEPTIONS AND ERROR HANDLING
 • No swallowing exceptions silently.
 • Centralized fatal‑error boundary in Program.Main.
 
+**“Only catch exceptions when the method can recover or add meaningful diagnostic information.
+Otherwise, allow the exception to propagate to the fatal handler in Program.Main.”**Exception Handling Policy
+1. Do not catch exceptions you cannot meaningfully handle.
+A method must not catch exceptions simply to prevent a crash.
+If the method cannot fix the problem or enrich the diagnostic information, the exception must be allowed to propagate.
+
+Examples of non‑recoverable errors (do not catch):
+
+A required parameter is null
+
+A required list is empty
+
+A control reference is unexpectedly null
+
+A method is called in an invalid state
+
+A contract is violated
+
+These are programming errors, not runtime conditions.
+They must fall through to the unified fatal handler in Program.Main.
+
+2. Only catch exceptions when the method can recover.
+A method may catch exceptions only when it can continue execution safely and predictably.
+
+Examples of recoverable situations:
+
+Clipboard is temporarily unavailable → retry or fall back
+
+Graphics measurement fails → use a safe default size
+
+File not found → create the file
+
+Network timeout → retry
+
+If the method can restore a valid state, catching is appropriate.
+
+3. Catching is also allowed when adding meaningful diagnostic context.
+If a method can’t recover but can provide additional, actionable information, it may catch and rethrow.
+
+Example:
+Wrapping a low‑level exception with subsystem‑specific context:
+catch (Exception pException) {
+   throw new InvalidOperationException("Syntax subsystem failed during tokenization.", pException);
+}
+This is allowed because it improves debuggability without hiding the failure.
+
+4. Never swallow exceptions.
+Empty catch blocks or catch‑and‑ignore patterns are strictly prohibited.
+They hide bugs and break the deterministic error‑handling model.
+
+5. Contract violations must throw immediately.
+If a method requires non‑null or non‑empty inputs, it must validate and throw:
+if ((pNumbers == null) || (pNumbers.Count == 0))
+   throw new ArgumentException("pNumbers must not be null or empty.", nameof(pNThese exceptions are intentional and must not be caught inside the method.
+
+6. The fatal boundary lives in Program.Main.
+All unhandled exceptions must flow to the centralized fatal handler.
+This ensures:
+
+deterministic shutdown
+
+consistent logging
+
+predictable user messaging
+
+no silent failures
+
+no inconsistent UI state
+
+This is the backbone of the application’s reliability model.umbers));
+
+
 WINFORMS RULES
 
 • Designer fields may use = null!; only when unavoidable.
@@ -131,6 +203,15 @@ parameters). Example:
 When iterating over a heterogeneous collection (e.g., ControlCollection, ToolStripItemCollection),
 always use `.OfType<T>()` to guarantee type safety and avoid runtime casting. This ensures explicit,
 predictable behavior and eliminates nullability warnings related to invalid casts.
+
+Always explicitly encompass logical tests. Never rely on operator precedence. Every comparison or boolean expression 
+must be wrapped in its own parentheses, even when the language would evaluate it correctly without them. This applies 
+to all logical operators, including AND, OR, and mixed comparison‑logical expressions. The goal is clarity, predictability, 
+and Dragon‑friendly readability.
+This:
+         if ((result == 0) && (cloaked != 0))
+not this:
+         if (result == 0 && cloaked != 0)
 
 P/INVOKE RULES
 

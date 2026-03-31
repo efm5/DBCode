@@ -28,6 +28,13 @@
       }
       #endregion
 
+      private void OnEditorTextChanged(object? pSender, EventArgs pArgs) {
+         if (mSuppressTextChanged)
+            return;
+         mTimer?.Stop();
+         mTimer?.Start();
+      }
+
       private void TargetedTSMI_Click(object? pSender, EventArgs pEventArgs) {
          if (pSender == null)
             return;
@@ -54,9 +61,7 @@
          object? tagObject = clickedTSMI == null ? null : clickedTSMI.Tag;
          double opacityValue = 0.0;
 
-         if (clickedTSMI == null)
-            return;
-         if (tagObject == null)
+         if ((clickedTSMI == null) || (tagObject == null))
             return;
          if (!double.TryParse(tagObject.ToString(), out opacityValue))
             return;

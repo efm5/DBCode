@@ -5,3 +5,11 @@ a “resource sanity check” method that validates all embedded icons before th
 or a small logging hook so fatal errors get written to a text file before exit
 
 My general practice would be to do a small logging hook so fatal errors get written to a text file before exit. But I will add that polish after everything is working. I have kept a reminder to do so. I also typically do a “resource sanity check” method that validates all embedded icons before the UI builds – but again for later.
+
+I am temporarily disabling warning: CA1822 – Member XXX does not access instance data and can be marked as static – restore it after resolving the picker migration
+
+In the new LayoutHelpers.cs – there are a lot of places where I have:
+#pragma warning disable XXX
+wrappers around a single line to defeat nullability – ask AI to fix the warning
+
+In both the font and color pickers the original design had a bottom panel – maybe remove it?

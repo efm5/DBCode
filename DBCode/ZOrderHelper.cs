@@ -18,11 +18,8 @@
 
          for (int i = 0; i < pSnapshot.Count; i++) {
             IntPtr pWindowHandle = pSnapshot[i];
-            if (IsRealVisibleWindow(pWindowHandle)) {
-               if (IsBlacklistedWindow(pWindowHandle) == false) {
-                  pFiltered.Add(pWindowHandle);
-               }
-            }
+            if ((IsRealVisibleWindow(pWindowHandle)) && (IsBlacklistedWindow(pWindowHandle) == false))
+               pFiltered.Add(pWindowHandle);
          }
          if (pFiltered.Count < 2)
             return IntPtr.Zero;
@@ -40,9 +37,7 @@
 
          for (int i = 0; i < pSnapshot.Count; i++) {
             IntPtr pHwnd = pSnapshot[i];
-            if (IsRealVisibleWindow(pHwnd) == false)
-               continue;
-            if (IsBlacklistedWindow(pHwnd))
+            if (!IsRealVisibleWindow(pHwnd) || IsBlacklistedWindow(pHwnd))
                continue;
             pResult.Add(pHwnd);
          }
@@ -64,13 +59,8 @@
       }
 
       public static bool IsValidTargetWindow(IntPtr pHwnd) {
-         if (pHwnd == IntPtr.Zero)
-            return false;
-         if (IsWindow(pHwnd) == false)
-            return false;
-         if (IsRealVisibleWindow(pHwnd) == false)
-            return false;
-         if (IsBlacklistedWindow(pHwnd))
+         if ((pHwnd == IntPtr.Zero) || (IsWindow(pHwnd) == false) || (IsRealVisibleWindow(pHwnd) == false) ||
+            (IsBlacklistedWindow(pHwnd)))
             return false;
          return true;
       }
@@ -99,11 +89,7 @@
       }
 
       private static bool IsRealVisibleWindow(IntPtr pWindowHandle) {
-         if (pWindowHandle == IntPtr.Zero)
-            return false;
-         if (IsWindow(pWindowHandle) == false)
-            return false;
-         if (IsWindowVisible(pWindowHandle) == false)
+         if ((pWindowHandle == IntPtr.Zero) || (IsWindow(pWindowHandle) == false) || (IsWindowVisible(pWindowHandle) == false))
             return false;
          int length = GetWindowTextLength(pWindowHandle);
          if (length == 0)
@@ -112,20 +98,11 @@
          if ((style & WS_VISIBLE) == 0)
             return false;
          int exStyle = (int)GetWindowLongPtr(pWindowHandle, GWL_EXSTYLE);
-         if ((exStyle & WS_EX_TOOLWINDOW) != 0)
+         if (((exStyle & WS_EX_TOOLWINDOW) != 0) || ((exStyle & WS_EX_NOACTIVATE) != 0) || ((exStyle & WS_EX_LAYERED) != 0))
             return false;
-         if ((exStyle & WS_EX_NOACTIVATE) != 0)
-            return false;
-         if ((exStyle & WS_EX_LAYERED) != 0)
-            return false;
-
          int cloaked = 0;
-         int result = DwmGetWindowAttribute(
-            pWindowHandle,
-            DWMWINDOWATTRIBUTE.DWMWA_CLOAKED,
-            out cloaked,
-            sizeof(int));
-         if (result == 0 && cloaked != 0)
+         int result = DwmGetWindowAttribute(pWindowHandle, DWMWINDOWATTRIBUTE.DWMWA_CLOAKED, out cloaked, sizeof(int));
+         if ((result == 0) && (cloaked != 0))
             return false;
          return true;
       }

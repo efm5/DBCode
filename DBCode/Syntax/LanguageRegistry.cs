@@ -1,18 +1,16 @@
 ﻿namespace DBCode.Syntax {
    internal static class LanguageRegistry {
-#pragma warning disable IDE0028
-      private static readonly Dictionary<LanguageKind, ILanguageDefinition> sDefinitions = new();
-      private static readonly Dictionary<LanguageKind, ITokenizer> sTokenizers = new();
-      private static readonly Dictionary<LanguageKind, IHighlighter> sHighlighters = new();
-#pragma warning restore IDE0028
+      private static readonly Dictionary<LanguageKind, ILanguageDefinition> sDefinitions = [];
+      private static readonly Dictionary<LanguageKind, ITokenizer> sTokenizers = [];
+      private static readonly Dictionary<LanguageKind, IHighlighter> sHighlighters = [];
 
-      internal static void Register(
-         ILanguageDefinition pDefinition,
-         ITokenizer pTokenizer,
-         IHighlighter pHighlighter) {
-         sDefinitions[pDefinition.Language] = pDefinition;
-         sTokenizers[pTokenizer.Language] = pTokenizer;
-         sHighlighters[pHighlighter.Language] = pHighlighter;
+      static LanguageRegistry() {
+         ILanguageDefinition csharpDefinition = new CSharpLanguageDefinition();
+         sDefinitions[LanguageKind.CSharp] = csharpDefinition;
+         ITokenizer csharpTokenizer = new CSharpTokenizer(csharpDefinition);
+         sTokenizers[LanguageKind.CSharp] = csharpTokenizer;
+         IHighlighter csharpHighlighter = new CSharpHighlighter();
+         sHighlighters[LanguageKind.CSharp] = csharpHighlighter;
       }
 
       internal static ILanguageDefinition GetDefinition(LanguageKind pLanguage) {

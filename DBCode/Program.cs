@@ -28,11 +28,15 @@ namespace DBCode {
       private static void ShowFatalErrorAndExit(Exception? pException, string pMessage) {
          if (pException == null)
             return;
+         //string report = pException.ToDiagnosticString();
+         string report = ExceptionExtensions.ToDiagnosticString(pException);
+         ClipboardHelper.TrySetClipboardText(report);
          MessageBox.Show(
-            $"{pMessage}\n\n{pException}",
+            $"{pMessage}\n\nA detailed diagnostic report has been copied to the clipboard.",
             "DBCode – Fatal Error",
             MessageBoxButtons.OK,
-            MessageBoxIcon.Error);
+            MessageBoxIcon.Error
+         );
          Environment.Exit(-1);
       }
    }

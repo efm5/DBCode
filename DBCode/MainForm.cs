@@ -1,4 +1,6 @@
-﻿namespace DBCode {
+﻿using DBCode.Syntax;
+
+namespace DBCode {
    public sealed partial class MainForm : Form {
       public MainForm() {
          InitializeUI();
@@ -44,7 +46,7 @@
          mMinimalTSMI = new ToolStripMenuItem();
          mFeaturesTSMI = new ToolStripMenuItem();
          mReturnToTopTSMI = new ToolStripMenuItem();
-         mMainTextBox = new RichTextBox();
+         mRichTextBox = new RichTextBox();
          mStatusStrip = new StatusStrip();
          mTransferTSB = new ToolStripButton();
          mTransportTSB = new ToolStripButton();
@@ -52,6 +54,9 @@
          mVersionStatusLabel = new ToolStripStatusLabel();
          mRevertTSB = new ToolStripButton();
          mExitTSB = new ToolStripButton();
+         mTimer = new System.Windows.Forms.Timer {
+            Interval = 400
+         };
 
          SuspendLayout();
 
@@ -155,13 +160,13 @@
          mMenuStrip.Items.Add(mPreferencesMenuItem);
          mMenuStrip.Items.Add(mHelpMenuItem);
 
-         mMainTextBox.Multiline = true;
-         mMainTextBox.ScrollBars = RichTextBoxScrollBars.Both;
-         mMainTextBox.AcceptsTab = true;
-         mMainTextBox.WordWrap = false;
-         mMainTextBox.Dock = DockStyle.Fill;
-         mMainTextBox.Name = "mainTextBox";
-         mMainTextBox.TabIndex = 1;
+         mRichTextBox.Multiline = true;
+         mRichTextBox.ScrollBars = RichTextBoxScrollBars.Both;
+         mRichTextBox.AcceptsTab = true;
+         mRichTextBox.WordWrap = false;
+         mRichTextBox.Dock = DockStyle.Fill;
+         mRichTextBox.Name = "mainTextBox";
+         mRichTextBox.TabIndex = 1;
 
          mStatusStrip.Dock = DockStyle.Bottom;
          mStatusStrip.SizingGrip = true;
@@ -208,12 +213,14 @@
          mStatusStrip.Items.Add(mRevertTSB);
          mStatusStrip.Items.Add(mExitTSB);
 
-         Controls.Add(mMainTextBox);
+         Controls.Add(mRichTextBox);
          Controls.Add(mStatusStrip);
          Controls.Add(mMenuStrip);
 
          Load += MainForm_Load;
          FormClosing += MainForm_FormClosing;
+         mHighlighterEngine = new HighlighterEngine(mRichTextBox, LanguageKind.CSharp);
+         mRichTextBox.TextChanged += OnEditorTextChanged;
          LoadEmbeddedIcons();
          InitializeIcon();
 

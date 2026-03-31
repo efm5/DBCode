@@ -1,5 +1,30 @@
 ﻿namespace DBCode {
    public sealed partial class MainForm : Form {
+      private static void UpDownSelectAll(NumericUpDown? pNumericUpDown) {
+         pNumericUpDown?.Focus();
+         pNumericUpDown?.Select(0, pNumericUpDown.Text.Length);
+      }
+
+      public static Font CreateNewFont(Font pFont) {
+         return new Font(pFont.Name, pFont.SizeInPoints, pFont.Style);
+      }
+
+      public static Font CreateNewTitleFont() {
+         if (mCurrentTheme == null)
+            return new Font("Segoe UI", 18f, FontStyle.Bold);
+         return new Font(mCurrentTheme.mInterfaceFont.Name, mCurrentTheme.mInterfaceFont.SizeInPoints + 4f, FontStyle.Bold);
+      }
+
+      private static void FlattenButton(Button? pButton, Color? pBackgroundColor, int pLeft = 0) {
+         if ((pButton != null) && (pBackgroundColor != null)) {
+            pButton.BackColor = Color.Transparent;
+            pButton.FlatAppearance.BorderColor = (Color)pBackgroundColor;
+            pButton.FlatAppearance.BorderSize = 0;
+            pButton.FlatStyle = FlatStyle.Flat;
+            pButton.Left = pLeft;
+         }
+      }
+
       private static Bitmap GetSizedImage(Icons pWhich, float pFontSize) {
          return GetSizedIcon(pWhich, pFontSize).ToBitmap();
       }
@@ -126,26 +151,26 @@
          Assembly? assembly = Assembly.GetExecutingAssembly();
          if (assembly == null)
             throw new InvalidOperationException(throwPrefix + "Assembly is null.");
-         string resourceName = "DBCode.CurlyTargetedIcon.ico";
+         string resourceName = "DBCode.Icons.CurlyTargetedIcon.ico";
          using Stream? stream1 = assembly.GetManifestResourceStream(resourceName);
 
          if (stream1 is null)
             throw new InvalidOperationException(throwPrefix + resourceName);
          mIcons[(int)Icons.CurlyTargeted] = new Icon(stream1);
 
-         resourceName = "DBCode.CurlyUntargetedIcon.ico";
+         resourceName = "DBCode.Icons.CurlyUntargetedIcon.ico";
          using Stream? stream2 = assembly.GetManifestResourceStream(resourceName);
          if (stream2 is null)
             throw new InvalidOperationException(throwPrefix + resourceName);
          mIcons[(int)Icons.CurlyUntargeted] = new Icon(stream2);
 
-         resourceName = "DBCode.StatusTargetedIcon.ico";
+         resourceName = "DBCode.Icons.StatusTargetedIcon.ico";
          using Stream? stream3 = assembly.GetManifestResourceStream(resourceName);
          if (stream3 is null)
             throw new InvalidOperationException(throwPrefix + resourceName);
          mIcons[(int)Icons.StatusTargeted] = new Icon(stream3);
 
-         resourceName = "DBCode.StatusUntargetedIcon.ico";
+         resourceName = "DBCode.Icons.StatusUntargetedIcon.ico";
          using Stream? stream4 = assembly.GetManifestResourceStream(resourceName);
          if (stream4 is null)
             throw new InvalidOperationException(throwPrefix + resourceName);
@@ -207,10 +232,6 @@
 
          mMinimalTSMI?.Checked = false;
          mFeaturesTSMI?.Checked = true;
-      }
-
-      public static void TimedMessage(string pMessage, string pTitle = "", int pDuration = 4500) {
-         _ = MessageBoxTimeout(IntPtr.Zero, pMessage, pTitle, TIMED_MESSAGEBOX_FLAGS, 0, pDuration);
       }
    }
 }

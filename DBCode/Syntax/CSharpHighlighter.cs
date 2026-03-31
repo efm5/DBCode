@@ -5,11 +5,8 @@
       public void ApplyHighlighting(RichTextBox pRichTextBox, IReadOnlyList<Token> pTokens) {
          foreach (Token token in pTokens) {
             Color color = GetColor(token.Kind);
-
-            if (color == Color.Black) {
+            if (color == Color.Black)
                continue;
-            }
-
             pRichTextBox.Select(token.StartIndex, token.Length);
             pRichTextBox.SelectionColor = color;
          }

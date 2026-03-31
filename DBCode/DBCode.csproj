@@ -7,33 +7,32 @@
      <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <ApplicationIcon>DBCodeIcon.ico</ApplicationIcon>
+    <ApplicationIcon>Icons\DBCodeIcon.ico</ApplicationIcon>
     <NeutralLanguage>en-US</NeutralLanguage>
     <AssemblyVersion>0.0.0.1</AssemblyVersion>
     <FileVersion>0.0.0.1</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>1701;1702;IDE0018;IDE0031;IDE0044;IDE0059;IDE0074</NoWarn>
+    <NoWarn>1701;1702;IDE0018;IDE0031;IDE0044;IDE0059;IDE0074;CA1822</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <NoWarn>1701;1702;IDE0018;IDE0031;IDE0044;IDE0059;IDE0074</NoWarn>
+    <NoWarn>1701;1702;IDE0018;IDE0031;IDE0044;IDE0059;IDE0074;CA1822</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
-     <EmbeddedResource Include="CurlyTargetedIcon.ico" />
-     <EmbeddedResource Include="CurlyUntargetedIcon.ico" />
-    <EmbeddedResource Include="StatusTargetedIcon.ico" />
-     <EmbeddedResource Include="StatusUntargetedIcon.ico" />
+    <Content Include="Icons\DBCodeIcon.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
+     <EmbeddedResource Include="Icons\CurlyTargetedIcon.ico" />
+     <EmbeddedResource Include="Icons\CurlyUntargetedIcon.ico" />
+    <EmbeddedResource Include="Icons\StatusTargetedIcon.ico" />
+     <EmbeddedResource Include="Icons\StatusUntargetedIcon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
@@ -52,6 +51,12 @@
     <Using Include="DBCode.Fields">
       <Static>True</Static>
     </Using>
+    <Using Include="DBCode.LayoutHelpers">
+      <Static>True</Static>
+    </Using>
+    <Using Include="DBCode.Program">
+      <Static>True</Static>
+    </Using>
     <Using Include="DBCode.Program.NativeMethods">
       <Static>True</Static>
     </Using>
@@ -63,13 +68,6 @@
     <Using Include="System.Reflection" />
     <Using Include="System.Runtime.InteropServices" />
     <Using Include="System.Text" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
