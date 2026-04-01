@@ -82,9 +82,9 @@
          return false;
       }
 
-      public static bool IsKnownColor(string pColorName, out Color opColor) {
-         opColor = Color.Transparent;
-         List<string> colors = new List<string>();
+      public static bool IsKnownColor(string pColorName, out Color pOColor) {
+         pOColor = Color.Transparent;
+         List<string> colors = [];
 
          foreach (string colorName in Enum.GetNames<KnownColor>()) {
             //cast the colorName into a KnownColor
@@ -95,14 +95,14 @@
                colors.Add(colorName);
          }
          if (colors.Contains(pColorName, StringComparer.OrdinalIgnoreCase)) {
-            opColor = Color.FromName(pColorName);
+            pOColor = Color.FromName(pColorName);
             return true;
          }
          return false;
       }
 
       public static bool IsKnownColor(string pColorName) {
-         List<string> colors = new List<string>();
+         List<string> colors = [];
 
          foreach (string colorName in Enum.GetNames<KnownColor>()) {
             //cast the colorName into a KnownColor

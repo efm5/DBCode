@@ -5,16 +5,6 @@
          pNumericUpDown?.Select(0, pNumericUpDown.Text.Length);
       }
 
-      public static Font CreateNewFont(Font pFont) {
-         return new Font(pFont.Name, pFont.SizeInPoints, pFont.Style);
-      }
-
-      public static Font CreateNewTitleFont() {
-         if (mCurrentTheme == null)
-            return new Font("Segoe UI", 18f, FontStyle.Bold);
-         return new Font(mCurrentTheme.mInterfaceFont.Name, mCurrentTheme.mInterfaceFont.SizeInPoints + 4f, FontStyle.Bold);
-      }
-
       private static void FlattenButton(Button? pButton, Color? pBackgroundColor, int pLeft = 0) {
          if ((pButton != null) && (pBackgroundColor != null)) {
             pButton.BackColor = Color.Transparent;

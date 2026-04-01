@@ -213,89 +213,89 @@
          //RestoreFontPickerHandlers();
       }
 
-      private void ShowFontPicker(FontUsage pFontUsage) {
-         //FadeOut();
-         //fontFamilyComboBox.SelectedIndexChanged -= FontFamilyComboBox_SelectedIndexChanged;
-         //fontSizeComboBox.SelectedIndexChanged -= FontSizeComboBox_SelectedIndexChanged;
-         //sFontUsage = pFontUsage;
-         //NewFontPickerBorderPanel();
-         //PrepareOptionsDialog(EscapeFrom.FontPicker);
-         //sFromFontPicker = true;
-         //pickFontPanel.Size = SizeFromFloats(Size.Width * 0.8f, (Size.Height * 0.8f) - sTitleBarHeight);
-         //pickFontTitleLabel.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-         //fontPickerBottomPanel.Dock = DockStyle.None;
-         //LayoutFontPicker();
-         //ShowPanel(sFontPickerBorderPanel);
-         //fontPickerCancelButton.Left = fontPickerBottomPanel.Width - fontPickerCancelButton.Width - sCancelOffset;
-         //fontPickerOkButton.Left = fontPickerCancelButton.Left - fontPickerOkButton.Width - sOkOffset;
-         //fontPickerCancelButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-         //fontPickerOkButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-         //fontPickerBottomPanel.Dock = DockStyle.Bottom;
-         //CenterControlHorizontally(pickFontPanel, pickFontTitleLabel);
-         //TextBoxSelectAll(fontFamilyNameTextBox);
-         //fontSizeComboBox.SelectedIndexChanged += FontSizeComboBox_SelectedIndexChanged;
-         //fontFamilyComboBox.SelectedIndexChanged += FontFamilyComboBox_SelectedIndexChanged;
-         //FadeIn();
-      }
+      //private void ShowFontPicker(FontUsage pFontUsage) {
+      //   //FadeOut();
+      //   //fontFamilyComboBox.SelectedIndexChanged -= FontFamilyComboBox_SelectedIndexChanged;
+      //   //fontSizeComboBox.SelectedIndexChanged -= FontSizeComboBox_SelectedIndexChanged;
+      //   //sFontUsage = pFontUsage;
+      //   //NewFontPickerBorderPanel();
+      //   //PrepareOptionsDialog(EscapeFrom.FontPicker);
+      //   //sFromFontPicker = true;
+      //   //pickFontPanel.Size = SizeFromFloats(Size.Width * 0.8f, (Size.Height * 0.8f) - sTitleBarHeight);
+      //   //pickFontTitleLabel.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+      //   //fontPickerBottomPanel.Dock = DockStyle.None;
+      //   //LayoutFontPicker();
+      //   //ShowPanel(sFontPickerBorderPanel);
+      //   //fontPickerCancelButton.Left = fontPickerBottomPanel.Width - fontPickerCancelButton.Width - sCancelOffset;
+      //   //fontPickerOkButton.Left = fontPickerCancelButton.Left - fontPickerOkButton.Width - sOkOffset;
+      //   //fontPickerCancelButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+      //   //fontPickerOkButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+      //   //fontPickerBottomPanel.Dock = DockStyle.Bottom;
+      //   //CenterControlHorizontally(pickFontPanel, pickFontTitleLabel);
+      //   //TextBoxSelectAll(fontFamilyNameTextBox);
+      //   //fontSizeComboBox.SelectedIndexChanged += FontSizeComboBox_SelectedIndexChanged;
+      //   //fontFamilyComboBox.SelectedIndexChanged += FontFamilyComboBox_SelectedIndexChanged;
+      //   //FadeIn();
+      //}
 
-      private void HideFontPicker(bool pFadeIn = true) {
-         //FadeOut();
-         //HidePanel(sFontPickerBorderPanel);
-         //RestoreOptions();
-         //sFromFontPicker = false;
-         //if (pFadeIn)
-         //   FadeIn();
-      }
+      //private void HideFontPicker(bool pFadeIn = true) {
+      //   //FadeOut();
+      //   //HidePanel(sFontPickerBorderPanel);
+      //   //RestoreOptions();
+      //   //sFromFontPicker = false;
+      //   //if (pFadeIn)
+      //   //   FadeIn();
+      //}
 
-      private void NewFontPickerBorderPanel() {
-         //sFontPickerBorderPanel ??= new BorderFrame(pickFontPanel, sForm) {
-         //   Name = "sFontPickerBorderPanel",
-         //   TabIndex = sTabIndex++
-         //};
-      }
+      //private void NewFontPickerBorderPanel() {
+      //   //sFontPickerBorderPanel ??= new BorderFrame(pickFontPanel, sForm) {
+      //   //   Name = "sFontPickerBorderPanel",
+      //   //   TabIndex = sTabIndex++
+      //   //};
+      //}
 
-      private static void SetFontComboBoxWidth(ComboBox pComboBox) {
-         //float boxWidth = 30f, boxHeight = 30f;
-         //SizeF stringSize = new SizeF();
+      //private static void SetFontComboBoxWidth(ComboBox pComboBox) {
+      //   //float boxWidth = 30f, boxHeight = 30f;
+      //   //SizeF stringSize = new SizeF();
 
-         //using (Graphics graphics = pComboBox.CreateGraphics()) {
-         //   foreach (string fontName in pComboBox.Items) {
-         //      //string fontName = ((FontFamily)item).Name;
-         //      if (!String.IsNullOrEmpty(fontName)) {
-         //         stringSize = graphics.MeasureString(fontName, pComboBox.Font);
-         //         if (stringSize.Width > boxWidth)
-         //            boxWidth = stringSize.Width;
-         //         if (stringSize.Height > boxHeight)
-         //            boxHeight = stringSize.Height;
-         //      }
-         //   }
-         //}
-         //pComboBox.Width = (int)(boxWidth + SystemInformation.VerticalScrollBarWidth);
-         //pComboBox.Height = (int)(boxHeight + sIndent);
-      }
+      //   //using (Graphics graphics = pComboBox.CreateGraphics()) {
+      //   //   foreach (string fontName in pComboBox.Items) {
+      //   //      //string fontName = ((FontFamily)item).Name;
+      //   //      if (!String.IsNullOrEmpty(fontName)) {
+      //   //         stringSize = graphics.MeasureString(fontName, pComboBox.Font);
+      //   //         if (stringSize.Width > boxWidth)
+      //   //            boxWidth = stringSize.Width;
+      //   //         if (stringSize.Height > boxHeight)
+      //   //            boxHeight = stringSize.Height;
+      //   //      }
+      //   //   }
+      //   //}
+      //   //pComboBox.Width = (int)(boxWidth + SystemInformation.VerticalScrollBarWidth);
+      //   //pComboBox.Height = (int)(boxHeight + sIndent);
+      //}
 
-      private static void SetFontComboBoxDropDownWidth(ComboBox pComboBox) {
-         //if (pComboBox.Items.Count == 0)
-         //   return;//don't change the width
-         //float boxWidth = 30f;
-         //SizeF stringSize = new SizeF();
+      //private static void SetFontComboBoxDropDownWidth(ComboBox pComboBox) {
+      //if (pComboBox.Items.Count == 0)
+      //   return;//don't change the width
+      //float boxWidth = 30f;
+      //SizeF stringSize = new SizeF();
 
-         //using (Graphics graphics = pComboBox.CreateGraphics()) {
-         //   foreach (string fontName in pComboBox.Items) {
-         //      //string fontName = ((FontFamily)item).Name;
-         //      if (!String.IsNullOrEmpty(fontName)) {
-         //         stringSize = graphics.MeasureString(fontName, pComboBox.Font);
-         //         if (stringSize.Width > boxWidth)
-         //            boxWidth = stringSize.Width;
-         //      }
-         //   }
-         //}
-         //if (boxWidth > pComboBox.Width) {
-         //   if (boxWidth > sComboBoxMaxDropdownWidth)
-         //      boxWidth = sComboBoxMaxDropdownWidth;
-         //   pComboBox.DropDownWidth = (int)boxWidth;
-         //}
-      }
+      //using (Graphics graphics = pComboBox.CreateGraphics()) {
+      //   foreach (string fontName in pComboBox.Items) {
+      //      //string fontName = ((FontFamily)item).Name;
+      //      if (!String.IsNullOrEmpty(fontName)) {
+      //         stringSize = graphics.MeasureString(fontName, pComboBox.Font);
+      //         if (stringSize.Width > boxWidth)
+      //            boxWidth = stringSize.Width;
+      //      }
+      //   }
+      //}
+      //if (boxWidth > pComboBox.Width) {
+      //   if (boxWidth > sComboBoxMaxDropdownWidth)
+      //      boxWidth = sComboBoxMaxDropdownWidth;
+      //   pComboBox.DropDownWidth = (int)boxWidth;
+      //}
+      //}
 
       private FontStyle GetFontStyle() {
          return FontStyle.Regular;//DEBUG efm5 2026 03 30 temporary

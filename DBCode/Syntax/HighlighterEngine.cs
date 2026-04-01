@@ -1,7 +1,9 @@
 ﻿namespace DBCode.Syntax {
    internal sealed class HighlighterEngine {
+#pragma warning disable IDE0032
       private readonly RichTextBox mRichTextBox;
       private LanguageKind mLanguage;
+#pragma warning restore IDE0032
       internal LanguageKind Language {
          get { return mLanguage; }
       }

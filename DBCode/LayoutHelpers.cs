@@ -1,10 +1,13 @@
 ﻿namespace DBCode {
    internal class LayoutHelpers {
-#pragma warning disable IDE0051
+#pragma warning disable IDE1006
+#pragma warning disable IDE0028
       private const int OFFSET = 5, DOUBLE_OFFSET = (OFFSET * 2);
-      private const int POST_CLIP_DELAY = 300, SHORT_DELAY = 50, LONG_DELAY = 450, CLIPBOARD_DELAY = 350, FIND_WIDTH = 200, WINDOW_REDUCER = 7,
+      private const int POST_CLIP_DELAY = 300, SHORT_DELAY = 50, LONG_DELAY = 450, CLIPBOARD_DELAY = 350,
+         FIND_WIDTH = 200, WINDOW_REDUCER = 7,
          //efm5 PANEL_BORDER should be evenly divisible by 4
-         PANEL_BORDER = 12, MAIN_BORDER = 4, HALF_BORDER = PANEL_BORDER / 2, INSET_BORDER = PANEL_BORDER / 4, BORDER = 4, DOUBLE_BORDER = BORDER * 2,
+         PANEL_BORDER = 12, MAIN_BORDER = 4, HALF_BORDER = PANEL_BORDER / 2, INSET_BORDER = PANEL_BORDER / 4,
+         BORDER = 4, DOUBLE_BORDER = BORDER * 2,
          DETAILS_VERTICAL_PADDING = 1, DETAILS_HORIZONTAL_PADDING = 1, ADDRESS_BAR_PADDING = 30;
 #pragma warning disable CS8602
       //DEBUG efm5 2026 03 30 resolve this needing a warning disable
@@ -76,7 +79,6 @@
                smallest = number;
          return smallest;
       }
-
 
       public static void RightAlign(List<Control> pControls) {
          if ((pControls == null) || (pControls.Count == 0))
@@ -768,11 +770,11 @@
             return true;
          return false;
       }
+
       public static bool RectangleContainsPoint(Rectangle pRectangle, Point pPoint) {
          return (pPoint.X >= pRectangle.Left) && (pPoint.X <= pRectangle.Right) && (pPoint.Y >= pRectangle.Top) &&
             (pPoint.Y <= pRectangle.Bottom);
       }
-
 
       public static string MassageColorName(string pCompressedName) {
          string expandedName = string.Empty;
@@ -816,6 +818,7 @@
          }
          return Color.FromArgb(r, g, b);
       }
+
       public static bool ColorsAreSimilar(Color pColor1, Color pColor2) {
          int rDist = Math.Abs(pColor1.R - pColor2.R),
         gDist = Math.Abs(pColor1.G - pColor2.G),
@@ -858,8 +861,8 @@
          return false;
       }
 
-      public static bool IsKnownColor(string pColorName, out Color opColor) {
-         opColor = Color.Transparent;
+      public static bool IsKnownColor(string pColorName, out Color pOColor) {
+         pOColor = Color.Transparent;
          List<string> colors = new List<string>();
 
          foreach (string colorName in Enum.GetNames<KnownColor>()) {
@@ -871,7 +874,7 @@
                colors.Add(colorName);
          }
          if (colors.Contains(pColorName, StringComparer.OrdinalIgnoreCase)) {
-            opColor = Color.FromName(pColorName);
+            pOColor = Color.FromName(pColorName);
             return true;
          }
          return false;
@@ -984,11 +987,19 @@
       }
 
       public static Font CreateNewTitleFont() {
-         return new Font(mCurrentTheme.mInterfaceFont.Name, mCurrentTheme.mInterfaceFont.SizeInPoints + 4f, FontStyle.Bold);
+         if (mCurrentTheme == null)
+            return new Font("Segoe UI", 18f, FontStyle.Bold);
+         //DEBUG efm5 2026 03 31 for these new font creators should I use multiplication or Addition
+         return new Font(mCurrentTheme.mFonts[(int)FontUsage.Interface].Name,
+            mCurrentTheme.mFonts[(int)FontUsage.Interface].SizeInPoints + 4f, FontStyle.Bold);
       }
 
       public static Font CreateNewWarningFont() {
-         return new Font(mCurrentTheme.mInterfaceFont.Name, mCurrentTheme.mInterfaceFont.SizeInPoints + 2f, FontStyle.Bold);
+         if (mCurrentTheme == null)
+            return new Font("Segoe UI", 18f, FontStyle.Bold);
+         //DEBUG efm5 2026 03 31 for these new font creators should I use multiplication or Addition
+         return new Font(mCurrentTheme.mFonts[(int)FontUsage.Interface].Name,
+            mCurrentTheme.mFonts[(int)FontUsage.Interface].SizeInPoints + 2f, FontStyle.Bold);
       }
 
       internal static RECT RECTFromRectangle(Rectangle pRectangle) {
@@ -1104,8 +1115,7 @@
          return true;
       }
 
-      public static bool LocatePrefixedTextBox(out Point oNextLocation, int pTop, Button? pPrefixButton, TextBox? pTextBox, Label? pSuffixLabel = null,
-         int pLeft = 20) {
+      public static bool LocatePrefixedTextBox(out Point oNextLocation, int pTop, Button? pPrefixButton, TextBox? pTextBox, int pLeft = 20) {
          oNextLocation = new Point(pLeft, pTop);
          if ((pPrefixButton == null) || (pTextBox == null)) {
             TimedMessage("LocatePrefixedTextBoxLine() some variable was illegally null.", "Code VIOLATION", 0);
@@ -1124,7 +1134,7 @@
          Control? lastControl = pAnchorControl;
 
          oNextPaddedLocation = new Point(0, 0);
-         if ((pAnchorControl == null) || (pControlList == null)) {
+         if ((pAnchorControl == null) || (pControlList == null) || (lastControl == null)) {
             TimedMessage("LocateControls() some variable was illegally null.", "Code VIOLATION", 0);
             return false;
          }
@@ -1220,18 +1230,18 @@
       }
 
       public static Point PlusEquals(Point pPointA, Point pPointB) {
-         Point result = new Point();
-
-         result.X = pPointA.X + pPointB.X;
-         result.Y = pPointA.Y + pPointB.Y;
+         Point result = new Point {
+            X = pPointA.X + pPointB.X,
+            Y = pPointA.Y + pPointB.Y
+         };
          return result;
       }
 
       public static Point PointFromPoint(Point pPointA) {
-         Point result = new Point();
-
-         result.X = pPointA.X;
-         result.Y = pPointA.Y;
+         Point result = new Point {
+            X = pPointA.X,
+            Y = pPointA.Y
+         };
          return result;
       }
 
@@ -1247,6 +1257,7 @@
          nint monitor = MonitorFromPoint(location, 2/*MONITOR_DEFAULTTONEAREST*/);
          GetDpiForMonitor(monitor, pDpiType, out pODpiX, out pODpiY);
       }
-#pragma warning restore IDE0051
+#pragma warning restore IDE1006
+#pragma warning restore IDE0028
    }
 }

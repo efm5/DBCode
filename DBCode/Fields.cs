@@ -1,5 +1,7 @@
 ﻿using DBCode.Syntax;
-
+using DBCode.Themes;
+#pragma warning disable CS0649//DEBUG efm5 2026 03 31 just until we start using the layout
+#pragma warning disable CS0414//DEBUG efm5 2026 03 31 just until we start using the layout
 namespace DBCode {
    public enum ViewMode {
       Features,
@@ -29,51 +31,37 @@ namespace DBCode {
    }
 
    public enum FontUsage : int {
-      [DisplayText("Interface")]
-      InterfaceFont,
-      [DisplayText("Menu")]
-      MenuFont,
-      [DisplayText("Status Bar")]
-      StatusBarFont,
-      [DisplayText("Text Box")]
-      TextBoxFont,
+      [DisplayText("Interface Font")]
+      Interface,
+      [DisplayText("Menu Font")]
+      Menu,
+      [DisplayText("Status Strip Font")]
+      Status,
+      [DisplayText("Text Box Font")]
+      Text,
    }
 
    public enum ColorUsage : int {
-      [DisplayText("main window Background")]
-      BackgroundColor,
-      [DisplayText("GroupBox Background")]
-      GroupBoxBackgroundColor,
-      [DisplayText("GroupBox Font")]
-      GroupBoxFontColor,
-      [DisplayText("Interface Background")]
-      InterfaceBackgroundColor,
-      [DisplayText("Interface Font")]
-      InterfaceFontColor,
-      [DisplayText("Menu Background")]
-      MenuBackgroundColor,
-      [DisplayText("Menu Font")]
-      MenuFontColor,
-      [DisplayText("Status Bar Background")]
-      StatusBarBackgroundColor,
-      [DisplayText("Status Bar Font")]
-      StatusBarFontColor,
-   }
-
-   class Theme {
-      public Color mMainWindowBackgroundColor { get; set; } = SystemColors.Window;
-      public Color mGroupBoxBackgroundColor { get; set; } = SystemColors.Control;
-      public Color mGroupBoxFontColor { get; set; } = SystemColors.ControlText;
-      public Color mInterfaceBackgroundColor { get; set; } = SystemColors.Control;
-      public Color mInterfaceFontColor { get; set; } = SystemColors.ControlText;
-      public Color mMenuBackgroundColor { get; set; } = SystemColors.Control;
-      public Color mMenuFontColor { get; set; } = SystemColors.ControlText;
-      public Color mStatusBarBackgroundColor { get; set; } = SystemColors.Control;
-      public Color mStatusBarFontColor { get; set; } = SystemColors.ControlText;
-      public Font mTextBoxFont { get; set; } = SystemFonts.DefaultFont;
-      public Font mInterfaceFont { get; set; } = SystemFonts.DefaultFont;
-      public Font mMenuFont { get; set; } = SystemFonts.DefaultFont;
-      public Font mStatusStripFont { get; set; } = SystemFonts.DefaultFont;
+      [DisplayText("Panel Background Color")]
+      PanelBackground,
+      [DisplayText("GroupBox Background Color")]
+      GroupBoxBackground,
+      [DisplayText("GroupBox Font Color")]
+      GroupBoxFont,
+      [DisplayText("Interface Background Color")]
+      InterfaceBackground,
+      [DisplayText("Interface Font Color")]
+      InterfaceFont,
+      [DisplayText("Menu Background Color")]
+      MenuBackground,
+      [DisplayText("Menu Font Color")]
+      MenuFont,
+      [DisplayText("Status Bar Background Color")]
+      StatusBackground,
+      [DisplayText("Status Bar Font Color")]
+      StatusFont,
+      [DisplayText("Text Box Font Color")]
+      TextBoxFont,
    }
 
    internal static class ClipboardHelper {
@@ -107,7 +95,7 @@ namespace DBCode {
       public static Button? mPreferencesCloseButton = null;
       public static EscapeFrom mEscapeFrom = EscapeFrom.Main;
       public static float mOFontSize, mScaling, mFontWidthAdjustment = 0.5f;
-      public static FontUsage mFontUsage = FontUsage.TextBoxFont;
+      public static FontUsage mFontUsage = FontUsage.Text;
       public static HighlighterEngine? mHighlighterEngine = null;
       public static Icon[] mIcons = new Icon[4];
       public static int
@@ -157,16 +145,16 @@ namespace DBCode {
          mAssociatedUpDownPostButtonVerticalOffset = 4,
          mAssociatedUpDownPostCheckBoxHorizontalSpace = 0,
          mAssociatedUpDownPostCheckBoxVerticalOffset = -2,
-#pragma warning disable IDE0052
-#pragma warning disable IDE0051
-#pragma warning disable IDE0044
-#pragma warning disable CS0414
-      //efm5 these variables are rarely used but some modules need them – keeping them on hand
+         //#pragma warning disable IDE0052
+         //#pragma warning disable IDE0051
+         //#pragma warning disable IDE0044
+         //#pragma warning disable CS0414
+         //efm5 these variables are rarely used but some modules need them – keeping them on hand
          mAssociatedCheckBoxVerticalOffset = 4;
-#pragma warning restore CS0414
-#pragma warning restore IDE0044
-#pragma warning restore IDE0051
-#pragma warning restore IDE0052
+      //#pragma warning restore CS0414
+      //#pragma warning restore IDE0044
+      //#pragma warning restore IDE0051
+      //#pragma warning restore IDE0052
       public static IntPtr mTargetWindow = IntPtr.Zero;
       public static readonly IntPtr mInsertAfterWindow = new IntPtr(0);
       public static MenuStrip? mMenuStrip = null;
@@ -192,7 +180,7 @@ namespace DBCode {
                "SPQuickPanel", "SP Search", "SPSearch", "svchost",  "SystemSettings",
                "TextInputHost",  "Windows Explorer", "XboxApp" ];
       public static RichTextBox? mRichTextBox = null;
-      public static Theme? mCurrentTheme = new Theme();
+      public static Theme? mCurrentTheme = new Theme(string.Empty);
       public static System.Windows.Forms.Timer? mTimer;
       public static ToolStripButton? mExitTSB = null;
       public static ToolStripButton? mRevertTSB = null;
@@ -274,4 +262,6 @@ namespace DBCode {
       public static TrackBar? mRedSlider;
       //DEBUG efm5 2026 03 30 End of MAYBE not Initialized
    }
+#pragma warning restore CS0649//DEBUG efm5 2026 03 31 just until we start using the layout
+#pragma warning restore CS0414//DEBUG efm5 2026 03 31 just until we start using the layout
 }

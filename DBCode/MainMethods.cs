@@ -2,11 +2,8 @@
    internal static partial class Program {
 
       [AttributeUsage(AttributeTargets.All)]
-      public class DisplayText : Attribute {
-         public DisplayText(string pText) {
-            this.Text = pText;
-         }
-         public string Text { get; set; } = string.Empty;
+      public class DisplayText(string pText) : Attribute {
+         public string Text { get; set; } = pText;
       }
 
       public static string ToDescription(object pType) {

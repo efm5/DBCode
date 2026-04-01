@@ -151,9 +151,9 @@
          FontPickerHelp();
       }
 
-      private void FontPickerCancelButton_Click(object? pSender, EventArgs pE) {
-         HideFontPicker();
-      }
+      //private void FontPickerCancelButton_Click(object? pSender, EventArgs pE) {
+      //   HideFontPicker();
+      //}
 
       private void FontPickerOkButton_Click(object? pSender, EventArgs pE) {
          //if (int.TryParse(fontSizeTextBox.Text, out int oSize)) {

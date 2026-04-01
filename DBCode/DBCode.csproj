@@ -70,6 +70,11 @@
     <Using Include="System.Text" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ProjectAssets\" />
+    <Folder Include="Preferences\" />
+  </ItemGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="call &quot;$(ProjectDir)..\successfulCompile.bat&quot;" />
   </Target>

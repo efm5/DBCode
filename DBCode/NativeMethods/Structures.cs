@@ -1,9 +1,6 @@
 namespace DBCode {
    static partial class Program {
       internal static partial class NativeMethods {
-#pragma warning disable IDE1079
-#pragma warning disable IDE1006
-#pragma warning disable SYSLIB1054
          #region Structures
          [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
          public struct COPYDATASTRUCT {
@@ -122,9 +119,6 @@ namespace DBCode {
             }
          }
          #endregion
-#pragma warning restore SYSLIB1054
-#pragma warning restore IDE1006
-#pragma warning restore IDE1079
       }
    }
 }
