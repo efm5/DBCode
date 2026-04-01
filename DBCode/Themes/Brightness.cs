@@ -1,10 +1,10 @@
 ﻿namespace DBCode.Themes {
    public static class Brightness {
       public static float ComputeLuma(Color pColor) {
-         float r = pColor.R / 255f;
-         float g = pColor.G / 255f;
-         float b = pColor.B / 255f;
-         float luma = (0.2126f * r) + (0.7152f * g) + (0.0722f * b);
+         float red = pColor.R / 255f;
+         float green = pColor.G / 255f;
+         float blue = pColor.B / 255f;
+         float luma = (0.2126f * red) + (0.7152f * green) + (0.0722f * blue);
 
          return luma;
       }

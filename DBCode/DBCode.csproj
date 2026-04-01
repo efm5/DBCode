@@ -71,6 +71,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Help\" />
     <Folder Include="ProjectAssets\" />
     <Folder Include="Preferences\" />
   </ItemGroup>

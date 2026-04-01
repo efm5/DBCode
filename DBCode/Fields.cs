@@ -20,14 +20,11 @@ namespace DBCode {
       StatusUntargeted
    }
 
-   public enum EscapeFrom : int {
+   public enum EscapeFrom : int {//efm5 multi-use – Maybe renamed? Create an alias
       ColorPicker,
       FontPicker,
       Main,
-      Preferences,
-      ThemeCreator,
-      ThemeEditor,
-      ThemePicker
+      Theme
    }
 
    public enum FontUsage : int {
@@ -92,7 +89,7 @@ namespace DBCode {
       public static bool mFirstGray = true;
       public static bool mIsHighlighting = false;
       public static bool mSuppressTextChanged = false;
-      public static Button? mPreferencesCloseButton = null;
+      public static Button? mThemeCloseButton = null;
       public static EscapeFrom mEscapeFrom = EscapeFrom.Main;
       public static float mOFontSize, mScaling, mFontWidthAdjustment = 0.5f;
       public static FontUsage mFontUsage = FontUsage.Text;
@@ -158,9 +155,9 @@ namespace DBCode {
       public static IntPtr mTargetWindow = IntPtr.Zero;
       public static readonly IntPtr mInsertAfterWindow = new IntPtr(0);
       public static MenuStrip? mMenuStrip = null;
-      public static Panel? mPreferencesPanel = null;
+      public static Panel? mThemePanel = null;
       public static readonly PropertyInfo[] mPredefinedColors = typeof(Color).GetProperties(BindingFlags.Public | BindingFlags.Static);
-      public static Rectangle mPrePreferencesBounds = new Rectangle(50, 50, 800, 600);
+      public static Rectangle mPreThemeBounds = new Rectangle(50, 50, 800, 600);
       public static Size mResolution, mMonitorSize;
       public static StatusStrip? mStatusStrip = null;
       public static string mPreMinimalText = string.Empty;
@@ -193,7 +190,7 @@ namespace DBCode {
       public static ToolStripMenuItem? mMinimalTSMI = null;
       public static ToolStripMenuItem? mModeMenuItem = null;
       public static ToolStripMenuItem? mOpaqueTSMI = null;
-      public static ToolStripMenuItem? mPreferencesMenuItem = null;
+      public static ToolStripMenuItem? mThemeMenuItem = null;
       public static ToolStripMenuItem? mRetargetTSMI = null;
       public static ToolStripMenuItem? mSeventyFiveTSMI = null;
       public static ToolStripMenuItem? mTargetedTSMI = null;
@@ -208,7 +205,8 @@ namespace DBCode {
       //Picker fields
       //DEBUG efm5 2026 03 30 Some of These need to be initialized
       public static Label? mFontDescriptionLabel = null;
-      private static Panel? mPickFontPanel = null;
+      public static Panel? mPickFontPanel = null;
+      public static Panel? mFontPickerBottomPanel = null;
       public static Button? mBluePrefixButton;
       public static Button? mColorPickerCancelButton;
       public static Button? mColorPickerHelpButton;

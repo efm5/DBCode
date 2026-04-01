@@ -1,18 +1,18 @@
 ﻿namespace DBCode {
    public sealed partial class MainForm : Form {
-      private void PreferencesCloseButton_Click(object? pSender, EventArgs pEventArgs) {
-         RestoreFromPreferencesPanel();
+      private void ThemeCloseButton_Click(object? pSender, EventArgs pEventArgs) {
+         RestoreFromThemePanel();
       }
 
-      private void PreferencesPanel_Layout(object? pSender, LayoutEventArgs pEventArgs) {
+      private void ThemePanel_Layout(object? pSender, LayoutEventArgs pEventArgs) {
          int buttonX = 0;
          int buttonY = 0;
 
-         if ((mPreferencesCloseButton == null) || (mPreferencesPanel == null))
+         if ((mThemeCloseButton == null) || (mThemePanel == null))
             return;
-         buttonX = mPreferencesPanel.ClientSize.Width - mPreferencesCloseButton.Width - 16;
-         buttonY = mPreferencesPanel.ClientSize.Height - mPreferencesCloseButton.Height - 16;
-         mPreferencesCloseButton.Location = new Point(buttonX, buttonY);
+         buttonX = mThemePanel.ClientSize.Width - mThemeCloseButton.Width - 16;
+         buttonY = mThemePanel.ClientSize.Height - mThemeCloseButton.Height - 16;
+         mThemeCloseButton.Location = new Point(buttonX, buttonY);
       }
    }
 }

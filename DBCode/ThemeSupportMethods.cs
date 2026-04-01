@@ -1,33 +1,33 @@
 ﻿namespace DBCode {
    public sealed partial class MainForm : Form {
-      private void EnsurePreferencesPanel() {
-         if (mPreferencesPanel != null)
+      private void EnsureThemePanel() {
+         if (mThemePanel != null)
             return;
-         mPreferencesPanel = new Panel();
-         mPreferencesCloseButton = new Button();
-         mPreferencesPanel.Size = new Size(1000, 800);
-         mPreferencesPanel.BackColor = SystemColors.ControlDark;
-         mPreferencesPanel.Name = "preferencesPanel";
-         mPreferencesCloseButton.Text = "&Close";
-         mPreferencesCloseButton.AutoSize = true;
-         mPreferencesCloseButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-         mPreferencesCloseButton.Name = "preferencesCloseButton";
-         mPreferencesCloseButton.Click += PreferencesCloseButton_Click;
-         mPreferencesPanel.Controls.Add(mPreferencesCloseButton);
-         mPreferencesPanel.Layout += PreferencesPanel_Layout;
+         mThemePanel = new Panel();
+         mThemeCloseButton = new Button();
+         mThemePanel.Size = new Size(1000, 800);
+         mThemePanel.BackColor = SystemColors.ControlDark;
+         mThemePanel.Name = "preferencesPanel";
+         mThemeCloseButton.Text = "&Close";
+         mThemeCloseButton.AutoSize = true;
+         mThemeCloseButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+         mThemeCloseButton.Name = "preferencesCloseButton";
+         mThemeCloseButton.Click += ThemeCloseButton_Click;
+         mThemePanel.Controls.Add(mThemeCloseButton);
+         mThemePanel.Layout += ThemePanel_Layout;
       }
 
-      private void ShowPreferencesPanel() {
-         EnsurePreferencesPanel();
-         if (mPreferencesPanel == null)
+      private void ShowThemePanel() {
+         EnsureThemePanel();
+         if (mThemePanel == null)
             return;
          Rectangle screenBounds = Screen.FromControl(this).WorkingArea;
-         int newWidth = mPreferencesPanel.Width;
-         int newHeight = mPreferencesPanel.Height;
+         int newWidth = mThemePanel.Width;
+         int newHeight = mThemePanel.Height;
          int newX = screenBounds.Left + (screenBounds.Width - newWidth) / 2;
          int newY = screenBounds.Top + (screenBounds.Height - newHeight) / 2;
 
-         mPrePreferencesBounds = Bounds;
+         mPreThemeBounds = Bounds;
          Bounds = new Rectangle(newX, newY, newWidth, newHeight);
          if (Controls.Contains(mMenuStrip))
             Controls.Remove(mMenuStrip);
@@ -35,21 +35,21 @@
             Controls.Remove(mRichTextBox);
          if (Controls.Contains(mStatusStrip))
             Controls.Remove(mStatusStrip);
-         if (!Controls.Contains(mPreferencesPanel))
-            Controls.Add(mPreferencesPanel);
+         if (!Controls.Contains(mThemePanel))
+            Controls.Add(mThemePanel);
 
-         mPreferencesPanel.Visible = true;
-         mPreferencesPanel.BringToFront();
+         mThemePanel.Visible = true;
+         mThemePanel.BringToFront();
       }
 
-      private void RestoreFromPreferencesPanel() {
-         Bounds = mPrePreferencesBounds;
+      private void RestoreFromThemePanel() {
+         Bounds = mPreThemeBounds;
 
-         if (mPreferencesPanel != null) {
-            mPreferencesPanel.Visible = false;
-            mPreferencesPanel.SendToBack();
-            if (Controls.Contains(mPreferencesPanel))
-               Controls.Remove(mPreferencesPanel);
+         if (mThemePanel != null) {
+            mThemePanel.Visible = false;
+            mThemePanel.SendToBack();
+            if (Controls.Contains(mThemePanel))
+               Controls.Remove(mThemePanel);
          }
 
          if (!Controls.Contains(mRichTextBox))

@@ -3,23 +3,18 @@
 namespace DBCode.Themes {
    public static class ThemeWriter {
       public static void SaveTheme(string pFolderPath, Theme pTheme) {
-         if (pTheme == null)
-            throw new ArgumentNullException(nameof(pTheme));
-
+         ArgumentNullException.ThrowIfNull(pTheme);
          if (!Directory.Exists(pFolderPath))
             Directory.CreateDirectory(pFolderPath);
 
          string fileName = pTheme.mName + ".json";
          string filePath = Path.Combine(pFolderPath, fileName);
-
          string json = BuildJson(pTheme);
          File.WriteAllText(filePath, json);
       }
 
       public static void SaveAllThemes(string pFolderPath, List<Theme> pThemes) {
-         if (pThemes == null)
-            throw new ArgumentNullException(nameof(pThemes));
-
+         ArgumentNullException.ThrowIfNull(pThemes);
          if (!Directory.Exists(pFolderPath))
             Directory.CreateDirectory(pFolderPath);
 
@@ -28,36 +23,32 @@ namespace DBCode.Themes {
       }
 
       private static string BuildJson(Theme pTheme) {
-         Dictionary<string, object> root = new Dictionary<string, object>();
+         Dictionary<string, object> root = new Dictionary<string, object> {
+            ["Name"] = pTheme.mName,
+            ["Brightness"] = pTheme.mBrightness.ToString()
+         };
+         Dictionary<string, string> fonts = [];
+         Dictionary<string, string> colors = [];
 
-         root["Name"] = pTheme.mName;
-         root["Brightness"] = pTheme.mBrightness.ToString();
-
-         Dictionary<string, string> fonts = new Dictionary<string, string>();
-         foreach (FontUsage usage in Enum.GetValues(typeof(FontUsage))) {
+         foreach (FontUsage usage in Enum.GetValues<FontUsage>()) {
             Font font = pTheme.mFonts[(int)usage];
             fonts[usage.ToString()] = new FontConverter().ConvertToString(font) ?? "";
          }
-         root["Fonts"] = fonts;
-
-         Dictionary<string, string> colors = new Dictionary<string, string>();
-         foreach (ColorUsage usage in Enum.GetValues(typeof(ColorUsage))) {
+         foreach (ColorUsage usage in Enum.GetValues<ColorUsage>()) {
             Color color = pTheme.mColors[(int)usage];
             colors[usage.ToString()] = ColorToString(color);
          }
+         root["Fonts"] = fonts;
          root["Colors"] = colors;
-
          JsonSerializerOptions options = new JsonSerializerOptions {
             WriteIndented = true
          };
-
          return JsonSerializer.Serialize(root, options);
       }
 
       private static string ColorToString(Color pColor) {
          if (pColor.IsNamedColor)
             return pColor.Name;
-
          return $"#{pColor.R:X2}{pColor.G:X2}{pColor.B:X2}";
       }
    }

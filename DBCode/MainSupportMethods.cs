@@ -1,5 +1,45 @@
 ﻿namespace DBCode {
    public sealed partial class MainForm : Form {
+      private void GetHelp(EscapeFrom pEscapeFrom, string? pSpecificHREFAnchor = "") {
+         if (pSpecificHREFAnchor == null) {
+            TimedMessage("Trying to get help failed! The string was null not empty.", "HTML Specific HREF Anchor ERROR");
+            return;
+         }
+         try {
+            string? fullyQualifiedPath = Path.GetDirectoryName(Application.ExecutablePath) ?? string.Empty;
+
+            fullyQualifiedPath = Path.Combine(fullyQualifiedPath, "Help") ?? string.Empty;
+            switch (pEscapeFrom) {
+               case EscapeFrom.Main:
+                  fullyQualifiedPath = Path.Combine(fullyQualifiedPath, "DBCodeHelp.html");
+                  break;
+               case EscapeFrom.Theme:
+                  fullyQualifiedPath = Path.Combine(fullyQualifiedPath, "DBCodeThemeHelp.html");
+                  break;
+               case EscapeFrom.FontPicker:
+                  fullyQualifiedPath = Path.Combine(fullyQualifiedPath, "DBCodeFontPickerHelp.html");
+                  break;
+               case EscapeFrom.ColorPicker:
+                  fullyQualifiedPath = Path.Combine(fullyQualifiedPath, "DBCodeColorPickerHelp.html");
+                  break;
+            }
+            if (!File.Exists(fullyQualifiedPath)) {
+               TimedMessage(string.Format("DBCode's help HTML file:\ncould not be found"), "Missing Help File");
+               return;
+            }
+            Process process = new Process {
+               StartInfo = new ProcessStartInfo(fullyQualifiedPath) {
+                  UseShellExecute = true
+               }
+            };
+            process.Start();
+            Thread.Sleep(100);//efm5 this seems to be necessary
+         }
+         catch (Exception pException) {
+            TimedMessage("Opening the Help HTML file failed\n" + pException.ToString(), "File ERROR");
+         }
+      }
+
       private static void UpDownSelectAll(NumericUpDown? pNumericUpDown) {
          pNumericUpDown?.Focus();
          pNumericUpDown?.Select(0, pNumericUpDown.Text.Length);

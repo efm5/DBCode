@@ -86,8 +86,8 @@
          mReturnToTop = mReturnToTopTSMI.Checked;
       }
 
-      private void PreferencesMenuItem_Click(object? pSender, EventArgs pEventArgs) {
-         ShowPreferencesPanel();
+      private void ThemeMenuItem_Click(object? pSender, EventArgs pEventArgs) {
+         ShowThemePanel();
       }
 
       private void HelpMenuItem_Click(object? pSender, EventArgs pEventArgs) {

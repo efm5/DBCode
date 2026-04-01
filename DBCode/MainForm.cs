@@ -34,7 +34,7 @@ namespace DBCode {
          mTargetingMenuItem = new ToolStripMenuItem();
          mVisibilityMenuItem = new ToolStripMenuItem();
          mModeMenuItem = new ToolStripMenuItem();
-         mPreferencesMenuItem = new ToolStripMenuItem();
+         mThemeMenuItem = new ToolStripMenuItem();
          mHelpMenuItem = new ToolStripMenuItem();
          mTargetedTSMI = new ToolStripMenuItem();
          mRetargetTSMI = new ToolStripMenuItem();
@@ -80,10 +80,10 @@ namespace DBCode {
          mModeMenuItem.Name = "modeMenuItem";
          mModeMenuItem.Text = "&Mode";
 
-         mPreferencesMenuItem.Name = "preferencesMenuItem";
-         mPreferencesMenuItem.Text = "&Preferences";
-         mPreferencesMenuItem.ShortcutKeys = Keys.Control | Keys.B;
-         mPreferencesMenuItem.Click += PreferencesMenuItem_Click;
+         mThemeMenuItem.Name = "preferencesMenuItem";
+         mThemeMenuItem.Text = "&Theme";
+         mThemeMenuItem.ShortcutKeys = Keys.Control | Keys.B;
+         mThemeMenuItem.Click += ThemeMenuItem_Click;
 
          mHelpMenuItem.Name = "helpMenuItem";
          mHelpMenuItem.Text = "&Help";
@@ -157,7 +157,7 @@ namespace DBCode {
          mMenuStrip.Items.Add(mTargetingMenuItem);
          mMenuStrip.Items.Add(mVisibilityMenuItem);
          mMenuStrip.Items.Add(mModeMenuItem);
-         mMenuStrip.Items.Add(mPreferencesMenuItem);
+         mMenuStrip.Items.Add(mThemeMenuItem);
          mMenuStrip.Items.Add(mHelpMenuItem);
 
          mRichTextBox.Multiline = true;

@@ -224,7 +224,56 @@
          return bottommost;
       }
 
-      public static void CenterControlHorizontally(Control pContainer, Control pChildControl) {
+      private static void SetFontComboBoxWidth(ComboBox? pComboBox) {
+         if (pComboBox == null)
+            return;
+         float boxWidth = 30f, boxHeight = 30f;
+         SizeF stringSize = new SizeF();
+
+         using (Graphics graphics = pComboBox.CreateGraphics()) {
+            foreach (string fontName in pComboBox.Items) {
+               //string fontName = ((FontFamily)item).Name;
+               if (!String.IsNullOrEmpty(fontName)) {
+                  stringSize = graphics.MeasureString(fontName, pComboBox.Font);
+                  if (stringSize.Width > boxWidth)
+                     boxWidth = stringSize.Width;
+                  if (stringSize.Height > boxHeight)
+                     boxHeight = stringSize.Height;
+               }
+            }
+         }
+         pComboBox.Width = (int)(boxWidth + SystemInformation.VerticalScrollBarWidth);
+         pComboBox.Height = (int)(boxHeight + mIndent);
+      }
+
+      private static void SetFontComboBoxDropDownWidth(ComboBox? pComboBox) {
+         if (pComboBox == null)
+            return;
+         if (pComboBox.Items.Count == 0)
+            return;//don't change the width
+         float boxWidth = 30f;
+         SizeF stringSize = new SizeF();
+
+         using (Graphics graphics = pComboBox.CreateGraphics()) {
+            foreach (string fontName in pComboBox.Items) {
+               //string fontName = ((FontFamily)item).Name;
+               if (!String.IsNullOrEmpty(fontName)) {
+                  stringSize = graphics.MeasureString(fontName, pComboBox.Font);
+                  if (stringSize.Width > boxWidth)
+                     boxWidth = stringSize.Width;
+               }
+            }
+         }
+         if (boxWidth > pComboBox.Width) {
+            if (boxWidth > mComboBoxMaxDropdownWidth)
+               boxWidth = mComboBoxMaxDropdownWidth;
+            pComboBox.DropDownWidth = (int)boxWidth;
+         }
+      }
+
+      public static void CenterControlHorizontally(Control? pContainer, Control? pChildControl) {
+         if ((pContainer == null) || (pChildControl == null))
+            return;
          if (pContainer.Width < pChildControl.Width) {
             pContainer.Width = pChildControl.Width + 2;
             pChildControl.Left = 1;
