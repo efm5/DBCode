@@ -912,7 +912,7 @@
 
       public static bool IsKnownColor(string pColorName, out Color pOColor) {
          pOColor = Color.Transparent;
-         List<string> colors = new List<string>();
+         List<string> colors = [];
 
          foreach (string colorName in Enum.GetNames<KnownColor>()) {
             //cast the colorName into a KnownColor
@@ -930,7 +930,7 @@
       }
 
       public static bool IsKnownColor(string pColorName) {
-         List<string> colors = new List<string>();
+         List<string> colors = [];
 
          foreach (string colorName in Enum.GetNames<KnownColor>()) {
             //cast the colorName into a KnownColor
@@ -944,6 +944,58 @@
             return true;
          return false;
       }
+
+      //public static bool IsKnownColor(Color pColor) {
+      //   Color color;
+
+      //   foreach (string colorName in Enum.GetNames<KnownColor>()) {
+      //      //cast the colorName into a KnownColor
+      //      if (!Enum.TryParse<KnownColor>(colorName, out KnownColor oKnownColor))
+      //         continue;
+      //      //check if the knownColor variable is a System color - 
+      //      if (oKnownColor > KnownColor.Transparent) {//  Transparent -27- is the highest numbered system color
+      //         color = Color.FromName(colorName);
+      //         if (color == pColor)
+      //            return true;
+      //      }
+      //   }
+      //   return false;
+      //}
+
+      //public static bool IsKnownColor(string pColorName, out Color pOColor) {
+      //   pOColor = Color.Transparent;
+      //   List<string> colors = new List<string>();
+
+      //   foreach (string colorName in Enum.GetNames<KnownColor>()) {
+      //      //cast the colorName into a KnownColor
+      //      if (!Enum.TryParse<KnownColor>(colorName, out KnownColor oKnownColor))
+      //         continue;
+      //      //check if the knownColor variable is a System color
+      //      if (oKnownColor > KnownColor.Transparent) //  Transparent -27- is the highest numbered system color
+      //         colors.Add(colorName);
+      //   }
+      //   if (colors.Contains(pColorName, StringComparer.OrdinalIgnoreCase)) {
+      //      pOColor = Color.FromName(pColorName);
+      //      return true;
+      //   }
+      //   return false;
+      //}
+
+      //public static bool IsKnownColor(string pColorName) {
+      //   List<string> colors = new List<string>();
+
+      //   foreach (string colorName in Enum.GetNames<KnownColor>()) {
+      //      //cast the colorName into a KnownColor
+      //      if (!Enum.TryParse<KnownColor>(colorName, out KnownColor oKnownColor))
+      //         continue;
+      //      //check if the knownColor variable is a System color
+      //      if (oKnownColor > KnownColor.Transparent)
+      //         colors.Add(colorName);
+      //   }
+      //   if (colors.Contains(pColorName, StringComparer.OrdinalIgnoreCase))
+      //      return true;
+      //   return false;
+      //}
 
       //public static Color GroupBoxBackgroundColor(Color pColor) {
       //   int red = 127, green = 127, blue = 127;

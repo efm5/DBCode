@@ -1,9 +1,6 @@
-﻿namespace DBCode.Themes {
-   public enum ThemeBrightness : int {
-      Light = 0,
-      Dark = 1
-   }
+﻿using static DBCode.Themes.ThemeBrightnessHelper;
 
+namespace DBCode.Themes {
    public class Theme {
       public string mName { get; set; } = string.Empty;
       public ThemeBrightness mBrightness { get; set; } = ThemeBrightness.Light;

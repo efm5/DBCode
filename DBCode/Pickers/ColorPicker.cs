@@ -121,7 +121,7 @@
 
       //            #region assignments
       //            mPickColorUsageLabel?.Text = "Use this color for the " + string.Format("{0}", ToDescription((ColorUsage)pColorUsage));
-      //            mEscapeFrom = EscapeFrom.ColorPicker;
+      //            mEscapeFrom = UIContext.ColorPicker;
       //            switch (pColorUsage) {
       //               case ColorUsage.Background:
       //                  usageColor = mCurrentTheme.mMainWindowBackgroundColor;
@@ -315,7 +315,7 @@
       //         //RemoveColorHandlers();
       //         //pColorUsage = pColorUsage;
       //         //NewColorPickerBorderPanel();
-      //         //PrepareOptionsDialog(EscapeFrom.ColorPicker);
+      //         //PrepareOptionsDialog(UIContext.ColorPicker);
       //         //sFromColorPicker = true;
       //         //sFromOptions = false;
       //         //pickColorPanel.Size = SizeFromFloats(Size.Width * 0.8f, (Size.Height * 0.8f) - sTitleBarHeight);

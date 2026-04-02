@@ -72,8 +72,6 @@
 
   <ItemGroup>
     <Folder Include="Help\" />
-    <Folder Include="ProjectAssets\" />
-    <Folder Include="Preferences\" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

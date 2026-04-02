@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using static DBCode.Themes.ThemeBrightnessHelper;
 
 namespace DBCode.Themes {
    public static class ThemeManager {

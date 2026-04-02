@@ -1,6 +1,6 @@
 ﻿namespace DBCode {
    public sealed partial class MainForm : Form {
-      private void GetHelp(EscapeFrom pEscapeFrom, string? pSpecificHREFAnchor = "") {
+      public void GetHelp(UIContext pUIContext, string? pSpecificHREFAnchor = "") {
          if (pSpecificHREFAnchor == null) {
             TimedMessage("Trying to get help failed! The string was null not empty.", "HTML Specific HREF Anchor ERROR");
             return;
@@ -9,17 +9,17 @@
             string? fullyQualifiedPath = Path.GetDirectoryName(Application.ExecutablePath) ?? string.Empty;
 
             fullyQualifiedPath = Path.Combine(fullyQualifiedPath, "Help") ?? string.Empty;
-            switch (pEscapeFrom) {
-               case EscapeFrom.Main:
+            switch (pUIContext) {
+               case UIContext.Main:
                   fullyQualifiedPath = Path.Combine(fullyQualifiedPath, "DBCodeHelp.html");
                   break;
-               case EscapeFrom.Theme:
+               case UIContext.Theme:
                   fullyQualifiedPath = Path.Combine(fullyQualifiedPath, "DBCodeThemeHelp.html");
                   break;
-               case EscapeFrom.FontPicker:
+               case UIContext.FontPicker:
                   fullyQualifiedPath = Path.Combine(fullyQualifiedPath, "DBCodeFontPickerHelp.html");
                   break;
-               case EscapeFrom.ColorPicker:
+               case UIContext.ColorPicker:
                   fullyQualifiedPath = Path.Combine(fullyQualifiedPath, "DBCodeColorPickerHelp.html");
                   break;
             }

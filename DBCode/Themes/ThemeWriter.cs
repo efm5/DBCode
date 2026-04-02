@@ -22,6 +22,10 @@ namespace DBCode.Themes {
             SaveTheme(pFolderPath, theme);
       }
 
+      [System.Diagnostics.CodeAnalysis.SuppressMessage(
+   "Performance",
+   "CA1869:Avoid creating a new 'JsonSerializerOptions' instance for every serialization operation",
+   Justification = "Theme serialization is a cold path; options object creation is negligible and clearer here.")]
       private static string BuildJson(Theme pTheme) {
          Dictionary<string, object> root = new Dictionary<string, object> {
             ["Name"] = pTheme.mName,

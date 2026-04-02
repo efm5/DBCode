@@ -1,4 +1,6 @@
-﻿namespace DBCode.Themes {
+﻿using static DBCode.Themes.ThemeBrightnessHelper;
+
+namespace DBCode.Themes {
    public static class ThemeDefaults {
       public static readonly Theme DefaultLight = BuildDefaultLight();
       public static readonly Theme DefaultDark = BuildDefaultDark();

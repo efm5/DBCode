@@ -86,15 +86,26 @@
          mReturnToTop = mReturnToTopTSMI.Checked;
       }
 
-      private void ThemeMenuItem_Click(object? pSender, EventArgs pEventArgs) {
-         ShowThemePanel();
-      }
+      private void Help_Click(object? pSender, EventArgs pEventArgs) {
+         UIContext context = UIContext.Main;
+         string? anchor = "";
 
-      private void HelpMenuItem_Click(object? pSender, EventArgs pEventArgs) {
-         string messageText = "Help is not yet implemented.";
-         string captionText = "Help";
+         if (pSender is Control control) {
+            if (control.Tag is HelpTag tag) {
+               context = tag.Context;
+               anchor = tag.Anchor;
+            }
+         }
+         else if (pSender is ToolStripItem item) {
+            if (item.Tag is HelpTag tag) {
+               context = tag.Context;
+               anchor = tag.Anchor;
+            }
+         }
+         else
+            return;
 
-         MessageBox.Show(this, messageText, captionText, MessageBoxButtons.OK, MessageBoxIcon.Information);
+         GetHelp(context, anchor);
       }
 
       private void TransMove_Click(object? pSender, EventArgs pEventArgs) {

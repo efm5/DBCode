@@ -83,12 +83,11 @@ namespace DBCode {
          mThemeMenuItem.Name = "preferencesMenuItem";
          mThemeMenuItem.Text = "&Theme";
          mThemeMenuItem.ShortcutKeys = Keys.Control | Keys.B;
-         mThemeMenuItem.Click += ThemeMenuItem_Click;
 
          mHelpMenuItem.Name = "helpMenuItem";
          mHelpMenuItem.Text = "&Help";
          mHelpMenuItem.ShortcutKeys = Keys.F1;
-         mHelpMenuItem.Click += HelpMenuItem_Click;
+         mHelpMenuItem.Click += Help_Click;
 
          mTargetedTSMI.Name = "targetedTSMI";
          mTargetedTSMI.Text = "&Targeted";

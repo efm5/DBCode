@@ -20,12 +20,7 @@ namespace DBCode {
       StatusUntargeted
    }
 
-   public enum EscapeFrom : int {//efm5 multi-use – Maybe renamed? Create an alias
-      ColorPicker,
-      FontPicker,
-      Main,
-      Theme
-   }
+   public enum UIContext { Main, Theme, ColorPicker, FontPicker }
 
    public enum FontUsage : int {
       [DisplayText("Interface Font")]
@@ -81,6 +76,18 @@ namespace DBCode {
       }
    }
 
+   internal sealed class HelpTag {
+      public UIContext Context;
+      public string? Anchor;
+
+#pragma warning disable IDE0290 // Use primary constructor
+      public HelpTag(UIContext pContext, string? pAnchor = "") {
+         Context = pContext;
+         Anchor = pAnchor;
+      }
+#pragma warning restore IDE0290
+   }
+
    internal static class Fields {
       public static bool mForceActivation = true;
       public static bool mIsTargetingEnabled = false;
@@ -89,31 +96,32 @@ namespace DBCode {
       public static bool mFirstGray = true;
       public static bool mIsHighlighting = false;
       public static bool mSuppressTextChanged = false;
-      public static Button? mThemeCloseButton = null;
-      public static EscapeFrom mEscapeFrom = EscapeFrom.Main;
+      public static UIContext mUIContext = UIContext.Main;
       public static float mOFontSize, mScaling, mFontWidthAdjustment = 0.5f;
       public static FontUsage mFontUsage = FontUsage.Text;
       public static HighlighterEngine? mHighlighterEngine = null;
       public static Icon[] mIcons = new Icon[4];
       public static int
-                  //#pragma warning disable IDE0052
-                  //#pragma warning disable IDE0051
-                  //#pragma warning disable IDE0044
-                  //#pragma warning disable CS0414
-                  //efm5 these variables are rarely used but some modules need them – keeping them on hand
-                  //sScalingTabControlVerticalPad = 0, sScalingTabControlHorizontalPad = 0,
-                  //#pragma warning restore CS0414
-                  //#pragma warning restore IDE0044
-                  //#pragma warning restore IDE0051
-                  //#pragma warning restore IDE0052
-                  //efm5 since these are all comment out why don't I remove them
-                  mComboBoxMaxDropdownHeight = 800, mComboBoxMaxDropdownWidth = 1000, mBookmarkRow = 0, mDoTabIndexBase = 80000, mDoIncrement = 1,
-         mDoPanelHeight = 0, mFindPosition, mFindLength, mScalingGroupBoxTopLinePad = 0, mSelectionStart, mSelectionLength, mMenuLeftOffset = 30, mEM = 10,
-         mIndent = 5, mCancelOffset = 15, mOkOffset = 15, mTitleBarHeight, mGroupTopPad = 2, mScalePad = 1, mTransitionSteps = 5, mTransitionInterval = 8,
-         mMatchIndex = 0, mDefaultAskingMessage = 0, mGroupRightPad = 0, mGroupBottomPad = 0, mGroupLeftPad = 25, mMaximumGridWidth = 200, mVerticalScrollOffset = 20,
-         mIconTabIndex = 90000, mIconVerticalPad = 10, mIconHorizontalPad = 10, mTabIndex = 200000, mIconRows = 0, mPartitionRows = 0, mHorizontalScrollOffset = 20,
-         mOpenWithTableLayoutPanelRow = 0, mSlideshowDuration = 0, mWidestMenu = 0, mMakingShortcuts = 0,
+         //#pragma warning disable IDE0052
+         //#pragma warning disable IDE0051
+         //#pragma warning disable IDE0044
+         //#pragma warning disable CS0414
+         //efm5 these variables are rarely used but some modules need them – keeping them on hand
+         //sScalingTabControlVerticalPad = 0, sScalingTabControlHorizontalPad = 0,
+         //#pragma warning restore CS0414
+         //#pragma warning restore IDE0044
+         //#pragma warning restore IDE0051
+         //#pragma warning restore IDE0052
+         //efm5 since these are all comment out why don't I remove them
+         mComboBoxMaxDropdownHeight = 800, mComboBoxMaxDropdownWidth = 1000, mBookmarkRow = 0, mDoTabIndexBase = 80000,
+         mDoIncrement = 1, mDoPanelHeight = 0, mFindPosition, mFindLength, mScalingGroupBoxTopLinePad = 0, mSelectionStart,
+         mSelectionLength, mMenuLeftOffset = 30, mEM = 10, mIndent = 5, mCancelOffset = 15, mOkOffset = 15, mTitleBarHeight,
+         mGroupTopPad = 2, mScalePad = 1, mTransitionSteps = 5, mTransitionInterval = 8, mMatchIndex = 0, mDefaultAskingMessage = 0,
+         mGroupRightPad = 0, mGroupBottomPad = 0, mGroupLeftPad = 25, mMaximumGridWidth = 200, mVerticalScrollOffset = 20,
+         mIconTabIndex = 90000, mIconVerticalPad = 10, mIconHorizontalPad = 10, mTabIndex = 200000, mIconRows = 0, mPartitionRows = 0,
+         mHorizontalScrollOffset = 20, mOpenWithTableLayoutPanelRow = 0, mSlideshowDuration = 0, mWidestMenu = 0, mMakingShortcuts = 0,
          mWidgetHorizontalSpace = 3, mWidgetBigHorizontalSpace = 10, mWidgetVerticalOffset = 2, mWidgetBigVerticalOffset = 7,
+         mEm = 10,
          mAssociatedButtonPostCheckBoxVerticalOffset = 3,
          mAssociatedButtonPostLabelHorizontalSpace = 3,
          mAssociatedButtonPostLabelVerticalOffset = -4,
@@ -156,6 +164,7 @@ namespace DBCode {
       public static readonly IntPtr mInsertAfterWindow = new IntPtr(0);
       public static MenuStrip? mMenuStrip = null;
       public static Panel? mThemePanel = null;
+      public static Panel? mThemeBottomPanel = null;
       public static readonly PropertyInfo[] mPredefinedColors = typeof(Color).GetProperties(BindingFlags.Public | BindingFlags.Static);
       public static Rectangle mPreThemeBounds = new Rectangle(50, 50, 800, 600);
       public static Size mResolution, mMonitorSize;

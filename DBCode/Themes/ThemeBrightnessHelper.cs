@@ -1,5 +1,10 @@
 ﻿namespace DBCode.Themes {
-   public static class Brightness {
+   public static class ThemeBrightnessHelper {
+      public enum ThemeBrightness : int {
+         Light = 0,
+         Dark = 1
+      }
+
       public static float ComputeLuma(Color pColor) {
          float red = pColor.R / 255f;
          float green = pColor.G / 255f;

@@ -46,7 +46,7 @@
          //RemoveFontPickerHandlers();
          //#region assignments
          //mPickFontUsageLabel?.Text = "Use this font for the " + string.Format("{0}", ToDescription((FontUsage)mFontUsage));
-         //mEscapeFrom = EscapeFrom.FontPicker;
+         //mEscapeFrom = UIContext.FontPicker;
          ////DEBUG efm5 2026 03 30 implement
          //switch (mFontUsage) {
          //   case FontUsage.InterfaceFont:
@@ -220,14 +220,14 @@
          mFontFamilyComboBox?.SelectedIndexChanged -= FontFamilyComboBox_SelectedIndexChanged;
          mFontSizeComboBox?.SelectedIndexChanged -= FontSizeComboBox_SelectedIndexChanged;
          mFontUsage = pFontUsage;
-         //PrepareOptionsDialog(EscapeFrom.FontPicker);
+         //PrepareOptionsDialog(UIContext.FontPicker);
          //mFromFontPicker = true;
          mPickFontPanel?.Size = SizeFromFloats(Size.Width * 0.8f, (Size.Height * 0.8f) - mTitleBarHeight);
          mPickFontTitleLabel.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-         mFontPickerBottomPanel?.Dock = DockStyle.None;
+         mFontPickerBottomPanel.Dock = DockStyle.None;
          LayoutFontPicker();
          //ShowPanel(sFontPickerBorderPanel);
-         mFontPickerCancelButton?.Left = mFontPickerBottomPanel.Width - mFontPickerCancelButton.Width - mCancelOffset;
+         mFontPickerCancelButton.Left = mFontPickerBottomPanel.Width - mFontPickerCancelButton.Width - mCancelOffset;
          mFontPickerOkButton.Left = mFontPickerCancelButton.Left - mFontPickerOkButton.Width - mOkOffset;
          mFontPickerCancelButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
          mFontPickerOkButton?.Anchor = AnchorStyles.Top | AnchorStyles.Right;

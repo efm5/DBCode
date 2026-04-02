@@ -86,6 +86,13 @@ Explicit initialization prevents accidental renumbering, preserves array‑index
 - Only use when bitwise combinations are intended.
 - Must explicitly assign powers of two.
 
+### 1.8.4 Enum Formatting Rule — Compact Form Allowed for Small Enums
+Small enums (typically 2–6 members) that use default integer initialization may be written in compact single‑line form:
+
+```csharp
+public enum UIContext { Main, Theme, ColorPicker, FontPicker }
+
+
 ## 1.9 File Structure
 - One class per file unless tightly coupled.
 - Using directives at top.
