@@ -22,6 +22,11 @@ namespace DBCode {
 
    public enum UIContext { Main, Theme, ColorPicker, FontPicker }
 
+   public enum LabelUsage : int {
+      Interface,
+      Title,
+   }
+
    public enum FontUsage : int {
       [DisplayText("Interface Font")]
       Interface,
@@ -89,6 +94,11 @@ namespace DBCode {
    }
 
    internal static class Fields {
+      public const AnchorStyles mTopLeftAnchor = AnchorStyles.Top | AnchorStyles.Left,
+        mTopRightAnchor = AnchorStyles.Top | AnchorStyles.Right,
+        mBottomLeftAnchor = AnchorStyles.Bottom | AnchorStyles.Left,
+        mBottomRightAnchor = AnchorStyles.Bottom | AnchorStyles.Right,
+        mTopLeftBottomRightAnchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
       public static bool mForceActivation = true;
       public static bool mIsTargetingEnabled = false;
       public static bool mPreMinimalControlBox = true;
@@ -118,10 +128,10 @@ namespace DBCode {
          mSelectionLength, mMenuLeftOffset = 30, mEM = 10, mIndent = 5, mCancelOffset = 15, mOkOffset = 15, mTitleBarHeight,
          mGroupTopPad = 2, mScalePad = 1, mTransitionSteps = 5, mTransitionInterval = 8, mMatchIndex = 0, mDefaultAskingMessage = 0,
          mGroupRightPad = 0, mGroupBottomPad = 0, mGroupLeftPad = 25, mMaximumGridWidth = 200, mVerticalScrollOffset = 20,
-         mIconTabIndex = 90000, mIconVerticalPad = 10, mIconHorizontalPad = 10, mTabIndex = 200000, mIconRows = 0, mPartitionRows = 0,
+         mIconTabIndex = mTabIndex++, mIconVerticalPad = 10, mIconHorizontalPad = 10, mTabIndex = mTabIndex++, mIconRows = 0, mPartitionRows = 0,
          mHorizontalScrollOffset = 20, mOpenWithTableLayoutPanelRow = 0, mSlideshowDuration = 0, mWidestMenu = 0, mMakingShortcuts = 0,
          mWidgetHorizontalSpace = 3, mWidgetBigHorizontalSpace = 10, mWidgetVerticalOffset = 2, mWidgetBigVerticalOffset = 7,
-         mEm = 10,
+         mEm = 10, mEmHalf = 5, mEm2 = 20, mEm3 = 30, mBottomButtonTop = 3,
          mAssociatedButtonPostCheckBoxVerticalOffset = 3,
          mAssociatedButtonPostLabelHorizontalSpace = 3,
          mAssociatedButtonPostLabelVerticalOffset = -4,

@@ -1,6 +1,5 @@
 ﻿namespace DBCode.Preferences {
    internal sealed partial class ThemePanel : Panel {
-      private readonly int mEm;
       private readonly UIContext mContext;
       private TabControl? mTabControl = null;
       private Panel? mThemeBottomPanel = null;
@@ -10,18 +9,14 @@
       public Button? mThemeOkButton = null;
       public Button? mThemeCancelButton = null;
 
-#pragma warning disable IDE0290
-      public ThemePanel(int pEm) {
-         mEm = pEm;
-         mContext = UIContext.Theme;
-
+      public ThemePanel(UIContext pContext) {
+         mContext = pContext;
          AssignHelpTag();
          InitializeUI();
       }
-#pragma warning restore IDE0290
 
       private void AssignHelpTag() {
-         Tag = new HelpTag(UIContext.Theme, "ThemePanel");
+         Tag = new HelpTag(mContext, "ThemePanel");
       }
 
       private void InitializeUI() {
@@ -32,77 +27,107 @@
       }
 
       private void CreateTitleLabel() {
-         mTitleLabel = new Label();
-         mTitleLabel.Text = "Theme Settings";
-         mTitleLabel.AutoSize = true;
-         mTitleLabel.Left = mEm;
-         mTitleLabel.Top = mEm;
+         mTitleLabel = new Label {
+            Name = "mTitleLabel",
+            TabIndex = mTabIndex++,
+            Text = "Theme Settings",
+            AutoSize = true,
+            Top = mEm
+         };
          Controls.Add(mTitleLabel);
       }
 
       private void CreateTabControl() {
-         mTabControl = new TabControl();
-         mTabControl.Left = mEm;
-         mTabControl.Top = (mTitleLabel?.Bottom ?? (2 * mEm)) + mEm;
-         mTabControl.Width = 800;   // temporary fixed size
-         mTabControl.Height = 600;  // temporary fixed size
+         mTabControl = new TabControl {
+            Name = "mTabControl",
+            TabIndex = mTabIndex++,
+            Left = mEm,
+            Width = 800,   // temporary fixed size
+            Height = 600  // temporary fixed size
+         };
          Controls.Add(mTabControl);
       }
 
       private void CreateThemeBottomPanel() {
-         mThemeBottomPanel = new Panel();
-         mThemeBottomPanel.Dock = DockStyle.Bottom;
-         mThemeBottomPanel.Height = 3 * mEm;
+         mThemeBottomPanel = new Panel {
+            Name = "mThemeBottomPanel",
+            TabIndex = mTabIndex++,
+         };
          Controls.Add(mThemeBottomPanel);
       }
 
       private void CreateThemeBottomButtons() {
          if (mThemeBottomPanel == null)
             return;
-         mThemeBottomHelpButton = new Button();
-         mThemeBottomHelpButton.Text = "&Help";
-         mThemeBottomHelpButton.AutoSize = true;
-         mThemeBottomHelpButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-         mThemeBottomHelpButton.Left = mEm;
-         mThemeBottomHelpButton.Top = 3;
-         mThemeBottomHelpButton.Tag = new HelpTag(UIContext.Theme, "ThemePanel");
+         mThemeBottomHelpButton = new Button {
+            Name = "mThemeBottomHelpButton",
+            TabIndex = mTabIndex++,
+            Text = "&Help",
+            AutoSize = true,
+            Anchor = AnchorStyles.Top | AnchorStyles.Left,
+            Left = mEm,
+            Top = mBottomButtonTop,
+            Tag = new HelpTag(UIContext.Theme, "ThemePanel")
+         };
          mThemeBottomHelpButton.Click += Help_Click;
          mThemeBottomPanel.Controls.Add(mThemeBottomHelpButton);
-
-         mThemeCancelButton = new Button();
-         mThemeCancelButton.Text = "&Cancel";
-         mThemeCancelButton.AutoSize = true;
-         mThemeCancelButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-         mThemeCancelButton.Left = mThemeBottomPanel.Width - (mThemeCancelButton.Width + (2 * mEm));
-         mThemeCancelButton.Top = 3;
+         mThemeCancelButton = new Button {
+            Name = "mThemeCancelButton",
+            TabIndex = mTabIndex++,
+            Text = "&Cancel",
+            AutoSize = true,
+            Top = mBottomButtonTop
+         };
+         //DEBUG efm5 2026 04 2 Handler
          mThemeBottomPanel.Controls.Add(mThemeCancelButton);
-
-         mThemeOkButton = new Button();
-         mThemeOkButton.Text = "&OK";
-         mThemeOkButton.AutoSize = true;
-         mThemeOkButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-         mThemeOkButton.Left = mThemeCancelButton.Left - (mThemeOkButton.Width + mEm);
-         mThemeOkButton.Top = 3;
+         mThemeOkButton = new Button {
+            Name = "mThemeOkButton",
+            TabIndex = mTabIndex++,
+            Text = "&OK",
+            AutoSize = true,
+            Top = mBottomButtonTop
+         };
+         //DEBUG efm5 2026 04 2 Handler
          mThemeBottomPanel.Controls.Add(mThemeOkButton);
-
-         mThemeApplyButton = new Button();
-         mThemeApplyButton.Text = "&Apply";
-         mThemeApplyButton.AutoSize = true;
-         mThemeApplyButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-         mThemeApplyButton.Left = mThemeOkButton.Left - (mThemeApplyButton.Width + mEm);
-         mThemeApplyButton.Top = 3;
+         mThemeApplyButton = new Button {
+            Name = "mThemeApplyButton",
+            TabIndex = mTabIndex++,
+            Text = "&Apply",
+            AutoSize = true,
+            Top = mBottomButtonTop
+         };
+         //DEBUG efm5 2026 04 2 Handler
          mThemeBottomPanel.Controls.Add(mThemeApplyButton);
       }
 
-      private void Help_Click(object? pSender, EventArgs pEventArgs) {
-         if (pSender is Control control && control.Tag is HelpTag tag) {
-            if (FindForm() is MainForm mainForm)
-               mainForm.GetHelp(tag.Context, tag.Anchor);
-         }
+      private void LayoutAndSizeTabControl() {
+         //DEBUG efm5 2026 04 2 layout and size the tab control
       }
 
       private void LayoutTheme() {
-         // heavy lifting will go here later
+         if ((mThemeCancelButton == null) || (mThemeOkButton == null) || (mThemeApplyButton == null) ||
+            (mThemeBottomPanel == null) || (mTabControl == null) || (mTitleLabel == null))
+            return;
+         mThemeCancelButton.Anchor = mTopLeftAnchor;
+         mThemeOkButton.Anchor = mTopLeftAnchor;
+         mThemeApplyButton.Anchor = mTopLeftAnchor;
+         mTabControl.Anchor = mTopLeftAnchor;
+         mThemeBottomPanel.Dock = DockStyle.None;
+         mThemeBottomPanel.Anchor = mTopLeftAnchor;
+         PaintPanel(mThemePanel);
+         mTitleLabel.Top = mEm;
+         mTabControl.Top = mTitleLabel.Bottom + mEmHalf;
+         LayoutAndSizeTabControl();
+         mThemeBottomPanel.Width = Math.Max(mTabControl.Left + mTabControl.Width + SystemInformation.VerticalScrollBarWidth,
+            TotalWidth(ControlCollectionAsList(mThemeBottomPanel.Controls), mEm));
+         mThemeCancelButton.Left = mThemeBottomPanel.Width - mThemeCancelButton.Width - mEm2;
+         mThemeOkButton.Left = mThemeCancelButton.Left - mThemeOkButton.Width - mEm;
+         mThemeApplyButton.Left = mThemeOkButton.Left - mThemeApplyButton.Width - mEm2;
+         mThemeCancelButton.Anchor = mTopRightAnchor;
+         mThemeOkButton.Anchor = mTopRightAnchor;
+         mThemeApplyButton.Anchor = mTopRightAnchor;
+         mThemeBottomPanel.Dock = DockStyle.Bottom;
+         mTabControl.Anchor = mTopLeftBottomRightAnchor;
       }
    }
 }

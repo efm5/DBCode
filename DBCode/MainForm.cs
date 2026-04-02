@@ -59,15 +59,15 @@ namespace DBCode {
          };
 
          SuspendLayout();
-
-         StartPosition = FormStartPosition.CenterScreen;
+         //DEBUG efm5 2026 04 2 many of these need tab index – TabIndex = mTabIndex++;
+         StartPosition = FormStartPosition.Manual;
          ClientSize = new Size(800, 800);
          MinimumSize = new Size(400, 300);
          Text = "DB Code";
 
          mMenuStrip.Dock = DockStyle.Top;
          mMenuStrip.Name = "menuStrip";
-         mMenuStrip.TabIndex = 0;
+         mMenuStrip.TabIndex = mTabIndex++;
 
          mTargetingMenuItem.Name = "targetingMenuItem";
          mTargetingMenuItem.Text = "&Targeting";
@@ -76,6 +76,7 @@ namespace DBCode {
          mVisibilityMenuItem.Text = "&Visibility";
          mVisibilityMenuItem.ShortcutKeys = Keys.Control | Keys.G;
          mVisibilityMenuItem.ShowShortcutKeys = true;
+
 
          mModeMenuItem.Name = "modeMenuItem";
          mModeMenuItem.Text = "&Mode";
@@ -165,12 +166,12 @@ namespace DBCode {
          mRichTextBox.WordWrap = false;
          mRichTextBox.Dock = DockStyle.Fill;
          mRichTextBox.Name = "mainTextBox";
-         mRichTextBox.TabIndex = 1;
+         mRichTextBox.TabIndex = mTabIndex++;
 
          mStatusStrip.Dock = DockStyle.Bottom;
          mStatusStrip.SizingGrip = true;
          mStatusStrip.Name = "statusStrip";
-         mStatusStrip.TabIndex = 2;
+         mStatusStrip.TabIndex = mTabIndex++;
 
          mTransferTSB.DisplayStyle = ToolStripItemDisplayStyle.Text;
          mTransferTSB.Name = "transferTSB";
@@ -187,11 +188,13 @@ namespace DBCode {
          mTargetingStatusLabel.Name = "targetingStatusLabel";
          mTargetingStatusLabel.Text = "Untargeted";
          mTargetingStatusLabel.Spring = false;
+         mTargetingStatusLabel.Tag = LabelUsage.Interface;
 
          mVersionStatusLabel.Name = "versionStatusLabel";
          mVersionStatusLabel.Text = "v 0.0.0.0";
          mVersionStatusLabel.Spring = true;
          mVersionStatusLabel.TextAlign = ContentAlignment.MiddleRight;
+         mVersionStatusLabel.Tag = LabelUsage.Interface;
 
          mRevertTSB.DisplayStyle = ToolStripItemDisplayStyle.Text;
          mRevertTSB.Name = "revertTSB";

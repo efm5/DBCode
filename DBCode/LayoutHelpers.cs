@@ -1,7 +1,6 @@
 ﻿namespace DBCode {
    internal class LayoutHelpers {
 #pragma warning disable IDE1006
-#pragma warning disable IDE0028
       private const int OFFSET = 5, DOUBLE_OFFSET = (OFFSET * 2);
       private const int POST_CLIP_DELAY = 300, SHORT_DELAY = 50, LONG_DELAY = 450, CLIPBOARD_DELAY = 350,
          FIND_WIDTH = 200, WINDOW_REDUCER = 7,
@@ -222,6 +221,31 @@
             if (control.Bottom > bottommost)
                bottommost = control.Bottom;
          return bottommost;
+      }
+
+      public static List<Control> ControlCollectionAsList(Control.ControlCollection pControlCollection) {
+         List<Control> returnValue = new List<Control>();
+         foreach (Control control in pControlCollection)
+            returnValue.Add(control);
+         return returnValue;
+      }
+
+      public static int TotalWidth(List<Control>? pControls, int pPadding) {
+         if ((pControls == null) || (pControls?.Count == 0))
+            return 0;
+         int returnValue = pControls[0].Left;
+
+         foreach (Control control in pControls)
+            returnValue += control.Width;
+         returnValue += (pPadding * pControls.Count);
+         return returnValue;
+      }
+
+      public static void PaintPanel(Panel? pPanel) {
+         if (pPanel == null)
+            return;
+         //DEBUG efm5 2026 04 2 step through all of the panel's controls,
+         //recursively – set their font and color than, if not auto sizing, their size
       }
 
       private static void SetFontComboBoxWidth(ComboBox? pComboBox) {
@@ -1359,6 +1383,5 @@
          GetDpiForMonitor(monitor, pDpiType, out pODpiX, out pODpiY);
       }
 #pragma warning restore IDE1006
-#pragma warning restore IDE0028
    }
 }
