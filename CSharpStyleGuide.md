@@ -22,6 +22,28 @@ FILE STRUCTURE AND ORGANIZATION
 • Designer‑generated files remain untouched except for catastrophic fixes.
 
 NAMING CONVENTIONS
+Object Initialization
+
+Use object initializers when creating WinForms controls or other objects with settable properties.
+
+    Keeps initialization grouped and readable
+
+    Reduces repeated variable names
+
+    Dragon‑friendly
+
+    Fully explicit and deterministic
+
+Example:
+csharp
+
+mButton = new Button {
+   Left = mEm,
+   Top = mEm,
+   Width = 120,
+   Height = 30,
+   Text = "OK"
+};
 
 3.1 Fields
 • Private fields use mCamelCase.

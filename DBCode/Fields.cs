@@ -111,65 +111,9 @@ namespace DBCode {
       public static FontUsage mFontUsage = FontUsage.Text;
       public static HighlighterEngine? mHighlighterEngine = null;
       public static Icon[] mIcons = new Icon[4];
-      public static int
-         //#pragma warning disable IDE0052
-         //#pragma warning disable IDE0051
-         //#pragma warning disable IDE0044
-         //#pragma warning disable CS0414
-         //efm5 these variables are rarely used but some modules need them – keeping them on hand
-         //sScalingTabControlVerticalPad = 0, sScalingTabControlHorizontalPad = 0,
-         //#pragma warning restore CS0414
-         //#pragma warning restore IDE0044
-         //#pragma warning restore IDE0051
-         //#pragma warning restore IDE0052
-         //efm5 since these are all comment out why don't I remove them
-         mComboBoxMaxDropdownHeight = 800, mComboBoxMaxDropdownWidth = 1000, mBookmarkRow = 0, mDoTabIndexBase = 80000,
-         mDoIncrement = 1, mDoPanelHeight = 0, mFindPosition, mFindLength, mScalingGroupBoxTopLinePad = 0, mSelectionStart,
-         mSelectionLength, mMenuLeftOffset = 30, mEM = 10, mIndent = 5, mCancelOffset = 15, mOkOffset = 15, mTitleBarHeight,
-         mGroupTopPad = 2, mScalePad = 1, mTransitionSteps = 5, mTransitionInterval = 8, mMatchIndex = 0, mDefaultAskingMessage = 0,
-         mGroupRightPad = 0, mGroupBottomPad = 0, mGroupLeftPad = 25, mMaximumGridWidth = 200, mVerticalScrollOffset = 20,
-         mIconTabIndex = mTabIndex++, mIconVerticalPad = 10, mIconHorizontalPad = 10, mTabIndex = mTabIndex++, mIconRows = 0, mPartitionRows = 0,
-         mHorizontalScrollOffset = 20, mOpenWithTableLayoutPanelRow = 0, mSlideshowDuration = 0, mWidestMenu = 0, mMakingShortcuts = 0,
-         mWidgetHorizontalSpace = 3, mWidgetBigHorizontalSpace = 10, mWidgetVerticalOffset = 2, mWidgetBigVerticalOffset = 7,
-         mEm = 10, mEmHalf = 5, mEm2 = 20, mEm3 = 30, mBottomButtonTop = 3,
-         mAssociatedButtonPostCheckBoxVerticalOffset = 3,
-         mAssociatedButtonPostLabelHorizontalSpace = 3,
-         mAssociatedButtonPostLabelVerticalOffset = -4,
-         mAssociatedButtonPostTextBoxVerticalOffset = 0,
-         mAssociatedCheckBoxPostButtonHorizontalSpace = 0,
-         mAssociatedCheckBoxPostButtonVerticalOffset = 4,
-         mAssociatedComboBoxPostButtonHorizontalSpace = 0,
-         mAssociatedComboBoxPostButtonVerticalOffset = 4,
-         mAssociatedLabelPostButtonHorizontalSpace = 0,
-         mAssociatedLabelPostButtonVerticalOffset = 5,
-         mAssociatedLabelPostCheckBoxHorizontalSpace = 0,
-         mAssociatedLabelPostCheckBoxVerticalOffset = 1,
-         mAssociatedLabelPostPanelVerticalOffset = 3,
-         mAssociatedLabelPostUpDownHorizontalSpace = 0,
-         mAssociatedLabelPostUpDownVerticalOffset = 1,
-         mAssociatedPostVerticalOffset = -1,
-         mAssociatedSliderPostUpDownHorizontalSpace = 0,
-         mAssociatedSliderPostUpDownVerticalOffset = 3,
-         mAssociatedTextBoxPostButtonHorizontalSpace = 0,
-         mAssociatedTextBoxPostButtonVerticalOffset = 2,
-         mAssociatedTextBoxPostCheckBoxVerticalOffset = 0,
-         mAssociatedTextBoxPostComboBoxHorizontalSpace = 1,
-         mAssociatedTextBoxPostComboBoxVerticalOffset = 0,
-         mAssociatedTextPostButtonVerticalOffset = 5,
-         mAssociatedUpDownPostButtonHorizontalSpace = 0,
-         mAssociatedUpDownPostButtonVerticalOffset = 4,
-         mAssociatedUpDownPostCheckBoxHorizontalSpace = 0,
-         mAssociatedUpDownPostCheckBoxVerticalOffset = -2,
-         //#pragma warning disable IDE0052
-         //#pragma warning disable IDE0051
-         //#pragma warning disable IDE0044
-         //#pragma warning disable CS0414
-         //efm5 these variables are rarely used but some modules need them – keeping them on hand
-         mAssociatedCheckBoxVerticalOffset = 4;
-      //#pragma warning restore CS0414
-      //#pragma warning restore IDE0044
-      //#pragma warning restore IDE0051
-      //#pragma warning restore IDE0052
+      internal static int mBookmarkRow, mDoTabIndexBase, mDoIncrement, mFindPosition, mFindLength, mSelectionStart, mSelectionLength,
+         mTransitionSteps, mTransitionInterval, mMatchIndex, mDefaultAskingMessage, mIconTabIndex, mIconVerticalPad, mIconHorizontalPad,
+         mIconRows, mPartitionRows, mOpenWithTableLayoutPanelRow, mSlideshowDuration, mWidestMenu, mMakingShortcuts;
       public static IntPtr mTargetWindow = IntPtr.Zero;
       public static readonly IntPtr mInsertAfterWindow = new IntPtr(0);
       public static MenuStrip? mMenuStrip = null;

@@ -40,11 +40,6 @@
          }
       }
 
-      private static void UpDownSelectAll(NumericUpDown? pNumericUpDown) {
-         pNumericUpDown?.Focus();
-         pNumericUpDown?.Select(0, pNumericUpDown.Text.Length);
-      }
-
       private static void FlattenButton(Button? pButton, Color? pBackgroundColor, int pLeft = 0) {
          if ((pButton != null) && (pBackgroundColor != null)) {
             pButton.BackColor = Color.Transparent;
