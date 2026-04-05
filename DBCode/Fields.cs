@@ -1,5 +1,6 @@
 ﻿using DBCode.Syntax;
 using DBCode.Themes;
+
 #pragma warning disable CS0649//DEBUG efm5 2026 03 31 just until we start using the layout
 #pragma warning disable CS0414//DEBUG efm5 2026 03 31 just until we start using the layout
 namespace DBCode {
@@ -139,6 +140,7 @@ namespace DBCode {
                "ScriptedSandbox64", "Search Correct", "SearchCorrect", "SP Quick Panel",
                "SPQuickPanel", "SP Search", "SPSearch", "svchost",  "SystemSettings",
                "TextInputHost",  "Windows Explorer", "XboxApp" ];
+      public static readonly string mUnicodeSampleString = "Unicode test: ÀÑÇ ÿ ɱ ǵ ʰ ā̋ ȇ ō̱ ╭╯ 🜁";
       public static RichTextBox? mRichTextBox = null;
       public static Theme? mCurrentTheme = new Theme(string.Empty);
       public static System.Windows.Forms.Timer? mTimer;

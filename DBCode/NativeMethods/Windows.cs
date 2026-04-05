@@ -3,8 +3,11 @@ namespace DBCode {
       internal static partial class NativeMethods {
 #pragma warning disable IDE1006
 #pragma warning disable SYSLIB1054
+         [DllImport("Shcore.dll")]
+         public static extern int GetDpiForMonitor(nint hmonitor, DpiType dpiType, out uint dpiX, out uint dpiY);
 
-         #region Window APIs
+         [DllImport("user32.dll")]
+         public static extern nint MonitorFromPoint(Point pt, int flags);
 
          [DllImport("user32.dll")]
          public static extern bool EnumWindows(EnumWindowsProc lpEnumFunc, IntPtr lParam);
@@ -55,14 +58,7 @@ namespace DBCode {
 
          [DllImport("user32.dll", SetLastError = true)]
          [return: MarshalAs(UnmanagedType.Bool)]
-         public static extern bool SetWindowPos(
-            IntPtr hWnd,
-            IntPtr hWndInsertAfter,
-            int X,
-            int Y,
-            int cx,
-            int cy,
-            uint uFlags);
+         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 
          [DllImport("user32.dll")]
          [return: MarshalAs(UnmanagedType.Bool)]
@@ -70,9 +66,6 @@ namespace DBCode {
 
          [DllImport("User32.dll")]
          public static extern IntPtr MonitorFromPoint([In] Point pt, [In] uint dwFlags);
-
-         #endregion
-
 #pragma warning restore SYSLIB1054
 #pragma warning restore IDE1006
       }

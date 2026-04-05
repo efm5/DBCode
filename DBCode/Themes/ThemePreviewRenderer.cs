@@ -32,16 +32,13 @@
       public static void DrawFontSample(Graphics pGraphics, Rectangle pBounds, Font pFont, string pLabel) {
          if (pGraphics == null)
             return;
-         // Label
          int labelX = pBounds.X;
          int labelY = pBounds.Y;
          DrawLeftAlignedText(pGraphics, pLabel, pFont, labelX, labelY);
-         // Sample text
-         string sample = "Some Unicode extremes ÿÀÑÇ";
          int sampleX = pBounds.X;
          int sampleY = pBounds.Y + pFont.Height + TextSpacing;
 
-         DrawLeftAlignedText(pGraphics, sample, pFont, sampleX, sampleY);
+         DrawLeftAlignedText(pGraphics, mUnicodeSampleString, pFont, sampleX, sampleY);
       }
 
       public static void DrawCombinedPreview(Graphics pGraphics, Rectangle pBounds, Theme pTheme) {

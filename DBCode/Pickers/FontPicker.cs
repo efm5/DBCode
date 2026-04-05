@@ -222,7 +222,7 @@
          mFontUsage = pFontUsage;
          //PrepareOptionsDialog(UIContext.FontPicker);
          //mFromFontPicker = true;
-         mPickFontPanel?.Size = SizeFromFloats(Size.Width * 0.8f, (Size.Height * 0.8f) - mTitleBarHeight);
+         mPickFontPanel?.Size = CreateSizeFromFloats(Size.Width * 0.8f, (Size.Height * 0.8f) - mTitleBarHeight);
          mPickFontTitleLabel.Anchor = AnchorStyles.Top | AnchorStyles.Left;
          mFontPickerBottomPanel.Dock = DockStyle.None;
          LayoutFontPicker();

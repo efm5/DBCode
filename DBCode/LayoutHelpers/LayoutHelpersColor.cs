@@ -1,126 +1,116 @@
-﻿namespace DBCode {
+namespace DBCode {
    internal static partial class LayoutHelpers {
-#pragma warning disable IDE1006
 
-      public static string MassageColorName(string pCompressedName) {
-         string expandedName = string.Empty;
-         Color color;
-         if (!IsKnownColor(pCompressedName, out color))
+      internal static string MassageColorName(string pCompressedName) {
+         if (string.IsNullOrWhiteSpace(pCompressedName))
+            return string.Empty;
+         Color knownColor;
+         if (!IsKnownColor(pCompressedName, out knownColor))
             return pCompressedName;
-         foreach (char c in pCompressedName)
-            if (char.IsUpper(c))
-               expandedName += " " + string.Format("{0}", c);
-            else
-               expandedName += string.Format("{0}", c);
-         expandedName = expandedName.Trim(' ');
-         return expandedName;
+         System.Text.StringBuilder expandedName = new System.Text.StringBuilder(pCompressedName.Length + 8);
+         expandedName.Append(pCompressedName[0]);
+         for (int index = 1; index < pCompressedName.Length; index++) {
+            char nextCharacter = pCompressedName[index];
+            if (char.IsUpper(nextCharacter))
+               expandedName.Append(' ');
+            expandedName.Append(nextCharacter);
+         }
+         return expandedName.ToString().Trim();
       }
 
-      public static Color SubtlyDifferent(Color pColor) {
-         int r = 128;
-         int g = 128;
-         int b = 128;
-         if ((pColor.R + pColor.G + pColor.B) < 382) {
-            r = (int)Math.Floor(pColor.R * 1.1f);
-            if (r > 255)
-               r = 255;
-            g = (int)Math.Floor(pColor.G * 1.1f);
-            if (g > 255)
-               g = 255;
-            b = (int)Math.Floor(pColor.B * 1.1f);
-            if (b > 255)
-               b = 255;
-         }
-         else {
-            r = (int)Math.Floor(pColor.R * 0.9f);
-            if (r < 0)
-               r = 0;
-            g = (int)Math.Floor(pColor.G * 0.9f);
-            if (g < 0)
-               g = 0;
-            b = (int)Math.Floor(pColor.B * 0.9f);
-            if (b < 0)
-               b = 0;
-         }
-         return Color.FromArgb(r, g, b);
+      internal static Color SubtlyDifferent(Color pColor) {
+         bool isDark = (pColor.R + pColor.G + pColor.B) < 382;
+         float factor = isDark ? 1.1f : 0.9f;
+         int red = ClampToByte((int)Math.Floor(pColor.R * factor)),
+             green = ClampToByte((int)Math.Floor(pColor.G * factor)),
+             blue = ClampToByte((int)Math.Floor(pColor.B * factor));
+         return Color.FromArgb(red, green, blue);
       }
 
-      public static bool ColorsAreSimilar(Color pColor1, Color pColor2) {
-         int rDist = Math.Abs(pColor1.R - pColor2.R);
-         int gDist = Math.Abs(pColor1.G - pColor2.G);
-         int bDist = Math.Abs(pColor1.B - pColor2.B);
-         if ((rDist + gDist + bDist) > 260)
+      internal static bool ColorsAreSimilar(Color pFirstColor, Color pSecondColor) {
+         int redDistance = Math.Abs(pFirstColor.R - pSecondColor.R),
+             greenDistance = Math.Abs(pFirstColor.G - pSecondColor.G),
+             blueDistance = Math.Abs(pFirstColor.B - pSecondColor.B);
+         if ((redDistance + greenDistance + blueDistance) > 260)
             return false;
          return true;
       }
 
-      public static bool ColorsAreIdentical(Color pColor1, Color pColor2) {
-         if ((pColor1.R == pColor2.R) && (pColor1.G == pColor2.G) && (pColor1.B == pColor2.B))
+      internal static bool ColorsAreIdentical(Color pFirstColor, Color pSecondColor) {
+         if ((pFirstColor.R == pSecondColor.R) &&
+             (pFirstColor.G == pSecondColor.G) &&
+             (pFirstColor.B == pSecondColor.B))
             return true;
          return false;
       }
 
-      public static Color ContrastingColor(Color pColor) {
+      internal static Color ContrastingColor(Color pColor) {
          if ((pColor.R == pColor.G) && (pColor.R == pColor.B)) {
-            if ((pColor.R + pColor.G + pColor.B) < 382)
+            int sum = pColor.R + pColor.G + pColor.B;
+            if (sum < 382)
                return Color.LightBlue;
-            else
-               return Color.DarkBlue;
+            return Color.DarkBlue;
          }
-         else {
-            if ((pColor.R + pColor.G + pColor.B) < 382)
-               return Color.LightGray;
-            else
-               return Color.DarkGray;
-         }
+         int brightness = pColor.R + pColor.G + pColor.B;
+         if (brightness < 382)
+            return Color.LightGray;
+         return Color.DarkGray;
       }
 
-      public static bool IsKnownColor(Color pColor) {
-         Color color;
-         foreach (string colorName in Enum.GetNames<KnownColor>()) {
-            KnownColor oKnownColor;
-            if (!Enum.TryParse<KnownColor>(colorName, out oKnownColor))
+      internal static bool IsKnownColor(Color pColor) {
+         foreach (string nextColorName in Enum.GetNames<KnownColor>()) {
+            KnownColor nextKnownColor;
+            if (!Enum.TryParse<KnownColor>(nextColorName, out nextKnownColor))
                continue;
-            if (oKnownColor > KnownColor.Transparent) {
-               color = Color.FromName(colorName);
-               if (color == pColor)
-                  return true;
+            if (nextKnownColor <= KnownColor.Transparent)
+               continue;
+            Color knownColor = Color.FromName(nextColorName);
+            if (knownColor.ToArgb() == pColor.ToArgb())
+               return true;
+         }
+         return false;
+      }
+
+      internal static bool IsKnownColor(string pColorName, out Color pOutputColor) {
+         pOutputColor = Color.Transparent;
+         if (string.IsNullOrWhiteSpace(pColorName))
+            return false;
+         foreach (string nextColorName in Enum.GetNames<KnownColor>()) {
+            KnownColor nextKnownColor;
+            if (!Enum.TryParse<KnownColor>(nextColorName, out nextKnownColor))
+               continue;
+            if (nextKnownColor <= KnownColor.Transparent)
+               continue;
+            if (string.Equals(nextColorName, pColorName, StringComparison.OrdinalIgnoreCase)) {
+               pOutputColor = Color.FromName(nextColorName);
+               return true;
             }
          }
          return false;
       }
 
-      public static bool IsKnownColor(string pColorName, out Color pOColor) {
-         pOColor = Color.Transparent;
-         List<string> colors = new List<string>();
-         foreach (string colorName in Enum.GetNames<KnownColor>()) {
-            KnownColor oKnownColor;
-            if (!Enum.TryParse<KnownColor>(colorName, out oKnownColor))
+      internal static bool IsKnownColor(string pColorName) {
+         if (string.IsNullOrWhiteSpace(pColorName))
+            return false;
+         foreach (string nextColorName in Enum.GetNames<KnownColor>()) {
+            KnownColor nextKnownColor;
+            if (!Enum.TryParse<KnownColor>(nextColorName, out nextKnownColor))
                continue;
-            if (oKnownColor > KnownColor.Transparent)
-               colors.Add(colorName);
-         }
-         if (colors.Contains(pColorName, StringComparer.OrdinalIgnoreCase)) {
-            pOColor = Color.FromName(pColorName);
-            return true;
+            if (nextKnownColor <= KnownColor.Transparent)
+               continue;
+            if (string.Equals(nextColorName, pColorName, StringComparison.OrdinalIgnoreCase))
+               return true;
          }
          return false;
       }
 
-      public static bool IsKnownColor(string pColorName) {
-         List<string> colors = new List<string>();
-         foreach (string colorName in Enum.GetNames<KnownColor>()) {
-            KnownColor oKnownColor;
-            if (!Enum.TryParse<KnownColor>(colorName, out oKnownColor))
-               continue;
-            if (oKnownColor > KnownColor.Transparent)
-               colors.Add(colorName);
-         }
-         if (colors.Contains(pColorName, StringComparer.OrdinalIgnoreCase))
-            return true;
-         return false;
+      private static int ClampToByte(int pValue) {
+         if (pValue < 0)
+            return 0;
+         if (pValue > 255)
+            return 255;
+         return pValue;
       }
 
-#pragma warning restore IDE1006
    }
 }
