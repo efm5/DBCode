@@ -1,10 +1,10 @@
 namespace DBCode {
    internal static partial class LayoutHelpers {
       internal static class ColorSwatchHelpers {
-         public static Size ColorSwatchSize() {
+         public static int CalculateSwatchSize() {
             int tallest = 0;
             Panel panel = new Panel();
-            Font useFont = LayoutHelpers.InterfaceFont();
+            Font useFont = mCurrentTheme!.mFonts[(int)FontUsage.Interface];
             Control[] samples = [
                new Button { Text = mUnicodeSampleString, AutoSize = true, Font = useFont },
                new Label { Text = mUnicodeSampleString, AutoSize = true, Font = useFont },
@@ -17,23 +17,22 @@ namespace DBCode {
                   tallest = control.Height;
             }
             panel.Dispose();
-            return new Size(tallest, tallest);
+            return tallest;
          }
 
          public static int BorderInset() {
             int inset = 2;
-            int fontSize = (int)Math.Floor(LayoutHelpers.InterfaceFont().Size);
-            if (fontSize > 14)
+            if (mEm > 14)
                inset++;
-            if (fontSize > 20)
+            if (mEm > 20)
                inset++;
-            if (fontSize > 24)
+            if (mEm > 24)
                inset++;
-            if (fontSize > 30)
+            if (mEm > 30)
                inset++;
-            if (fontSize > 40)
+            if (mEm > 40)
                inset++;
-            if (fontSize > 60)
+            if (mEm > 60)
                inset++;
             return inset;
          }

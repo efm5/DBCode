@@ -7,7 +7,7 @@ namespace DBCode {
          #region Device I/O, Volume Control & File Handles
 
          [DllImport("kernel32", CharSet = CharSet.Unicode)]
-         public static extern IntPtr CreateFile(
+         internal static extern IntPtr CreateFile(
             string filename,
             uint desiredAccess,
             uint shareMode,
@@ -17,7 +17,7 @@ namespace DBCode {
             IntPtr templateFile);
 
          [DllImport("kernel32")]
-         public static extern bool DeviceIoControl(
+         internal static extern bool DeviceIoControl(
             IntPtr deviceHandle,
             uint ioControlCode,
             IntPtr inBuffer,
@@ -28,7 +28,7 @@ namespace DBCode {
             IntPtr overlapped);
 
          [DllImport("kernel32")]
-         public static extern bool CloseHandle(IntPtr handle);
+         internal static extern bool CloseHandle(IntPtr handle);
 
          #endregion
 

@@ -58,5 +58,53 @@ namespace DBCode.Properties {
                 this["FormOpacity"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ThemePrimaryTabPageIndex {
+            get {
+                return ((int)(this["ThemePrimaryTabPageIndex"]));
+            }
+            set {
+                this["ThemePrimaryTabPageIndex"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ThemeHighlightTabPageIndex {
+            get {
+                return ((int)(this["ThemeHighlightTabPageIndex"]));
+            }
+            set {
+                this["ThemeHighlightTabPageIndex"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100, 100")]
+        public global::System.Drawing.Point ThemeLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["ThemeLocation"]));
+            }
+            set {
+                this["ThemeLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1000, 500")]
+        public global::System.Drawing.Size ThemeSize {
+            get {
+                return ((global::System.Drawing.Size)(this["ThemeSize"]));
+            }
+            set {
+                this["ThemeSize"] = value;
+            }
+        }
     }
 }

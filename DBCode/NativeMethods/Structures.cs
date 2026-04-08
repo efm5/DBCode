@@ -56,8 +56,8 @@ namespace DBCode {
             public uint length;
             public Flags flags;
             public uint showCmd;
-            public Point ptMinPosition;
-            public Point ptMaxPosition;
+            public POINT ptMinPosition;
+            public POINT ptMaxPosition;
             public RECT rcNormalPosition;
          }
 
@@ -110,6 +110,27 @@ namespace DBCode {
             public int Right;
             public int Bottom;
 
+            public RECT(int pLeft, int pTop, int pRight, int pBottom) {
+               Left = pLeft;
+               Top = pTop;
+               Right = pRight;
+               Bottom = pBottom;
+            }
+
+            public RECT(Point pLocation, Size pSize) {
+               Left = pLocation.X;
+               Top = pLocation.Y;
+               Right = pLocation.X + pSize.Width;
+               Bottom = pLocation.Y + pSize.Height;
+            }
+
+            public RECT(Rectangle pRectangle) {
+               Left = pRectangle.Left;
+               Top = pRectangle.Top;
+               Right = pRectangle.Right;
+               Bottom = pRectangle.Bottom;
+            }
+
             public readonly int Width() {
                return (Right - Left);
             }
@@ -117,6 +138,28 @@ namespace DBCode {
             public readonly int Height() {
                return (Bottom - Top);
             }
+         }
+
+
+         [StructLayout(LayoutKind.Sequential)]
+         public struct POINT {
+            public int X;
+            public int Y;
+
+            public POINT(int pX, int pY) {
+               X = pX;
+               Y = pY;
+            }
+
+            public POINT(Point pPoint) {
+               X = pPoint.X;
+               Y = pPoint.Y;
+            }
+         }
+
+         [StructLayout(LayoutKind.Sequential)]
+         public struct INT32 {
+            public int Value;
          }
          #endregion
       }

@@ -1,41 +1,41 @@
 ﻿namespace DBCode {
    internal static partial class LayoutHelpers {
-      internal sealed class SwatchCluster : Panel {
+      internal sealed class SwatchCluster : BaseCluster {
          private Label mLabel;
          private Button mButton;
          private ColorSwatch mSwatch;
-         private LabelPosition mLabelPosition;
-         private int mSpacing = 6;
-
          public event ColorSwatchClickedHandler? SwatchClicked;
+         internal Color? mBackgroundColor;
 
-         public SwatchCluster(ColorSwatchUsage pUsage, Color pDefaultColor, string pLabelText,
-            LabelPosition pLabelPosition, Color? pBackgroundColor) {
+         public SwatchCluster(ColorSwatchUsage pUsage, Color pDefaultColor, string pLabelText, string pButtonText,
+            LabelPosition pLabelPosition, Color? pBackgroundColor = null) : base(pBackgroundColor) {
+            mBackgroundColor = pBackgroundColor;
             mLabelPosition = pLabelPosition;
-            BackColor = pBackgroundColor ?? Color.Transparent;
-            AutoSize = true;
-            TabIndex = LayoutHelpers.NextTabIndex();
-            Name = "SwatchCluster" + TabIndex;
-
-            mLabel = new Label {
+            mLabel = new Label() {
+               TabIndex = LayoutHelpers.TAB_INDEX_IGNORED,
+               Name = $"LabeledButtonTextBoxCluster{nameof(mLabel)}{mTabIndex++}",
                Text = pLabelText,
-               AutoSize = true,
-               Font = LayoutHelpers.InterfaceFont()
+               Top = mEm,
+               TextAlign = ContentAlignment.MiddleCenter,
+               Height = 40,
+               Font = LayoutHelpers.CreateNewFont(),
+               ForeColor = mCurrentTheme!.mColors[(int)ColorUsage.InterfaceFont],
+               BackColor = pBackgroundColor ?? Color.Transparent
             };
-
-            mButton = new Button {
-               Text = "Select",
+            mButton = new Button() {
+               TabIndex = mTabIndex,
+               Name = $"LabeledButtonTextBoxCluster{nameof(mButton)}{mTabIndex++}",
+               Text = pButtonText,
+               Top = mEm,
                AutoSize = true,
-               Font = LayoutHelpers.InterfaceFont()
+               AutoSizeMode = AutoSizeMode.GrowAndShrink,
+               Font = LayoutHelpers.CreateNewFont(),
+               ForeColor = mCurrentTheme!.mColors[(int)ColorUsage.InterfaceFont]
+               //BackColor = pBackgroundColor ?? Color.Transparent
             };
-
-            mSwatch = new ColorSwatch(pUsage, pDefaultColor, 24, BackColor);
+            mSwatch = new ColorSwatch(pUsage, pDefaultColor, BackColor);
             mSwatch.SwatchClicked += OnSwatchClicked;
-
-            Controls.Add(mLabel);
-            Controls.Add(mButton);
-            Controls.Add(mSwatch);
-
+            Controls.AddRange(mLabel, mButton, mSwatch);
             LayoutControls();
          }
 
@@ -48,53 +48,42 @@
             LayoutControls();
          }
 
+         protected override void LayoutCluster() {
+         }
+
          private void LayoutControls() {
-            int buttonLeft = 0;
-            int buttonTop = 0;
-            mButton.Left = buttonLeft;
-            mButton.Top = buttonTop;
-
-            int swatchLeft = mButton.Right + mSpacing;
-            int swatchTop = buttonTop + (mButton.Height - mSwatch.Height) / 2;
-            mSwatch.Left = swatchLeft;
-            mSwatch.Top = swatchTop;
-
-            int labelLeft = 0;
-            int labelTop = 0;
-
             if (mLabelPosition == LabelPosition.Left) {
-               labelLeft = 0;
-               labelTop = (mButton.Height - mLabel.Height) / 2;
-               mLabel.Left = labelLeft;
-               mLabel.Top = labelTop;
-               mButton.Left = mLabel.Right + mSpacing;
-               mSwatch.Left = mButton.Right + mSpacing;
+               mLabel.Left = 0;
+               mLabel.Top = 0;
+               mButton.Left = mLabel.Right + mEm;
+               mButton.Top = 0;
+               mSwatch.Left = mButton.Right + mEm;
+               mSwatch.Top = 0;
             }
             else if (mLabelPosition == LabelPosition.Right) {
-               labelLeft = mSwatch.Right + mSpacing;
-               labelTop = (mButton.Height - mLabel.Height) / 2;
-               mLabel.Left = labelLeft;
-               mLabel.Top = labelTop;
+               mButton.Left = 0;
+               mButton.Top = 0;
+               mSwatch.Left = mButton.Right + mEm;
+               mSwatch.Top = 0;
+               mLabel.Left = mSwatch.Right + mEm;
+               mLabel.Top = 0;
             }
             else if (mLabelPosition == LabelPosition.Top) {
-               labelLeft = mButton.Left;
-               labelTop = 0;
-               mLabel.Left = labelLeft;
-               mLabel.Top = labelTop;
-               mButton.Top = mLabel.Bottom + mSpacing;
-               mSwatch.Top = mButton.Top + (mButton.Height - mSwatch.Height) / 2;
+               mLabel.Left = 0;
+               mLabel.Top = 0;
+               mButton.Left = 0;
+               mButton.Top = mLabel.Bottom + mEm;
+               mSwatch.Left = mButton.Right + mEm;
+               mSwatch.Top = mButton.Top;
             }
             else if (mLabelPosition == LabelPosition.Bottom) {
-               labelLeft = mButton.Left;
-               labelTop = Math.Max(mButton.Bottom, mSwatch.Bottom) + mSpacing;
-               mLabel.Left = labelLeft;
-               mLabel.Top = labelTop;
+               mButton.Left = 0;
+               mButton.Top = 0;
+               mSwatch.Left = mButton.Right + mEm;
+               mSwatch.Top = 0;
+               mLabel.Left = 0;
+               mLabel.Top = Math.Max(mButton.Bottom, mSwatch.Bottom);
             }
-
-            int width = Math.Max(mLabel.Right, Math.Max(mSwatch.Right, mButton.Right));
-            int height = Math.Max(mLabel.Bottom, Math.Max(mSwatch.Bottom, mButton.Bottom));
-            Width = width;
-            Height = height;
          }
 
          protected override void Dispose(bool pDisposing) {

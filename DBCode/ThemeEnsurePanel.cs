@@ -1,52 +1,60 @@
-﻿namespace DBCode {
+﻿using DBCode.Themes;
+
+namespace DBCode {
    public sealed partial class MainForm : Form {
-      private void EnsureThemePanel() {
-         if (mThemePanel == null)
-            mThemePanel = new Panel();
-         ShowThemePanel();
+      public void EnsureThemePanel(ThemeUsage pThemeUsage) {
+         if (pThemeUsage == ThemeUsage.Pick) { }//DEBUG efm5 2026 04 6 implement
+         else {
+            mPreThemeBounds = Bounds;
+            Bounds = new Rectangle(Settings.Default.ThemeLocation, Settings.Default.ThemeSize);
+            if (mThemePanel == null)
+               mThemePanel = new ThemePanel(pThemeUsage);
+            ShowThemePanel(pThemeUsage);
+         }
       }
 
-      public void ShowThemePanel() {
-         EnsureThemePanel();
-         if (mThemePanel == null)
+      public void ShowThemePanel(ThemeUsage pThemeUsage) {
+         if (pThemeUsage == ThemeUsage.Design) {
+            if (mThemePanel == null)
+               return;
+            ControlBox = false;
+            if (Controls.Contains(mMenuStrip))
+               Controls.Remove(mMenuStrip);
+            if (Controls.Contains(mRichTextBox))
+               Controls.Remove(mRichTextBox);
+            if (Controls.Contains(mStatusStrip))
+               Controls.Remove(mStatusStrip);
+            if (!Controls.Contains(mThemePanel))
+               Controls.Add(mThemePanel);
+            mThemePanel.PerformLayout();
+            mThemePanel.Dock = DockStyle.Fill;
+            mThemePanel.Visible = true;
+            mThemePanel.BringToFront();
+            mThemePanel.Show();
+         }
+         else {
+            TimedMessage("ShowThemePanel(ThemeUsage) neither edit nor pick are working.", "Not Yet IMPLEMENTED");
+         }
+      }
+
+      public static void RestoreFromThemePanel() {
+         if (mForm == null)
             return;
-         Rectangle screenBounds = Screen.FromControl(this).WorkingArea;
-         int newWidth = mThemePanel.Width;
-         int newHeight = mThemePanel.Height;
-         int newX = screenBounds.Left + (screenBounds.Width - newWidth) / 2;
-         int newY = screenBounds.Top + (screenBounds.Height - newHeight) / 2;
-
-         mPreThemeBounds = Bounds;
-         Bounds = new Rectangle(newX, newY, newWidth, newHeight);
-         if (Controls.Contains(mMenuStrip))
-            Controls.Remove(mMenuStrip);
-         if (Controls.Contains(mRichTextBox))
-            Controls.Remove(mRichTextBox);
-         if (Controls.Contains(mStatusStrip))
-            Controls.Remove(mStatusStrip);
-         if (!Controls.Contains(mThemePanel))
-            Controls.Add(mThemePanel);
-
-         mThemePanel.Visible = true;
-         mThemePanel.BringToFront();
-      }
-
-      private void RestoreFromThemePanel() {
-         Bounds = mPreThemeBounds;
-
+         mForm.ControlBox = true;
          if (mThemePanel != null) {
+            mThemePanel.SaveSettings();
             mThemePanel.Visible = false;
             mThemePanel.SendToBack();
-            if (Controls.Contains(mThemePanel))
-               Controls.Remove(mThemePanel);
+            if (mForm.Controls.Contains(mThemePanel))
+               mForm.Controls.Remove(mThemePanel);
          }
-
-         if (!Controls.Contains(mRichTextBox))
-            Controls.Add(mRichTextBox);
-         if (!Controls.Contains(mStatusStrip))
-            Controls.Add(mStatusStrip);
-         if (mCurrentViewMode == ViewMode.Features && !Controls.Contains(mMenuStrip))
-            Controls.Add(mMenuStrip);
+         mForm.Bounds = mPreThemeBounds;
+         if (!mForm.Controls.Contains(mRichTextBox))
+            mForm.Controls.Add(mRichTextBox);
+         if (!mForm.Controls.Contains(mStatusStrip))
+            mForm.Controls.Add(mStatusStrip);
+         if (mCurrentViewMode == ViewMode.Features && !mForm.Controls.Contains(mMenuStrip))
+            mForm.Controls.Add(mMenuStrip);
 
          mRichTextBox?.Visible = true;
          mStatusStrip?.Visible = true;

@@ -4,12 +4,8 @@ namespace DBCode {
          return mTabIndex++;
       }
 
-      internal static Font InterfaceFont() {
-         return CreateNewFont();
-      }
-
-      internal static void GetDpi(Screen pScreen, DpiType pDpiType, out uint pODpiX, out uint pODpiY) {
-         Point location = new Point(pScreen.Bounds.Left + 1, pScreen.Bounds.Top + 1);
+      internal static void GetDPI(Screen pScreen, DPIType pDpiType, out uint pODpiX, out uint pODpiY) {
+         POINT location = new POINT(pScreen.Bounds.Left + 1, pScreen.Bounds.Top + 1);
          nint monitor = MonitorFromPoint(location, 2);
          _ = GetDpiForMonitor(monitor, pDpiType, out pODpiX, out pODpiY);
       }

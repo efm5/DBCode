@@ -7,7 +7,7 @@ namespace DBCode {
          #region Messaging, Input & Window Interaction
 
          [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-         public static extern int MessageBoxTimeout(
+         internal static extern int MessageBoxTimeout(
             IntPtr hWnd,
             string lpText,
             string lpCaption,
@@ -17,45 +17,45 @@ namespace DBCode {
 
          [DllImport("user32")]
          [return: MarshalAs(UnmanagedType.Bool)]
-         public static extern bool PostMessage(
+         internal static extern bool PostMessage(
             IntPtr hwnd,
             int msg,
             IntPtr wparam,
             IntPtr lparam);
 
          [DllImport("User32.dll", EntryPoint = "PostMessage")]
-         public static extern int PostMessage(
+         internal static extern int PostMessage(
             IntPtr hWnd,
             int Msg,
             int wParam,
             ref COPYDATASTRUCT lParam);
 
          [DllImport("user32", CharSet = CharSet.Unicode)]
-         public static extern int RegisterWindowMessage(string message);
+         internal static extern int RegisterWindowMessage(string message);
 
          [DllImport("User32.dll", CharSet = CharSet.Unicode)]
-         public static extern IntPtr SendMessage(
+         internal static extern IntPtr SendMessage(
             IntPtr hWnd,
             int msg,
             int wParam,
             int lParam);
 
          [DllImport("User32.dll", EntryPoint = "SendMessage")]
-         public static extern int SendMessage(
+         internal static extern int SendMessage(
             IntPtr hWnd,
             int Msg,
             int wParam,
             ref COPYDATASTRUCT lParam);
 
          [DllImport("user32.dll", SetLastError = true)]
-         public static extern IntPtr SetActiveWindow(IntPtr hWnd);
+         internal static extern IntPtr SetActiveWindow(IntPtr hWnd);
 
          [DllImport("user32.dll")]
          [return: MarshalAs(UnmanagedType.Bool)]
-         public static extern bool SetCursorPos(int X, int Y);
+         internal static extern bool SetCursorPos(int X, int Y);
 
          [DllImport("user32.dll")]
-         public static extern void mouse_event(
+         internal static extern void mouse_event(
             int dwFlags,
             int dx,
             int dy,
@@ -64,11 +64,11 @@ namespace DBCode {
 
          [DllImport("User32.dll")]
          [return: MarshalAs(UnmanagedType.Bool)]
-         public static extern bool SetForegroundWindow(IntPtr hwnd);
+         internal static extern bool SetForegroundWindow(IntPtr hwnd);
 
          [DllImport("user32.dll")]
          [return: MarshalAs(UnmanagedType.Bool)]
-         public static extern bool SetProcessDPIAware();
+         internal static extern bool SetProcessDPIAware();
 
          #endregion
 

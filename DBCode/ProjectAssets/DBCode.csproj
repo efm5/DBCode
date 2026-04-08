@@ -51,10 +51,6 @@
     <Folder Include="Help\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="ProjectAssets\DBCode.csproj" />
-  </ItemGroup>
-
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="call &quot;$(ProjectDir)..\successfulCompile.bat&quot;" />
   </Target>

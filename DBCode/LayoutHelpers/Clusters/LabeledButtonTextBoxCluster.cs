@@ -1,11 +1,12 @@
-namespace DBCode {
+﻿namespace DBCode {
    internal static partial class LayoutHelpers {
-      internal sealed class LabeledButtonCluster : BaseCluster {
-         internal Control mLabel { get; private set; }
-         internal Control mButton { get; private set; }
+      internal sealed class LabeledButtonTextBoxCluster : BaseCluster {
+         internal Label mLabel { get; private set; }
+         internal Button mButton { get; private set; }
+         internal TextBox mExampleTextBox { get; private set; }
          internal Color? mBackgroundColor;
 
-         internal LabeledButtonCluster(string pLabelText, string pButtonText, LabelPosition pLabelPosition,
+         internal LabeledButtonTextBoxCluster(string pLabelText, string pButtonText, LabelPosition pLabelPosition,
             Color? pBackgroundColor = null) : base(pBackgroundColor) {
             mBackgroundColor = pBackgroundColor;
             mLabelPosition = pLabelPosition;
@@ -31,6 +32,19 @@ namespace DBCode {
                ForeColor = mCurrentTheme!.mColors[(int)ColorUsage.InterfaceFont]
                //BackColor = pBackgroundColor ?? Color.Transparent
             };
+            mExampleTextBox = new TextBox() {
+               TabIndex = mTabIndex,
+               Name = $"LabeledButtonTextBoxCluster{nameof(mLabel)}{mTabIndex++}",
+               Top = mEm,
+               Width = 300,
+               Text = mUnicodeSampleString,
+               Multiline = false,
+               Font = CreateNewFont(mCurrentTheme.mFonts[(int)FontUsage.Interface]),
+               ForeColor = mCurrentTheme!.mColors[(int)ColorUsage.InterfaceFont]
+            };
+            mExampleTextBox.BackColor = pBackgroundColor ?? mCurrentTheme!.mColors[(int)ColorUsage.InterfaceBackground];
+            Controls.AddRange(mLabel, mButton, mExampleTextBox);
+            ApplyLabelPosition(mLabel, mButton);
          }
 
          protected override void LayoutCluster() {

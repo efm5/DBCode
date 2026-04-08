@@ -3,10 +3,11 @@ namespace DBCode {
       internal sealed class TextFieldCluster : BaseCluster {
          private Label? mLabel = null;
          private TextBox? mTextBox = null;
+         internal Color? mBackgroundColor;
 
-         public TextFieldCluster(string pLabelText, string pInitialText, int pTextBoxWidth, LabelPosition pLabelPosition,
+         public TextFieldCluster(string pLabelText, int pTextBoxWidth, LabelPosition pLabelPosition,
             Color? pBackgroundColor) : base(pBackgroundColor) {
-
+            mBackgroundColor = pBackgroundColor;
             mLabelPosition = pLabelPosition;
             mLabel = new Label {
                AutoSize = true,
@@ -15,37 +16,17 @@ namespace DBCode {
                TabIndex = LayoutHelpers.TAB_INDEX_IGNORED
             };
             mTextBox = new TextBox {
-               Text = pInitialText,
+               Text = mUnicodeSampleString,
                Width = pTextBoxWidth,
                BackColor = BackColor,
                TabIndex = LayoutHelpers.NextTabIndex()
             };
-
-            //add controls before layout math
             Controls.Add(mLabel);
             Controls.Add(mTextBox);
-            //position label and textbox
             ApplyLabelPosition(mLabel, mTextBox);
-            FinalizeSize(mLabel, mTextBox);
          }
 
-         public TextBox? TextBoxControl() {
-            return mTextBox;
-         }
-
-         public Label? LabelControl() {
-            return mLabel;
-         }
-
-         public string CurrentText() {
-            if (mTextBox == null)
-               return string.Empty;
-            return mTextBox.Text;
-         }
-
-         public void SetText(string pValue) {
-            if (mTextBox != null)
-               mTextBox.Text = pValue;
+         protected override void LayoutCluster() {
          }
 
          protected override void Dispose(bool pDisposing) {

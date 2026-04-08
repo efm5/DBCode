@@ -23,10 +23,11 @@ namespace DBCode {
 
    public enum UIContext { Main, Theme, ColorPicker, FontPicker }
 
-   public enum LabelUsage : int {
-      Interface,
-      Title,
-   }
+   public enum LabelUsage : int { Interface, Title }
+
+   public enum PrimaryTabPageUsage : int { Interface, Color }
+
+   public enum HighlightTabPageUsage : int { Interface, CSharp1, CSharp2 }
 
    public enum FontUsage : int {
       [DisplayText("Interface Font")]
@@ -36,7 +37,7 @@ namespace DBCode {
       [DisplayText("Status Strip Font")]
       Status,
       [DisplayText("Text Box Font")]
-      Text,
+      Text
    }
 
    public enum ColorUsage : int {
@@ -60,7 +61,19 @@ namespace DBCode {
       StatusFont,
       [DisplayText("Text Box Font Color")]
       TextBoxFont,
+      [DisplayText("Text Box Color")]
+      TextBox,
+      [DisplayText("Tab Header Selected Background Color")]
+      TabHeaderSelectedBackground,
+      [DisplayText("Tab Header Unselected Background Color")]
+      TabHeaderUnselectedBackground,
+      [DisplayText("Tab Header Selected Font Color")]
+      TabHeaderSelectedFont,
+      [DisplayText("Tab Header Unselected Color")]
+      TabHeaderUnselectedFont
    }
+
+   public enum ThemeUsage : int { Design, Edit, Pick }
 
    internal static class ClipboardHelper {
       public static void TrySetClipboardText(string pText) {
@@ -112,14 +125,11 @@ namespace DBCode {
       public static FontUsage mFontUsage = FontUsage.Text;
       public static HighlighterEngine? mHighlighterEngine = null;
       public static Icon[] mIcons = new Icon[4];
-      internal static int mBookmarkRow, mDoTabIndexBase, mDoIncrement, mFindPosition, mFindLength, mSelectionStart, mSelectionLength,
-         mTransitionSteps, mTransitionInterval, mMatchIndex, mDefaultAskingMessage, mIconTabIndex, mIconVerticalPad, mIconHorizontalPad,
-         mIconRows, mPartitionRows, mOpenWithTableLayoutPanelRow, mSlideshowDuration, mWidestMenu, mMakingShortcuts;
+      public static int mThemePrimaryTabPageIndex = 0, mThemeHighlightTabPageIndex = 0;
       public static IntPtr mTargetWindow = IntPtr.Zero;
       public static readonly IntPtr mInsertAfterWindow = new IntPtr(0);
       public static MenuStrip? mMenuStrip = null;
-      public static Panel? mThemePanel = null;
-      public static Panel? mThemeBottomPanel = null;
+      public static ThemePanel? mThemePanel = null;
       public static readonly PropertyInfo[] mPredefinedColors = typeof(Color).GetProperties(BindingFlags.Public | BindingFlags.Static);
       public static Rectangle mPreThemeBounds = new Rectangle(50, 50, 800, 600);
       public static Size mResolution, mMonitorSize;
@@ -156,6 +166,9 @@ namespace DBCode {
       public static ToolStripMenuItem? mModeMenuItem = null;
       public static ToolStripMenuItem? mOpaqueTSMI = null;
       public static ToolStripMenuItem? mThemeMenuItem = null;
+      public static ToolStripMenuItem? mThemeDesignTSMI = null;
+      public static ToolStripMenuItem? mThemePickTSMI = null;
+      public static ToolStripMenuItem? mThemeEditTSMI = null;
       public static ToolStripMenuItem? mRetargetTSMI = null;
       public static ToolStripMenuItem? mSeventyFiveTSMI = null;
       public static ToolStripMenuItem? mTargetedTSMI = null;
@@ -198,6 +211,7 @@ namespace DBCode {
       public static ComboBox? mFontFamilyComboBox;
       public static ComboBox? mFontSizeComboBox;
       public static ComboBox? mNamedColorsComboBox;
+      public static Form? mForm = null;
       public static GroupBox? mFontStyleGroupBox;
       public static Label? mPickColorTitleLabel;
       public static Label? mPickColorUsageLabel;

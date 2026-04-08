@@ -1,3 +1,5 @@
+using static DBCode.LayoutHelpers.ColorSwatchHelpers;
+
 namespace DBCode {
    internal static partial class LayoutHelpers {
       internal sealed class ColorSwatch : Panel {
@@ -6,10 +8,10 @@ namespace DBCode {
          private int mSwatchSize = 24;
          public event ColorSwatchClickedHandler? SwatchClicked;
 
-         public ColorSwatch(ColorSwatchUsage pUsage, Color pColor, int pSwatchSize, Color? pBackgroundColor) {
+         public ColorSwatch(ColorSwatchUsage pUsage, Color pColor, Color? pBackgroundColor) {
             mUsage = pUsage;
             mSwatchColor = pColor;
-            mSwatchSize = pSwatchSize;
+            mSwatchSize = CalculateSwatchSize();
 
             BackColor = pBackgroundColor ?? Color.Transparent;
             Width = mSwatchSize;

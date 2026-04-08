@@ -3,10 +3,14 @@ namespace DBCode {
       internal sealed class LabeledCheckBoxCluster : BaseCluster {
          private Label? mLabel = null;
          private CheckBox? mCheckBox = null;
+         internal Color? mBackgroundColor;
 
-         public LabeledCheckBoxCluster(string pLabelText, bool pInitialChecked, LabelPosition pLabelPosition,
+         public LabeledCheckBoxCluster(string pLabelText, string pCheckBoxText, bool pInitialChecked, LabelPosition pLabelPosition,
             Color? pBackgroundColor) : base(pBackgroundColor) {
+            mBackgroundColor = pBackgroundColor;
             mLabelPosition = pLabelPosition;
+            if ((mLabelPosition == LabelPosition.Top) || (mLabelPosition == LabelPosition.Bottom))
+               mLabelPosition = LabelPosition.Left;
             mLabel = new Label {
                AutoSize = true,
                Text = pLabelText,
@@ -15,25 +19,19 @@ namespace DBCode {
                Name = $"LabeledCheckBoxClusterLabel{TabIndex}"
             };
             mCheckBox = new CheckBox {
+               Text = pCheckBoxText,
                AutoSize = true,
                Checked = pInitialChecked,
                BackColor = BackColor,
                TabIndex = LayoutHelpers.NextTabIndex(),
                Name = $"LabeledCheckBoxClusterCheckBox{TabIndex}"
             };
-            //add controls before layout math
             Controls.Add(mLabel);
             Controls.Add(mCheckBox);
             ApplyLabelPosition(mLabel, mCheckBox);
-            FinalizeSize(mLabel, mCheckBox);
          }
 
-         public CheckBox? CheckBoxControl() {
-            return mCheckBox;
-         }
-
-         public Label? LabelControl() {
-            return mLabel;
+         protected override void LayoutCluster() {
          }
 
          protected override void Dispose(bool pDisposing) {

@@ -4,6 +4,7 @@ namespace DBCode {
    public sealed partial class MainForm : Form {
       public MainForm() {
          InitializeUI();
+         mForm = this;
          MinimumSize = new Size(700, 200);
 
          Assembly assembly = Assembly.GetExecutingAssembly();
@@ -35,6 +36,9 @@ namespace DBCode {
          mVisibilityMenuItem = new ToolStripMenuItem();
          mModeMenuItem = new ToolStripMenuItem();
          mThemeMenuItem = new ToolStripMenuItem();
+         mThemeDesignTSMI = new ToolStripMenuItem();
+         mThemePickTSMI = new ToolStripMenuItem();
+         mThemeEditTSMI = new ToolStripMenuItem();
          mHelpMenuItem = new ToolStripMenuItem();
          mTargetedTSMI = new ToolStripMenuItem();
          mRetargetTSMI = new ToolStripMenuItem();
@@ -54,10 +58,7 @@ namespace DBCode {
          mVersionStatusLabel = new ToolStripStatusLabel();
          mRevertTSB = new ToolStripButton();
          mExitTSB = new ToolStripButton();
-         mTimer = new System.Windows.Forms.Timer {
-            Interval = 400
-         };
-
+         mTimer = new System.Windows.Forms.Timer { Interval = 400 };
          SuspendLayout();
          //DEBUG efm5 2026 04 2 many of these need tab index – TabIndex = mTabIndex++;
          StartPosition = FormStartPosition.Manual;
@@ -77,13 +78,27 @@ namespace DBCode {
          mVisibilityMenuItem.ShortcutKeys = Keys.Control | Keys.G;
          mVisibilityMenuItem.ShowShortcutKeys = true;
 
-
          mModeMenuItem.Name = "modeMenuItem";
          mModeMenuItem.Text = "&Mode";
 
-         mThemeMenuItem.Name = "preferencesMenuItem";
+         mThemeMenuItem.Name = "themeMenuItem";
          mThemeMenuItem.Text = "&Theme";
-         mThemeMenuItem.ShortcutKeys = Keys.Control | Keys.B;
+
+         mThemeDesignTSMI.Name = "themeDesignTSMI";
+         mThemeDesignTSMI.Text = "&Design";
+         mThemeDesignTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D;
+         mThemeDesignTSMI.Click += ThemeDesign_Click;
+
+         mThemeEditTSMI.Name = "themeEditTSMI";
+         mThemeEditTSMI.Text = "&Edit";
+         mThemeEditTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.E;
+         mThemeEditTSMI.Click += ThemeEdit_Click;
+
+         mThemePickTSMI.Name = "themePickTSMI";
+         mThemePickTSMI.Text = "&Pick";
+         mThemePickTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.P;
+         mThemePickTSMI.Click += ThemePick_Click;
+         mThemeMenuItem.DropDownItems.AddRange(mThemeDesignTSMI, mThemeEditTSMI, mThemePickTSMI);
 
          mHelpMenuItem.Name = "helpMenuItem";
          mHelpMenuItem.Text = "&Help";

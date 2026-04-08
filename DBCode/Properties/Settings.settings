@@ -11,5 +11,17 @@
     <Setting Name="FormOpacity" Type="System.Double" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
+    <Setting Name="ThemePrimaryTabPageIndex" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="ThemeHighlightTabPageIndex" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="ThemeLocation" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">100, 100</Value>
+    </Setting>
+    <Setting Name="ThemeSize" Type="System.Drawing.Size" Scope="User">
+      <Value Profile="(Default)">1000, 500</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

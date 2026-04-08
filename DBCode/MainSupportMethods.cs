@@ -1,6 +1,6 @@
 ﻿namespace DBCode {
    public sealed partial class MainForm : Form {
-      public void GetHelp(UIContext pUIContext, string? pSpecificHREFAnchor = "") {
+      public static void GetHelp(UIContext pUIContext, string? pSpecificHREFAnchor = "") {
          if (pSpecificHREFAnchor == null) {
             TimedMessage("Trying to get help failed! The string was null not empty.", "HTML Specific HREF Anchor ERROR");
             return;

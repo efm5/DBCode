@@ -1,45 +1,39 @@
-﻿namespace DBCode {
+﻿using System.Runtime.CompilerServices;
+
+namespace DBCode {
    internal static class ZOrderHelper {
+
       #region public methods
       public static List<IntPtr> GetZOrderSnapshot() {
-#pragma warning disable IDE0028
-         List<IntPtr> pList = new List<IntPtr>();
-#pragma warning restore IDE0028
-
+         List<IntPtr> pList = [];
          EnumWindowsCollect(pList);
          return pList;
       }
 
       public static IntPtr GetPenultimateVisibleWindow(IntPtr pTopWindow) {
-#pragma warning disable IDE0028
          List<IntPtr> pSnapshot = GetZOrderSnapshot();
-         List<IntPtr> pFiltered = new List<IntPtr>();
-#pragma warning restore IDE0028
-
-         for (int i = 0; i < pSnapshot.Count; i++) {
-            IntPtr pWindowHandle = pSnapshot[i];
+         List<IntPtr> pFiltered = [];
+         for (int pIndex = 0; pIndex < pSnapshot.Count; pIndex++) {
+            IntPtr pWindowHandle = pSnapshot[pIndex];
             if ((IsRealVisibleWindow(pWindowHandle)) && (IsBlacklistedWindow(pWindowHandle) == false))
                pFiltered.Add(pWindowHandle);
          }
          if (pFiltered.Count < 2)
             return IntPtr.Zero;
-         int index = pFiltered.IndexOf(pTopWindow);
-         if (index <= 0)
+         int pTopIndex = pFiltered.IndexOf(pTopWindow);
+         if (pTopIndex <= 0)
             return IntPtr.Zero;
-         return pFiltered[index - 1];
+         return pFiltered[pTopIndex - 1];
       }
 
       public static List<IntPtr> GetAcceptableWindowsInZOrder() {
-#pragma warning disable IDE0028
-         List<IntPtr> pResult = new List<IntPtr>();
+         List<IntPtr> pResult = [];
          List<IntPtr> pSnapshot = GetZOrderSnapshot();
-#pragma warning restore IDE0028
-
-         for (int i = 0; i < pSnapshot.Count; i++) {
-            IntPtr pHwnd = pSnapshot[i];
-            if (!IsRealVisibleWindow(pHwnd) || IsBlacklistedWindow(pHwnd))
+         for (int pIndex = 0; pIndex < pSnapshot.Count; pIndex++) {
+            IntPtr pWindowHandle = pSnapshot[pIndex];
+            if (!IsRealVisibleWindow(pWindowHandle) || IsBlacklistedWindow(pWindowHandle))
                continue;
-            pResult.Add(pHwnd);
+            pResult.Add(pWindowHandle);
          }
          return pResult;
       }
@@ -51,67 +45,80 @@
       }
 
       public static IntPtr GetMostSuitableWindow() {
-         //#pragma warning disable IDE0028//efm5 warning
          List<IntPtr> pCandidates = GetAcceptableWindowsInZOrder();
-         //#pragma warning restore IDE0028
-
          return SelectFromMultiple(pCandidates);
       }
 
-      public static bool IsValidTargetWindow(IntPtr pHwnd) {
-         if ((pHwnd == IntPtr.Zero) || (IsWindow(pHwnd) == false) || (IsRealVisibleWindow(pHwnd) == false) ||
-            (IsBlacklistedWindow(pHwnd)))
+      public static bool IsValidTargetWindow(IntPtr pWindowHandle) {
+         if ((pWindowHandle == IntPtr.Zero) || (IsWindow(pWindowHandle) == false) || (IsRealVisibleWindow(pWindowHandle) == false) || (IsBlacklistedWindow(pWindowHandle)))
             return false;
          return true;
       }
 
-      public static string GetWindowTitle(IntPtr pHwnd) {
-         int length = GetWindowTextLength(pHwnd);
-         if (length <= 0)
+      public static unsafe string GetWindowTitle(IntPtr pWindowHandle) {
+         int pLength = NativeMethods.GetWindowTextLength(pWindowHandle);
+         if (pLength <= 0)
             return string.Empty;
 
-         //#pragma warning disable IDE0028//efm5 warning
-         StringBuilder pBuilder = new StringBuilder(length + 1);
-         //#pragma warning restore IDE0028
-#pragma warning disable CA1806
-         GetWindowText(pHwnd, pBuilder, pBuilder.Capacity);
-#pragma warning restore CA1806
-         return pBuilder.ToString();
+         char[] pBuffer = new char[pLength + 1];
+
+         fixed (char* pFixed = pBuffer) {
+            int pWritten = NativeMethods.GetWindowText(
+                pWindowHandle,
+                pFixed,
+                pBuffer.Length
+            );
+
+            return new string(pBuffer, 0, pWritten);
+         }
       }
       #endregion
 
       #region private methods
-      private static void EnumWindowsCollect(List<IntPtr> pList) {
-         EnumWindows(delegate (IntPtr pWindowHandle, IntPtr pCallbackParam) {
-            pList.Add(pWindowHandle);
-            return true;
-         }, IntPtr.Zero);
+      private static unsafe void EnumWindowsCollect(List<IntPtr> pList) {
+         var handle = GCHandle.Alloc(pList);
+         try {
+            delegate* unmanaged[Stdcall]<nint, nint, bool> pCallback = &EnumWindowsCallback;
+            NativeMethods.EnumWindows(pCallback, GCHandle.ToIntPtr(handle));
+         }
+         finally {
+            handle.Free();
+         }
+      }
+
+      [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
+      private static bool EnumWindowsCallback(nint pWindowHandle, nint pLeftParameter) {
+         var list = (List<IntPtr>)GCHandle.FromIntPtr(pLeftParameter).Target!;
+         list.Add(pWindowHandle);
+         return true;
       }
 
       private static bool IsRealVisibleWindow(IntPtr pWindowHandle) {
          if ((pWindowHandle == IntPtr.Zero) || (IsWindow(pWindowHandle) == false) || (IsWindowVisible(pWindowHandle) == false))
             return false;
-         int length = GetWindowTextLength(pWindowHandle);
-         if (length == 0)
+         int pLength = GetWindowTextLength(pWindowHandle);
+         if (pLength == 0)
             return false;
-         int style = (int)GetWindowLongPtr(pWindowHandle, GWL_STYLE);
-         if ((style & WS_VISIBLE) == 0)
+         int pStyle = (int)GetWindowLongPtr(pWindowHandle, GWL_STYLE);
+         if ((pStyle & WS_VISIBLE) == 0)
             return false;
-         int exStyle = (int)GetWindowLongPtr(pWindowHandle, GWL_EXSTYLE);
-         if (((exStyle & WS_EX_TOOLWINDOW) != 0) || ((exStyle & WS_EX_NOACTIVATE) != 0) || ((exStyle & WS_EX_LAYERED) != 0))
+         int pExStyle = (int)GetWindowLongPtr(pWindowHandle, GWL_EXSTYLE);
+         if (((pExStyle & WS_EX_TOOLWINDOW) != 0) || ((pExStyle & WS_EX_NOACTIVATE) != 0) || ((pExStyle & WS_EX_LAYERED) != 0))
             return false;
-         int cloaked = 0;
-         int result = DwmGetWindowAttribute(pWindowHandle, DWMWINDOWATTRIBUTE.DWMWA_CLOAKED, out cloaked, sizeof(int));
-         if ((result == 0) && (cloaked != 0))
+         INT32 pOCloakedValue;
+         int pResult = DwmGetWindowAttributeInt(pWindowHandle, (int)DWMWINDOWATTRIBUTE.DWMWA_CLOAKED, out pOCloakedValue, sizeof(int));
+         int pCloaked = pOCloakedValue.Value;
+         if ((pResult == 0) && (pCloaked != 0))
             return false;
          return true;
       }
 
-#pragma warning disable IDE0060//DEBUG efm5 2026 03 28 temporarily
-      private static bool IsBlacklistedWindow(IntPtr pHwnd) {
+#pragma warning disable IDE0600 // Remove unused parameter - this is a placeholder for future logic that may need the window handle.
+      private static bool IsBlacklistedWindow(IntPtr pWindowHandle) {
+         //DEBUG efm5 2026 04 5 flesh out this stub
          return false;
       }
-#pragma warning restore IDE0060
+#pragma warning restore IDE0600
       #endregion
    }
 }

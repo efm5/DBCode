@@ -3,15 +3,22 @@ namespace DBCode {
       internal sealed class ClusterContainer : Panel {
          private int mVerticalSpacing = 6, mHorizontalSpacing = 6, mCurrentY = 0, mCurrentX = 0;
          private bool mAutoFlowVertical = true;
+         internal Color? mBackgroundColor;
 
          public ClusterContainer(bool pAutoFlowVertical, int pHorizontalSpacing, int pVerticalSpacing, Color? pBackgroundColor) {
+            mBackgroundColor = pBackgroundColor;
             mAutoFlowVertical = pAutoFlowVertical;
             mHorizontalSpacing = pHorizontalSpacing;
             mVerticalSpacing = pVerticalSpacing;
-            TabIndex = LayoutHelpers.NextTabIndex();
+            TabIndex = mTabIndex;
+            Name = $"ClusterContainer{mTabIndex++}";
             AutoSize = true;
             BackColor = pBackgroundColor ?? Color.Transparent;
-            Name = $"ClusterContainer{TabIndex}";
+            LayoutCluster();
+         }
+
+         internal void LayoutCluster() {
+            //DEBUG efm5 2026 04 7 do the work
          }
 
          public void AddCluster(BaseCluster pCluster) {

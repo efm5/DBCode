@@ -1,8 +1,8 @@
 using System.Collections.ObjectModel;
+using DBCode.Themes;
 
 namespace DBCode {
    internal static partial class LayoutHelpers {
-
       internal static Size CreateSizeFromFloats(float pWidth, float pHeight) {
          return new Size((int)pWidth, (int)pHeight);
       }
@@ -586,5 +586,23 @@ namespace DBCode {
          return new Point(pPoint.X, pPoint.Y);
       }
 
+      internal static int GetTabHeaderHeight(Font pFont) {
+         return TextRenderer.MeasureText(Fields.mUnicodeSampleString,
+            new Font(pFont.FontFamily, pFont.Size + 1f, FontStyle.Bold)).Height + 6;
+      }
+
+      internal static int GetTabHeaderWidth(string pText, Font pFont) {
+         return TextRenderer.MeasureText(pText, pFont).Width + 20;
+      }
+
+      internal static void ComputeTabWidths(VariableWidthTabControl pTabControl) {
+         pTabControl.TabHeaderWidths.Clear();
+         for (int i = 0; i < pTabControl.TabPages.Count; i++) {
+            TabPage page = pTabControl.TabPages[i];
+            Font font = mCurrentTheme!.mFonts[(int)FontUsage.Interface];
+            int width = GetTabHeaderWidth(page.Text, font);
+            pTabControl.TabHeaderWidths.Add(width);
+         }
+      }
    }
 }

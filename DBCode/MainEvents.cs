@@ -5,6 +5,8 @@
          Size savedSize = Settings.Default.FormSize;
          Point savedLocation = Settings.Default.FormLocation;
          double savedOpacity = Settings.Default.FormOpacity;
+         mThemePrimaryTabPageIndex = Settings.Default.ThemePrimaryTabPageIndex;
+         mThemeHighlightTabPageIndex = Settings.Default.ThemeHighlightTabPageIndex;
 
          if (!savedSize.IsEmpty)
             Size = savedSize;
@@ -24,9 +26,25 @@
          Settings.Default.FormOpacity = Opacity;
          Settings.Default.FormSize = Size;
          Settings.Default.FormLocation = Location;
+         Settings.Default.ThemePrimaryTabPageIndex = mThemePrimaryTabPageIndex;
+         Settings.Default.ThemeHighlightTabPageIndex = mThemeHighlightTabPageIndex;
+         if (mThemePanel != null)
+            mThemePanel.SaveSettings();
          Settings.Default.Save();
       }
       #endregion
+
+      private void ThemeDesign_Click(object? pSender, EventArgs pEventArgs) {
+         EnsureThemePanel(ThemeUsage.Design);
+      }
+
+      private void ThemeEdit_Click(object? pSender, EventArgs pEventArgs) {
+         EnsureThemePanel(ThemeUsage.Edit);
+      }
+
+      private void ThemePick_Click(object? pSender, EventArgs pEventArgs) {
+         EnsureThemePanel(ThemeUsage.Pick);
+      }
 
       private void OnEditorTextChanged(object? pSender, EventArgs pArgs) {
          if (mSuppressTextChanged)
@@ -86,7 +104,7 @@
          mReturnToTop = mReturnToTopTSMI.Checked;
       }
 
-      private void Help_Click(object? pSender, EventArgs pEventArgs) {
+      public static void Help_Click(object? pSender, EventArgs pEventArgs) {
          UIContext context = UIContext.Main;
          string? anchor = "";
 

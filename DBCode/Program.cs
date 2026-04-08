@@ -1,5 +1,8 @@
 namespace DBCode {
    internal static partial class Program {
+      public static bool gBackgroundWorkerFinished = false;
+      public static bool gOffset = false;
+
       [STAThread]
       private static void Main() {
          Application.EnableVisualStyles();
