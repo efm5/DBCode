@@ -1,5 +1,10 @@
 ﻿namespace DBCode {
    public sealed partial class MainForm : Form {
+      public static void PerformFirstLaunchInitialization() {
+         TimedMessage("Welcome to DBCode! This message will disappear after a few seconds.", "Welcome to DBCode!", 3000);
+         //DEBUG efm5 2026 04 8 fill out the logic
+      }
+
       public static void GetHelp(UIContext pUIContext, string? pSpecificHREFAnchor = "") {
          if (pSpecificHREFAnchor == null) {
             TimedMessage("Trying to get help failed! The string was null not empty.", "HTML Specific HREF Anchor ERROR");

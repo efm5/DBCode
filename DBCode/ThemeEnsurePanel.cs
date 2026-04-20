@@ -6,9 +6,12 @@ namespace DBCode {
          if (pThemeUsage == ThemeUsage.Pick) { }//DEBUG efm5 2026 04 6 implement
          else {
             mPreThemeBounds = Bounds;
-            Bounds = new Rectangle(Settings.Default.ThemeLocation, Settings.Default.ThemeSize);
+            Bounds = new Rectangle(mUiState.mThemeLocation, mUiState.mThemeSize);
             if (mThemePanel == null)
-               mThemePanel = new ThemePanel(pThemeUsage);
+               mThemePanel = new ThemePanel(pThemeUsage, mUiState);
+            mThemePanel.BeginThemeEditSession(mCurrentTheme);
+            if (!mFirstTheme)
+               Bounds = mThemeBounds;
             ShowThemePanel(pThemeUsage);
          }
       }
@@ -42,7 +45,6 @@ namespace DBCode {
             return;
          mForm.ControlBox = true;
          if (mThemePanel != null) {
-            mThemePanel.SaveSettings();
             mThemePanel.Visible = false;
             mThemePanel.SendToBack();
             if (mForm.Controls.Contains(mThemePanel))

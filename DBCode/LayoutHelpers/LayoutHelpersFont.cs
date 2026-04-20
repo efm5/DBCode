@@ -32,24 +32,38 @@ namespace DBCode {
          return new Font(mCurrentTheme.mFonts[(int)FontUsage.Interface].Name, pSize, FontStyle.Bold);
       }
 
-      public static Font CreateNewTitleFont() {
-         if (mCurrentTheme == null)
-            return new Font("Segoe UI", 18f, FontStyle.Bold);
-         return new Font(mCurrentTheme.mFonts[(int)FontUsage.Interface].Name,
-            (mCurrentTheme.mFonts[(int)FontUsage.Interface].SizeInPoints * 1.25f), FontStyle.Bold);
-      }
+      //public static Font CreateNewTitleFont() {
+      //   if (mCurrentTheme == null)
+      //      return new Font("Segoe UI", 18f, FontStyle.Bold);
+      //   return new Font(mCurrentTheme.mFonts[(int)FontUsage.Interface].Name,
+      //      (mCurrentTheme.mFonts[(int)FontUsage.Interface].SizeInPoints * 1.25f), FontStyle.Bold);
+      //}
 
-      public static Font CreateNewTitleFont(float pSize) {
+      //public static Font CreateNewTitleFont(float pSize) {
+      //   if (mCurrentTheme == null)
+      //      return new Font("Segoe UI", 18f * pSize, FontStyle.Bold);
+      //   if (pSize < 0)
+      //      pSize = 1.25f;
+      //   else if (pSize < .5)
+      //      pSize = .5f;
+      //   else if (pSize > 2)
+      //      pSize = 2f;
+      //   float baseSize = mCurrentTheme.mFonts[(int)FontUsage.Interface].SizeInPoints * 1.25f;
+      //   float finalSize = baseSize * pSize;
+      //   return new Font(mCurrentTheme.mFonts[(int)FontUsage.Interface].Name, finalSize, FontStyle.Bold);
+      //}
+
+      public static Font CreateNewTitleFont(HeaderLabelSize pSize) {
          if (mCurrentTheme == null)
             return new Font("Segoe UI", 18f, FontStyle.Bold);
-         if (pSize < 0)
-            pSize = 1.25f;
-         else if (pSize < .5)
-            pSize = .5f;
-         else if (pSize > 2)
-            pSize = 2f;
-         pSize = mCurrentTheme.mFonts[(int)FontUsage.Interface].SizeInPoints * pSize;
-         return new Font(mCurrentTheme.mFonts[(int)FontUsage.Interface].Name, pSize, FontStyle.Bold);
+         float baseSize = mCurrentTheme.mFonts[(int)FontUsage.Interface].SizeInPoints, multiplier = (int)pSize / 100f;
+
+         baseSize = (float)Math.Ceiling(baseSize * multiplier);
+         if (baseSize < 8)
+            baseSize = 8f;
+         else if (baseSize > 100)
+            baseSize = 100f;
+         return new Font(mCurrentTheme.mFonts[(int)FontUsage.Interface].Name, baseSize, FontStyle.Bold);
       }
 
       public static Font CreateNewWarningFont() {

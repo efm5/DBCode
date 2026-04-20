@@ -153,6 +153,11 @@ namespace DBCode {
          mWidgetVerticalOffset = (int)Math.Ceiling(fontSize * 0.2f);
          mWidgetBigVerticalOffset = (int)Math.Ceiling(fontSize * 0.7f);
          mEm = (int)Math.Ceiling(fontSize);
+         mEm2 = mEm * 2;
+         mEm3 = mEm * 3;
+         mEmHalf = (int)Math.Ceiling(mEm * 0.5f);
+         mBottomPad = (int)Math.Ceiling(fontSize * 0.75f);
+         mRightPad = (int)Math.Ceiling(fontSize * 0.75f);
          mMenuLeftOffset = (int)Math.Ceiling(fontSize * 2.5f);
          mGroupTopPad = (int)Math.Ceiling(fontSize * 0.2f);
          GroupBox groupBox = new GroupBox {

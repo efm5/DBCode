@@ -37,37 +37,62 @@ All generated code must follow these rules without exception.
 • Must be full English words.
 • No abbreviations (idx, tmp, rgb, etc.).
 • Dragon‑friendly and pronounceable.
+• Semantic richness is preferred over brevity.
+• camelCase.
+  Examples:
+    int totalCount (a local field)
 
 1.4 Field Naming
 • Grouped, alphabetized, vertically compact.
 • Full English words only.
+• No abbreviations.
+    int mTotalCount (a class field)
 
 1.5 Type Names
 • PascalCase.
 • Full English words.
 • No abbreviations.
+• When a member of a class precede the name with “m”.
+  Example:
+    private static int mCount;
+1.6 Field Declaration Rules (Strict)
+• Fields are grouped strictly by type.
+• All fields of the same type appear together.
+• No blank lines are inserted between fields of the same type.
+• Within each type group, fields are alphabetized by identifier.
+• Fields are not grouped by semantic role; grouping is by type only.
+• Fields of the same type are declared in a single comma‑separated statement when reasonable.
+• Reference‑type fields are explicitly initialized to null unless otherwise specified.
 
 ===========================================
-2. FORMATTING RULES
+2. COMMENTING, FORMATTING AND LAYOUT RULES
 ===========================================
 
-2.1 Indentation
+2.1 General Philosophy
+• The target maximum line width is approximately 130 characters.
+• Long declarations are wrapped only at comma boundaries.
+• Mid‑expression wrapping is avoided unless unavoidable.
+• Continuation lines are indented exactly three spaces beyond the existing indentation level.
+• Formatting is compact and vertically dense.
+• Unnecessary blank lines are avoided.
+• Blank lines are not inserted before comments or return statements.
+
+2.2 Indentation
 • 3 spaces per indentation level.
 • No tabs.
 
-2.2 Braces
+2.3 Braces
 • Opening brace on same line as declaration.
 • No braces for single‑statement control structures.
 
-2.3 Vertical Compactness
-• No blank lines inside methods.
+2.4 Vertical Compactness
+• No blank lines inside methods except after variable declaration blocks.
 • No blank line before return statements.
 • No blank line before comments inside methods.
 • Methods separated by exactly one blank line.
 
-2.4 Region Spacing Rule (NEW — FINAL)
+2.5 Region Spacing Rule
 To maintain consistent vertical compactness and predictable structure:
-
 • A single blank line MUST appear *before* each `#region` directive.
 • A single blank line MUST appear *after* each `#endregion` directive.
 • NO blank line may appear immediately *after* a `#region` directive.
@@ -101,15 +126,40 @@ Incorrect:
 
 This rule applies to ALL files and ALL regions.
 
+2.6 Commenting
+To maintain vertical compactness:
+• Refrain from embedded comments within method bodies except for critical clarifications. 
+• When comments are necessary, they should be concise and placed immediately above the relevant code without intervening blank lines.
+• No summary blocks or XML documentation comments are required unless explicitly requested.
+
 ===========================================
-3. LANGUAGE RULES
+3. CONTROL STRUCTURE RULES
 ===========================================
 
-3.1 No LINQ in subsystem code.
-3.2 No cleverness; clarity always wins.
-3.3 No expression‑bodied members in subsystem code.
-3.4 No implicit typing except in foreach loops.
-3.5 No nullable reference types in subsystem code.
+3.1 Braces are always used, except for single‑statement control structures.
+3.2 Explicit block structure is preferred over compact syntax.
+
+===========================================
+4. LANGUAGE RULES
+===========================================
+
+4.1 No LINQ in subsystem code.
+4.2 No cleverness; clarity always wins.
+4.3 No expression‑bodied members in subsystem code.
+4.4 No implicit typing.
+  Example:
+    Prefer:
+            foreach (Control control in Controls.OfType<Control>()) {
+            string windowTitle = GetWindowTitle(pWindowHandle);
+    Over:
+            foreach (Control control in Controls)
+            var windowTitle = GetWindowTitle(pWindowHandle);
+    even where in the type is unmistakable.
+4.5 No nullable reference types in subsystem code.
+4.6 Enumerations
+• Short enums are collapsed onto a single line when they fit comfortably within the ~130 letter maximum line length rule.
+• Multi‑line enums are preserved when they include attributes or descriptive metadata.
+• Enum members are not reordered unless explicitly instructed.
 
 ===========================================
 4. INTEROP RULES
@@ -120,11 +170,9 @@ This rule applies to ALL files and ALL regions.
 • NEVER specify CharSet — LibraryImport does not support it.
 • All parameters must follow naming rules.
 • All out parameters must use blittable wrapper structs when required.
-
 4.2 Blittable Wrapper Types
 • INT32, UINT32, BOOL, etc. must be used for byref primitives.
 • RECT, POINT, SIZE must remain blittable.
-
 4.3 No overloads for LibraryImport
 • If multiple output types are needed, use distinct method names:
     DwmGetWindowAttribute
@@ -134,6 +182,12 @@ This rule applies to ALL files and ALL regions.
 ===========================================
 5. STRUCTURE & ARCHITECTURE RULES
 ===========================================
+
+WinForms context is assumed unless explicitly stated otherwise.
+Control ownership, layout logic, and event wiring are not changed unless requested.
+Existing naming conventions for controls and UI elements are respected.
+Monolithic panels with overlapping responsibilities are avoided.
+UI components do not persist state.
 
 5.1 Subsystem Layout
 • Each subsystem must be self‑contained.
@@ -149,23 +203,56 @@ This rule applies to ALL files and ALL regions.
 • No inline suppressions except temporary debugging cases.
 
 ===========================================
-6. DRAGON DICTATION RULES
+6. UI STATE AND PERSISTENCE ARCHITECTURE
 ===========================================
 
-6.1 Identifier Pronounceability
+• Settings.Default is used for serialization only.
+• All runtime UI state lives in UiState.
+• UI components never persist state directly.
+• Persistence occurs once at shutdown.
+• First‑launch initialization logic is not part of UiState.
+
+===========================================
+7. LANGUAGE AND STYLE RULES
+===========================================
+
+• Variable initialization is explicit.
+• Local variables are declared at the top of methods.
+• Clever or minimalist constructs that sacrifice clarity are avoided.
+• Single‑line AddRange calls are preferred unless the line exceeds the ~130 letter maximum line length, in which case wrapping occurs at comma boundaries.
+
+===========================================
+8. DRAGON DICTATION RULES
+===========================================
+
+8.1 Identifier Pronounceability
 • All identifiers must be easily dictated.
 • No abbreviations.
 • No multi‑step dictation sequences.
-
-6.2 Loop Variables
+8.2 Loop Variables
 • Use full English names:
     currentIndex
     currentControl
     nextControl
-
-6.3 Method Names
+8.3 Method Names
 • Full English words.
 • Verb‑first.
+
+===========================================
+9. WORKFLOW ASSUMPTIONS
+===========================================
+
+• The codebase is written and maintained using a hands‑free, dictation‑driven workflow.
+• Naming and structure must minimize friction for Dragon dictation.
+• Predictability and consistency are more important than stylistic novelty.
+
+===========================================
+10. APPLYING THE STYLE GUIDE
+===========================================
+
+• When instructed to apply the style guide, all rules above are assumed without restatement.
+• Ambiguities are resolved using the most conservative interpretation.
+• Violations are corrected explicitly rather than worked around.
 
 ===========================================
 END OF STYLE GUIDE

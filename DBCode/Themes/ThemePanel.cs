@@ -1,108 +1,121 @@
-﻿using DBCode.Diagnostics;
+﻿using System.Globalization;
 
 namespace DBCode {
    namespace Themes {
-      internal sealed class VariableWidthTabControl : TabControl {
-         public readonly List<int> TabHeaderWidths = [];
-
-         protected override void OnMouseDown(MouseEventArgs pMouseEventArgs) {
-            Point mouseLocation = pMouseEventArgs.Location;
-            int tabIndex = HitTestTabHeaders(mouseLocation);
-            if (tabIndex >= 0)
-               SelectedIndex = tabIndex;
-            else
-               base.OnMouseDown(pMouseEventArgs);
-         }
-
-         private int HitTestTabHeaders(Point pMouseLocation) {
-            int currentTabHeaderOffset = 0;
-            int tabHeaderTop = GetTabRect(0).Y;
-
-            for (int tabIndex = 0; tabIndex < TabHeaderWidths.Count; tabIndex++) {
-               int offsetBefore = currentTabHeaderOffset;
-               int tabHeaderWidth = TabHeaderWidths[tabIndex];
-               Rectangle tabHeaderRectangle = new Rectangle(offsetBefore, tabHeaderTop, tabHeaderWidth, ItemSize.Height);
-               bool containsPoint = tabHeaderRectangle.Contains(pMouseLocation);
-
-               if (containsPoint)
-                  return tabIndex;
-               int offsetAfter = offsetBefore + tabHeaderWidth;
-               currentTabHeaderOffset = offsetAfter;
-            }
-            return -1;
-         }
-
-         private int HitTestVariableWidth(Point pPoint) {
-            int x = 0;
-            for (int i = 0; i < TabHeaderWidths.Count; i++) {
-               Rectangle r = new Rectangle(x, 0, TabHeaderWidths[i], ItemSize.Height);
-               if (r.Contains(pPoint))
-                  return i;
-               x += TabHeaderWidths[i];
-            }
-            return -1;
-         }
-      }
-
-      internal sealed class ThemePanel : Panel {
-         private readonly Button mApplyButton, mCancelButton, mHelpButton, mOkButton, mNewButton, mOpenButton;
-         private readonly TitleLabelCluster mTitleLabel, mFirstTitleLabel, mSecondTitleLabel, mThirdTitleLabel, mFourthTitleLabel, mFifthTitleLabel;
+      internal sealed partial class ThemePanel : Panel {
+         private const string TemporaryThemePrefix = "\u26A0 TEMPORARY THEME \u26A0 ";
+         private readonly Button mApplyButton, mCancelButton, mCloneButton, mHelpButton, mNewButton, mOkButton;
+         private readonly HeaderLabelCluster mFifthTitleLabel, mFirstTitleLabel, mFourthTitleLabel, mSecondTitleLabel, mThirdTitleLabel, mTitleLabel;
+         private readonly LabeledButtonTextBoxCluster mFirstCluster, mFourthCluster, mSecondCluster, mThirdCluster;
          private readonly StatusStrip mStatusStrip;
-         private readonly VariableWidthTabControl mHighlightTabControl, mPrimaryTabControl;
-         private readonly ToolStripControlHost mApplyHost, mCancelHost, mHelpHost, mOkHost, mNewHost, mOpenHost;
+         private readonly ToolStripControlHost mApplyHost, mCancelHost, mCloneHost, mHelpHost, mNewHost, mOkHost;
          private readonly ToolStripStatusLabel mSpringLabel;
-         private readonly LabeledButtonTextBoxCluster mFirstCluster, mSecondCluster, mThirdCluster, mFourthCluster;
-         private readonly ThemeUsage mThemeUsage;
-         private readonly MenuStrip mThemePanelMenuStrip;
-         private Theme? mTemporaryTheme;
+         private readonly UiState mUiState;
+         private readonly VariableWidthTabControl mHighlightTabControl, mPrimaryTabControl;
+         private bool mHasCachedPreferredSize, mThemeIsDirty = false;
+         private ClusterContainer mApplicationColorsContainer;
+         private FontFamily mCachedFontFamily;
+         private float mCachedFontSize;
+         private FontStyle mCachedFontStyle;
+         private Size mCachedPreferredSize;
+         private Theme mTemporaryTheme;
 
-         public ThemePanel(ThemeUsage pThemeUsage) {
-            if (mCurrentTheme == null)
-               Fatal.Layout(nameof(mCurrentTheme), "Current theme is null when creating a new Theme Panel.");
-            mThemeUsage = pThemeUsage;
+         private struct InitialBoundsResult {
+            internal Rectangle Bounds;
+            internal bool IsClamped;
+         }
+
+         public ThemePanel(ThemeUsage pThemeUsage, UiState pUiState) {
+            mUiState = pUiState;
             AutoScroll = true;
             AutoSize = false;
             BackColor = Color.Transparent;
-            mApplyButton = new Button() ?? throw Fatal.Layout(nameof(mApplyButton), "Constructor failed to create control.");
-            mCancelButton = new Button() ?? throw Fatal.Layout(nameof(mCancelButton), "Constructor failed to create control.");
-            mHelpButton = new Button() ?? throw Fatal.Layout(nameof(mHelpButton), "Constructor failed to create control.");
-            mOkButton = new Button() ?? throw Fatal.Layout(nameof(mOkButton), "Constructor failed to create control.");
-            mTitleLabel = new TitleLabelCluster("Themes", 0f) ?? throw Fatal.Layout(nameof(mTitleLabel), "Constructor failed to create control.");
-            mFirstTitleLabel = new TitleLabelCluster("Fonts", 1.1f) ?? throw Fatal.Layout(nameof(mFirstTitleLabel), "Constructor failed to create control.");
-            mSecondTitleLabel = new TitleLabelCluster("Colors", 1.1f) ?? throw Fatal.Layout(nameof(mSecondTitleLabel), "Constructor failed to create control.");
-            mThirdTitleLabel = new TitleLabelCluster("Interface", 1.1f) ?? throw Fatal.Layout(nameof(mThirdTitleLabel), "Constructor failed to create control.");
-            mFourthTitleLabel = new TitleLabelCluster("C# 1", 1.1f) ?? throw Fatal.Layout(nameof(mFourthTitleLabel), "Constructor failed to create control.");
-            mFifthTitleLabel = new TitleLabelCluster("C# 2", 1.1f) ?? throw Fatal.Layout(nameof(mFifthTitleLabel), "Constructor failed to create control.");
+            mApplyButton = new Button();
+            mCancelButton = new Button();
+            mHelpButton = new Button();
+            mOkButton = new Button();
+            mNewButton = new Button();
+            mCloneButton = new Button();
+            mTitleLabel = new HeaderLabelCluster("Themes", HeaderLabelSize.Normal);
+            mFirstTitleLabel = new HeaderLabelCluster("Fonts", HeaderLabelSize.Small);
+            mSecondTitleLabel = new HeaderLabelCluster("Colors", HeaderLabelSize.Small);
+            mThirdTitleLabel = new HeaderLabelCluster("Interface", HeaderLabelSize.Small);
+            mFourthTitleLabel = new HeaderLabelCluster("C# 1", HeaderLabelSize.Small);
+            mFifthTitleLabel = new HeaderLabelCluster("C# 2", HeaderLabelSize.Small);
             mStatusStrip = new StatusStrip();
-            mHighlightTabControl = new VariableWidthTabControl();
             mPrimaryTabControl = new VariableWidthTabControl();
+            mHighlightTabControl = new VariableWidthTabControl();
             mApplyHost = new ToolStripControlHost(mApplyButton);
             mCancelHost = new ToolStripControlHost(mCancelButton);
             mHelpHost = new ToolStripControlHost(mHelpButton);
             mOkHost = new ToolStripControlHost(mOkButton);
+            mNewHost = new ToolStripControlHost(mNewButton);
+            mCloneHost = new ToolStripControlHost(mCloneButton);
             mSpringLabel = new ToolStripStatusLabel();
             mFirstCluster = new LabeledButtonTextBoxCluster("The Interface Font:", "Interface", LabelPosition.Left);
             mSecondCluster = new LabeledButtonTextBoxCluster("The Menu Font:", "Menu", LabelPosition.Left);
             mThirdCluster = new LabeledButtonTextBoxCluster("The Static Strip Font:", "Status Strip", LabelPosition.Left);
             mFourthCluster = new LabeledButtonTextBoxCluster("The Text Box Font:", "Box", LabelPosition.Left);
-            mTemporaryTheme = mCurrentTheme?.Clone() ?? throw Fatal.Layout(nameof(mCurrentTheme), "Current theme is null when creating a new Theme Panel.");
+            mTemporaryTheme = mCurrentTheme.Clone(TemporaryThemePrefix + DateTime.UtcNow.Ticks.ToString(CultureInfo.InvariantCulture));
          }
 
          protected override void OnHandleCreated(EventArgs pEventArgs) {
             base.OnHandleCreated(pEventArgs);
             CreateLayout();
+            if (mFirstTheme) {
+               Size preferredSize = GetPreferredContentSizeCached();
+               InitialBoundsResult result = ComputeInitialThemePanelBounds(preferredSize);
+               mForm.Bounds = result.Bounds;
+            }
+            Dock = DockStyle.Fill;
+            BeginInvoke(new Action(() => { ApplyThemeToThemePanel(); }));
          }
 
-         private void LayoutPrimaryClusters() {
-            mPrimaryTabControl.TabPages[(int)PrimaryTabPageUsage.Interface].Controls.Add(mFirstTitleLabel);
-            int top = mFirstTitleLabel!.Bottom + mEm;
-            LabeledButtonTextBoxCluster[] clusters = [mFirstCluster, mSecondCluster, mThirdCluster, mFourthCluster];
-            foreach (LabeledButtonTextBoxCluster cluster in clusters) {
-               cluster.Left = mEm;
-               cluster.Top = top;
-               mPrimaryTabControl.TabPages[(int)PrimaryTabPageUsage.Interface].Controls.Add(cluster);
-               top = cluster.Bottom + mEm;
+         private Size GetPreferredContentSizeCached() {
+            Font interfaceFont = mTemporaryTheme.mFonts[(int)FontUsage.Interface];
+
+            if (mHasCachedPreferredSize && (mCachedFontFamily == interfaceFont.FontFamily) &&
+               ((int)mCachedFontSize == (int)interfaceFont.SizeInPoints) && (mCachedFontStyle == interfaceFont.Style))
+               return mCachedPreferredSize;
+            mCachedFontFamily = interfaceFont.FontFamily;
+            mCachedFontSize = interfaceFont.SizeInPoints;
+            mCachedFontStyle = interfaceFont.Style;
+            mHasCachedPreferredSize = true;
+            return ComputePreferredContentSizeInternal();
+         }
+
+         private Size ComputePreferredContentSizeInternal() {
+            int maxWidthPrimary = 300, maxHeightPrimary = 300, maxWidthHighlight = 300, maxHeightHighlight = 300, pageWidth, pageHeight, wantedWidth, wantedHeight;
+
+            foreach (Panel panel in mPrimaryTabControl.TabPages[(int)PrimaryTabPageUsage.Interface].Controls.OfType<Panel>()) {
+               Control? rightmost = Rightmost(ControlCollectionAsList(panel.Controls));
+               Control? bottommost = Bottommost(ControlCollectionAsList(panel.Controls));
+
+               pageWidth = rightmost != null ? rightmost.Right : 300;
+               pageHeight = bottommost != null ? bottommost.Bottom : 300;
+               if (pageWidth > maxWidthPrimary)
+                  maxWidthPrimary = pageWidth;
+               if (pageHeight > maxHeightPrimary)
+                  maxHeightPrimary = pageHeight;
             }
+            foreach (Panel panel in mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Interface].Controls.OfType<Panel>()) {
+               Control? rightmost = Rightmost(ControlCollectionAsList(panel.Controls));
+               Control? bottommost = Bottommost(ControlCollectionAsList(panel.Controls));
+
+               pageWidth = rightmost != null ? rightmost.Right : 300;
+               pageHeight = bottommost != null ? bottommost.Bottom : 300;
+               if (pageWidth > maxWidthHighlight)
+                  maxWidthHighlight = pageWidth;
+               if (pageHeight > maxHeightHighlight)
+                  maxHeightHighlight = pageHeight;
+            }
+            wantedWidth = Math.Max(maxWidthPrimary, maxWidthHighlight);//DEBUG efm5 2026 04 19 add space for scrollbars
+            wantedHeight = Math.Max(maxHeightPrimary, maxHeightHighlight) + mTitleLabel.Height + mStatusStrip.Height + mEm2;
+            if (wantedWidth < 300)
+               wantedWidth = 300;
+            if (wantedHeight < 300)
+               wantedHeight = 300;
+            return new Size(wantedWidth, wantedHeight);
          }
 
          private void CreateLayout() {
@@ -110,44 +123,203 @@ namespace DBCode {
             CreateTabControls();
             CreateStatusStrip();
             LayoutPrimaryClusters();
+            LayoutInterfaceColorsPage();
+            LayoutCSharp1ColorsPage();
             mApplyButton.Click += ApplyButton_Click;
             mCancelButton.Click += CancelButton_Click;
             mHelpButton.Click += MainForm.Help_Click;
             mOkButton.Click += OkButton_Click;
+            mNewButton.Click += NewButton_Click;
+            mCloneButton.Click += CloneButton_Click;
             Controls.AddRange(mPrimaryTabControl, mStatusStrip, mTitleLabel);
-            mPrimaryTabControl.TabPages[(int)PrimaryTabPageUsage.Interface].Controls.Add(mFirstTitleLabel);
-            mPrimaryTabControl.TabPages[(int)PrimaryTabPageUsage.Color].Controls.Add(mSecondTitleLabel);
-            mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Interface].Controls.Add(mThirdTitleLabel);
-            mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.CSharp1].Controls.Add(mFourthTitleLabel);
-            mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.CSharp2].Controls.Add(mFifthTitleLabel);
-            ApplyThemeToThemePanel();
+            mHasCachedPreferredSize = false;
             ResumeLayout(true);
          }
 
          private void CreateTabControls() {
-            mPrimaryTabControl.SuspendLayout();
-            mHighlightTabControl.SuspendLayout();
             mPrimaryTabControl.TabPages.AddRange([new TabPage("Fonts"), new TabPage("Colors")]);
-            foreach (TabPage tabPage in mPrimaryTabControl.TabPages.OfType<TabPage>())
-               tabPage.AutoScroll = true;
+            mHighlightTabControl.TabPages.AddRange([new TabPage("Interface"), new TabPage("C#"), new TabPage("Basic")]);
             mPrimaryTabControl.Dock = DockStyle.Fill;
-            mHighlightTabControl.TabPages.AddRange([new TabPage("Interface"), new TabPage("C# 1"), new TabPage("C# 2")]);
-            foreach (TabPage tabPage in mHighlightTabControl.TabPages.OfType<TabPage>())
-               tabPage.AutoScroll = true;
             mHighlightTabControl.Dock = DockStyle.Fill;
             mPrimaryTabControl.TabPages[(int)PrimaryTabPageUsage.Color].Controls.Add(mHighlightTabControl);
-            mPrimaryTabControl.SelectedIndex = mThemePrimaryTabPageIndex;
-            mHighlightTabControl.SelectedIndex = mThemeHighlightTabPageIndex;
             mPrimaryTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
-            mPrimaryTabControl.DrawItem += new DrawItemEventHandler(PrimaryTabControl_DrawItem);
             mHighlightTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
-            mHighlightTabControl.DrawItem += new DrawItemEventHandler(HighlightTabControl_DrawItem);
-            mHighlightTabControl.ResumeLayout(false);
-            mPrimaryTabControl.ResumeLayout(false);
+            mPrimaryTabControl.DrawItem += PrimaryTabControl_DrawItem;
+            mHighlightTabControl.DrawItem += HighlightTabControl_DrawItem;
+            mPrimaryTabControl.SelectedIndex = mUiState.mThemePrimaryTabPageIndex;
+            mHighlightTabControl.SelectedIndex = mUiState.mThemeHighlightTabPageIndex;
+            mPrimaryTabControl.SelectedIndexChanged += PrimaryTabControl_SelectedIndexChanged;
+            mHighlightTabControl.SelectedIndexChanged += HighlightTabControl_SelectedIndexChanged;
+         }
+
+         private void LayoutPrimaryClusters() {
+            TabPage page = mPrimaryTabControl.TabPages[(int)PrimaryTabPageUsage.Interface];
+            Panel scrollPanel = new Panel {
+               Name = $"PrimaryTabControlTabPageScrollPanel{mTabIndex}",
+               TabIndex = mTabIndex++,
+               Dock = DockStyle.Fill,
+               AutoScroll = true
+            };
+            page.Controls.Add(scrollPanel);
+            scrollPanel.Controls.Add(mFirstTitleLabel);
+            int top = mFirstTitleLabel.Bottom + mEm;
+            foreach (LabeledButtonTextBoxCluster cluster in new[] { mFirstCluster, mSecondCluster, mThirdCluster, mFourthCluster }) {
+               cluster.Left = mEm;
+               cluster.Top = top;
+               scrollPanel.Controls.Add(cluster);
+               top = cluster.Bottom + mEm;
+            }
+         }
+
+         private void LayoutInterfaceColorsPage() {
+            TabPage page = mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Interface];
+            Panel scrollPanel = new Panel {
+               Name = $"InterfaceColorsTabPagesScrollPanel{mTabIndex}",
+               TabIndex = mTabIndex++,
+               Dock = DockStyle.Fill
+            };
+            page.Controls.Add(scrollPanel);
+            HeaderLabelCluster header = new HeaderLabelCluster("Interface Colors", HeaderLabelSize.Small);
+            List<BaseCluster> colorClusters = new List<BaseCluster>();
+            AddColorCluster(colorClusters, "Panel Background", ColorSwatchUsage.PanelBackground);
+            AddColorCluster(colorClusters, "TextBox Background", ColorSwatchUsage.TextBox);
+            AddColorCluster(colorClusters, "TextBox Font", ColorSwatchUsage.TextBoxFont);
+            AddColorCluster(colorClusters, "Menu Background", ColorSwatchUsage.MenuBackground);
+            AddColorCluster(colorClusters, "Menu Font", ColorSwatchUsage.MenuFont);
+            AddColorCluster(colorClusters, "Interface Background", ColorSwatchUsage.InterfaceBackground);
+            AddColorCluster(colorClusters, "Interface Font", ColorSwatchUsage.InterfaceFont);
+            AddColorCluster(colorClusters, "Status Background", ColorSwatchUsage.StatusBackground);
+            AddColorCluster(colorClusters, "Status Font", ColorSwatchUsage.StatusFont);
+            AddColorCluster(colorClusters, "GroupBox Background", ColorSwatchUsage.GroupBoxBackground);
+            AddColorCluster(colorClusters, "GroupBox Font", ColorSwatchUsage.GroupBoxFont);
+            AddColorCluster(colorClusters, "Tab Header Unselected Font", ColorSwatchUsage.TabHeaderUnselectedFont);
+            AddColorCluster(colorClusters, "Tab Header Selected Font", ColorSwatchUsage.TabHeaderSelectedFont);
+            AddColorCluster(colorClusters, "Tab Header Unselected Background", ColorSwatchUsage.TabHeaderUnselectedBackground);
+            AddColorCluster(colorClusters, "Tab Header Selected Background", ColorSwatchUsage.TabHeaderSelectedBackground);
+            ClusterContainer colorsContainer = new ClusterContainer(colorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               Dock = DockStyle.Fill,
+               Name = "InterfaceColorsClusterContainer",
+               AutoScroll = true
+            };
+            scrollPanel.Controls.Add(colorsContainer);
+            scrollPanel.Controls.Add(header);
+         }
+
+         private void LayoutCSharp1ColorsPage() {
+            TabPage page = mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.CSharp1];
+            Panel scrollPanel = new Panel {
+               Name = $"CSharpColorsTabPagesScrollPanel{mTabIndex}",
+               TabIndex = mTabIndex++,
+               Dock = DockStyle.Fill
+            };
+            page.Controls.Add(scrollPanel);
+            HeaderLabelCluster header = new HeaderLabelCluster("C# Highlight Colors", HeaderLabelSize.Small);
+            List<BaseCluster> colorClusters = new List<BaseCluster>();
+            AddColorCluster(colorClusters, "Unknown Token", ColorSwatchUsage.Unknown);
+            AddColorCluster(colorClusters, "Whitespace Token", ColorSwatchUsage.Whitespace);
+            AddColorCluster(colorClusters, "Identifier Token", ColorSwatchUsage.Identifier);
+            AddColorCluster(colorClusters, "Keyword Token", ColorSwatchUsage.Keyword);
+            AddColorCluster(colorClusters, "Number Token", ColorSwatchUsage.Number);
+            AddColorCluster(colorClusters, "String Literal Token", ColorSwatchUsage.StringLiteral);
+            AddColorCluster(colorClusters, "Character Literal Token", ColorSwatchUsage.CharLiteral);
+            AddColorCluster(colorClusters, "Comment Token", ColorSwatchUsage.Comment);
+            AddColorCluster(colorClusters, "Preprocessor Directive Token", ColorSwatchUsage.PreprocessorDirective);
+            AddColorCluster(colorClusters, "Operator Token", ColorSwatchUsage.Operator);
+            AddColorCluster(colorClusters, "Punctuation Token", ColorSwatchUsage.Punctuation);
+            ClusterContainer colorsContainer = new ClusterContainer(colorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               Dock = DockStyle.Fill,
+               Name = "CSharpColorsClusterContainer",
+               AutoScroll = true
+            };
+            scrollPanel.Controls.Add(colorsContainer);
+            scrollPanel.Controls.Add(header);
+         }
+
+         public void BeginThemeEditSession(Theme pCurrentTheme) {
+            mCurrentTheme = pCurrentTheme;
+            mTemporaryTheme = pCurrentTheme.Clone();
+            mHasCachedPreferredSize = false;
+            ApplyThemeToThemePanel();
+            Invalidate(true);
+         }
+
+         private static InitialBoundsResult ComputeInitialThemePanelBounds(Size pPreferredSize) {
+            Rectangle screenBounds = ScreenBoundsPrimary();
+            Rectangle taskbarBounds = GetTaskbarBounds();
+            int availableLeft = screenBounds.Left;
+            int availableTop = screenBounds.Top;
+            int availableWidth = screenBounds.Width;
+            int availableHeight = screenBounds.Height;
+            if (!taskbarBounds.IsEmpty) {
+               bool taskbarTop = taskbarBounds.Top == screenBounds.Top &&
+                                 taskbarBounds.Height < screenBounds.Height;
+               bool taskbarBottom = taskbarBounds.Bottom == screenBounds.Bottom &&
+                                    taskbarBounds.Height < screenBounds.Height;
+               bool taskbarLeft = taskbarBounds.Left == screenBounds.Left &&
+                                  taskbarBounds.Width < screenBounds.Width;
+               bool taskbarRight = taskbarBounds.Right == screenBounds.Right &&
+                                   taskbarBounds.Width < screenBounds.Width;
+               if (taskbarTop) {
+                  availableTop = taskbarBounds.Bottom;
+                  availableHeight = screenBounds.Bottom - availableTop;
+               }
+               else if (taskbarBottom) {
+                  availableHeight = taskbarBounds.Top - screenBounds.Top;
+               }
+               else if (taskbarLeft) {
+                  availableLeft = taskbarBounds.Right;
+                  availableWidth = screenBounds.Right - availableLeft;
+               }
+               else if (taskbarRight) {
+                  availableWidth = taskbarBounds.Left - screenBounds.Left;
+               }
+            }
+            int maxWidth = (int)Math.Floor(availableWidth * 0.9f);
+            int maxHeight = (int)Math.Floor(availableHeight * 0.9f);
+            int width = pPreferredSize.Width;
+            int height = pPreferredSize.Height;
+            bool widthClamped = width > maxWidth;
+            bool heightClamped = height > maxHeight;
+            if (widthClamped)
+               width = maxWidth;
+            if (heightClamped)
+               height = maxHeight;
+            Rectangle bounds = new Rectangle((availableLeft + ((availableWidth - width) / 2)),
+               (availableTop + ((availableHeight - height) / 2)), width, height);
+            InitialBoundsResult result;
+            result.Bounds = bounds;
+            result.IsClamped = widthClamped || heightClamped;
+            return result;
+         }
+
+         private void AddColorCluster(List<BaseCluster> pClusters, string pLabel, ColorSwatchUsage pUsage,
+            LabelPosition pLabelPosition = LabelPosition.Left) {
+            Color color = mCurrentTheme.mColors[(int)pUsage];
+            LabeledButtonColorSwatchCluster cluster = new LabeledButtonColorSwatchCluster(
+               pLabel,
+               ToDescription(pUsage),
+               pUsage,
+               pLabelPosition,
+               color
+            );
+            pClusters.Add(cluster);
+         }
+
+         private List<LabeledButtonColorSwatchCluster> CreateColorUsageClusters() {
+            List<LabeledButtonColorSwatchCluster> clusters = new List<LabeledButtonColorSwatchCluster>();
+            foreach (ColorUsage usage in Enum.GetValues(typeof(ColorUsage))) {
+               string labelText = ToDescription(usage);
+               string buttonText = ColorUsageButtonNames.Names[usage];
+               Color initialColor = mTemporaryTheme.mColors[(int)usage];
+               LabeledButtonColorSwatchCluster cluster = new LabeledButtonColorSwatchCluster(labelText, buttonText,
+                  (ColorSwatchUsage)usage, LabelPosition.Left, initialColor, null);
+               cluster.SwatchClicked += OnColorSwatchClicked;
+               clusters.Add(cluster);
+            }
+            return clusters;
          }
 
          private void CreateStatusStrip() {
-            mStatusStrip.SuspendLayout();
             mStatusStrip.SizingGrip = true;
             mStatusStrip.Dock = DockStyle.Bottom;
             mSpringLabel.Spring = true;
@@ -155,123 +327,94 @@ namespace DBCode {
             mApplyButton.Text = "Apply";
             mOkButton.Text = "OK";
             mCancelButton.Text = "Cancel";
-            mStatusStrip.Items.Add(mHelpHost);
-            mStatusStrip.Items.Add(mSpringLabel);
-            mStatusStrip.Items.Add(mApplyHost);
-            mStatusStrip.Items.Add(mOkHost);
-            mStatusStrip.Items.Add(mCancelHost);
-            mStatusStrip.ResumeLayout(false);
+            mNewButton.Text = "New";
+            mCloneButton.Text = "Clone";
+            mStatusStrip.Items.AddRange(mHelpHost, mNewHost, mCloneHost, mSpringLabel, mApplyHost, mOkHost, mCancelHost);
          }
 
-         private void PrimaryTabControl_DrawItem(object? pSender, DrawItemEventArgs pDrawItemEventArgs) {
-            TabControlDrawItem(mPrimaryTabControl, pDrawItemEventArgs);
-         }
-
-         private void HighlightTabControl_DrawItem(object? pSender, DrawItemEventArgs pDrawItemEventArgs) {
-            TabControlDrawItem(mHighlightTabControl, pDrawItemEventArgs);
-         }
-
-         private void TabControlDrawItem(TabControl pTabControl, DrawItemEventArgs pDrawItemEventArgs) {
-            if (mCurrentTheme == null)
-               return;
-            if (pTabControl is not VariableWidthTabControl variableWidthTabControl)
-               return;
-            TabPage page = pTabControl.TabPages[pDrawItemEventArgs.Index];
-            Rectangle tabRect = pTabControl.GetTabRect(pDrawItemEventArgs.Index);
-            bool isSelected = (pTabControl.SelectedIndex == pDrawItemEventArgs.Index);
-            Color backgroundColor = isSelected
-               ? mCurrentTheme.mColors[(int)ColorUsage.TabHeaderSelectedBackground]
-               : mCurrentTheme.mColors[(int)ColorUsage.TabHeaderUnselectedBackground];
-            Color textColor = isSelected
-               ? mCurrentTheme.mColors[(int)ColorUsage.TabHeaderSelectedFont]
-               : mCurrentTheme.mColors[(int)ColorUsage.TabHeaderUnselectedFont];
-            Font font;
-            if (isSelected)
-               font = CreateNewBoldFont();
-            else
-               font = CreateNewFont();
-            using (SolidBrush brush = new SolidBrush(backgroundColor)) {
-               pDrawItemEventArgs.Graphics.FillRectangle(brush, tabRect);
-            }
-            TextFormatFlags flags = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter;
-            TextRenderer.DrawText(pDrawItemEventArgs.Graphics, page.Text, font,
-               tabRect, textColor, flags);
+         private void DrawTabControlItem(VariableWidthTabControl pTabControl, DrawItemEventArgs pArgs) {
+            Theme theme = mTemporaryTheme;
+            TabPage page = pTabControl.TabPages[pArgs.Index];
+            Rectangle rect = pTabControl.GetTabRect(pArgs.Index);
+            bool selected = pTabControl.SelectedIndex == pArgs.Index;
+            Color back = selected ? theme.mColors[(int)ColorUsage.TabHeaderSelectedBackground]
+                                  : theme.mColors[(int)ColorUsage.TabHeaderUnselectedBackground];
+            Color fore = selected ? theme.mColors[(int)ColorUsage.TabHeaderSelectedFont]
+                                  : theme.mColors[(int)ColorUsage.TabHeaderUnselectedFont];
+            Font font = selected ? CreateNewBoldFont() : CreateNewFont();
+            using (SolidBrush brush = new SolidBrush(back))
+               pArgs.Graphics.FillRectangle(brush, rect);
+            TextRenderer.DrawText(pArgs.Graphics, page.Text, font, rect, fore,
+               TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
          }
 
          public void ApplyThemeToThemePanel() {
-            if (mCurrentTheme == null)
-               return;
-            BackColor = mCurrentTheme.mColors[(int)ColorUsage.PanelBackground];
+            Theme theme = mTemporaryTheme;
+            BackColor = theme.mColors[(int)ColorUsage.PanelBackground];
+            foreach (ToolStripItem item in mStatusStrip.Items)
+               if (item is ToolStripControlHost host) {
+                  Control control = host.Control;
+                  control.ForeColor = theme.mColors[(int)ColorUsage.StatusFont];
+                  control.BackColor = theme.mColors[(int)ColorUsage.StatusBackground];
+                  control.Font = theme.mFonts[(int)FontUsage.Status];
+               }
+            ApplyThemeToControlTree(mPrimaryTabControl);
+            ApplyThemeToControlTree(mHighlightTabControl);
+            mStatusStrip.Renderer = new ToolStripProfessionalRenderer();
+            mStatusStrip.Invalidate(true);
             foreach (ToolStripItem item in mStatusStrip.Items) {
                if (item is ToolStripControlHost host) {
                   Control control = host.Control;
-                  control.Font = mCurrentTheme.mFonts[(int)FontUsage.Status];
-                  control.ForeColor = mCurrentTheme.mColors[(int)ColorUsage.StatusFont];
-                  control.BackColor = mCurrentTheme.mColors[(int)ColorUsage.StatusBackground];
+                  var handle = control.Handle;
+                  control.ForeColor = theme.mColors[(int)ColorUsage.StatusFont];
+                  control.BackColor = theme.mColors[(int)ColorUsage.StatusBackground];
+                  control.Font = theme.mFonts[(int)FontUsage.Status];
+                  control.Invalidate();
+                  control.Update();
                }
             }
-            mPrimaryTabControl.Font = mCurrentTheme.mFonts[(int)FontUsage.Interface];
-            mPrimaryTabControl.ForeColor = mCurrentTheme.mColors[(int)ColorUsage.InterfaceFont];
-            mPrimaryTabControl.BackColor = mCurrentTheme.mColors[(int)ColorUsage.InterfaceBackground];
-            mHighlightTabControl.Font = mPrimaryTabControl.Font;
-            mHighlightTabControl.ForeColor = mPrimaryTabControl.ForeColor;
-            mHighlightTabControl.BackColor = mPrimaryTabControl.BackColor;
-            foreach (TabPage page in mPrimaryTabControl.TabPages) {
-               page.BackColor = mCurrentTheme.mColors[(int)ColorUsage.InterfaceBackground];
-               page.ForeColor = mCurrentTheme.mColors[(int)ColorUsage.InterfaceFont];
-            }
-            foreach (TabPage page in mHighlightTabControl.TabPages) {
-               page.BackColor = mPrimaryTabControl.BackColor;
-               page.ForeColor = mPrimaryTabControl.ForeColor;
-            }
-            foreach (TabPage page in mPrimaryTabControl.TabPages)
-               ApplyThemeToControlTree(page);
-            foreach (TabPage page in mHighlightTabControl.TabPages)
-               ApplyThemeToControlTree(page);
-            //DEBUG efm5 2026 04 6 for each Label in the theme panel, all its TabPages, and all clusters – Refresh ()
+            mHasCachedPreferredSize = false;
          }
 
          private void ApplyThemeToControlTree(Control pParent) {
-            if (mCurrentTheme == null)
-               return;
+            Theme theme = mTemporaryTheme;
             foreach (Control control in pParent.Controls) {
-               control.BackColor = mCurrentTheme.mColors[(int)ColorUsage.InterfaceBackground];
-               control.ForeColor = mCurrentTheme.mColors[(int)ColorUsage.InterfaceFont];
-               control.Font = mCurrentTheme.mFonts[(int)FontUsage.Interface];
+               if (control is BaseCluster cluster && cluster.mSkipTheme) {
+                  ApplyThemeToControlTree(control);
+                  continue;
+               }
+               control.ForeColor = theme.mColors[(int)ColorUsage.InterfaceFont];
+               control.BackColor = theme.mColors[(int)ColorUsage.InterfaceBackground];
+               control.Font = theme.mFonts[(int)FontUsage.Interface];
                ApplyThemeToControlTree(control);
             }
          }
 
-         public void SaveSettings() {
-            if (mForm == null)
-               return;
-            Settings.Default.ThemeLocation = mForm.Location;
-            Settings.Default.ThemeSize = mForm.Size;
-         }
-
-         public void UseSettings() {
-            Location = Settings.Default.ThemeLocation;
-            Size = Settings.Default.ThemeSize;
-         }
-
          public void UpdateTheme() {
+            //DEBUG efm5 2026 04 7 commit temporary theme to current theme
          }
 
-         private void ApplyButton_Click(object? pSender, EventArgs pEventArgs) {
-            SaveSettings();
+         public void ApplyTheme() {
+            //DEBUG efm5 2026 04 7 apply temporary theme to preview
          }
 
-         private void CancelButton_Click(object? pSender, EventArgs pEventArgs) {
-            CloseThemePanel();
+         private void RefreshThemePreview() {
+            //DEBUG efm5 2026 04 8 do the work
          }
 
-         private void OkButton_Click(object? pSender, EventArgs pEventArgs) {
-            UpdateTheme();
-            //DEBUG efm5 2026 04 6 if current theme has been changed, repaint main form to reflect changes immediately
-            CloseThemePanel();
+         private void OnColorSwatchClicked(object? pSender, ColorSwatchUsage pUsage) {
+            if (pSender is not ColorSwatch swatch)
+               return;
+            Color newColor = Color.Maroon;
+            mTemporaryTheme.mColors[(int)pUsage] = newColor;
+            swatch.SetColor(newColor);
+            mThemeIsDirty = true;
+            TimedMessage($"[TEST MODE] Set {pUsage} to {newColor}", "COLOR UPDATED");
          }
 
          private void CloseThemePanel() {
+            mFirstTheme = false;
+            mThemeBounds = mForm.Bounds;
             MainForm.RestoreFromThemePanel();
          }
       }

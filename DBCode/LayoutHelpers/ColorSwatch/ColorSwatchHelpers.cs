@@ -1,23 +1,17 @@
 namespace DBCode {
    internal static partial class LayoutHelpers {
       internal static class ColorSwatchHelpers {
-         public static int CalculateSwatchSize() {
-            int tallest = 0;
-            Panel panel = new Panel();
-            Font useFont = mCurrentTheme!.mFonts[(int)FontUsage.Interface];
-            Control[] samples = [
-               new Button { Text = mUnicodeSampleString, AutoSize = true, Font = useFont },
-               new Label { Text = mUnicodeSampleString, AutoSize = true, Font = useFont },
-               new CheckBox { Text = mUnicodeSampleString, AutoSize = true, Font = useFont },
-               new RadioButton { Text = mUnicodeSampleString, AutoSize = true, Font = useFont }
-            ];
-            foreach (Control control in samples) {
-               panel.Controls.Add(control);
-               if (control.Height > tallest)
-                  tallest = control.Height;
-            }
-            panel.Dispose();
-            return tallest;
+         internal static Size GetSwatchSize() {
+            using Panel tempPanel = new Panel();
+            using Button tempButton = new Button() {
+               Text = mUnicodeSampleString,
+               AutoSize = true,
+               AutoSizeMode = AutoSizeMode.GrowAndShrink,
+               Font = CreateNewFont()
+            };
+            tempPanel.Controls.Add(tempButton);
+            int dimension = tempButton.Height;
+            return new Size(dimension, dimension);
          }
 
          public static int BorderInset() {

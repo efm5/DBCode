@@ -1,5 +1,5 @@
-using System.Collections.ObjectModel;
 using DBCode.Themes;
+using System.Collections.ObjectModel;
 
 namespace DBCode {
    internal static partial class LayoutHelpers {

@@ -46,6 +46,53 @@ namespace DBCode {
          int centerY = bounds.Top + (bounds.Height / 2);
          return new Point(centerX, centerY);
       }
+
+      internal static Rectangle GetTaskbarBounds() {
+         NativeMathMethods.APPBARDATA data = new NativeMathMethods.APPBARDATA {
+            cbSize = Marshal.SizeOf(typeof(NativeMathMethods.APPBARDATA))
+         };
+         uint result = NativeMathMethods.SHAppBarMessage(NativeMathMethods.ABM_GETTASKBARPOS, ref data);
+         if (result != 0) {
+            int width = data.rc.Right - data.rc.Left;
+            int height = data.rc.Bottom - data.rc.Top;
+            return new Rectangle(data.rc.Left, data.rc.Top, width, height);
+         }
+         Rectangle screenBounds = ScreenBoundsPrimary();
+         Rectangle workingArea = ScreenWorkingAreaPrimary();
+         int left = 0;
+         int top = 0;
+         int widthFallback = 0;
+         int heightFallback = 0;
+
+         if (workingArea.Top > screenBounds.Top) {
+            left = screenBounds.Left;
+            top = screenBounds.Top;
+            widthFallback = screenBounds.Width;
+            heightFallback = workingArea.Top - screenBounds.Top;
+         }
+         else if (workingArea.Bottom < screenBounds.Bottom) {
+            left = screenBounds.Left;
+            top = workingArea.Bottom;
+            widthFallback = screenBounds.Width;
+            heightFallback = screenBounds.Bottom - workingArea.Bottom;
+         }
+         else if (workingArea.Left > screenBounds.Left) {
+            left = screenBounds.Left;
+            top = screenBounds.Top;
+            widthFallback = workingArea.Left - screenBounds.Left;
+            heightFallback = screenBounds.Height;
+         }
+         else if (workingArea.Right < screenBounds.Right) {
+            left = workingArea.Right;
+            top = screenBounds.Top;
+            widthFallback = screenBounds.Right - workingArea.Right;
+            heightFallback = screenBounds.Height;
+         }
+         else {
+            return Rectangle.Empty;
+         }
+         return new Rectangle(left, top, widthFallback, heightFallback);
+      }
 #pragma warning restore CS8602
    }
 }

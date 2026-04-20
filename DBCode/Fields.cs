@@ -4,26 +4,24 @@ using DBCode.Themes;
 #pragma warning disable CS0649//DEBUG efm5 2026 03 31 just until we start using the layout
 #pragma warning disable CS0414//DEBUG efm5 2026 03 31 just until we start using the layout
 namespace DBCode {
-   public enum ViewMode {
-      Features,
-      Minimal
-   }
+   #region enumerations
+   public enum ViewMode { Features, Minimal }
 
-   public enum PasteMode {
-      Transfer,
-      Transport
-   }
+   public enum PasteMode { Transfer, Transport }
 
-   public enum Icons {
-      CurlyTargeted,
-      CurlyUntargeted,
-      StatusTargeted,
-      StatusUntargeted
-   }
+   public enum Icons { CurlyTargeted, CurlyUntargeted, StatusTargeted, StatusUntargeted }
 
    public enum UIContext { Main, Theme, ColorPicker, FontPicker }
 
    public enum LabelUsage : int { Interface, Title }
+
+   public enum HeaderLabelSize : int {
+      ExtraLarge = 200,
+      Large = 150,
+      Normal = 125,
+      Small = 110,
+      Tiny = 100
+   }
 
    public enum PrimaryTabPageUsage : int { Interface, Color }
 
@@ -70,11 +68,61 @@ namespace DBCode {
       [DisplayText("Tab Header Selected Font Color")]
       TabHeaderSelectedFont,
       [DisplayText("Tab Header Unselected Color")]
-      TabHeaderUnselectedFont
+      TabHeaderUnselectedFont,
+      // Syntax Tokens
+      [DisplayText("Unknown Token Color")]
+      Unknown,
+      [DisplayText("Whitespace Token Color")]
+      Whitespace,
+      [DisplayText("Identifier Token Color")]
+      Identifier,
+      [DisplayText("Keyword Token Color")]
+      Keyword,
+      [DisplayText("Number Token Color")]
+      Number,
+      [DisplayText("String Literal Token Color")]
+      StringLiteral,
+      [DisplayText("Character Literal Token Color")]
+      CharLiteral,
+      [DisplayText("Comment Token Color")]
+      Comment,
+      [DisplayText("Preprocessor Directive Token Color")]
+      PreprocessorDirective,
+      [DisplayText("Operator Token Color")]
+      Operator,
+      [DisplayText("Punctuation Token Color")]
+      Punctuation
+   }
+
+   internal enum ColorRole : int {
+      [DisplayText("Unknown Token Color")]
+      Unknown,
+      [DisplayText("Whitespace Token Color")]
+      Whitespace,
+      [DisplayText("Identifier Token Color")]
+      Identifier,
+      [DisplayText("Keyword Token Color")]
+      Keyword,
+      [DisplayText("Number Token Color")]
+      Number,
+      [DisplayText("String Literal Token Color")]
+      StringLiteral,
+      [DisplayText("Character Literal Token Color")]
+      CharLiteral,
+      [DisplayText("Comment Token Color")]
+      Comment,
+      [DisplayText("Preprocessor Directive Token Color")]
+      PreprocessorDirective,
+      [DisplayText("Operator Token Color")]
+      Operator,
+      [DisplayText("Punctuation Token Color")]
+      Punctuation
    }
 
    public enum ThemeUsage : int { Design, Edit, Pick }
+   #endregion
 
+   #region classes
    internal static class ClipboardHelper {
       public static void TrySetClipboardText(string pText) {
          if (string.IsNullOrEmpty(pText))
@@ -106,139 +154,91 @@ namespace DBCode {
       }
 #pragma warning restore IDE0290
    }
+   #endregion
 
+   #region fields
    internal static class Fields {
-      public const AnchorStyles mTopLeftAnchor = AnchorStyles.Top | AnchorStyles.Left,
-        mTopRightAnchor = AnchorStyles.Top | AnchorStyles.Right,
-        mBottomLeftAnchor = AnchorStyles.Bottom | AnchorStyles.Left,
-        mBottomRightAnchor = AnchorStyles.Bottom | AnchorStyles.Right,
-        mTopLeftBottomRightAnchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
-      public static bool mForceActivation = true;
-      public static bool mIsTargetingEnabled = false;
-      public static bool mPreMinimalControlBox = true;
-      public static bool mReturnToTop = true;
-      public static bool mFirstGray = true;
-      public static bool mIsHighlighting = false;
-      public static bool mSuppressTextChanged = false;
-      public static UIContext mUIContext = UIContext.Main;
-      public static float mOFontSize, mScaling, mFontWidthAdjustment = 0.5f;
+      #region general
+      public const AnchorStyles mBottomLeftAnchor = AnchorStyles.Bottom | AnchorStyles.Left,
+         mBottomRightAnchor = AnchorStyles.Bottom | AnchorStyles.Right,
+         mTopLeftAnchor = AnchorStyles.Top | AnchorStyles.Left,
+         mTopLeftBottomRightAnchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right,
+         mTopRightAnchor = AnchorStyles.Top | AnchorStyles.Right;
+      public static bool mFirstGray = true, mFirstLaunch = true, mForceActivation = true, mIsHighlighting = false, mIsTargetingEnabled = false,
+         mPreMinimalControlBox = true, mReturnToTop = true, mSuppressTextChanged = false, mFirstTheme = true;
+      public static float mFontWidthAdjustment = 0.5f, mOFontSize, mScaling;
       public static FontUsage mFontUsage = FontUsage.Text;
+      public static Form? mForm = null;
       public static HighlighterEngine? mHighlighterEngine = null;
       public static Icon[] mIcons = new Icon[4];
-      public static int mThemePrimaryTabPageIndex = 0, mThemeHighlightTabPageIndex = 0;
+      public static int mThemeHighlightTabPageIndex = 0, mThemePrimaryTabPageIndex = 0;
       public static IntPtr mTargetWindow = IntPtr.Zero;
       public static readonly IntPtr mInsertAfterWindow = new IntPtr(0);
       public static MenuStrip? mMenuStrip = null;
       public static ThemePanel? mThemePanel = null;
-      public static readonly PropertyInfo[] mPredefinedColors = typeof(Color).GetProperties(BindingFlags.Public | BindingFlags.Static);
-      public static Rectangle mPreThemeBounds = new Rectangle(50, 50, 800, 600);
-      public static Size mResolution, mMonitorSize;
-      public static StatusStrip? mStatusStrip = null;
-      public static string mPreMinimalText = string.Empty;
-      public static string mTargetWindowName = "Under construction";
-      public static string mVersionString = "0.0.0.0";
-      public static readonly List<string>
-         mIDEs = [//efm5 these are case insensitive
-                  //Appropriate target Windows to paste into
-            "Visual Studio", "Arduino", "Particle", "IntelliJ",
-               "Eclipse", "NetBeans", "Xcode", "PSPad", "vim", "Emacs" ],
-         mBlackList = [//efm5 these are case insensitive
-                       //Windows not to paste into
-            "ApplicationFrameHost", "Auto Box", "Calculator", "dictation box", "dictationbox",
-               "Dragon", "explorer", "Grid", "Hotkeys for Dragon", "hotkeysForDragon", "HxOutlook",
-               "HyperNote Box", "HyperNoteBox", "iexplorer", "MediaMonkey", "Music.UI", "obkagent",
-               "ScriptedSandbox64", "Search Correct", "SearchCorrect", "SP Quick Panel",
-               "SPQuickPanel", "SP Search", "SPSearch", "svchost",  "SystemSettings",
-               "TextInputHost",  "Windows Explorer", "XboxApp" ];
-      public static readonly string mUnicodeSampleString = "Unicode test: ÀÑÇ ÿ ɱ ǵ ʰ ā̋ ȇ ō̱ ╭╯ 🜁";
+      public static readonly PropertyInfo[] mPredefinedColors =
+         typeof(Color).GetProperties(BindingFlags.Public | BindingFlags.Static);
+      public static Rectangle mPreThemeBounds = new Rectangle(50, 50, 800, 600), mThemeBounds;
       public static RichTextBox? mRichTextBox = null;
-      public static Theme? mCurrentTheme = new Theme(string.Empty);
+      public static Size mMonitorSize, mResolution;
+      public static StatusStrip? mStatusStrip = null;
+      public static string mPreMinimalText = string.Empty, mTargetWindowName = "Under construction",
+         mVersionString = "0.0.0.0";
+      public static readonly List<string> mBlackList = [
+         //efm5 these are case insensitive
+         //Windows not to paste into
+         "ApplicationFrameHost", "Auto Box", "Calculator", "DB Code", "dictation box", "dictationbox", "Dragon",
+         "explorer", "Grid", "Hotkeys for Dragon", "hotkeysForDragon", "HxOutlook", "HyperNote Box", "HyperNoteBox",
+         "iexplorer", "MediaMonkey", "Music.UI", "obkagent", "ScriptedSandbox64", "Search Correct", "SearchCorrect",
+         "SP Quick Panel", "SPQuickPanel", "SP Search", "SPSearch", "svchost", "SystemSettings", "TextInputHost",
+         "Windows Explorer", "XboxApp" ],
+         mIDEs = [
+            //efm5 these are case insensitive; Uses Contains() – “Visual Studio” matches “Visual Studio Code”
+            //Appropriate target Windows to paste into
+            "Arduino", "Eclipse", "Emacs", "IntelliJ", "NetBeans", "Particle", "PSPad", "Visual Studio", "vim", "Xcode"  ];
+      public static readonly string mUnicodeSampleString = "Unicode test: ÀÑÇ ÿ ɱ ǵ ʰ ā̋ ȇ ō̱ ╭╯ 🜁";
       public static System.Windows.Forms.Timer? mTimer;
-      public static ToolStripButton? mExitTSB = null;
-      public static ToolStripButton? mRevertTSB = null;
-      public static ToolStripButton? mTransferTSB = null;
-      public static ToolStripButton? mTransportTSB = null;
-      public static ToolStripMenuItem? mReturnToTopTSMI = null;
-      public static ToolStripMenuItem? mFeaturesTSMI = null;
-      public static ToolStripMenuItem? mFiftyTSMI = null;
-      public static ToolStripMenuItem? mHelpMenuItem = null;
-      public static ToolStripMenuItem? mMinimalTSMI = null;
-      public static ToolStripMenuItem? mModeMenuItem = null;
-      public static ToolStripMenuItem? mOpaqueTSMI = null;
-      public static ToolStripMenuItem? mThemeMenuItem = null;
-      public static ToolStripMenuItem? mThemeDesignTSMI = null;
-      public static ToolStripMenuItem? mThemePickTSMI = null;
-      public static ToolStripMenuItem? mThemeEditTSMI = null;
-      public static ToolStripMenuItem? mRetargetTSMI = null;
-      public static ToolStripMenuItem? mSeventyFiveTSMI = null;
-      public static ToolStripMenuItem? mTargetedTSMI = null;
-      public static ToolStripMenuItem? mTargetingMenuItem = null;
-      public static ToolStripMenuItem? mThirtyTSMI = null;
-      public static ToolStripMenuItem? mTransparentTSMI = null;
-      public static ToolStripMenuItem? mVisibilityMenuItem = null;
-      public static ToolStripStatusLabel? mTargetingStatusLabel = null;
-      public static ToolStripStatusLabel? mVersionStatusLabel = null;
+      public static Theme? mCurrentTheme = ThemeBuiltIns.CreateVisualStudioDarkTheme();
+      public static ToolStripStatusLabel? mTargetingStatusLabel = null, mVersionStatusLabel = null;
+      public static UIContext mUIContext = UIContext.Main;
+      public static UiState mUiState = null!;
       public static ViewMode mCurrentViewMode = ViewMode.Features;
+      #endregion
 
-      //Picker fields
-      //DEBUG efm5 2026 03 30 Some of These need to be initialized
-      public static Label? mFontDescriptionLabel = null;
-      public static Panel? mPickFontPanel = null;
-      public static Panel? mFontPickerBottomPanel = null;
-      public static Button? mBluePrefixButton;
-      public static Button? mColorPickerCancelButton;
-      public static Button? mColorPickerHelpButton;
-      public static Button? mColorPickerOkButton;
-      public static Button? mFontFamilyDropDownPrefixButton;
-      public static Button? mFontFamilyTextBoxPrefixButton;
-      public static Button? mFontPickerCancelButton;
-      public static Button? mFontPickerHelpButton;
-      public static Button? mFontPickerOkButton;
-      public static Button? mFontSizeDropDownPrefixButton;
-      public static Button? mFontSizePrefixButton;
-      public static Button? mGrayPrefixButton;
-      public static Button? mGreenPrefixButton;
-      public static Button? mNamedColorPrefixButton;
-      public static Button? mRedPrefixButton;
-      public static Button? mRefreshButton;
-      public static CheckBox? mBoldStyleCheckBox;
-      public static CheckBox? mItalicsStyleCheckBox;
-      public static CheckBox? mNormalStyleCheckBox;
-      public static CheckBox? mStrikethroughStyleCheckBox;
-      public static CheckBox? mUnderlineStyleCheckBox;
-      public static CheckBox? mUseGrayscaleCheckBox;
-      public static CheckBox? mUseNamedCheckBox;
-      public static ComboBox? mFontFamilyComboBox;
-      public static ComboBox? mFontSizeComboBox;
-      public static ComboBox? mNamedColorsComboBox;
-      public static Form? mForm = null;
-      public static GroupBox? mFontStyleGroupBox;
-      public static Label? mPickColorTitleLabel;
-      public static Label? mPickColorUsageLabel;
-      public static Label? mPickFontTitleLabel;
-      public static Label? mPickFontUsageLabel;
-      public static NumericUpDown? mBlueUpDown;
-      public static NumericUpDown? mGrayUpDown;
-      public static NumericUpDown? mGreenUpDown;
-      public static NumericUpDown? mRedUpDown;
-      public static Panel? mColorPickerBottomPanel;
-      public static Panel? mColorPickerExampleInnerPanel;
-      public static Panel? mColorPickerExampleMiddlePanel;
-      public static Panel? mColorPickerExampleOuterPanel;
-      public static Panel? mColorPickerNamedColorPanel;
-      public static Panel? mColorPickerSliderPanel;
-      public static Panel? mGrayscaleInnerExamplePanel;
-      public static Panel? mGrayscaleMiddleExamplePanel;
-      public static Panel? mGrayscaleOuterExamplePanel;
-      public static Panel? mPickColorPanel;
-      public static TextBox? mFontFamilyNameTextBox;
-      public static TextBox? mFontSizeTextBox;
-      public static TrackBar? mBlueSlider;
-      public static TrackBar? mGraySlider;
-      public static TrackBar? mGreenSlider;
-      public static TrackBar? mRedSlider;
-      //DEBUG efm5 2026 03 30 End of MAYBE not Initialized
+      #region main menu
+      public static ToolStripButton? mExitTSB = null, mRevertTSB = null, mTransferTSB = null, mTransportTSB = null;
+      public static ToolStripMenuItem? mFeaturesTSMI = null, mFiftyTSMI = null, mHelpMenuItem = null, mMinimalTSMI = null,
+         mModeMenuItem = null, mOpaqueTSMI = null, mRetargetTSMI = null, mReturnToTopTSMI = null, mSeventyFiveTSMI = null,
+         mTargetedTSMI = null, mTargetingMenuItem = null, mThemeDesignTSMI = null, mThemeEditTSMI = null,
+         mThemeMenuItem = null, mThemePickTSMI = null, mThirtyTSMI = null, mTransparentTSMI = null,
+         mVisibilityMenuItem = null;
+      #endregion
+
+      //DEBUG efm5 2026 03 30 Some of These will need to be initialized 
+      #region Picker fields
+      public static Button? mBluePrefixButton = null, mColorPickerCancelButton = null, mColorPickerHelpButton = null,
+         mColorPickerOkButton = null, mFontFamilyDropDownPrefixButton = null, mFontFamilyTextBoxPrefixButton = null,
+         mFontPickerCancelButton = null, mFontPickerHelpButton = null, mFontPickerOkButton = null,
+         mFontSizeDropDownPrefixButton = null, mFontSizePrefixButton = null, mGrayPrefixButton = null,
+         mGreenPrefixButton = null, mNamedColorPrefixButton = null, mRedPrefixButton = null, mRefreshButton = null;
+      public static CheckBox? mBoldStyleCheckBox = null, mItalicsStyleCheckBox = null, mNormalStyleCheckBox = null,
+         mStrikethroughStyleCheckBox = null, mUnderlineStyleCheckBox = null, mUseGrayscaleCheckBox = null,
+         mUseNamedCheckBox = null;
+      public static ComboBox? mFontFamilyComboBox = null, mFontSizeComboBox = null, mNamedColorsComboBox = null;
+      public static GroupBox? mFontStyleGroupBox = null;
+      public static Label? mFontDescriptionLabel = null, mPickColorTitleLabel = null, mPickColorUsageLabel = null,
+         mPickFontTitleLabel = null, mPickFontUsageLabel = null;
+      public static NumericUpDown? mBlueUpDown = null, mGrayUpDown = null, mGreenUpDown = null, mRedUpDown = null;
+      public static Panel? mColorPickerBottomPanel = null, mColorPickerExampleInnerPanel = null,
+         mColorPickerExampleMiddlePanel = null, mColorPickerExampleOuterPanel = null,
+         mColorPickerNamedColorPanel = null, mColorPickerSliderPanel = null, mFontPickerBottomPanel = null,
+         mGrayscaleInnerExamplePanel = null, mGrayscaleMiddleExamplePanel = null, mGrayscaleOuterExamplePanel = null,
+         mPickColorPanel = null, mPickFontPanel = null;
+      public static TextBox? mFontFamilyNameTextBox = null, mFontSizeTextBox = null;
+      public static TrackBar? mBlueSlider = null, mGraySlider = null, mGreenSlider = null, mRedSlider = null;
+      #endregion
    }
+   #endregion
 #pragma warning restore CS0649//DEBUG efm5 2026 03 31 just until we start using the layout
 #pragma warning restore CS0414//DEBUG efm5 2026 03 31 just until we start using the layout
 }

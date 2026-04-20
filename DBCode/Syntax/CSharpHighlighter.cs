@@ -1,29 +1,57 @@
-﻿
+﻿namespace DBCode.Syntax {
+   internal sealed class BatchHighlighter : SyntaxHighlighterBase {
+      internal BatchHighlighter() : base(LanguageKind.Batch) { }
+   }
 
-namespace DBCode.Syntax {
-   internal sealed class CSharpHighlighter : IHighlighter {
-      public LanguageKind Language => LanguageKind.CSharp;
+   internal sealed class BasicHighlighter : SyntaxHighlighterBase {
+      internal BasicHighlighter() : base(LanguageKind.Basic) { }
+   }
 
-      public void ApplyHighlighting(RichTextBox pRichTextBox, IReadOnlyList<Token> pTokens) {
-         foreach (Token token in pTokens) {
-            Color color = GetColor(token.Kind);
-            if (color == Color.Black)
-               continue;
-            pRichTextBox.Select(token.StartIndex, token.Length);
-            pRichTextBox.SelectionColor = color;
-         }
-      }
+   internal sealed class CHighlighter : SyntaxHighlighterBase {
+      internal CHighlighter() : base(LanguageKind.C) { }
+   }
 
-      private static Color GetColor(TokenKind pKind) {
-         return pKind switch {
-            TokenKind.Keyword => Color.Blue,
-            TokenKind.StringLiteral => Color.Brown,
-            TokenKind.CharLiteral => Color.Brown,
-            TokenKind.Comment => Color.Green,
-            TokenKind.Number => Color.DarkCyan,
-            TokenKind.PreprocessorDirective => Color.Purple,
-            _ => Color.Black
-         };
-      }
+   internal sealed class CppHighlighter : SyntaxHighlighterBase {
+      internal CppHighlighter() : base(LanguageKind.Cpp) { }
+   }
+
+   internal sealed class CSharpHighlighter : SyntaxHighlighterBase {
+      internal CSharpHighlighter() : base(LanguageKind.CSharp) { }
+   }
+
+   internal sealed class CssHighlighter : SyntaxHighlighterBase {
+      internal CssHighlighter() : base(LanguageKind.Css) { }
+   }
+
+   internal sealed class FSharpHighlighter : SyntaxHighlighterBase {
+      internal FSharpHighlighter() : base(LanguageKind.FSharp) { }
+   }
+
+   internal sealed class HtmlHighlighter : SyntaxHighlighterBase {
+      internal HtmlHighlighter() : base(LanguageKind.Html) { }
+   }
+
+   internal sealed class JsonHighlighter : SyntaxHighlighterBase {
+      internal JsonHighlighter() : base(LanguageKind.Json) { }
+   }
+
+   internal sealed class MarkdownHighlighter : SyntaxHighlighterBase {
+      internal MarkdownHighlighter() : base(LanguageKind.Markdown) { }
+   }
+
+   internal sealed class PowerShellHighlighter : SyntaxHighlighterBase {
+      internal PowerShellHighlighter() : base(LanguageKind.PowerShell) { }
+   }
+
+   internal sealed class PythonHighlighter : SyntaxHighlighterBase {
+      internal PythonHighlighter() : base(LanguageKind.Python) { }
+   }
+
+   internal sealed class SqlHighlighter : SyntaxHighlighterBase {
+      internal SqlHighlighter() : base(LanguageKind.Sql) { }
+   }
+
+   internal sealed class XmlHighlighter : SyntaxHighlighterBase {
+      internal XmlHighlighter() : base(LanguageKind.Xml) { }
    }
 }

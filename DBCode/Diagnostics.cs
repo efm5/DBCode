@@ -2,6 +2,7 @@
 
 namespace DBCode {
    namespace Diagnostics {
+
       internal sealed class FatalLayoutException : Exception {
          public FatalLayoutException(string pMessage) : base(pMessage) { }
       }
@@ -22,7 +23,6 @@ namespace DBCode {
                   $"Method: {pCaller}{Environment.NewLine}" +
                   $"File: {pFile}{Environment.NewLine}" +
                   $"Line: {pLine}{Environment.NewLine}");
-
             return pValue;
          }
 
@@ -41,7 +41,6 @@ namespace DBCode {
                   $"Method: {pCaller}{Environment.NewLine}" +
                   $"File: {pFile}{Environment.NewLine}" +
                   $"Line: {pLine}{Environment.NewLine}");
-
             return pValue.Value;
          }
 

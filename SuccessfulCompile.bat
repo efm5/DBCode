@@ -14,6 +14,6 @@ if exist "A:\" (
    mkdir %dtStamp%
    CD %dtStamp%
 
-   xcopy /e /c /h /k /y /i "D:\DBCode\"
+   xcopy /e /c /h /k /y /i "E:\DBCode\"
 )
 Exit 0

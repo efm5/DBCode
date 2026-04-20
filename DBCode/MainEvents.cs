@@ -2,11 +2,11 @@
    public sealed partial class MainForm : Form {
       #region main form
       private void MainForm_Load(object? pSender, EventArgs pEventArgs) {
-         Size savedSize = Settings.Default.FormSize;
-         Point savedLocation = Settings.Default.FormLocation;
-         double savedOpacity = Settings.Default.FormOpacity;
-         mThemePrimaryTabPageIndex = Settings.Default.ThemePrimaryTabPageIndex;
-         mThemeHighlightTabPageIndex = Settings.Default.ThemeHighlightTabPageIndex;
+         Size savedSize = mUiState.mFormSize;
+         Point savedLocation = mUiState.mFormLocation;
+         double savedOpacity = mUiState.mFormOpacity;
+         mThemePrimaryTabPageIndex = mUiState.mThemePrimaryTabPageIndex;
+         mThemeHighlightTabPageIndex = mUiState.mThemeHighlightTabPageIndex;
 
          if (!savedSize.IsEmpty)
             Size = savedSize;
@@ -23,13 +23,16 @@
       }
 
       private void MainForm_FormClosing(object? pSender, FormClosingEventArgs pEventArgs) {
-         Settings.Default.FormOpacity = Opacity;
-         Settings.Default.FormSize = Size;
-         Settings.Default.FormLocation = Location;
-         Settings.Default.ThemePrimaryTabPageIndex = mThemePrimaryTabPageIndex;
-         Settings.Default.ThemeHighlightTabPageIndex = mThemeHighlightTabPageIndex;
-         if (mThemePanel != null)
-            mThemePanel.SaveSettings();
+         mUiState.mFormOpacity = Opacity;
+         mUiState.mFormSize = Size;
+         mUiState.mFormLocation = Location;
+         mUiState.mThemePrimaryTabPageIndex = mThemePrimaryTabPageIndex;
+         mUiState.mThemeHighlightTabPageIndex = mThemeHighlightTabPageIndex;
+         mUiState.WriteToSettings();
+         if (!mFirstTheme) {
+            Settings.Default.ThemeLocation = mThemeBounds.Location;
+            Settings.Default.ThemeSize = mThemeBounds.Size;
+         }
          Settings.Default.Save();
       }
       #endregion
