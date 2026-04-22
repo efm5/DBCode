@@ -466,28 +466,24 @@
       public LanguageKind Language => mLanguage;
 
       public void ApplyHighlighting(RichTextBox box, IReadOnlyList<Token> tokens) {
+         int originalSelectionStart, originalSelectionLength;
+         ColorRole role;
+         Color color;
          if (tokens == null || tokens.Count == 0)
             return;
-
-         var originalSelectionStart = box.SelectionStart;
-         var originalSelectionLength = box.SelectionLength;
-
+         originalSelectionStart = box.SelectionStart;
+         originalSelectionLength = box.SelectionLength;
          box.SuspendLayout();
-
          foreach (var token in tokens) {
-            if (!mColorRoles.TryGetValue(token.Kind, out var role))
+            if (!mColorRoles.TryGetValue(token.Kind, out role))
                role = ColorRole.Unknown;
-
-            var color = ThemeColorProvider.Get(role);
-
+            color = ThemeColorProvider.Get(role);
             box.SelectionStart = token.StartIndex;
             box.SelectionLength = token.Length;
             box.SelectionColor = color;
          }
-
          box.SelectionStart = originalSelectionStart;
          box.SelectionLength = originalSelectionLength;
-
          box.ResumeLayout();
       }
    }
@@ -566,17 +562,16 @@
          }
 
          internal void Highlight() {
+            string text;
+            IReadOnlyList<Token> tokens;
             if (mIsHighlighting)
                return;
-
             mIsHighlighting = true;
-
             try {
-               var text = mBox.Text;
+               text = mBox.Text;
                if (text.Length == 0)
                   return;
-
-               var tokens = mTokenizer.Tokenize(text);
+               tokens = mTokenizer.Tokenize(text);
                mHighlighter.ApplyHighlighting(mBox, tokens);
             }
             finally {

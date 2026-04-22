@@ -1,57 +1,45 @@
 ﻿namespace DBCode.Syntax.Tokenizing {
    internal sealed class CharReader : ITokenReader {
-      public bool TryRead(
-         string pText,
-         int pStartIndex,
-         out Token pToken,
-         out int pNewIndex
-      ) {
+      public bool TryRead(string pText, int pStartIndex, out Token pToken, out int pNewIndex) {
+         int length, index, startPosition, hexDigitCount;
+         char currentCharacter, escapeCharacter;
+
          pToken = null!;
          pNewIndex = pStartIndex;
-
-         int length = pText.Length;
-         int index = pStartIndex;
-
+         length = pText.Length;
+         index = pStartIndex;
          if (index >= length)
             return false;
-
          if (pText[index] != '\'')
             return false;
-
-         int start = index;
+         startPosition = index;
          index++;
-
          if (index >= length)
             return false;
-
-         char c = pText[index];
-
-         if (c == '\\') {
+         currentCharacter = pText[index];
+         if (currentCharacter == '\\') {
             index++;
-
             if (index >= length)
                return false;
-
-            char esc = pText[index];
-
-            if (esc == 'u') {
+            escapeCharacter = pText[index];
+            if (escapeCharacter == 'u') {
                index++;
-               int count = 0;
-               while (index < length && count < 4 && IsHexDigit(pText[index])) {
+               hexDigitCount = 0;
+               while (index < length && hexDigitCount < 4 && IsHexDigit(pText[index])) {
                   index++;
-                  count++;
+                  hexDigitCount++;
                }
-               if (count != 4)
+               if (hexDigitCount != 4)
                   return false;
             }
-            else if (esc == 'x') {
+            else if (escapeCharacter == 'x') {
                index++;
-               int count = 0;
-               while (index < length && count < 4 && IsHexDigit(pText[index])) {
+               hexDigitCount = 0;
+               while (index < length && hexDigitCount < 4 && IsHexDigit(pText[index])) {
                   index++;
-                  count++;
+                  hexDigitCount++;
                }
-               if (count == 0)
+               if (hexDigitCount == 0)
                   return false;
             }
             else {
@@ -61,26 +49,22 @@
          else {
             index++;
          }
-
          if (index >= length)
             return false;
-
          if (pText[index] != '\'')
             return false;
-
          index++;
-
-         pToken = new Token(TokenKind.CharLiteral, start, index - start);
+         pToken = new Token(TokenKind.CharLiteral, startPosition, index - startPosition);
          pNewIndex = index;
          return true;
       }
 
-      private static bool IsHexDigit(char pChar) {
-         if (pChar >= '0' && pChar <= '9')
+      private static bool IsHexDigit(char pCharacter) {
+         if (pCharacter >= '0' && pCharacter <= '9')
             return true;
-         if (pChar >= 'a' && pChar <= 'f')
+         if (pCharacter >= 'a' && pCharacter <= 'f')
             return true;
-         if (pChar >= 'A' && pChar <= 'F')
+         if (pCharacter >= 'A' && pCharacter <= 'F')
             return true;
          return false;
       }

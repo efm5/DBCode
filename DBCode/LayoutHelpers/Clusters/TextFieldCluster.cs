@@ -12,14 +12,15 @@ namespace DBCode {
             mLabel = new Label {
                AutoSize = true,
                Text = pLabelText,
-               BackColor = BackColor,
-               TabIndex = LayoutHelpers.TAB_INDEX_IGNORED
+               BackColor = pBackgroundColor ?? Color.Transparent,
+               TabIndex = TAB_INDEX_IGNORED
             };
             mTextBox = new TextBox {
                Text = mUnicodeSampleString,
                Width = pTextBoxWidth,
                BackColor = BackColor,
-               TabIndex = LayoutHelpers.NextTabIndex()
+               TabIndex = mTabIndex,
+               Name = $"TextFieldClusterTextBox{mTabIndex++}"
             };
             Controls.Add(mLabel);
             Controls.Add(mTextBox);

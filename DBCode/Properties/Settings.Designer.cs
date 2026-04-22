@@ -25,7 +25,7 @@ namespace DBCode.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("600, 300")]
+        [global::System.Configuration.DefaultSettingValueAttribute("700, 300")]
         public global::System.Drawing.Size FormSize {
             get {
                 return ((global::System.Drawing.Size)(this["FormSize"]));
@@ -37,7 +37,7 @@ namespace DBCode.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("660, 390")]
+        [global::System.Configuration.DefaultSettingValueAttribute("610, 390")]
         public global::System.Drawing.Point FormLocation {
             get {
                 return ((global::System.Drawing.Point)(this["FormLocation"]));
@@ -85,7 +85,7 @@ namespace DBCode.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("100, 100")]
+        [global::System.Configuration.DefaultSettingValueAttribute("160, 250")]
         public global::System.Drawing.Point ThemeLocation {
             get {
                 return ((global::System.Drawing.Point)(this["ThemeLocation"]));
@@ -97,7 +97,7 @@ namespace DBCode.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("600, 500")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1600, 575")]
         public global::System.Drawing.Size ThemeSize {
             get {
                 return ((global::System.Drawing.Size)(this["ThemeSize"]));
@@ -128,6 +128,66 @@ namespace DBCode.Properties {
             }
             set {
                 this["FirstTheme"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int PreviousLanguage {
+            get {
+                return ((int)(this["PreviousLanguage"]));
+            }
+            set {
+                this["PreviousLanguage"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Dark")]
+        public string CurrentThemeName {
+            get {
+                return ((string)(this["CurrentThemeName"]));
+            }
+            set {
+                this["CurrentThemeName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("460, 240")]
+        public global::System.Drawing.Point ThemePickerLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["ThemePickerLocation"]));
+            }
+            set {
+                this["ThemePickerLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1000, 600")]
+        public global::System.Drawing.Size ThemePickerSize {
+            get {
+                return ((global::System.Drawing.Size)(this["ThemePickerSize"]));
+            }
+            set {
+                this["ThemePickerSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int CurrentLanguage {
+            get {
+                return ((int)(this["CurrentLanguage"]));
+            }
+            set {
+                this["CurrentLanguage"] = value;
             }
         }
     }

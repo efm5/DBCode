@@ -11,7 +11,7 @@ namespace DBCode {
 
    public enum Icons { CurlyTargeted, CurlyUntargeted, StatusTargeted, StatusUntargeted }
 
-   public enum UIContext { Main, Theme, ColorPicker, FontPicker }
+   public enum HelpContext { Main, Theme, ColorPicker, FontPicker }
 
    public enum LabelUsage : int { Interface, Title }
 
@@ -25,7 +25,9 @@ namespace DBCode {
 
    public enum PrimaryTabPageUsage : int { Interface, Color }
 
-   public enum HighlightTabPageUsage : int { Interface, CSharp1, CSharp2 }
+   public enum HighlightTabPageUsage : int {
+      Interface, CSharp, C, Cpp, Basic, FSharp, HTML, CSS, XML, JSON, PowerShell, Batch, SQL, Markdown, Python
+   }
 
    public enum FontUsage : int {
       [DisplayText("Interface Font")]
@@ -70,56 +72,65 @@ namespace DBCode {
       [DisplayText("Tab Header Unselected Color")]
       TabHeaderUnselectedFont,
       // Syntax Tokens
-      [DisplayText("Unknown Token Color")]
+      [DisplayText("Unknown Color")]
       Unknown,
-      [DisplayText("Whitespace Token Color")]
+      [DisplayText("Whitespace Color")]
       Whitespace,
-      [DisplayText("Identifier Token Color")]
+      [DisplayText("Identifier Color")]
       Identifier,
-      [DisplayText("Keyword Token Color")]
+      [DisplayText("Keyword Color")]
       Keyword,
-      [DisplayText("Number Token Color")]
+      [DisplayText("Number Color")]
       Number,
-      [DisplayText("String Literal Token Color")]
+      [DisplayText("String Literal Color")]
       StringLiteral,
-      [DisplayText("Character Literal Token Color")]
+      [DisplayText("Character Literal Color")]
       CharLiteral,
-      [DisplayText("Comment Token Color")]
+      [DisplayText("Comment Color")]
       Comment,
-      [DisplayText("Preprocessor Directive Token Color")]
+      [DisplayText("Preprocessor Directive Color")]
       PreprocessorDirective,
-      [DisplayText("Operator Token Color")]
+      [DisplayText("Operator Color")]
       Operator,
-      [DisplayText("Punctuation Token Color")]
+      [DisplayText("Punctuation Color")]
       Punctuation
    }
 
    internal enum ColorRole : int {
-      [DisplayText("Unknown Token Color")]
+      [DisplayText("Unknown Color")]
       Unknown,
-      [DisplayText("Whitespace Token Color")]
+      [DisplayText("Whitespace Color")]
       Whitespace,
-      [DisplayText("Identifier Token Color")]
+      [DisplayText("Identifier Color")]
       Identifier,
-      [DisplayText("Keyword Token Color")]
+      [DisplayText("Keyword Color")]
       Keyword,
-      [DisplayText("Number Token Color")]
+      [DisplayText("Number Color")]
       Number,
-      [DisplayText("String Literal Token Color")]
+      [DisplayText("String Literal Color")]
       StringLiteral,
-      [DisplayText("Character Literal Token Color")]
+      [DisplayText("Character Literal Color")]
       CharLiteral,
-      [DisplayText("Comment Token Color")]
+      [DisplayText("Comment Color")]
       Comment,
-      [DisplayText("Preprocessor Directive Token Color")]
+      [DisplayText("Preprocessor Directive Color")]
       PreprocessorDirective,
-      [DisplayText("Operator Token Color")]
+      [DisplayText("Operator Color")]
       Operator,
-      [DisplayText("Punctuation Token Color")]
+      [DisplayText("Punctuation Color")]
       Punctuation
    }
 
-   public enum ThemeUsage : int { Design, Edit, Pick }
+   public enum HighlightUsage : int { Language, Token }
+
+   public enum ThemeUsage : int {
+      [DisplayText("DesignTheme")]
+      Design,
+      [DisplayText("EditTheme")]
+      Edit,
+      [DisplayText("PickTheme")]
+      Pick
+   }
    #endregion
 
    #region classes
@@ -144,11 +155,11 @@ namespace DBCode {
    }
 
    internal sealed class HelpTag {
-      public UIContext Context;
+      public HelpContext Context;
       public string? Anchor;
 
 #pragma warning disable IDE0290 // Use primary constructor
-      public HelpTag(UIContext pContext, string? pAnchor = "") {
+      public HelpTag(HelpContext pContext, string? pAnchor = "") {
          Context = pContext;
          Anchor = pAnchor;
       }
@@ -164,8 +175,9 @@ namespace DBCode {
          mTopLeftAnchor = AnchorStyles.Top | AnchorStyles.Left,
          mTopLeftBottomRightAnchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right,
          mTopRightAnchor = AnchorStyles.Top | AnchorStyles.Right;
-      public static bool mFirstGray = true, mFirstLaunch = true, mForceActivation = true, mIsHighlighting = false, mIsTargetingEnabled = false,
-         mPreMinimalControlBox = true, mReturnToTop = true, mSuppressTextChanged = false, mFirstTheme = true;
+      public static bool mFirstGray = true, mFirstLaunch = true, mForceActivation = true, mIsTargetingEnabled = false,
+         mPreMinimalControlBox = true, mReturnToTop = true, mFirstTheme = true, mFirstThemePicker = true,
+         mFirstColorPicker = true;
       public static float mFontWidthAdjustment = 0.5f, mOFontSize, mScaling;
       public static FontUsage mFontUsage = FontUsage.Text;
       public static Form? mForm = null;
@@ -174,16 +186,24 @@ namespace DBCode {
       public static int mThemeHighlightTabPageIndex = 0, mThemePrimaryTabPageIndex = 0;
       public static IntPtr mTargetWindow = IntPtr.Zero;
       public static readonly IntPtr mInsertAfterWindow = new IntPtr(0);
+      public static LanguageKind mCurrentLanguage = LanguageKind.CSharp;
       public static MenuStrip? mMenuStrip = null;
       public static ThemePanel? mThemePanel = null;
+      public static ColorPickerPanel? mColorPickerPanel = null;
+      public static ThemePickerPanel? mThemePickerPanel = null;
       public static readonly PropertyInfo[] mPredefinedColors =
          typeof(Color).GetProperties(BindingFlags.Public | BindingFlags.Static);
-      public static Rectangle mPreThemeBounds = new Rectangle(50, 50, 800, 600), mThemeBounds;
+      public static Rectangle mPreThemeBounds = new Rectangle(50, 50, 800, 600), mThemeBounds,
+         mPreThemePickerBounds = new Rectangle(50, 50, 800, 600), mThemePickerBounds,
+         mPrePickerBounds = new Rectangle(50, 50, 800, 600), mColorPickerBounds;
       public static RichTextBox? mRichTextBox = null;
       public static Size mMonitorSize, mResolution;
       public static StatusStrip? mStatusStrip = null;
       public static string mPreMinimalText = string.Empty, mTargetWindowName = "Under construction",
-         mVersionString = "0.0.0.0";
+         mVersionString = "0.0.0.0", mPreviousThemeName = string.Empty;
+      public static readonly string mAppFolder = AppDomain.CurrentDomain.BaseDirectory,
+        mMyDocumentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\",
+        mDataFolder = mMyDocumentsFolder + @"DBCode_Data\", mHelpFolder = mAppFolder + @"Help\", mCurrently = "Currently:  ";
       public static readonly List<string> mBlackList = [
          //efm5 these are case insensitive
          //Windows not to paste into
@@ -197,10 +217,11 @@ namespace DBCode {
             //Appropriate target Windows to paste into
             "Arduino", "Eclipse", "Emacs", "IntelliJ", "NetBeans", "Particle", "PSPad", "Visual Studio", "vim", "Xcode"  ];
       public static readonly string mUnicodeSampleString = "Unicode test: ÀÑÇ ÿ ɱ ǵ ʰ ā̋ ȇ ō̱ ╭╯ 🜁";
-      public static System.Windows.Forms.Timer? mTimer;
-      public static Theme? mCurrentTheme = ThemeBuiltIns.CreateVisualStudioDarkTheme();
+      public static List<Theme> mThemes = new List<Theme>();//efm5 This line and the next must be before any code that uses mThemes – Such as the next line
+      public static Theme? mCurrentTheme = ThemeBuiltIns.CreateDarkTheme(false);
+      public static readonly ToolStripSeparator toolStripSeparator1 = new ToolStripSeparator();
       public static ToolStripStatusLabel? mTargetingStatusLabel = null, mVersionStatusLabel = null;
-      public static UIContext mUIContext = UIContext.Main;
+      public static HelpContext mUIContext = HelpContext.Main;
       public static UiState mUiState = null!;
       public static ViewMode mCurrentViewMode = ViewMode.Features;
       #endregion
@@ -208,34 +229,12 @@ namespace DBCode {
       #region main menu
       public static ToolStripButton? mExitTSB = null, mRevertTSB = null, mTransferTSB = null, mTransportTSB = null;
       public static ToolStripMenuItem? mFeaturesTSMI = null, mFiftyTSMI = null, mHelpMenuItem = null, mMinimalTSMI = null,
-         mModeMenuItem = null, mOpaqueTSMI = null, mRetargetTSMI = null, mReturnToTopTSMI = null, mSeventyFiveTSMI = null,
+         mModeMenuItem = null, mLanguageMenuItem = null, mOpaqueTSMI = null, mRetargetTSMI = null, mReturnToTopTSMI = null, mSeventyFiveTSMI = null,
          mTargetedTSMI = null, mTargetingMenuItem = null, mThemeDesignTSMI = null, mThemeEditTSMI = null,
          mThemeMenuItem = null, mThemePickTSMI = null, mThirtyTSMI = null, mTransparentTSMI = null,
-         mVisibilityMenuItem = null;
-      #endregion
-
-      //DEBUG efm5 2026 03 30 Some of These will need to be initialized 
-      #region Picker fields
-      public static Button? mBluePrefixButton = null, mColorPickerCancelButton = null, mColorPickerHelpButton = null,
-         mColorPickerOkButton = null, mFontFamilyDropDownPrefixButton = null, mFontFamilyTextBoxPrefixButton = null,
-         mFontPickerCancelButton = null, mFontPickerHelpButton = null, mFontPickerOkButton = null,
-         mFontSizeDropDownPrefixButton = null, mFontSizePrefixButton = null, mGrayPrefixButton = null,
-         mGreenPrefixButton = null, mNamedColorPrefixButton = null, mRedPrefixButton = null, mRefreshButton = null;
-      public static CheckBox? mBoldStyleCheckBox = null, mItalicsStyleCheckBox = null, mNormalStyleCheckBox = null,
-         mStrikethroughStyleCheckBox = null, mUnderlineStyleCheckBox = null, mUseGrayscaleCheckBox = null,
-         mUseNamedCheckBox = null;
-      public static ComboBox? mFontFamilyComboBox = null, mFontSizeComboBox = null, mNamedColorsComboBox = null;
-      public static GroupBox? mFontStyleGroupBox = null;
-      public static Label? mFontDescriptionLabel = null, mPickColorTitleLabel = null, mPickColorUsageLabel = null,
-         mPickFontTitleLabel = null, mPickFontUsageLabel = null;
-      public static NumericUpDown? mBlueUpDown = null, mGrayUpDown = null, mGreenUpDown = null, mRedUpDown = null;
-      public static Panel? mColorPickerBottomPanel = null, mColorPickerExampleInnerPanel = null,
-         mColorPickerExampleMiddlePanel = null, mColorPickerExampleOuterPanel = null,
-         mColorPickerNamedColorPanel = null, mColorPickerSliderPanel = null, mFontPickerBottomPanel = null,
-         mGrayscaleInnerExamplePanel = null, mGrayscaleMiddleExamplePanel = null, mGrayscaleOuterExamplePanel = null,
-         mPickColorPanel = null, mPickFontPanel = null;
-      public static TextBox? mFontFamilyNameTextBox = null, mFontSizeTextBox = null;
-      public static TrackBar? mBlueSlider = null, mGraySlider = null, mGreenSlider = null, mRedSlider = null;
+         mVisibilityMenuItem = null, mPlainTextTSMI = null, mCSharpTSMI = null, mCTSMI = null, mCppTSMI = null, mBasicTSMI = null, mFSharpTSMI = null,
+         mHtmlTSMI = null, mCssTSMI = null, mXmlTSMI = null, mJsonTSMI = null, mPowerShellTSMI = null, mBatchTSMI = null, mSqlTSMI = null,
+         mMarkdownTSMI = null, mPythonTSMI = null, mCurrentLanguageIsTSMI = null;
       #endregion
    }
    #endregion

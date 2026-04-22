@@ -3,8 +3,8 @@
 namespace DBCode {
    public sealed partial class MainForm : Form {
       public MainForm() {
-         InitializeUIPart1();
          mForm = this;
+         InitializeUIPart1();
          MinimumSize = new Size(400, 200);
          Assembly assembly = Assembly.GetExecutingAssembly();
          FileVersionInfo? fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
@@ -33,6 +33,7 @@ namespace DBCode {
          mTargetingMenuItem = new ToolStripMenuItem();
          mVisibilityMenuItem = new ToolStripMenuItem();
          mModeMenuItem = new ToolStripMenuItem();
+         mLanguageMenuItem = new ToolStripMenuItem();
          mThemeMenuItem = new ToolStripMenuItem();
          mThemeDesignTSMI = new ToolStripMenuItem();
          mThemePickTSMI = new ToolStripMenuItem();
@@ -48,6 +49,22 @@ namespace DBCode {
          mMinimalTSMI = new ToolStripMenuItem();
          mFeaturesTSMI = new ToolStripMenuItem();
          mReturnToTopTSMI = new ToolStripMenuItem();
+         mPlainTextTSMI = new ToolStripMenuItem();
+         mCSharpTSMI = new ToolStripMenuItem();
+         mCTSMI = new ToolStripMenuItem();
+         mCppTSMI = new ToolStripMenuItem();
+         mBasicTSMI = new ToolStripMenuItem();
+         mFSharpTSMI = new ToolStripMenuItem();
+         mHtmlTSMI = new ToolStripMenuItem();
+         mCssTSMI = new ToolStripMenuItem();
+         mXmlTSMI = new ToolStripMenuItem();
+         mJsonTSMI = new ToolStripMenuItem();
+         mPowerShellTSMI = new ToolStripMenuItem();
+         mBatchTSMI = new ToolStripMenuItem();
+         mSqlTSMI = new ToolStripMenuItem();
+         mMarkdownTSMI = new ToolStripMenuItem();
+         mPythonTSMI = new ToolStripMenuItem();
+         mCurrentLanguageIsTSMI = new ToolStripMenuItem();
          mRichTextBox = new RichTextBox();
          mStatusStrip = new StatusStrip();
          mTransferTSB = new ToolStripButton();
@@ -56,7 +73,6 @@ namespace DBCode {
          mVersionStatusLabel = new ToolStripStatusLabel();
          mRevertTSB = new ToolStripButton();
          mExitTSB = new ToolStripButton();
-         mTimer = new System.Windows.Forms.Timer { Interval = 400 };
       }
 
       private void InitializeUIPart1() {
@@ -71,6 +87,7 @@ namespace DBCode {
          MakeNews();
          InitializeUIPart2();
          InitializeUIPart3();
+         Themes.ThemeManager.LoadThemes();
          SuspendLayout();
          //DEBUG efm5 2026 04 2 many of these need tab index – TabIndex = mTabIndex++;
          StartPosition = FormStartPosition.Manual;
@@ -88,6 +105,8 @@ namespace DBCode {
          mVisibilityMenuItem.ShowShortcutKeys = true;
          mModeMenuItem.Name = "modeMenuItem";
          mModeMenuItem.Text = "&Mode";
+         mLanguageMenuItem.Name = "languageMenuItem";
+         mLanguageMenuItem.Text = "&Language";
          mThemeMenuItem.Name = "themeMenuItem";
          mThemeMenuItem.Text = "&Theme";
          mThemeDesignTSMI.Name = "themeDesignTSMI";
@@ -102,9 +121,10 @@ namespace DBCode {
          mThemePickTSMI.Text = "&Pick";
          mThemePickTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.P;
          mThemePickTSMI.Click += ThemePick_Click;
-         mThemeMenuItem.DropDownItems.AddRange(mThemePickTSMI, mThemeDesignTSMI, mThemeEditTSMI);
+         mThemeMenuItem.DropDownItems.AddRange(mCurrentLanguageIsTSMI, toolStripSeparator1, mThemePickTSMI, mThemeDesignTSMI, mThemeEditTSMI);
          mHelpMenuItem.Name = "helpMenuItem";
          mHelpMenuItem.Text = "&Help";
+         mHelpMenuItem.Tag = new HelpTag(HelpContext.Main);
          mHelpMenuItem.ShortcutKeys = Keys.F1;
          mHelpMenuItem.Click += Help_Click;
          mTargetedTSMI.Name = "targetedTSMI";
@@ -118,18 +138,16 @@ namespace DBCode {
          mRetargetTSMI.Click += RetargetTSMI_Click;
          mTargetingMenuItem.DropDownItems.Add(mTargetedTSMI);
          mTargetingMenuItem.DropDownItems.Add(mRetargetTSMI);
-         Controls.Add(mRichTextBox);
-         Controls.Add(mStatusStrip);
-         Controls.Add(mMenuStrip);
-
+         Controls.AddRange(mRichTextBox, mStatusStrip, mMenuStrip);
          Load += MainForm_Load;
          FormClosing += MainForm_FormClosing;
-         mHighlighterEngine = new HighlighterEngine(mRichTextBox, LanguageKind.CSharp);
+         mHighlighterEngine = new HighlighterEngine(mRichTextBox, mCurrentLanguage);
          mRichTextBox.TextChanged += OnEditorTextChanged;
          LoadEmbeddedIcons();
          InitializeIcon();
-         LayoutHelpers.AdjustForThemeFont(mCurrentTheme!.mFonts[(int)FontUsage.Interface]);
-
+         CheckLanguage();
+         AdjustForThemeFont(mCurrentTheme!.mFonts[(int)FontUsage.Interface]);
+         ApplyThemeToMainForm();
          ResumeLayout(false);
          PerformLayout();
       }
@@ -172,14 +190,72 @@ namespace DBCode {
          mReturnToTopTSMI.CheckOnClick = true;
          mReturnToTopTSMI.ShortcutKeys = Keys.Control | Keys.H;
          mReturnToTopTSMI.Click += ReturnToTopTSMI_Click;
-         mModeMenuItem.DropDownItems.Add(mMinimalTSMI);
-         mModeMenuItem.DropDownItems.Add(mFeaturesTSMI);
-         mModeMenuItem.DropDownItems.Add(mReturnToTopTSMI);
-         mMenuStrip.Items.Add(mTargetingMenuItem);
-         mMenuStrip.Items.Add(mVisibilityMenuItem);
-         mMenuStrip.Items.Add(mModeMenuItem);
-         mMenuStrip.Items.Add(mThemeMenuItem);
-         mMenuStrip.Items.Add(mHelpMenuItem);
+         mPlainTextTSMI.Name = "plaintextTSMI";
+         mPlainTextTSMI.Text = "Plain&text";
+         mPlainTextTSMI.Tag = LanguageKind.PlainText;
+         mPlainTextTSMI.Click += LanguageTSMI_Click;
+         mCSharpTSMI.Name = "cSharpTSMI";
+         mCSharpTSMI.Text = "CSha&rp";
+         mCSharpTSMI.Tag = LanguageKind.CSharp;
+         mCSharpTSMI.Click += LanguageTSMI_Click;
+         mCTSMI.Name = "cTSMI";
+         mCTSMI.Text = "&C";
+         mCTSMI.Tag = LanguageKind.C;
+         mCTSMI.Click += LanguageTSMI_Click;
+         mCppTSMI.Name = "cppTSMI";
+         mCppTSMI.Text = "C&pp";
+         mCppTSMI.Tag = LanguageKind.Cpp;
+         mCppTSMI.Click += LanguageTSMI_Click;
+         mBasicTSMI.Name = "basicTSMI";
+         mBasicTSMI.Text = "&Basic";
+         mBasicTSMI.Tag = LanguageKind.Basic;
+         mBasicTSMI.Click += LanguageTSMI_Click;
+         mFSharpTSMI.Name = "fSharpTSMI";
+         mFSharpTSMI.Text = "&FSharp";
+         mFSharpTSMI.Tag = LanguageKind.FSharp;
+         mFSharpTSMI.Click += LanguageTSMI_Click;
+         mHtmlTSMI.Name = "hTMLTSMI";
+         mHtmlTSMI.Text = "&HTML";
+         mHtmlTSMI.Tag = LanguageKind.Html;
+         mHtmlTSMI.Click += LanguageTSMI_Click;
+         mCssTSMI.Name = "cSSTSMI";
+         mCssTSMI.Text = "C&SS";
+         mCssTSMI.Tag = LanguageKind.Css;
+         mCssTSMI.Click += LanguageTSMI_Click;
+         mXmlTSMI.Name = "xMLTSMI";
+         mXmlTSMI.Text = "&XML";
+         mXmlTSMI.Tag = LanguageKind.Xml;
+         mXmlTSMI.Click += LanguageTSMI_Click;
+         mJsonTSMI.Name = "jSONTSMI";
+         mJsonTSMI.Text = "&JSON";
+         mJsonTSMI.Tag = LanguageKind.Json;
+         mJsonTSMI.Click += LanguageTSMI_Click;
+         mPowerShellTSMI.Name = "powerShellTSMI";
+         mPowerShellTSMI.Text = "Po&werShell";
+         mPowerShellTSMI.Tag = LanguageKind.PowerShell;
+         mPowerShellTSMI.Click += LanguageTSMI_Click;
+         mBatchTSMI.Name = "batchTSMI";
+         mBatchTSMI.Text = "B&atch";
+         mBatchTSMI.Tag = LanguageKind.Batch;
+         mBatchTSMI.Click += LanguageTSMI_Click;
+         mSqlTSMI.Name = "sQLTSMI";
+         mSqlTSMI.Text = "S&QL";
+         mSqlTSMI.Tag = LanguageKind.Sql;
+         mSqlTSMI.Click += LanguageTSMI_Click;
+         mMarkdownTSMI.Name = "markdownTSMI";
+         mMarkdownTSMI.Text = "&Markdown";
+         mMarkdownTSMI.Tag = LanguageKind.Markdown;
+         mMarkdownTSMI.Click += LanguageTSMI_Click;
+         mPythonTSMI.Name = "pythonTSMI";
+         mPythonTSMI.Text = "P&ython";
+         mPythonTSMI.Tag = LanguageKind.Python;
+         mPythonTSMI.Click += LanguageTSMI_Click;
+         mCurrentLanguageIsTSMI.Name = "currentLanguageIsTSMI";
+         mCurrentLanguageIsTSMI.Text = mCurrently + mCurrentTheme.mName;
+         mModeMenuItem.DropDownItems.AddRange(mMinimalTSMI, mFeaturesTSMI, mReturnToTopTSMI);
+         mLanguageMenuItem.DropDownItems.AddRange(mPlainTextTSMI, mCSharpTSMI, mCTSMI, mCppTSMI, mBasicTSMI, mFSharpTSMI, mHtmlTSMI,
+            mCssTSMI, mXmlTSMI, mJsonTSMI, mPowerShellTSMI, mBatchTSMI, mSqlTSMI, mMarkdownTSMI, mPythonTSMI);
+         mMenuStrip.Items.AddRange(mTargetingMenuItem, mVisibilityMenuItem, mModeMenuItem, mLanguageMenuItem, mThemeMenuItem, mHelpMenuItem);
       }
 
       private void InitializeUIPart3() {
@@ -223,12 +299,8 @@ namespace DBCode {
          mExitTSB.Text = "E&xit";
          mExitTSB.Alignment = ToolStripItemAlignment.Right;
          mExitTSB.Click += ExitTSB_Click;
-         mStatusStrip.Items.Add(mTransferTSB);
-         mStatusStrip.Items.Add(mTransportTSB);
-         mStatusStrip.Items.Add(mTargetingStatusLabel);
-         mStatusStrip.Items.Add(mVersionStatusLabel);
-         mStatusStrip.Items.Add(mRevertTSB);
-         mStatusStrip.Items.Add(mExitTSB);
+         mStatusStrip.Items.AddRange(new ToolStripItem[] { mTransferTSB, mTransportTSB, mTargetingStatusLabel, mVersionStatusLabel,
+            mRevertTSB, mExitTSB });
       }
    }
 }

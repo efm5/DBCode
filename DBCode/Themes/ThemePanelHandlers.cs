@@ -38,6 +38,13 @@
             UpdateTheme();
             CloseThemePanel();
          }
+
+         private void OnColorSwatchClicked(object? pSender, ColorSwatchUsage pUsage) {
+            LabeledButtonColorSwatchCluster? swatch = pSender as LabeledButtonColorSwatchCluster;
+            if (swatch == null)
+               return;
+            EnsureColorPickerPanel(mTemporaryTheme, (ColorUsage)pUsage, swatch.GetColor());
+         }
       }
    }
 }

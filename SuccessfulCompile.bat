@@ -16,4 +16,18 @@ if exist "A:\" (
 
    xcopy /e /c /h /k /y /i "E:\DBCode\"
 )
+if exist "E:\DBCode\DBCode\Help" (
+   if exist "E:\DBCode\DBCode\bin\Debug\net10.0-windows" (
+      CD /D "E:\DBCode\DBCode\bin\Debug\net10.0-windows"
+      mkdir "Help"
+      CD "Help"
+      xcopy /c /h /k /y "E:\DBCode\DBCode\Help\*.*"
+   )
+   if exist "E:\DBCode\DBCode\bin\Release\net10.0-windows" (
+      CD /D "E:\DBCode\DBCode\bin\Release\net10.0-windows"
+      mkdir "Help"
+      CD "Help"
+      xcopy /c /h /k /y "E:\DBCode\DBCode\Help\*.*"
+   )
+)
 Exit 0

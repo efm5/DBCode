@@ -1,6 +1,5 @@
 namespace DBCode {
    internal static partial class LayoutHelpers {
-
       internal static void RightAlign(List<Control>? pControls) {
          if (pControls == null || pControls.Count == 0)
             return;
@@ -44,91 +43,6 @@ namespace DBCode {
       internal static void CenterControl(Control? pContainer, Control? pChildControl) {
          CenterControlHorizontally(pContainer, pChildControl);
          CenterControlVertically(pContainer, pChildControl);
-      }
-
-      internal static bool EnsureWindowFitsMonitor(Form? pForm, bool pControlBox = true) {
-         if (pForm == null)
-            return false;
-         Screen formScreen = Screen.FromControl(pForm);
-         Rectangle workingArea = formScreen.WorkingArea;
-         Size size = pForm.Size;
-         int controlBoxSpace = pControlBox ? 4 : 1;
-         bool changed = false;
-
-         SizeF titleSize;
-         using (Graphics graphics = pForm.CreateGraphics()) {
-            titleSize = graphics.MeasureString(pForm.Text, CreateNewFont());
-         }
-         int wantedTitleWidth = (int)((titleSize.Width * 0.86f) +
-            (SystemInformation.CaptionButtonSize.Width * controlBoxSpace));
-
-         if (size.Width < wantedTitleWidth) {
-            size.Width = wantedTitleWidth;
-            changed = true;
-         }
-         if (size.Width > workingArea.Width) {
-            size.Width = workingArea.Width - 10;
-            changed = true;
-         }
-         if (size.Height > workingArea.Height) {
-            size.Height = workingArea.Height - 10;
-            changed = true;
-         }
-         pForm.Size = size;
-
-         int x = pForm.Left;
-         int y = pForm.Top;
-
-         if (pForm.Right > workingArea.Right)
-            x = workingArea.Right - size.Width - 5;
-         if (pForm.Bottom > workingArea.Bottom)
-            y = workingArea.Bottom - size.Height - 5;
-
-         pForm.Location = new Point(x, y);
-
-         if (IsOffScreen(pForm))
-            pForm.Location = new Point(workingArea.Left + 5, workingArea.Top + 5);
-
-         if (IsPartiallyHidden(pForm)) {
-            pForm.Location = new Point(workingArea.Left + 5, workingArea.Top + 5);
-            if (pForm.Width > workingArea.Width - 10)
-               pForm.Width = workingArea.Width - 10;
-            if (pForm.Height > workingArea.Height - 10)
-               pForm.Height = workingArea.Height - 10;
-            changed = true;
-         }
-         return changed;
-      }
-
-      internal static bool IsOffScreen(Form? pForm) {
-         if (pForm == null)
-            return true;
-         Screen[] screens = Screen.AllScreens;
-         for (int i = 0; i < screens.Length; i++) {
-            if (screens[i].WorkingArea.Contains(new Point(pForm.Left, pForm.Top)))
-               return false;
-         }
-         return true;
-      }
-
-      internal static bool IsPartiallyHidden(Form? pForm) {
-         if (pForm == null)
-            return true;
-         Screen[] screens = Screen.AllScreens;
-         for (int i = 0; i < screens.Length; i++) {
-            if (screens[i].WorkingArea.Contains(new Point(pForm.Right, pForm.Bottom)))
-               return false;
-         }
-         return true;
-      }
-
-      internal static void CenterFormOnMonitor(Form? pForm) {
-         if (pForm == null)
-            return;
-         Screen screen = Screen.FromControl(pForm);
-         Rectangle workingArea = screen.WorkingArea;
-         pForm.Left = workingArea.X + (workingArea.Width - pForm.Width) / 2;
-         pForm.Top = workingArea.Y + (workingArea.Height - pForm.Height) / 2;
       }
 
       internal static void CenterDialog(Form? pForm, Panel? pPanel, Control? pBorderPanel) {
@@ -291,6 +205,48 @@ namespace DBCode {
 
          pForm.Size = new Size(wide, tall);
          CenterFormOnMonitor(pForm);
+      }
+
+      internal static int WidgetLayout(List<Control> pControlList, int pMaxWidth, int pTop = 10, int pLeft = 10) {
+         if ((pControlList == null) || (pControlList.Count == 0))
+            return 0;
+         List<Control> rowList = new List<Control>();
+         int tooWide = pMaxWidth, top = pTop, left = pLeft, bottom = pControlList[0].Bottom;
+
+         for (int i = 0; i < pControlList.Count; i++) {
+            pControlList[i].Location = new Point(left, top);
+            if (pControlList[i].Bottom > bottom)
+               bottom = pControlList[i].Bottom;
+            left = pControlList[i].Right + mEm;
+            if (left > tooWide) {
+               top = Bottommost(rowList).Bottom + mEmHalf;
+               rowList.Clear();
+               pControlList[i].Location = new Point(pControlList[0].Left, top);
+               left = pControlList[i].Right + mEm;
+               bottom = pControlList[i].Bottom;
+            }
+            rowList.Add(pControlList[i]);
+         }
+         return bottom;
+      }
+
+      internal static void PaintMenuItem(ToolStripMenuItem pTSMI) {
+         pTSMI.Font = CreateMenuFont();
+         pTSMI.ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorUsage.MenuFont];
+         pTSMI.BackColor = mCurrentTheme.mInterfaceColors[(int)ColorUsage.MenuBackground];
+      }
+
+      internal static void PaintMenuItemsRecursive(ToolStripMenuItem pTSMI) {
+         pTSMI.Font = CreateMenuFont();
+         pTSMI.ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorUsage.MenuFont];
+         pTSMI.BackColor = mCurrentTheme.mInterfaceColors[(int)ColorUsage.MenuBackground];
+         foreach (ToolStripMenuItem tsmi in pTSMI.DropDownItems.OfType<ToolStripMenuItem>()) {
+            tsmi.Font = CreateMenuFont();
+            tsmi.ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorUsage.MenuFont];
+            tsmi.BackColor = mCurrentTheme.mInterfaceColors[(int)ColorUsage.MenuBackground];
+            if (tsmi.DropDownItems.Count > 0)
+               PaintMenuItemsRecursive(tsmi);
+         }
       }
    }
 }

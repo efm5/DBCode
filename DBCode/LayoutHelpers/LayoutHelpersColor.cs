@@ -1,6 +1,5 @@
 namespace DBCode {
    internal static partial class LayoutHelpers {
-
       internal static string MassageColorName(string pCompressedName) {
          if (string.IsNullOrWhiteSpace(pCompressedName))
             return string.Empty;

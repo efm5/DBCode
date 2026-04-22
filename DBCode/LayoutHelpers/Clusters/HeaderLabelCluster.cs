@@ -14,8 +14,7 @@
                Font = CreateNewTitleFont(pSizeMultiplier),
                TextAlign = ContentAlignment.MiddleCenter,
                BackColor = pBackgroundColor ?? Color.Transparent,
-               ForeColor = mCurrentTheme!.mColors[(int)ColorUsage.InterfaceFont],
-               Top = mEm
+               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont]
             };
             Controls.Add(mLabel);
             Dock = DockStyle.Top;

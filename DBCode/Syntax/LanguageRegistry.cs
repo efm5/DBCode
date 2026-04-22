@@ -5,11 +5,14 @@
       private static readonly Dictionary<LanguageKind, IHighlighter> sHighlighters = [];
 
       static LanguageRegistry() {
-         ILanguageDefinition csharpDefinition = new CSharpLanguageDefinition();
+         ILanguageDefinition csharpDefinition;
+         ITokenizer csharpTokenizer;
+         IHighlighter csharpHighlighter;
+         csharpDefinition = new CSharpLanguageDefinition();
          sDefinitions[LanguageKind.CSharp] = csharpDefinition;
-         ITokenizer csharpTokenizer = new CSharpTokenizer(csharpDefinition);
+         csharpTokenizer = new CSharpTokenizer(csharpDefinition);
          sTokenizers[LanguageKind.CSharp] = csharpTokenizer;
-         IHighlighter csharpHighlighter = new CSharpHighlighter();
+         csharpHighlighter = new CSharpHighlighter();
          sHighlighters[LanguageKind.CSharp] = csharpHighlighter;
       }
 

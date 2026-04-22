@@ -33,17 +33,27 @@ namespace DBCode.Themes {
          };
          Dictionary<string, string> fonts = [];
          Dictionary<string, string> colors = [];
+         Dictionary<string, Dictionary<string, string>> highlightColors = [];
 
          foreach (FontUsage usage in Enum.GetValues<FontUsage>()) {
             Font font = pTheme.mFonts[(int)usage];
             fonts[usage.ToString()] = new FontConverter().ConvertToString(font) ?? "";
          }
          foreach (ColorUsage usage in Enum.GetValues<ColorUsage>()) {
-            Color color = pTheme.mColors[(int)usage];
+            Color color = pTheme.mInterfaceColors[(int)usage];
             colors[usage.ToString()] = ColorToString(color);
+         }
+         foreach (DBCode.Syntax.LanguageKind language in Enum.GetValues<DBCode.Syntax.LanguageKind>()) {
+            Dictionary<string, string> tokenColors = [];
+            foreach (DBCode.Syntax.TokenKind token in Enum.GetValues<DBCode.Syntax.TokenKind>()) {
+               Color color = pTheme.mHighlightColors[(int)language][(int)token];
+               tokenColors[token.ToString()] = ColorToString(color);
+            }
+            highlightColors[language.ToString()] = tokenColors;
          }
          root["Fonts"] = fonts;
          root["Colors"] = colors;
+         root["HighlightColors"] = highlightColors;
          JsonSerializerOptions options = new JsonSerializerOptions {
             WriteIndented = true
          };

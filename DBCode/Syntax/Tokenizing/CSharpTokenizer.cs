@@ -20,15 +20,16 @@
       }
 
       public IReadOnlyList<Token> Tokenize(string pText) {
+         int length, index, newIndex;
+         bool matched;
+         Token token;
          var tokens = new List<Token>();
-         int length = pText.Length;
-         int index = 0;
-
+         length = pText.Length;
+         index = 0;
          while (index < length) {
-            Token token = new Token(TokenKind.Unknown, index, 0);
-            int newIndex = index;
-            bool matched = false;
-
+            token = new Token(TokenKind.Unknown, index, 0);
+            newIndex = index;
+            matched = false;
             foreach (ITokenReader reader in mReaders) {
                if (reader.TryRead(pText, index, out Token tempToken, out int tempIndex)) {
                   token = tempToken;
@@ -37,16 +38,13 @@
                   break;
                }
             }
-
             if (!matched) {
                token = new Token(TokenKind.Unknown, index, 1);
                newIndex = index + 1;
             }
-
             tokens.Add(token);
             index = newIndex;
          }
-
          return tokens;
       }
    }

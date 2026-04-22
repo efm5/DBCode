@@ -9,45 +9,39 @@
       public LanguageKind Language => LanguageKind.CSharp;
 
       public IReadOnlyList<Token> Tokenize(string pText) {
+         int index, startPosition, length;
+         char currentCharacter;
+         string value;
+         TokenKind kind;
          var tokens = new List<Token>();
-         int index = 0;
-
+         index = 0;
          while (index < pText.Length) {
-            char c = pText[index];
-
-            if (char.IsWhiteSpace(c)) {
-               int start = index;
+            currentCharacter = pText[index];
+            if (char.IsWhiteSpace(currentCharacter)) {
+               startPosition = index;
                while (index < pText.Length && char.IsWhiteSpace(pText[index])) {
                   index++;
                }
-
-               tokens.Add(new Token(TokenKind.Whitespace, start, index - start));
+               tokens.Add(new Token(TokenKind.Whitespace, startPosition, index - startPosition));
                continue;
             }
-
-            if (IsIdentifierStart(c)) {
-               int start = index;
+            if (IsIdentifierStart(currentCharacter)) {
+               startPosition = index;
                index++;
-
                while (index < pText.Length && IsIdentifierPart(pText[index])) {
                   index++;
                }
-
-               int length = index - start;
-               string value = pText.Substring(start, length);
-
-               TokenKind kind = mDefinition.Keywords.Contains(value)
+               length = index - startPosition;
+               value = pText.Substring(startPosition, length);
+               kind = mDefinition.Keywords.Contains(value)
                   ? TokenKind.Keyword
                   : TokenKind.Identifier;
-
-               tokens.Add(new Token(kind, start, length));
+               tokens.Add(new Token(kind, startPosition, length));
                continue;
             }
-
             tokens.Add(new Token(TokenKind.Unknown, index, 1));
             index++;
          }
-
          return tokens;
       }
 

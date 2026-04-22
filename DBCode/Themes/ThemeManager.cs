@@ -3,19 +3,19 @@ using static DBCode.Themes.ThemeBrightnessHelper;
 
 namespace DBCode.Themes {
    public static class ThemeManager {
-      public static List<Theme> LoadThemes(string pFolderPath, string pLastUsedThemeName) {
-         _ = pLastUsedThemeName;//DEBUG efm5 2026 03 31 to temporarily defeat the warning about this parameter not being used yet.
-                                //It will be used in the future when we implement the logic to select the last used theme from the loaded themes.
+      public static List<Theme> LoadThemes() {
          List<Theme> themes = [];
-
-         if (!Directory.Exists(pFolderPath)) {
-            themes.Add(ThemeDefaults.DefaultLight);
+         if (!Directory.Exists(mDataFolder)) {
             themes.Add(ThemeDefaults.DefaultDark);
+            themes.Add(ThemeDefaults.DefaultLight);
+            themes.Add(ThemeDefaults.LightPastel);
+            themes.Add(ThemeDefaults.DarkPastel);
+            themes.Add(ThemeDefaults.Classic);
+            themes.Add(ThemeDefaults.HighContrastDark);
+            themes.Add(ThemeDefaults.HighContrastLight);
             return themes;
          }
-
-         string[] files = Directory.GetFiles(pFolderPath, "*.json", SearchOption.TopDirectoryOnly);
-
+         string[] files = Directory.GetFiles(mDataFolder, "*.json", SearchOption.TopDirectoryOnly);
          foreach (string file in files) {
             try {
                Theme theme = LoadThemeFromJson(file);
@@ -27,8 +27,13 @@ namespace DBCode.Themes {
             }
          }
          if (themes.Count == 0) {
-            themes.Add(ThemeDefaults.DefaultLight);
             themes.Add(ThemeDefaults.DefaultDark);
+            themes.Add(ThemeDefaults.DefaultLight);
+            themes.Add(ThemeDefaults.LightPastel);
+            themes.Add(ThemeDefaults.DarkPastel);
+            themes.Add(ThemeDefaults.Classic);
+            themes.Add(ThemeDefaults.HighContrastDark);
+            themes.Add(ThemeDefaults.HighContrastLight);
          }
          return themes;
       }
@@ -71,7 +76,22 @@ namespace DBCode.Themes {
                throw new Exception($"Theme '{name}' is missing color '{key}'.");
             string colorString = colorElement.GetString() ?? "";
 
-            theme.mColors[(int)usage] = ParseColor(colorString);
+            theme.mInterfaceColors[(int)usage] = ParseColor(colorString);
+         }
+
+         if (root.TryGetProperty("HighlightColors", out JsonElement highlightColors)) {
+            foreach (DBCode.Syntax.LanguageKind language in Enum.GetValues<DBCode.Syntax.LanguageKind>()) {
+               string languageKey = language.ToString();
+               if (highlightColors.TryGetProperty(languageKey, out JsonElement tokenColors)) {
+                  foreach (DBCode.Syntax.TokenKind token in Enum.GetValues<DBCode.Syntax.TokenKind>()) {
+                     string tokenKey = token.ToString();
+                     if (tokenColors.TryGetProperty(tokenKey, out JsonElement colorElement)) {
+                        string colorString = colorElement.GetString() ?? "";
+                        theme.mHighlightColors[(int)language][(int)token] = ParseColor(colorString);
+                     }
+                  }
+               }
+            }
          }
          return theme;
       }

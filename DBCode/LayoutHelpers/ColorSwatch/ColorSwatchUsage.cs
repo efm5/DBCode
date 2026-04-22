@@ -56,9 +56,11 @@ namespace DBCode {
          [DisplayText("Punctuation Token Color")]
          Punctuation,
          // Color Panel
+         Gray,
          Red,
          Green,
-         Blue
+         Blue,
+         Demo
       }
    }
 }

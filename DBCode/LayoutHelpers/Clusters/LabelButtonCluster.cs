@@ -10,26 +10,23 @@ namespace DBCode {
             mBackgroundColor = pBackgroundColor;
             mLabelPosition = pLabelPosition;
             mLabel = new Label() {
-               TabIndex = LayoutHelpers.TAB_INDEX_IGNORED,
+               TabIndex = TAB_INDEX_IGNORED,
                Name = $"LabeledButtonTextBoxCluster{nameof(mLabel)}{mTabIndex++}",
                Text = pLabelText,
-               Top = mEm,
+               AutoSize = true,
                TextAlign = ContentAlignment.MiddleCenter,
-               Height = 40,
-               Font = LayoutHelpers.CreateNewFont(),
-               ForeColor = mCurrentTheme!.mColors[(int)ColorUsage.InterfaceFont],
+               Font = CreateNewFont(),
+               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont],
                BackColor = pBackgroundColor ?? Color.Transparent
             };
             mButton = new Button() {
                TabIndex = mTabIndex,
                Name = $"LabeledButtonTextBoxCluster{nameof(mButton)}{mTabIndex++}",
                Text = pButtonText,
-               Top = mEm,
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-               Font = LayoutHelpers.CreateNewFont(),
-               ForeColor = mCurrentTheme!.mColors[(int)ColorUsage.InterfaceFont]
-               //BackColor = pBackgroundColor ?? Color.Transparent
+               Font = CreateNewFont(),
+               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont]
             };
          }
 

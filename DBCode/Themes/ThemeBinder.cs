@@ -1,17 +1,12 @@
 ﻿namespace DBCode.Themes {
    public static class ThemeBinder {
+      public static void ApplyTheme(Control pControl) => ApplyTheme(pControl, true, null);
 
-      public static void ApplyTheme(Control pControl)
-         => ApplyTheme(pControl, true, null);
+      public static void ApplyTheme(Control pControl, bool pRecurse) => ApplyTheme(pControl, pRecurse, null);
 
-      public static void ApplyTheme(Control pControl, bool pRecurse)
-         => ApplyTheme(pControl, pRecurse, null);
+      public static void ApplyTheme(Control pControl, List<Control>? pExclusions) => ApplyTheme(pControl, true, pExclusions);
 
-      public static void ApplyTheme(Control pControl, List<Control>? pExclusions)
-         => ApplyTheme(pControl, true, pExclusions);
-
-      public static void ApplyThemeToControl(Control pControl)
-         => ApplyThemeInternal(pControl, GetTheme());
+      public static void ApplyThemeToControl(Control pControl) => ApplyThemeInternal(pControl, GetTheme());
 
       public static void ApplyThemeToControls(List<Control> pControls) {
          Theme theme = GetTheme();
@@ -24,10 +19,9 @@
             return;
          if (pExclusions != null && pExclusions.Contains(pControl))
             return;
-
          Theme theme = GetTheme();
-         ApplyThemeInternal(pControl, theme);
 
+         ApplyThemeInternal(pControl, theme);
          if (pRecurse) {
             foreach (Control child in pControl.Controls) {
                if (pExclusions != null && pExclusions.Contains(child))
@@ -35,7 +29,6 @@
                ApplyTheme(child, true, pExclusions);
             }
          }
-
          if (pControl is MenuStrip menuStrip)
             ApplyMenuStrip(menuStrip, theme, pExclusions);
          if (pControl is ContextMenuStrip contextMenu)
@@ -44,8 +37,7 @@
             ApplyToolStrip(toolStrip, theme, pExclusions);
       }
 
-      private static Theme GetTheme()
-         => ThemeRegistry.GetCurrentThemeClone();
+      private static Theme GetTheme() => ThemeRegistry.GetCurrentThemeClone();
 
       private static void ApplyThemeInternal(Control pControl, Theme pTheme) {
          ThemeTag? tag = pControl.Tag as ThemeTag;
@@ -56,12 +48,11 @@
          }
 
          Font font = pTheme.mFonts[(int)tag.mFontUsage];
-         Color foreColor = pTheme.mColors[(int)tag.mForeColorUsage];
-         Color backColor = pTheme.mColors[(int)tag.mBackColorUsage];
+         Color foreColor = pTheme.mInterfaceColors[(int)tag.mForeColorUsage];
+         Color backColor = pTheme.mInterfaceColors[(int)tag.mBackColorUsage];
 
          pControl.Font = font;
          pControl.ForeColor = foreColor;
-
          if (tag.mAllowTransparent && backColor == Color.Transparent)
             pControl.BackColor = Color.Transparent;
          else
@@ -96,15 +87,13 @@
             string text = pItem.Text ?? "<no text>";
             throw new Exception($"Menu item '{name}' ('{text}') is missing a ThemeTag.");
          }
-
          Font font = pTheme.mFonts[(int)tag.mFontUsage];
-         Color foreColor = pTheme.mColors[(int)tag.mForeColorUsage];
-         Color backColor = pTheme.mColors[(int)tag.mBackColorUsage];
+         Color foreColor = pTheme.mInterfaceColors[(int)tag.mForeColorUsage];
+         Color backColor = pTheme.mInterfaceColors[(int)tag.mBackColorUsage];
 
          pItem.Font = font;
          pItem.ForeColor = foreColor;
          pItem.BackColor = backColor;
-
          foreach (ToolStripItem child in pItem.DropDownItems) {
             if (child is ToolStripMenuItem childItem)
                ApplyMenuItem(childItem, pTheme, pExclusions);
@@ -118,10 +107,9 @@
             string text = pItem.Text ?? "<no text>";
             throw new Exception($"ToolStrip item '{name}' ('{text}') is missing a ThemeTag.");
          }
-
          Font font = pTheme.mFonts[(int)tag.mFontUsage];
-         Color foreColor = pTheme.mColors[(int)tag.mForeColorUsage];
-         Color backColor = pTheme.mColors[(int)tag.mBackColorUsage];
+         Color foreColor = pTheme.mInterfaceColors[(int)tag.mForeColorUsage];
+         Color backColor = pTheme.mInterfaceColors[(int)tag.mBackColorUsage];
 
          pItem.Font = font;
          pItem.ForeColor = foreColor;

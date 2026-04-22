@@ -10,12 +10,12 @@ namespace DBCode {
             mBackgroundColor = pBackgroundColor;
             mLabelPosition = pLabelPosition;
             mLabel = new Label {
-               TabIndex = LayoutHelpers.TAB_INDEX_IGNORED,
+               TabIndex = TAB_INDEX_IGNORED,
                Name = $"TitleLabelCluster{nameof(mLabel)}{mTabIndex++}",
                Text = pLabelText,
-               Height = 40,
-               Font = LayoutHelpers.CreateNewFont(),
-               ForeColor = mCurrentTheme!.mColors[(int)ColorUsage.InterfaceFont],
+               AutoSize = true,
+               Font = CreateNewFont(),
+               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont],
                BackColor = pBackgroundColor ?? Color.Transparent
             };
             Controls.Add(mLabel);
@@ -27,10 +27,9 @@ namespace DBCode {
                   TabIndex = mTabIndex,
                   Name = $"RadioButtonClusterButton{nameof(radioButton)}{mTabIndex++}",
                   Text = labelName,
-                  Top = mEm,
                   AutoSize = true,
-                  Font = LayoutHelpers.CreateNewFont(),
-                  ForeColor = mCurrentTheme!.mColors[(int)ColorUsage.InterfaceFont]
+                  Font = CreateNewFont(),
+                  ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont]
                   //BackColor = pBackgroundColor ?? Color.Transparent
                };
                if ((pInitiallyChecked > -1) && (pInitiallyChecked < pRadioButtonNames.Count)) {

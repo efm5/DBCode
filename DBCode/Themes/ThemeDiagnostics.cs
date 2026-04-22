@@ -50,7 +50,7 @@
 
       private static void ValidateColors(Theme pTheme, List<string> pIssues) {
          foreach (ColorUsage usage in Enum.GetValues<ColorUsage>()) {
-            Color color = pTheme.mColors[(int)usage];
+            Color color = pTheme.mInterfaceColors[(int)usage];
 
             if (color.A == 0)
                pIssues.Add($"Color '{usage}' is fully transparent (A=0).");

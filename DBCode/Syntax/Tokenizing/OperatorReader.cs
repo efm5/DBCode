@@ -1,50 +1,38 @@
 ﻿namespace DBCode.Syntax.Tokenizing {
    internal sealed class OperatorReader : ITokenReader {
-      public bool TryRead(
-         string pText,
-         int pStartIndex,
-         out Token pToken,
-         out int pNewIndex
-      ) {
+      public bool TryRead(string pText, int pStartIndex, out Token pToken, out int pNewIndex) {
+         int length, index, startPosition;
+         char currentCharacter, nextCharacter, thirdCharacter;
+
          pToken = null!;
          pNewIndex = pStartIndex;
-
-         int length = pText.Length;
-         int index = pStartIndex;
-
+         length = pText.Length;
+         index = pStartIndex;
          if (index >= length)
             return false;
-
-         char c = pText[index];
-
-         if (IsPunctuation(c)) {
+         currentCharacter = pText[index];
+         if (IsPunctuation(currentCharacter)) {
             pToken = new Token(TokenKind.Punctuation, index, 1);
             pNewIndex = index + 1;
             return true;
          }
-
-         if (!IsOperatorStart(c))
+         if (!IsOperatorStart(currentCharacter))
             return false;
-
-         int start = index;
+         startPosition = index;
          index++;
-
          if (index < length) {
-            char next = pText[index];
-
-            if (IsTwoCharOperator(c, next)) {
+            nextCharacter = pText[index];
+            if (IsTwoCharOperator(currentCharacter, nextCharacter)) {
                index++;
-
                if (index < length) {
-                  char third = pText[index];
-                  if (IsThreeCharOperator(c, next, third)) {
+                  thirdCharacter = pText[index];
+                  if (IsThreeCharOperator(currentCharacter, nextCharacter, thirdCharacter)) {
                      index++;
                   }
                }
             }
          }
-
-         pToken = new Token(TokenKind.Operator, start, index - start);
+         pToken = new Token(TokenKind.Operator, startPosition, index - startPosition);
          pNewIndex = index;
          return true;
       }

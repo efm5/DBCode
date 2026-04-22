@@ -1,7 +1,13 @@
-Ed’s Unified C# Coding Style Guide
-(For Visual Studio 2026, .NET 10, C# 14, WinForms)
+You are helping a hands-free programmer using Dragon for both dictation and computer/application control. 
+Be forewarned, Dragon introduces “Speak-Os” (inadvertent capitalization of words, 
+failure to insert appropriate spacing between words and after punctuation, misspellings based on synonyms etc.).
+If you struggle to interpret meaning, Do not hesitate to ask for clarification.
 
-This guide defines the explicit, deterministic, Dragon‑friendly coding style used throughout the DBCode project. All generated code must follow these rules unless explicitly overridden.
+Ed’s Unified C# Coding Style Guide
+(For Visual Studio 2026 Insider, .NET 10, C# 14, WinForms)
+
+This guide defines the explicit, deterministic, Dragon‑friendly coding style used throughout the DBCode project. 
+All generated code must follow these rules unless explicitly overridden.
 
 GENERAL PHILOSOPHY
 
@@ -46,7 +52,7 @@ mButton = new Button {
 };
 
 3.1 Fields
-• Private fields use mCamelCase.
+• Member fields use mCamelCase.
 • No underscores.
 • No Hungarian notation.
 Example: private int mTokenIndex;
@@ -61,14 +67,15 @@ Example: public string FilePath { get; private set; }
 • Verbs for actions, nouns for queries.
 
 3.4 Parameters
-• camelCase.
+• pCamelCase.
 • Exception parameters use:
 pException
 pOuter / pInner
 pInner1, pInner2 for multiple nested blocks.
 
 INDENTATION AND SPACING
-
+Vertical space is at a premiumOn the monitor due to vision-constrained large fonts.
+Strictly limit blank lines between method statements.
 • Indentation is 3 spaces, never tabs.
 • No blank lines inside methods except:
 – One blank line after a pure variable‑declaration block.
@@ -78,11 +85,11 @@ INDENTATION AND SPACING
 BRACES AND BLOCKS
 
 • Opening brace on the same line.
-• Closing brace aligned with the statement that opened the block.
+• Closing brace on a separate line, aligned with the statement that opened the block.
 
 Example:
 if (condition) {
-DoSomething();
+   DoSomething();
 }
 
 NULLABILITY
@@ -116,13 +123,18 @@ SYNTAX HIGHLIGHTING SUBSYSTEM RULES
 • LanguageRegistry is the single source of truth.
 • All language definitions live in /Syntax.
 
-LONG STATEMENT CONTINUATION RULE (NEW — 29 MARCH 2026)
+LONG STATEMENT CONTINUATION RULE
 
-Method calls, constructor calls, and object/collection initializers must remain on a single line whenever the entire statement fits within the ~130‑character soft limit.
+Method calls, constructor calls, and object/collection initializers must remain on a single line 
+whenever the entire statement fits within the ~130‑character soft limit.
 
-If the statement exceeds the soft limit, break the line only at natural operator boundaries (such as commas, binary operators, or concatenation points). The continuation line must be indented one indentation level (3 spaces). If the continuation line itself exceeds the soft limit, break again at the next natural boundary. All continuation lines must use the same indentation level; do not stair‑step.
+If the statement exceeds the soft limit, break the line only at natural operator boundaries 
+(such as commas, binary operators, or concatenation points). The continuation line must be indented 
+one indentation level (3 spaces). If the continuation line itself exceeds the soft limit, break again 
+at the next natural boundary. All continuation lines must use the same indentation level; do not stair‑step.
 
-The closing parenthesis should remain on the same line as the final argument unless doing so would exceed the soft limit, in which case it appears on its own line aligned with the start of the statement.
+The closing parenthesis should remain on the same line as the final argument unless doing so would exceed 
+the soft limit, in which case it appears on its own line aligned with the start of the statement.
 
 Examples (shown conceptually):
 
@@ -131,13 +143,13 @@ SetWindowPos(Handle, mInsertAfterWindow, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | S
 
 Break at natural boundary:
 SetWindowPos(Handle, mInsertAfterWindow, 0, 0, 0, 0,
-SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+   SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 
 Break again if still too long:
 SetWindowPos(Handle, mInsertAfterWindow, 0, 0, 0, 0,
-SWP_NOMOVE |
-SWP_NOSIZE |
-SWP_NOACTIVATE);
+   SWP_NOMOVE |
+   SWP_NOSIZE |
+   SWP_NOACTIVATE);
 
 P/INVOKE RULES
 
@@ -149,23 +161,24 @@ P/INVOKE RULES
 Example: mInsertAfterWindow instead of HWND_TOP.
 
 COMMENTS AND DOCUMENTATION
-
+Vertical space is at a premiumOn the monitor due to vision-constrained large fonts.
 • Use // for inline comments.
 • Use XML documentation only for public APIs.
 • Comments must explain why, not what.
+• If possible, comments should be on the same line with the statement being explained
 
 GITHUB AND REPO STRUCTURE
 
 • Style guide lives in:
 /DBCode/StyleGuide.md
-• All code must compile cleanly with warnings treated as errors.
+• All code must compile cleanly with warnings and messages treated as errors.
 • No unused files or dead code.
 
 DRAGON DICTATION CONSIDERATIONS
 
-• Avoid symbols that are hard to dictate.
+• Avoid symbols that are hard to dictate or contain synonym words or reserved programming words.
 • Avoid clever formatting.
-• Keep method names pronounceable.
+• Keep method field and variable names pronounceable.
 • Avoid nested lambdas or fluent chains.
 
 END OF STYLE GUIDE

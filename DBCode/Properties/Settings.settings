@@ -3,10 +3,10 @@
   <Profiles />
   <Settings>
     <Setting Name="FormSize" Type="System.Drawing.Size" Scope="User">
-      <Value Profile="(Default)">600, 300</Value>
+      <Value Profile="(Default)">700, 300</Value>
     </Setting>
     <Setting Name="FormLocation" Type="System.Drawing.Point" Scope="User">
-      <Value Profile="(Default)">660, 390</Value>
+      <Value Profile="(Default)">610, 390</Value>
     </Setting>
     <Setting Name="FormOpacity" Type="System.Double" Scope="User">
       <Value Profile="(Default)">1</Value>
@@ -18,16 +18,31 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="ThemeLocation" Type="System.Drawing.Point" Scope="User">
-      <Value Profile="(Default)">100, 100</Value>
+      <Value Profile="(Default)">160, 250</Value>
     </Setting>
     <Setting Name="ThemeSize" Type="System.Drawing.Size" Scope="User">
-      <Value Profile="(Default)">600, 500</Value>
+      <Value Profile="(Default)">1600, 575</Value>
     </Setting>
     <Setting Name="FirstLaunch" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="FirstTheme" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="PreviousLanguage" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="CurrentThemeName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Dark</Value>
+    </Setting>
+    <Setting Name="ThemePickerLocation" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">460, 240</Value>
+    </Setting>
+    <Setting Name="ThemePickerSize" Type="System.Drawing.Size" Scope="User">
+      <Value Profile="(Default)">1000, 600</Value>
+    </Setting>
+    <Setting Name="CurrentLanguage" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>
 </SettingsFile>

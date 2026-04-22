@@ -1,5 +1,18 @@
 namespace DBCode {
    internal static partial class LayoutHelpers {
+      public static Font CreateMenuFont() {
+         if (mCurrentTheme == null)
+            return new Font("Segoe UI", 14f, FontStyle.Regular);
+         return new Font(mCurrentTheme.mFonts[(int)FontUsage.Menu].Name,
+            mCurrentTheme.mFonts[(int)FontUsage.Menu].SizeInPoints, FontStyle.Regular);
+      }
+      public static Font CreateStatusBarFont() {
+         if (mCurrentTheme == null)
+            return new Font("Segoe UI", 14f, FontStyle.Regular);
+         return new Font(mCurrentTheme.mFonts[(int)FontUsage.Status].Name,
+            mCurrentTheme.mFonts[(int)FontUsage.Status].SizeInPoints, FontStyle.Regular);
+      }
+
       public static Font CreateNewFont() {
          if (mCurrentTheme == null)
             return new Font("Segoe UI", 14f, FontStyle.Regular);

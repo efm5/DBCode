@@ -93,6 +93,97 @@ namespace DBCode {
          }
          return new Rectangle(left, top, widthFallback, heightFallback);
       }
+
+      internal static bool EnsureWindowFitsMonitor(Form? pForm, bool pControlBox = true) {
+         if (pForm == null)
+            return false;
+         Screen formScreen = Screen.FromControl(pForm);
+         Rectangle workingArea = formScreen.WorkingArea;
+         Size size = pForm.Size;
+         int controlBoxSpace = pControlBox ? 4 : 1;
+         bool changed = false;
+
+         SizeF titleSize;
+         using (Graphics graphics = pForm.CreateGraphics()) {
+            titleSize = graphics.MeasureString(pForm.Text, CreateNewFont());
+         }
+         int wantedTitleWidth = (int)((titleSize.Width * 0.86f) +
+            (SystemInformation.CaptionButtonSize.Width * controlBoxSpace));
+
+         if (size.Width < wantedTitleWidth) {
+            size.Width = wantedTitleWidth;
+            changed = true;
+         }
+         if (size.Width > workingArea.Width) {
+            size.Width = workingArea.Width - 10;
+            changed = true;
+         }
+         if (size.Height > workingArea.Height) {
+            size.Height = workingArea.Height - 10;
+            changed = true;
+         }
+         pForm.Size = size;
+
+         int x = pForm.Left;
+         int y = pForm.Top;
+
+         if (pForm.Right > workingArea.Right)
+            x = workingArea.Right - size.Width - 5;
+         if (pForm.Bottom > workingArea.Bottom)
+            y = workingArea.Bottom - size.Height - 5;
+
+         pForm.Location = new Point(x, y);
+
+         if (IsOffScreen(pForm))
+            pForm.Location = new Point(workingArea.Left + 5, workingArea.Top + 5);
+
+         if (IsPartiallyHidden(pForm)) {
+            pForm.Location = new Point(workingArea.Left + 5, workingArea.Top + 5);
+            if (pForm.Width > workingArea.Width - 10)
+               pForm.Width = workingArea.Width - 10;
+            if (pForm.Height > workingArea.Height - 10)
+               pForm.Height = workingArea.Height - 10;
+            changed = true;
+         }
+         return changed;
+      }
+
+      internal static bool IsOffScreen(Form? pForm) {
+         if (pForm == null)
+            return true;
+         Screen[] screens = Screen.AllScreens;
+         for (int i = 0; i < screens.Length; i++) {
+            if (screens[i].WorkingArea.Contains(new Point(pForm.Left, pForm.Top)))
+               return false;
+         }
+         return true;
+      }
+
+      internal static bool IsPartiallyHidden(Form? pForm) {
+         if (pForm == null)
+            return true;
+         Screen[] screens = Screen.AllScreens;
+         for (int i = 0; i < screens.Length; i++) {
+            if (screens[i].WorkingArea.Contains(new Point(pForm.Right, pForm.Bottom)))
+               return false;
+         }
+         return true;
+      }
+
+      internal static void CenterFormOnMonitor(Form? pForm) {
+         if (pForm == null)
+            return;
+         Screen screen = Screen.FromControl(pForm);
+         Rectangle workingArea = screen.WorkingArea;
+         pForm.Left = workingArea.X + (workingArea.Width - pForm.Width) / 2;
+         pForm.Top = workingArea.Y + (workingArea.Height - pForm.Height) / 2;
+      }
+
+      internal static void GetDPI(Screen pScreen, DPIType pDpiType, out uint pODpiX, out uint pODpiY) {
+         POINT location = new POINT(pScreen.Bounds.Left + 1, pScreen.Bounds.Top + 1);
+         nint monitor = MonitorFromPoint(location, 2);
+         _ = GetDpiForMonitor(monitor, pDpiType, out pODpiX, out pODpiY);
+      }
 #pragma warning restore CS8602
    }
 }

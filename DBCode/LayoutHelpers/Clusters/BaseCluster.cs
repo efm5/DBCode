@@ -6,14 +6,13 @@ namespace DBCode {
          private static int mNextClusterId = 1;
          internal bool mSkipTheme = false;
 
-
          protected BaseCluster(Color? pBackgroundColor) {
             BackColor = pBackgroundColor ?? Color.Transparent;
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             TabStop = false;
-            TabIndex = LayoutHelpers.TAB_INDEX_IGNORED;
-            Name = "BaseCluster" + mNextClusterId;
+            TabIndex = TAB_INDEX_IGNORED;
+            Name = $"BaseCluster{mNextClusterId}";
             mNextClusterId++;
          }
 

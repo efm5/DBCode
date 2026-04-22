@@ -7,24 +7,19 @@
          internal TextBox mExampleTextBox { get; private set; }
          internal Color? mBackgroundColor;
 
-         internal LabeledButtonTextBoxCluster(
-            string pLabelText,
-            string pButtonText,
-            LabelPosition pLabelPosition,
-            Color? pBackgroundColor = null)
+         internal LabeledButtonTextBoxCluster(string pLabelText, string pButtonText, LabelPosition pLabelPosition, Color? pBackgroundColor = null)
             : base(pBackgroundColor) {
 
             mBackgroundColor = pBackgroundColor;
             mLabelPosition = pLabelPosition;
-
             mLabel = new Label() {
-               TabIndex = LayoutHelpers.TAB_INDEX_IGNORED,
+               TabIndex = TAB_INDEX_IGNORED,
                Name = $"LabeledButtonTextBoxCluster{nameof(mLabel)}{mTabIndex++}",
                Text = pLabelText,
                TextAlign = ContentAlignment.MiddleCenter,
                AutoSize = true,
-               Font = LayoutHelpers.CreateNewFont(),
-               ForeColor = mCurrentTheme!.mColors[(int)ColorUsage.InterfaceFont],
+               Font = CreateNewFont(),
+               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont],
                BackColor = pBackgroundColor ?? Color.Transparent
             };
 
@@ -34,8 +29,8 @@
                Text = pButtonText,
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-               Font = LayoutHelpers.CreateNewFont(),
-               ForeColor = mCurrentTheme!.mColors[(int)ColorUsage.InterfaceFont]
+               Font = CreateNewFont(),
+               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont]
             };
 
             mExampleTextBox = new TextBox() {
@@ -45,8 +40,8 @@
                Text = mUnicodeSampleString,
                Multiline = false,
                Font = CreateNewFont(mCurrentTheme.mFonts[(int)FontUsage.Interface]),
-               ForeColor = mCurrentTheme!.mColors[(int)ColorUsage.InterfaceFont],
-               BackColor = pBackgroundColor ?? mCurrentTheme!.mColors[(int)ColorUsage.InterfaceBackground]
+               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont],
+               BackColor = pBackgroundColor ?? mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceBackground]
             };
 
             Controls.Add(mLabel);
@@ -56,16 +51,16 @@
 
          protected override void LayoutCluster() {
             // Update theme-dependent properties
-            mLabel.Font = LayoutHelpers.CreateNewFont();
-            mLabel.ForeColor = mCurrentTheme!.mColors[(int)ColorUsage.InterfaceFont];
+            mLabel.Font = CreateNewFont();
+            mLabel.ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont];
             mLabel.BackColor = mBackgroundColor ?? Color.Transparent;
 
-            mButton.Font = LayoutHelpers.CreateNewFont();
-            mButton.ForeColor = mCurrentTheme!.mColors[(int)ColorUsage.InterfaceFont];
+            mButton.Font = CreateNewFont();
+            mButton.ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont];
 
             mExampleTextBox.Font = CreateNewFont(mCurrentTheme.mFonts[(int)FontUsage.Interface]);
-            mExampleTextBox.ForeColor = mCurrentTheme!.mColors[(int)ColorUsage.InterfaceFont];
-            mExampleTextBox.BackColor = mBackgroundColor ?? mCurrentTheme!.mColors[(int)ColorUsage.InterfaceBackground];
+            mExampleTextBox.ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont];
+            mExampleTextBox.BackColor = mBackgroundColor ?? mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
 
             // 1. Label + button: normal label-position logic
             ApplyLabelPosition(mLabel, mButton);

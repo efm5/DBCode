@@ -1,32 +1,25 @@
 ﻿namespace DBCode.Themes {
    public static class ThemeRegistry {
-
-      public static List<Theme> Themes { get; private set; } = [];
-      public static string LastUsedThemeName { get; private set; } = String.Empty;
+      public static List<Theme> mThemeList { get; private set; } = [];
 
       public static void Initialize(string pFolderPath, string pLastUsedThemeName) {
          List<Theme> themes = [];
-
          AddBuiltIns(themes);
-
-         List<Theme> loaded = ThemeManager.LoadThemes(pFolderPath, pLastUsedThemeName);
+         List<Theme> loaded = ThemeManager.LoadThemes();
          AddUserThemes(themes, loaded);
-
          List<Theme> validated = ValidateThemes(themes);
-
-         Themes = validated;
-         LastUsedThemeName = SelectThemeName(validated, pLastUsedThemeName);
+         mThemeList = validated;
+         mPreviousThemeName = SelectThemeName(validated);
       }
 
       public static void Reload(string pFolderPath) {
-         string previous = LastUsedThemeName;
-         Initialize(pFolderPath, previous);
+         Initialize(pFolderPath, mPreviousThemeName);
       }
 
       public static bool SetCurrentTheme(string pName) {
-         foreach (Theme theme in Themes) {
+         foreach (Theme theme in mThemeList) {
             if (String.Equals(theme.mName, pName, StringComparison.OrdinalIgnoreCase)) {
-               LastUsedThemeName = theme.mName;
+               mPreviousThemeName = theme.mName;
                return true;
             }
          }
@@ -34,8 +27,8 @@
       }
 
       public static Theme GetCurrentThemeClone() {
-         foreach (Theme theme in Themes) {
-            if (String.Equals(theme.mName, LastUsedThemeName, StringComparison.OrdinalIgnoreCase))
+         foreach (Theme theme in mThemeList) {
+            if (String.Equals(theme.mName, mPreviousThemeName, StringComparison.OrdinalIgnoreCase))
                return theme.Clone();
          }
          return ThemeDefaults.DefaultLight;
@@ -46,8 +39,9 @@
          pList.Add(ThemeDefaults.DefaultDark);
          pList.Add(ThemeDefaults.HighContrastLight);
          pList.Add(ThemeDefaults.HighContrastDark);
-         pList.Add(ThemeDefaults.ClassicWin32);
-         pList.Add(ThemeDefaults.PastelBreeze);
+         pList.Add(ThemeDefaults.Classic);
+         pList.Add(ThemeDefaults.LightPastel);
+         pList.Add(ThemeDefaults.DarkPastel);
       }
 
       private static void AddUserThemes(List<Theme> pList, List<Theme> pUserThemes) {
@@ -74,9 +68,9 @@
          return result;
       }
 
-      private static string SelectThemeName(List<Theme> pThemes, string pLastUsedThemeName) {
+      private static string SelectThemeName(List<Theme> pThemes) {
          foreach (Theme theme in pThemes) {
-            if (String.Equals(theme.mName, pLastUsedThemeName, StringComparison.OrdinalIgnoreCase))
+            if (String.Equals(theme.mName, mPreviousThemeName, StringComparison.OrdinalIgnoreCase))
                return theme.mName;
          }
          if (pThemes.Count > 0)

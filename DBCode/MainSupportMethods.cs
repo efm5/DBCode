@@ -1,11 +1,109 @@
-﻿namespace DBCode {
+﻿using DBCode.Syntax;
+using DBCode.Themes;
+
+namespace DBCode {
    public sealed partial class MainForm : Form {
+      public static void CheckLanguage() {
+         foreach (ToolStripMenuItem tsmi in mLanguageMenuItem.DropDownItems.OfType<ToolStripMenuItem>())
+            tsmi.Checked = false;
+         switch (mCurrentLanguage) {
+            case LanguageKind.CSharp:
+               mCSharpTSMI.Checked = true;
+               break;
+            case LanguageKind.C:
+               mCTSMI.Checked = true;
+               break;
+            case LanguageKind.Cpp:
+               mCppTSMI.Checked = true;
+               break;
+            case LanguageKind.Basic:
+               mBasicTSMI.Checked = true;
+               break;
+            case LanguageKind.FSharp:
+               mFSharpTSMI.Checked = true;
+               break;
+            case LanguageKind.Html:
+               mHtmlTSMI.Checked = true;
+               break;
+            case LanguageKind.Css:
+               mCssTSMI.Checked = true;
+               break;
+            case LanguageKind.Xml:
+               mXmlTSMI.Checked = true;
+               break;
+            case LanguageKind.Json:
+               mJsonTSMI.Checked = true;
+               break;
+            case LanguageKind.PowerShell:
+               mPowerShellTSMI.Checked = true;
+               break;
+            case LanguageKind.Batch:
+               mBatchTSMI.Checked = true;
+               break;
+            case LanguageKind.Sql:
+               mSqlTSMI.Checked = true;
+               break;
+            case LanguageKind.Markdown:
+               mMarkdownTSMI.Checked = true;
+               break;
+            case LanguageKind.Python:
+               mPythonTSMI.Checked = true;
+               break;
+            case LanguageKind.PlainText:
+               mPlainTextTSMI.Checked = true;
+               break;
+         }
+      }
+
+      public static void RehighlightText() {
+         //DEBUG efm5 2026 04 20 do the work
+         TimedMessage("Rehighlighting text with the new language selection", "Rehighlighting Text", 2000);
+         switch (mCurrentLanguage) {
+            case LanguageKind.PlainText:
+               break;
+            default:
+               break;
+         }
+      }
+
+      internal void ApplyThemeToMainForm() {
+         mRichTextBox.TextChanged -= OnEditorTextChanged;
+         Theme theme = mCurrentTheme;
+         mCurrentLanguageIsTSMI.Text = mCurrently + theme.mName;
+         mForm.BackColor = theme.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
+         mRichTextBox.BackColor = theme.mInterfaceColors[(int)ColorUsage.TextBox];
+         mRichTextBox.ForeColor = theme.mInterfaceColors[(int)ColorUsage.TextBoxFont];
+         mMenuStrip.BackColor = theme.mInterfaceColors[(int)ColorUsage.MenuBackground];
+         foreach (ToolStripMenuItem toolStripMenuItem in mMenuStrip.Items.OfType<ToolStripMenuItem>()) {
+            PaintMenuItem(toolStripMenuItem);
+            foreach (ToolStripMenuItem subItem in toolStripMenuItem.DropDownItems.OfType<ToolStripMenuItem>())
+               PaintMenuItemsRecursive(subItem);
+         }
+         mStatusStrip.Renderer = new ToolStripProfessionalRenderer();
+         mStatusStrip.Invalidate(true);
+         mStatusStrip.BackColor = theme.mInterfaceColors[(int)ColorUsage.StatusBackground];
+         foreach (ToolStripItem item in mStatusStrip.Items) {
+            //if (item is ToolStripControlHost host) {
+            //Control control = host.Control;
+            //Control control = host.Control;
+            //nint handle = control.Handle;
+            item.ForeColor = theme.mInterfaceColors[(int)ColorUsage.StatusFont];
+            item.BackColor = theme.mInterfaceColors[(int)ColorUsage.StatusBackground];
+            item.Font = theme.mFonts[(int)FontUsage.Status];
+            item.Invalidate();
+            //item.Update();
+            //}
+         }
+         mHighlighterEngine.HighlightNow();
+         mRichTextBox.TextChanged += OnEditorTextChanged;
+      }
+
       public static void PerformFirstLaunchInitialization() {
          TimedMessage("Welcome to DBCode! This message will disappear after a few seconds.", "Welcome to DBCode!", 3000);
          //DEBUG efm5 2026 04 8 fill out the logic
       }
 
-      public static void GetHelp(UIContext pUIContext, string? pSpecificHREFAnchor = "") {
+      public static void GetHelp(HelpContext pUIContext, string? pSpecificHREFAnchor = "") {
          if (pSpecificHREFAnchor == null) {
             TimedMessage("Trying to get help failed! The string was null not empty.", "HTML Specific HREF Anchor ERROR");
             return;
@@ -15,16 +113,16 @@
 
             fullyQualifiedPath = Path.Combine(fullyQualifiedPath, "Help") ?? string.Empty;
             switch (pUIContext) {
-               case UIContext.Main:
+               case HelpContext.Main:
                   fullyQualifiedPath = Path.Combine(fullyQualifiedPath, "DBCodeHelp.html");
                   break;
-               case UIContext.Theme:
+               case HelpContext.Theme:
                   fullyQualifiedPath = Path.Combine(fullyQualifiedPath, "DBCodeThemeHelp.html");
                   break;
-               case UIContext.FontPicker:
+               case HelpContext.FontPicker:
                   fullyQualifiedPath = Path.Combine(fullyQualifiedPath, "DBCodeFontPickerHelp.html");
                   break;
-               case UIContext.ColorPicker:
+               case HelpContext.ColorPicker:
                   fullyQualifiedPath = Path.Combine(fullyQualifiedPath, "DBCodeColorPickerHelp.html");
                   break;
             }
@@ -42,16 +140,6 @@
          }
          catch (Exception pException) {
             TimedMessage("Opening the Help HTML file failed\n" + pException.ToString(), "File ERROR");
-         }
-      }
-
-      private static void FlattenButton(Button? pButton, Color? pBackgroundColor, int pLeft = 0) {
-         if ((pButton != null) && (pBackgroundColor != null)) {
-            pButton.BackColor = Color.Transparent;
-            pButton.FlatAppearance.BorderColor = (Color)pBackgroundColor;
-            pButton.FlatAppearance.BorderSize = 0;
-            pButton.FlatStyle = FlatStyle.Flat;
-            pButton.Left = pLeft;
          }
       }
 

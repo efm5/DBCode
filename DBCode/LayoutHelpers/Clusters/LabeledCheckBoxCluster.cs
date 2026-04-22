@@ -14,17 +14,17 @@ namespace DBCode {
             mLabel = new Label {
                AutoSize = true,
                Text = pLabelText,
-               BackColor = BackColor,
-               TabIndex = LayoutHelpers.TAB_INDEX_IGNORED,
-               Name = $"LabeledCheckBoxClusterLabel{TabIndex}"
+               BackColor = pBackgroundColor ?? Color.Transparent,
+               TabIndex = TAB_INDEX_IGNORED,
+               Name = $"LabeledCheckBoxClusterLabel{mTabIndex++}"
             };
             mCheckBox = new CheckBox {
                Text = pCheckBoxText,
                AutoSize = true,
                Checked = pInitialChecked,
                BackColor = BackColor,
-               TabIndex = LayoutHelpers.NextTabIndex(),
-               Name = $"LabeledCheckBoxClusterCheckBox{TabIndex}"
+               TabIndex = mTabIndex,
+               Name = $"LabeledCheckBoxClusterCheckBox{mTabIndex++}"
             };
             Controls.Add(mLabel);
             Controls.Add(mCheckBox);

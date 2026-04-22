@@ -1,13 +1,13 @@
 namespace DBCode {
    internal static partial class LayoutHelpers {
-      internal static int NextTabIndex() {
-         return mTabIndex++;
-      }
-
-      internal static void GetDPI(Screen pScreen, DPIType pDpiType, out uint pODpiX, out uint pODpiY) {
-         POINT location = new POINT(pScreen.Bounds.Left + 1, pScreen.Bounds.Top + 1);
-         nint monitor = MonitorFromPoint(location, 2);
-         _ = GetDpiForMonitor(monitor, pDpiType, out pODpiX, out pODpiY);
+      internal static void FlattenButton(Button? pButton, Color? pBackgroundColor, int pLeft = 0) {
+         if ((pButton != null) && (pBackgroundColor != null)) {
+            pButton.BackColor = Color.Transparent;
+            pButton.FlatAppearance.BorderColor = (Color)pBackgroundColor;
+            pButton.FlatAppearance.BorderSize = 0;
+            pButton.FlatStyle = FlatStyle.Flat;
+            pButton.Left = pLeft;
+         }
       }
 
       internal static void ToCenterOrNot(Form pForm, bool pControlBox = true) {
@@ -116,7 +116,7 @@ namespace DBCode {
 
       internal static void RecalculateAssociatedOffsets(Font pFont) {
          float fontSize = pFont.SizeInPoints;
-         mGroupLeftPad = (int)Math.Ceiling(fontSize * 2.5f);
+         mGroupLeftPad = (int)Math.Ceiling(fontSize * 1.5f);
          mAssociatedButtonPostCheckBoxVerticalOffset = (int)Math.Ceiling(fontSize * 0.3f);
          mAssociatedButtonPostLabelHorizontalSpace = (int)Math.Ceiling(fontSize * 0.3f);
          mAssociatedButtonPostLabelVerticalOffset = (int)Math.Ceiling(fontSize * -0.4f);
@@ -171,7 +171,8 @@ namespace DBCode {
          };
          Label label = new Label {
             Font = CreateNewFont(pFont),
-            Text = mUnicodeSampleString
+            Text = mUnicodeSampleString,
+            AutoSize = true,
          };
          panel.Controls.Add(label);
          groupBox.Controls.Add(panel);
@@ -262,6 +263,20 @@ namespace DBCode {
          if (pPadWidth)
             width += mIndent;
          pSize = new SizeF(width, height);
+      }
+
+      internal static void TextBoxSelectAll(TextBox pTextBox) {
+         if (pTextBox == null)
+            return;
+         pTextBox.SelectAll();
+      }
+
+      public static Point GetGroupBoxFirstLineOffset(GroupBox pGroupBox) {
+         SizeF stringSize = new SizeF();
+
+         using (Graphics graphics = pGroupBox.CreateGraphics())
+            stringSize = graphics.MeasureString(pGroupBox.Text + "Ñçg", pGroupBox.Font);
+         return new Point(mGroupLeftPad, (int)stringSize.Height + mGroupTopPad + mScalingGroupBoxTopLinePad);
       }
    }
 }

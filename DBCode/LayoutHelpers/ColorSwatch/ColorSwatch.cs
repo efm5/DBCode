@@ -8,20 +8,31 @@ namespace DBCode {
          private Size mSwatchSize = new Size(24, 24);
          public event ColorSwatchClickedHandler? SwatchClicked;
 
-         public ColorSwatch(ColorSwatchUsage pUsage, Color pInitialColor, Color? pBackgroundColor = null) {
+         public ColorSwatch(ColorSwatchUsage pUsage, Color pInitialColor, int pSize, Color? pBackgroundColor = null) {
             mUsage = pUsage;
             mSwatchColor = pInitialColor;
-            mSwatchSize = GetSwatchSize();
+            if (pSize < 8)
+               mSwatchSize = GetSwatchSize();
+            else
+               mSwatchSize = new Size(pSize, pSize);
             Size = mSwatchSize;
             BackColor = Color.Transparent;
-            TabIndex = LayoutHelpers.NextTabIndex();
-            Name = "ColorSwatch" + TabIndex;
+            TabIndex = mTabIndex;
+            Name = "ColorSwatch" + mTabIndex++;
             MouseClick += OnMouseClick;
          }
 
          public void SetColor(Color pNewColor) {
             mSwatchColor = pNewColor;
             Invalidate();
+         }
+
+         public Color GetColor() {
+            return mSwatchColor;
+         }
+
+         public void SetSize(int pSize) {
+            Size = new Size(pSize, pSize);
          }
 
          private void OnMouseClick(object? pSender, MouseEventArgs pArgs) {

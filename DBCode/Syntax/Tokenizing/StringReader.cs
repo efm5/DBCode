@@ -1,25 +1,19 @@
 ﻿namespace DBCode.Syntax.Tokenizing {
    internal sealed class StringReader : ITokenReader {
-      public bool TryRead(
-         string pText,
-         int pStartIndex,
-         out Token pToken,
-         out int pNewIndex
-      ) {
+      public bool TryRead(string pText, int pStartIndex, out Token pToken, out int pNewIndex) {
+         int length, index, startPosition;
+         bool isVerbatim;
+         char currentCharacter, nextCharacter;
+
          pToken = null!;
          pNewIndex = pStartIndex;
-
-         int length = pText.Length;
-         int index = pStartIndex;
-
+         length = pText.Length;
+         index = pStartIndex;
          if (index >= length)
             return false;
-
-         bool isVerbatim = false;
-
-         char c = pText[index];
-
-         if (c == '$') {
+         isVerbatim = false;
+         currentCharacter = pText[index];
+         if (currentCharacter == '$') {
             if (index + 1 < length && (pText[index + 1] == '"' || pText[index + 1] == '@')) {
                index++;
             }
@@ -27,7 +21,6 @@
                return false;
             }
          }
-
          if (pText[index] == '@') {
             if (index + 1 < length && pText[index + 1] == '"') {
                isVerbatim = true;
@@ -37,18 +30,14 @@
                return false;
             }
          }
-
          if (pText[index] != '"')
             return false;
-
-         int start = pStartIndex;
+         startPosition = pStartIndex;
          index++;
-
          if (isVerbatim) {
             while (index < length) {
-               char ch = pText[index];
-
-               if (ch == '"') {
+               nextCharacter = pText[index];
+               if (nextCharacter == '"') {
                   if (index + 1 < length && pText[index + 1] == '"') {
                      index += 2;
                      continue;
@@ -56,32 +45,27 @@
                   index++;
                   break;
                }
-
                index++;
             }
          }
          else {
             while (index < length) {
-               char ch = pText[index];
-
-               if (ch == '\\') {
+               nextCharacter = pText[index];
+               if (nextCharacter == '\\') {
                   if (index + 1 < length)
                      index += 2;
                   else
                      index++;
                   continue;
                }
-
-               if (ch == '"') {
+               if (nextCharacter == '"') {
                   index++;
                   break;
                }
-
                index++;
             }
          }
-
-         pToken = new Token(TokenKind.StringLiteral, start, index - start);
+         pToken = new Token(TokenKind.StringLiteral, startPosition, index - startPosition);
          pNewIndex = index;
          return true;
       }

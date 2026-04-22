@@ -6,17 +6,15 @@ namespace DBCode {
 
          internal LabelCluster(string pText, Color? pBackgroundColor = null)
             : base(pBackgroundColor) {
-
             mLabel = new Label() {
                Name = $"LabelCluster{nameof(mLabel)}{mTabIndex}",
                TabIndex = mTabIndex++,
                Text = pText,
                AutoSize = true,
-               Font = LayoutHelpers.CreateNewFont(),
-               ForeColor = mCurrentTheme!.mColors[(int)ColorUsage.InterfaceFont],
+               Font = CreateNewFont(),
+               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont],
                BackColor = pBackgroundColor ?? Color.Transparent
             };
-
             Controls.Add(mLabel);
          }
 

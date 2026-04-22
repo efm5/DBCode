@@ -5,7 +5,7 @@ namespace DBCode {
       internal sealed partial class ThemePanel : Panel {
          private const string TemporaryThemePrefix = "\u26A0 TEMPORARY THEME \u26A0 ";
          private readonly Button mApplyButton, mCancelButton, mCloneButton, mHelpButton, mNewButton, mOkButton;
-         private readonly HeaderLabelCluster mFifthTitleLabel, mFirstTitleLabel, mFourthTitleLabel, mSecondTitleLabel, mThirdTitleLabel, mTitleLabel;
+         private readonly HeaderLabelCluster mFirstTitleLabel, mSecondTitleLabel, mThirdTitleLabel, mTitleLabel;
          private readonly LabeledButtonTextBoxCluster mFirstCluster, mFourthCluster, mSecondCluster, mThirdCluster;
          private readonly StatusStrip mStatusStrip;
          private readonly ToolStripControlHost mApplyHost, mCancelHost, mCloneHost, mHelpHost, mNewHost, mOkHost;
@@ -32,7 +32,7 @@ namespace DBCode {
             BackColor = Color.Transparent;
             mApplyButton = new Button();
             mCancelButton = new Button();
-            mHelpButton = new Button();
+            mHelpButton = new Button() { Tag = new HelpTag(HelpContext.Theme, ToDescription(pThemeUsage)) };
             mOkButton = new Button();
             mNewButton = new Button();
             mCloneButton = new Button();
@@ -40,8 +40,6 @@ namespace DBCode {
             mFirstTitleLabel = new HeaderLabelCluster("Fonts", HeaderLabelSize.Small);
             mSecondTitleLabel = new HeaderLabelCluster("Colors", HeaderLabelSize.Small);
             mThirdTitleLabel = new HeaderLabelCluster("Interface", HeaderLabelSize.Small);
-            mFourthTitleLabel = new HeaderLabelCluster("C# 1", HeaderLabelSize.Small);
-            mFifthTitleLabel = new HeaderLabelCluster("C# 2", HeaderLabelSize.Small);
             mStatusStrip = new StatusStrip();
             mPrimaryTabControl = new VariableWidthTabControl();
             mHighlightTabControl = new VariableWidthTabControl();
@@ -68,7 +66,7 @@ namespace DBCode {
                mForm.Bounds = result.Bounds;
             }
             Dock = DockStyle.Fill;
-            BeginInvoke(new Action(() => { ApplyThemeToThemePanel(); }));
+            BeginInvoke(new Action(() => { ApplyThemeToPanel(); }));
          }
 
          private Size GetPreferredContentSizeCached() {
@@ -124,7 +122,20 @@ namespace DBCode {
             CreateStatusStrip();
             LayoutPrimaryClusters();
             LayoutInterfaceColorsPage();
-            LayoutCSharp1ColorsPage();
+            LayoutCSharpTokenColorsPage();
+            LayoutCTokenColorsPage();
+            LayoutCppTokenColorsPage();
+            LayoutBasicTokenColorsPage();
+            LayoutFSharpTokenColorsPage();
+            LayoutHTMLTokenColorsPage();
+            LayoutCSSTokenColorsPage();
+            LayoutXMLTokenColorsPage();
+            LayoutJSONTokenColorsPage();
+            LayoutPowerShellTokenColorsPage();
+            LayoutBatchTokenColorsPage();
+            LayoutSQLTokenColorsPage();
+            LayoutMarkdownTokenColorsPage();
+            LayoutPythonTokenColorsPage();
             mApplyButton.Click += ApplyButton_Click;
             mCancelButton.Click += CancelButton_Click;
             mHelpButton.Click += MainForm.Help_Click;
@@ -138,7 +149,9 @@ namespace DBCode {
 
          private void CreateTabControls() {
             mPrimaryTabControl.TabPages.AddRange([new TabPage("Fonts"), new TabPage("Colors")]);
-            mHighlightTabControl.TabPages.AddRange([new TabPage("Interface"), new TabPage("C#"), new TabPage("Basic")]);
+            mHighlightTabControl.TabPages.AddRange([new TabPage("Interface"), new TabPage("C#"), new TabPage("C"), new TabPage("C++"),
+               new TabPage("Basic"), new TabPage("F#"), new TabPage("HTML"), new TabPage("CSS"), new TabPage("XML"), new TabPage("JSON"),
+               new TabPage("Power Shell"), new TabPage("Batch"), new TabPage("SQL"), new TabPage("Markdown"), new TabPage("Python")]);
             mPrimaryTabControl.Dock = DockStyle.Fill;
             mHighlightTabControl.Dock = DockStyle.Fill;
             mPrimaryTabControl.TabPages[(int)PrimaryTabPageUsage.Color].Controls.Add(mHighlightTabControl);
@@ -205,30 +218,420 @@ namespace DBCode {
             scrollPanel.Controls.Add(header);
          }
 
-         private void LayoutCSharp1ColorsPage() {
-            TabPage page = mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.CSharp1];
+         private void LayoutCSharpTokenColorsPage() {
+            TabPage page = mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.CSharp];
             Panel scrollPanel = new Panel {
                Name = $"CSharpColorsTabPagesScrollPanel{mTabIndex}",
                TabIndex = mTabIndex++,
                Dock = DockStyle.Fill
             };
             page.Controls.Add(scrollPanel);
-            HeaderLabelCluster header = new HeaderLabelCluster("C# Highlight Colors", HeaderLabelSize.Small);
+            HeaderLabelCluster header = new HeaderLabelCluster("C# Token Highlight Colors", HeaderLabelSize.Small);
             List<BaseCluster> colorClusters = new List<BaseCluster>();
-            AddColorCluster(colorClusters, "Unknown Token", ColorSwatchUsage.Unknown);
-            AddColorCluster(colorClusters, "Whitespace Token", ColorSwatchUsage.Whitespace);
-            AddColorCluster(colorClusters, "Identifier Token", ColorSwatchUsage.Identifier);
-            AddColorCluster(colorClusters, "Keyword Token", ColorSwatchUsage.Keyword);
-            AddColorCluster(colorClusters, "Number Token", ColorSwatchUsage.Number);
-            AddColorCluster(colorClusters, "String Literal Token", ColorSwatchUsage.StringLiteral);
-            AddColorCluster(colorClusters, "Character Literal Token", ColorSwatchUsage.CharLiteral);
-            AddColorCluster(colorClusters, "Comment Token", ColorSwatchUsage.Comment);
-            AddColorCluster(colorClusters, "Preprocessor Directive Token", ColorSwatchUsage.PreprocessorDirective);
-            AddColorCluster(colorClusters, "Operator Token", ColorSwatchUsage.Operator);
-            AddColorCluster(colorClusters, "Punctuation Token", ColorSwatchUsage.Punctuation);
+            AddColorCluster(colorClusters, "Unknown", ColorSwatchUsage.Unknown);
+            AddColorCluster(colorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
+            AddColorCluster(colorClusters, "Identifier", ColorSwatchUsage.Identifier);
+            AddColorCluster(colorClusters, "Keyword", ColorSwatchUsage.Keyword);
+            AddColorCluster(colorClusters, "Number", ColorSwatchUsage.Number);
+            AddColorCluster(colorClusters, "String Literal", ColorSwatchUsage.StringLiteral);
+            AddColorCluster(colorClusters, "Character Literal", ColorSwatchUsage.CharLiteral);
+            AddColorCluster(colorClusters, "Comment", ColorSwatchUsage.Comment);
+            AddColorCluster(colorClusters, "Preprocessor Directive", ColorSwatchUsage.PreprocessorDirective);
+            AddColorCluster(colorClusters, "Operator", ColorSwatchUsage.Operator);
+            AddColorCluster(colorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             ClusterContainer colorsContainer = new ClusterContainer(colorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
                Dock = DockStyle.Fill,
                Name = "CSharpColorsClusterContainer",
+               AutoScroll = true
+            };
+            scrollPanel.Controls.Add(colorsContainer);
+            scrollPanel.Controls.Add(header);
+         }
+
+         private void LayoutCTokenColorsPage() {
+            TabPage page = mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.C];
+            Panel scrollPanel = new Panel {
+               Name = $"CColorsTabPagesScrollPanel{mTabIndex}",
+               TabIndex = mTabIndex++,
+               Dock = DockStyle.Fill
+            };
+            page.Controls.Add(scrollPanel);
+            HeaderLabelCluster header = new HeaderLabelCluster("C Token Highlight Colors", HeaderLabelSize.Small);
+            List<BaseCluster> colorClusters = new List<BaseCluster>();
+            AddColorCluster(colorClusters, "Unknown", ColorSwatchUsage.Unknown);
+            AddColorCluster(colorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
+            AddColorCluster(colorClusters, "Identifier", ColorSwatchUsage.Identifier);
+            AddColorCluster(colorClusters, "Keyword", ColorSwatchUsage.Keyword);
+            AddColorCluster(colorClusters, "Number", ColorSwatchUsage.Number);
+            AddColorCluster(colorClusters, "String Literal", ColorSwatchUsage.StringLiteral);
+            AddColorCluster(colorClusters, "Character Literal", ColorSwatchUsage.CharLiteral);
+            AddColorCluster(colorClusters, "Comment", ColorSwatchUsage.Comment);
+            AddColorCluster(colorClusters, "Preprocessor Directive", ColorSwatchUsage.PreprocessorDirective);
+            AddColorCluster(colorClusters, "Operator", ColorSwatchUsage.Operator);
+            AddColorCluster(colorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
+            ClusterContainer colorsContainer = new ClusterContainer(colorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               Dock = DockStyle.Fill,
+               Name = "CColorsClusterContainer",
+               AutoScroll = true
+            };
+            scrollPanel.Controls.Add(colorsContainer);
+            scrollPanel.Controls.Add(header);
+         }
+
+         private void LayoutCppTokenColorsPage() {
+            TabPage page = mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Cpp];
+            Panel scrollPanel = new Panel {
+               Name = $"CppColorsTabPagesScrollPanel{mTabIndex}",
+               TabIndex = mTabIndex++,
+               Dock = DockStyle.Fill
+            };
+            page.Controls.Add(scrollPanel);
+            HeaderLabelCluster header = new HeaderLabelCluster("C++ Token Highlight Colors", HeaderLabelSize.Small);
+            List<BaseCluster> colorClusters = new List<BaseCluster>();
+            AddColorCluster(colorClusters, "Unknown", ColorSwatchUsage.Unknown);
+            AddColorCluster(colorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
+            AddColorCluster(colorClusters, "Identifier", ColorSwatchUsage.Identifier);
+            AddColorCluster(colorClusters, "Keyword", ColorSwatchUsage.Keyword);
+            AddColorCluster(colorClusters, "Number", ColorSwatchUsage.Number);
+            AddColorCluster(colorClusters, "String Literal", ColorSwatchUsage.StringLiteral);
+            AddColorCluster(colorClusters, "Character Literal", ColorSwatchUsage.CharLiteral);
+            AddColorCluster(colorClusters, "Comment", ColorSwatchUsage.Comment);
+            AddColorCluster(colorClusters, "Preprocessor Directive", ColorSwatchUsage.PreprocessorDirective);
+            AddColorCluster(colorClusters, "Operator", ColorSwatchUsage.Operator);
+            AddColorCluster(colorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
+            ClusterContainer colorsContainer = new ClusterContainer(colorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               Dock = DockStyle.Fill,
+               Name = "CppColorsClusterContainer",
+               AutoScroll = true
+            };
+            scrollPanel.Controls.Add(colorsContainer);
+            scrollPanel.Controls.Add(header);
+         }
+
+         private void LayoutBasicTokenColorsPage() {
+            TabPage page = mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Basic];
+            Panel scrollPanel = new Panel {
+               Name = $"BasicColorsTabPagesScrollPanel{mTabIndex}",
+               TabIndex = mTabIndex++,
+               Dock = DockStyle.Fill
+            };
+            page.Controls.Add(scrollPanel);
+            HeaderLabelCluster header = new HeaderLabelCluster("Basic Token Highlight Colors", HeaderLabelSize.Small);
+            List<BaseCluster> colorClusters = new List<BaseCluster>();
+            AddColorCluster(colorClusters, "Unknown", ColorSwatchUsage.Unknown);
+            AddColorCluster(colorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
+            AddColorCluster(colorClusters, "Identifier", ColorSwatchUsage.Identifier);
+            AddColorCluster(colorClusters, "Keyword", ColorSwatchUsage.Keyword);
+            AddColorCluster(colorClusters, "Number", ColorSwatchUsage.Number);
+            AddColorCluster(colorClusters, "String Literal", ColorSwatchUsage.StringLiteral);
+            AddColorCluster(colorClusters, "Character Literal", ColorSwatchUsage.CharLiteral);
+            AddColorCluster(colorClusters, "Comment", ColorSwatchUsage.Comment);
+            AddColorCluster(colorClusters, "Preprocessor Directive", ColorSwatchUsage.PreprocessorDirective);
+            AddColorCluster(colorClusters, "Operator", ColorSwatchUsage.Operator);
+            AddColorCluster(colorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
+            ClusterContainer colorsContainer = new ClusterContainer(colorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               Dock = DockStyle.Fill,
+               Name = "BasicColorsClusterContainer",
+               AutoScroll = true
+            };
+            scrollPanel.Controls.Add(colorsContainer);
+            scrollPanel.Controls.Add(header);
+         }
+
+         private void LayoutFSharpTokenColorsPage() {
+            TabPage page = mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.FSharp];
+            Panel scrollPanel = new Panel {
+               Name = $"FSharpColorsTabPagesScrollPanel{mTabIndex}",
+               TabIndex = mTabIndex++,
+               Dock = DockStyle.Fill
+            };
+            page.Controls.Add(scrollPanel);
+            HeaderLabelCluster header = new HeaderLabelCluster("F# Token Highlight Colors", HeaderLabelSize.Small);
+            List<BaseCluster> colorClusters = new List<BaseCluster>();
+            AddColorCluster(colorClusters, "Unknown", ColorSwatchUsage.Unknown);
+            AddColorCluster(colorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
+            AddColorCluster(colorClusters, "Identifier", ColorSwatchUsage.Identifier);
+            AddColorCluster(colorClusters, "Keyword", ColorSwatchUsage.Keyword);
+            AddColorCluster(colorClusters, "Number", ColorSwatchUsage.Number);
+            AddColorCluster(colorClusters, "String Literal", ColorSwatchUsage.StringLiteral);
+            AddColorCluster(colorClusters, "Character Literal", ColorSwatchUsage.CharLiteral);
+            AddColorCluster(colorClusters, "Comment", ColorSwatchUsage.Comment);
+            AddColorCluster(colorClusters, "Preprocessor Directive", ColorSwatchUsage.PreprocessorDirective);
+            AddColorCluster(colorClusters, "Operator", ColorSwatchUsage.Operator);
+            AddColorCluster(colorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
+            ClusterContainer colorsContainer = new ClusterContainer(colorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               Dock = DockStyle.Fill,
+               Name = "FSharpColorsClusterContainer",
+               AutoScroll = true
+            };
+            scrollPanel.Controls.Add(colorsContainer);
+            scrollPanel.Controls.Add(header);
+         }
+
+         private void LayoutHTMLTokenColorsPage() {
+            TabPage page = mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.HTML];
+            Panel scrollPanel = new Panel {
+               Name = $"HTMLColorsTabPagesScrollPanel{mTabIndex}",
+               TabIndex = mTabIndex++,
+               Dock = DockStyle.Fill
+            };
+            page.Controls.Add(scrollPanel);
+            HeaderLabelCluster header = new HeaderLabelCluster("HTML Token Highlight Colors", HeaderLabelSize.Small);
+            List<BaseCluster> colorClusters = new List<BaseCluster>();
+            AddColorCluster(colorClusters, "Unknown", ColorSwatchUsage.Unknown);
+            AddColorCluster(colorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
+            AddColorCluster(colorClusters, "Identifier", ColorSwatchUsage.Identifier);
+            AddColorCluster(colorClusters, "Keyword", ColorSwatchUsage.Keyword);
+            AddColorCluster(colorClusters, "Number", ColorSwatchUsage.Number);
+            AddColorCluster(colorClusters, "String Literal", ColorSwatchUsage.StringLiteral);
+            AddColorCluster(colorClusters, "Character Literal", ColorSwatchUsage.CharLiteral);
+            AddColorCluster(colorClusters, "Comment", ColorSwatchUsage.Comment);
+            AddColorCluster(colorClusters, "Preprocessor Directive", ColorSwatchUsage.PreprocessorDirective);
+            AddColorCluster(colorClusters, "Operator", ColorSwatchUsage.Operator);
+            AddColorCluster(colorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
+            ClusterContainer colorsContainer = new ClusterContainer(colorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               Dock = DockStyle.Fill,
+               Name = "HTMLColorsClusterContainer",
+               AutoScroll = true
+            };
+            scrollPanel.Controls.Add(colorsContainer);
+            scrollPanel.Controls.Add(header);
+         }
+
+         private void LayoutCSSTokenColorsPage() {
+            TabPage page = mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.CSS];
+            Panel scrollPanel = new Panel {
+               Name = $"CSSColorsTabPagesScrollPanel{mTabIndex}",
+               TabIndex = mTabIndex++,
+               Dock = DockStyle.Fill
+            };
+            page.Controls.Add(scrollPanel);
+            HeaderLabelCluster header = new HeaderLabelCluster("CSS Token Highlight Colors", HeaderLabelSize.Small);
+            List<BaseCluster> colorClusters = new List<BaseCluster>();
+            AddColorCluster(colorClusters, "Unknown", ColorSwatchUsage.Unknown);
+            AddColorCluster(colorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
+            AddColorCluster(colorClusters, "Identifier", ColorSwatchUsage.Identifier);
+            AddColorCluster(colorClusters, "Keyword", ColorSwatchUsage.Keyword);
+            AddColorCluster(colorClusters, "Number", ColorSwatchUsage.Number);
+            AddColorCluster(colorClusters, "String Literal", ColorSwatchUsage.StringLiteral);
+            AddColorCluster(colorClusters, "Character Literal", ColorSwatchUsage.CharLiteral);
+            AddColorCluster(colorClusters, "Comment", ColorSwatchUsage.Comment);
+            AddColorCluster(colorClusters, "Preprocessor Directive", ColorSwatchUsage.PreprocessorDirective);
+            AddColorCluster(colorClusters, "Operator", ColorSwatchUsage.Operator);
+            AddColorCluster(colorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
+            ClusterContainer colorsContainer = new ClusterContainer(colorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               Dock = DockStyle.Fill,
+               Name = "CSSColorsClusterContainer",
+               AutoScroll = true
+            };
+            scrollPanel.Controls.Add(colorsContainer);
+            scrollPanel.Controls.Add(header);
+         }
+
+         private void LayoutXMLTokenColorsPage() {
+            TabPage page = mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.XML];
+            Panel scrollPanel = new Panel {
+               Name = $"XMLColorsTabPagesScrollPanel{mTabIndex}",
+               TabIndex = mTabIndex++,
+               Dock = DockStyle.Fill
+            };
+            page.Controls.Add(scrollPanel);
+            HeaderLabelCluster header = new HeaderLabelCluster("XML Token Highlight Colors", HeaderLabelSize.Small);
+            List<BaseCluster> colorClusters = new List<BaseCluster>();
+            AddColorCluster(colorClusters, "Unknown", ColorSwatchUsage.Unknown);
+            AddColorCluster(colorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
+            AddColorCluster(colorClusters, "Identifier", ColorSwatchUsage.Identifier);
+            AddColorCluster(colorClusters, "Keyword", ColorSwatchUsage.Keyword);
+            AddColorCluster(colorClusters, "Number", ColorSwatchUsage.Number);
+            AddColorCluster(colorClusters, "String Literal", ColorSwatchUsage.StringLiteral);
+            AddColorCluster(colorClusters, "Character Literal", ColorSwatchUsage.CharLiteral);
+            AddColorCluster(colorClusters, "Comment", ColorSwatchUsage.Comment);
+            AddColorCluster(colorClusters, "Preprocessor Directive", ColorSwatchUsage.PreprocessorDirective);
+            AddColorCluster(colorClusters, "Operator", ColorSwatchUsage.Operator);
+            AddColorCluster(colorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
+            ClusterContainer colorsContainer = new ClusterContainer(colorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               Dock = DockStyle.Fill,
+               Name = "XMLColorsClusterContainer",
+               AutoScroll = true
+            };
+            scrollPanel.Controls.Add(colorsContainer);
+            scrollPanel.Controls.Add(header);
+         }
+
+         private void LayoutJSONTokenColorsPage() {
+            TabPage page = mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.JSON];
+            Panel scrollPanel = new Panel {
+               Name = $"JSONColorsTabPagesScrollPanel{mTabIndex}",
+               TabIndex = mTabIndex++,
+               Dock = DockStyle.Fill
+            };
+            page.Controls.Add(scrollPanel);
+            HeaderLabelCluster header = new HeaderLabelCluster("JSON Token Highlight Colors", HeaderLabelSize.Small);
+            List<BaseCluster> colorClusters = new List<BaseCluster>();
+            AddColorCluster(colorClusters, "Unknown", ColorSwatchUsage.Unknown);
+            AddColorCluster(colorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
+            AddColorCluster(colorClusters, "Identifier", ColorSwatchUsage.Identifier);
+            AddColorCluster(colorClusters, "Keyword", ColorSwatchUsage.Keyword);
+            AddColorCluster(colorClusters, "Number", ColorSwatchUsage.Number);
+            AddColorCluster(colorClusters, "String Literal", ColorSwatchUsage.StringLiteral);
+            AddColorCluster(colorClusters, "Character Literal", ColorSwatchUsage.CharLiteral);
+            AddColorCluster(colorClusters, "Comment", ColorSwatchUsage.Comment);
+            AddColorCluster(colorClusters, "Preprocessor Directive", ColorSwatchUsage.PreprocessorDirective);
+            AddColorCluster(colorClusters, "Operator", ColorSwatchUsage.Operator);
+            AddColorCluster(colorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
+            ClusterContainer colorsContainer = new ClusterContainer(colorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               Dock = DockStyle.Fill,
+               Name = "JSONColorsClusterContainer",
+               AutoScroll = true
+            };
+            scrollPanel.Controls.Add(colorsContainer);
+            scrollPanel.Controls.Add(header);
+         }
+
+         private void LayoutPowerShellTokenColorsPage() {
+            TabPage page = mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.PowerShell];
+            Panel scrollPanel = new Panel {
+               Name = $"PowerShellColorsTabPagesScrollPanel{mTabIndex}",
+               TabIndex = mTabIndex++,
+               Dock = DockStyle.Fill
+            };
+            page.Controls.Add(scrollPanel);
+            HeaderLabelCluster header = new HeaderLabelCluster("PowerShell Token Highlight Colors", HeaderLabelSize.Small);
+            List<BaseCluster> colorClusters = new List<BaseCluster>();
+            AddColorCluster(colorClusters, "Unknown", ColorSwatchUsage.Unknown);
+            AddColorCluster(colorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
+            AddColorCluster(colorClusters, "Identifier", ColorSwatchUsage.Identifier);
+            AddColorCluster(colorClusters, "Keyword", ColorSwatchUsage.Keyword);
+            AddColorCluster(colorClusters, "Number", ColorSwatchUsage.Number);
+            AddColorCluster(colorClusters, "String Literal", ColorSwatchUsage.StringLiteral);
+            AddColorCluster(colorClusters, "Character Literal", ColorSwatchUsage.CharLiteral);
+            AddColorCluster(colorClusters, "Comment", ColorSwatchUsage.Comment);
+            AddColorCluster(colorClusters, "Preprocessor Directive", ColorSwatchUsage.PreprocessorDirective);
+            AddColorCluster(colorClusters, "Operator", ColorSwatchUsage.Operator);
+            AddColorCluster(colorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
+            ClusterContainer colorsContainer = new ClusterContainer(colorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               Dock = DockStyle.Fill,
+               Name = "PowerShellColorsClusterContainer",
+               AutoScroll = true
+            };
+            scrollPanel.Controls.Add(colorsContainer);
+            scrollPanel.Controls.Add(header);
+         }
+
+         private void LayoutBatchTokenColorsPage() {
+            TabPage page = mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Batch];
+            Panel scrollPanel = new Panel {
+               Name = $"BatchColorsTabPagesScrollPanel{mTabIndex}",
+               TabIndex = mTabIndex++,
+               Dock = DockStyle.Fill
+            };
+            page.Controls.Add(scrollPanel);
+            HeaderLabelCluster header = new HeaderLabelCluster("Batch Token Highlight Colors", HeaderLabelSize.Small);
+            List<BaseCluster> colorClusters = new List<BaseCluster>();
+            AddColorCluster(colorClusters, "Unknown", ColorSwatchUsage.Unknown);
+            AddColorCluster(colorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
+            AddColorCluster(colorClusters, "Identifier", ColorSwatchUsage.Identifier);
+            AddColorCluster(colorClusters, "Keyword", ColorSwatchUsage.Keyword);
+            AddColorCluster(colorClusters, "Number", ColorSwatchUsage.Number);
+            AddColorCluster(colorClusters, "String Literal", ColorSwatchUsage.StringLiteral);
+            AddColorCluster(colorClusters, "Character Literal", ColorSwatchUsage.CharLiteral);
+            AddColorCluster(colorClusters, "Comment", ColorSwatchUsage.Comment);
+            AddColorCluster(colorClusters, "Preprocessor Directive", ColorSwatchUsage.PreprocessorDirective);
+            AddColorCluster(colorClusters, "Operator", ColorSwatchUsage.Operator);
+            AddColorCluster(colorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
+            ClusterContainer colorsContainer = new ClusterContainer(colorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               Dock = DockStyle.Fill,
+               Name = "BatchColorsClusterContainer",
+               AutoScroll = true
+            };
+            scrollPanel.Controls.Add(colorsContainer);
+            scrollPanel.Controls.Add(header);
+         }
+
+         private void LayoutSQLTokenColorsPage() {
+            TabPage page = mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.SQL];
+            Panel scrollPanel = new Panel {
+               Name = $"SQLColorsTabPagesScrollPanel{mTabIndex}",
+               TabIndex = mTabIndex++,
+               Dock = DockStyle.Fill
+            };
+            page.Controls.Add(scrollPanel);
+            HeaderLabelCluster header = new HeaderLabelCluster("SQL Token Highlight Colors", HeaderLabelSize.Small);
+            List<BaseCluster> colorClusters = new List<BaseCluster>();
+            AddColorCluster(colorClusters, "Unknown", ColorSwatchUsage.Unknown);
+            AddColorCluster(colorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
+            AddColorCluster(colorClusters, "Identifier", ColorSwatchUsage.Identifier);
+            AddColorCluster(colorClusters, "Keyword", ColorSwatchUsage.Keyword);
+            AddColorCluster(colorClusters, "Number", ColorSwatchUsage.Number);
+            AddColorCluster(colorClusters, "String Literal", ColorSwatchUsage.StringLiteral);
+            AddColorCluster(colorClusters, "Character Literal", ColorSwatchUsage.CharLiteral);
+            AddColorCluster(colorClusters, "Comment", ColorSwatchUsage.Comment);
+            AddColorCluster(colorClusters, "Preprocessor Directive", ColorSwatchUsage.PreprocessorDirective);
+            AddColorCluster(colorClusters, "Operator", ColorSwatchUsage.Operator);
+            AddColorCluster(colorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
+            ClusterContainer colorsContainer = new ClusterContainer(colorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               Dock = DockStyle.Fill,
+               Name = "SQLColorsClusterContainer",
+               AutoScroll = true
+            };
+            scrollPanel.Controls.Add(colorsContainer);
+            scrollPanel.Controls.Add(header);
+         }
+
+         private void LayoutMarkdownTokenColorsPage() {
+            TabPage page = mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Markdown];
+            Panel scrollPanel = new Panel {
+               Name = $"MarkdownColorsTabPagesScrollPanel{mTabIndex}",
+               TabIndex = mTabIndex++,
+               Dock = DockStyle.Fill
+            };
+            page.Controls.Add(scrollPanel);
+            HeaderLabelCluster header = new HeaderLabelCluster("Markdown Token Highlight Colors", HeaderLabelSize.Small);
+            List<BaseCluster> colorClusters = new List<BaseCluster>();
+            AddColorCluster(colorClusters, "Unknown", ColorSwatchUsage.Unknown);
+            AddColorCluster(colorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
+            AddColorCluster(colorClusters, "Identifier", ColorSwatchUsage.Identifier);
+            AddColorCluster(colorClusters, "Keyword", ColorSwatchUsage.Keyword);
+            AddColorCluster(colorClusters, "Number", ColorSwatchUsage.Number);
+            AddColorCluster(colorClusters, "String Literal", ColorSwatchUsage.StringLiteral);
+            AddColorCluster(colorClusters, "Character Literal", ColorSwatchUsage.CharLiteral);
+            AddColorCluster(colorClusters, "Comment", ColorSwatchUsage.Comment);
+            AddColorCluster(colorClusters, "Preprocessor Directive", ColorSwatchUsage.PreprocessorDirective);
+            AddColorCluster(colorClusters, "Operator", ColorSwatchUsage.Operator);
+            AddColorCluster(colorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
+            ClusterContainer colorsContainer = new ClusterContainer(colorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               Dock = DockStyle.Fill,
+               Name = "MarkdownColorsClusterContainer",
+               AutoScroll = true
+            };
+            scrollPanel.Controls.Add(colorsContainer);
+            scrollPanel.Controls.Add(header);
+         }
+
+         private void LayoutPythonTokenColorsPage() {
+            TabPage page = mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Python];
+            Panel scrollPanel = new Panel {
+               Name = $"PythonColorsTabPagesScrollPanel{mTabIndex}",
+               TabIndex = mTabIndex++,
+               Dock = DockStyle.Fill
+            };
+            page.Controls.Add(scrollPanel);
+            HeaderLabelCluster header = new HeaderLabelCluster("Python Token Highlight Colors", HeaderLabelSize.Small);
+            List<BaseCluster> colorClusters = new List<BaseCluster>();
+            AddColorCluster(colorClusters, "Unknown", ColorSwatchUsage.Unknown);
+            AddColorCluster(colorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
+            AddColorCluster(colorClusters, "Identifier", ColorSwatchUsage.Identifier);
+            AddColorCluster(colorClusters, "Keyword", ColorSwatchUsage.Keyword);
+            AddColorCluster(colorClusters, "Number", ColorSwatchUsage.Number);
+            AddColorCluster(colorClusters, "String Literal", ColorSwatchUsage.StringLiteral);
+            AddColorCluster(colorClusters, "Character Literal", ColorSwatchUsage.CharLiteral);
+            AddColorCluster(colorClusters, "Comment", ColorSwatchUsage.Comment);
+            AddColorCluster(colorClusters, "Preprocessor Directive", ColorSwatchUsage.PreprocessorDirective);
+            AddColorCluster(colorClusters, "Operator", ColorSwatchUsage.Operator);
+            AddColorCluster(colorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
+            ClusterContainer colorsContainer = new ClusterContainer(colorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               Dock = DockStyle.Fill,
+               Name = "PythonColorsClusterContainer",
                AutoScroll = true
             };
             scrollPanel.Controls.Add(colorsContainer);
@@ -239,7 +642,7 @@ namespace DBCode {
             mCurrentTheme = pCurrentTheme;
             mTemporaryTheme = pCurrentTheme.Clone();
             mHasCachedPreferredSize = false;
-            ApplyThemeToThemePanel();
+            ApplyThemeToPanel();
             Invalidate(true);
          }
 
@@ -294,7 +697,7 @@ namespace DBCode {
 
          private void AddColorCluster(List<BaseCluster> pClusters, string pLabel, ColorSwatchUsage pUsage,
             LabelPosition pLabelPosition = LabelPosition.Left) {
-            Color color = mCurrentTheme.mColors[(int)pUsage];
+            Color color = mTemporaryTheme.mInterfaceColors[(int)pUsage];
             LabeledButtonColorSwatchCluster cluster = new LabeledButtonColorSwatchCluster(
                pLabel,
                ToDescription(pUsage),
@@ -302,6 +705,7 @@ namespace DBCode {
                pLabelPosition,
                color
             );
+            cluster.SwatchClicked += OnColorSwatchClicked;
             pClusters.Add(cluster);
          }
 
@@ -310,7 +714,7 @@ namespace DBCode {
             foreach (ColorUsage usage in Enum.GetValues(typeof(ColorUsage))) {
                string labelText = ToDescription(usage);
                string buttonText = ColorUsageButtonNames.Names[usage];
-               Color initialColor = mTemporaryTheme.mColors[(int)usage];
+               Color initialColor = mTemporaryTheme.mInterfaceColors[(int)usage];
                LabeledButtonColorSwatchCluster cluster = new LabeledButtonColorSwatchCluster(labelText, buttonText,
                   (ColorSwatchUsage)usage, LabelPosition.Left, initialColor, null);
                cluster.SwatchClicked += OnColorSwatchClicked;
@@ -337,10 +741,10 @@ namespace DBCode {
             TabPage page = pTabControl.TabPages[pArgs.Index];
             Rectangle rect = pTabControl.GetTabRect(pArgs.Index);
             bool selected = pTabControl.SelectedIndex == pArgs.Index;
-            Color back = selected ? theme.mColors[(int)ColorUsage.TabHeaderSelectedBackground]
-                                  : theme.mColors[(int)ColorUsage.TabHeaderUnselectedBackground];
-            Color fore = selected ? theme.mColors[(int)ColorUsage.TabHeaderSelectedFont]
-                                  : theme.mColors[(int)ColorUsage.TabHeaderUnselectedFont];
+            Color back = selected ? theme.mInterfaceColors[(int)ColorUsage.TabHeaderSelectedBackground]
+                                  : theme.mInterfaceColors[(int)ColorUsage.TabHeaderUnselectedBackground];
+            Color fore = selected ? theme.mInterfaceColors[(int)ColorUsage.TabHeaderSelectedFont]
+                                  : theme.mInterfaceColors[(int)ColorUsage.TabHeaderUnselectedFont];
             Font font = selected ? CreateNewBoldFont() : CreateNewFont();
             using (SolidBrush brush = new SolidBrush(back))
                pArgs.Graphics.FillRectangle(brush, rect);
@@ -348,16 +752,17 @@ namespace DBCode {
                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
          }
 
-         public void ApplyThemeToThemePanel() {
+         public void ApplyThemeToPanel() {
             Theme theme = mTemporaryTheme;
-            BackColor = theme.mColors[(int)ColorUsage.PanelBackground];
-            foreach (ToolStripItem item in mStatusStrip.Items)
+            BackColor = theme.mInterfaceColors[(int)ColorUsage.PanelBackground];
+            foreach (ToolStripItem item in mStatusStrip.Items) {
                if (item is ToolStripControlHost host) {
                   Control control = host.Control;
-                  control.ForeColor = theme.mColors[(int)ColorUsage.StatusFont];
-                  control.BackColor = theme.mColors[(int)ColorUsage.StatusBackground];
+                  control.ForeColor = theme.mInterfaceColors[(int)ColorUsage.StatusFont];
+                  control.BackColor = theme.mInterfaceColors[(int)ColorUsage.StatusBackground];
                   control.Font = theme.mFonts[(int)FontUsage.Status];
                }
+            }
             ApplyThemeToControlTree(mPrimaryTabControl);
             ApplyThemeToControlTree(mHighlightTabControl);
             mStatusStrip.Renderer = new ToolStripProfessionalRenderer();
@@ -365,9 +770,9 @@ namespace DBCode {
             foreach (ToolStripItem item in mStatusStrip.Items) {
                if (item is ToolStripControlHost host) {
                   Control control = host.Control;
-                  var handle = control.Handle;
-                  control.ForeColor = theme.mColors[(int)ColorUsage.StatusFont];
-                  control.BackColor = theme.mColors[(int)ColorUsage.StatusBackground];
+                  nint handle = control.Handle;
+                  control.ForeColor = theme.mInterfaceColors[(int)ColorUsage.StatusFont];
+                  control.BackColor = theme.mInterfaceColors[(int)ColorUsage.StatusBackground];
                   control.Font = theme.mFonts[(int)FontUsage.Status];
                   control.Invalidate();
                   control.Update();
@@ -383,8 +788,8 @@ namespace DBCode {
                   ApplyThemeToControlTree(control);
                   continue;
                }
-               control.ForeColor = theme.mColors[(int)ColorUsage.InterfaceFont];
-               control.BackColor = theme.mColors[(int)ColorUsage.InterfaceBackground];
+               control.ForeColor = theme.mInterfaceColors[(int)ColorUsage.InterfaceFont];
+               control.BackColor = theme.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
                control.Font = theme.mFonts[(int)FontUsage.Interface];
                ApplyThemeToControlTree(control);
             }
@@ -402,14 +807,82 @@ namespace DBCode {
             //DEBUG efm5 2026 04 8 do the work
          }
 
-         private void OnColorSwatchClicked(object? pSender, ColorSwatchUsage pUsage) {
-            if (pSender is not ColorSwatch swatch)
+         public void EnsureColorPickerPanel(Theme pTheme, ColorUsage pUsage, Color pInitialColor) {
+            mPrePickerBounds = Bounds;
+            if (mColorPickerPanel == null)
+               mColorPickerPanel = new ColorPickerPanel(pTheme, pInitialColor);
+            if (!mFirstColorPicker)
+               Bounds = mColorPickerBounds;
+            else
+               Bounds = new Rectangle(100, 100, 1000, 800);
+            ShowColorPickerPanel();
+         }
+
+         public void ShowColorPickerPanel() {
+            if (mColorPickerPanel == null)
                return;
-            Color newColor = Color.Maroon;
-            mTemporaryTheme.mColors[(int)pUsage] = newColor;
-            swatch.SetColor(newColor);
-            mThemeIsDirty = true;
-            TimedMessage($"[TEST MODE] Set {pUsage} to {newColor}", "COLOR UPDATED");
+            if (mForm.Controls.Contains(mThemePanel))
+               mForm.Controls.Remove(mThemePanel);
+            if (!mForm.Controls.Contains(mColorPickerPanel))
+               mForm.Controls.Add(mColorPickerPanel);
+            mColorPickerPanel.PerformLayout();
+            mColorPickerPanel.Dock = DockStyle.Fill;
+            mColorPickerPanel.Visible = true;
+            mColorPickerPanel.BringToFront();
+            mColorPickerPanel.Show();
+         }
+
+         public static void RestoreFromColorPickerPanel() {
+            if (mForm == null)
+               return;
+            if (mColorPickerPanel != null) {
+               mColorPickerPanel.Visible = false;
+               mColorPickerPanel.SendToBack();
+               if (mForm.Controls.Contains(mColorPickerPanel))
+                  mForm.Controls.Remove(mColorPickerPanel);
+            }
+            mForm.Bounds = mPrePickerBounds;
+            if (!mForm.Controls.Contains(mThemePanel))
+               mForm.Controls.Add(mThemePanel);
+         }
+
+         public void EnsureFontPickerPanel(Theme pTheme, FontUsage pUsage, Font pInitialFont) {
+            mPrePickerBounds = Bounds;
+            if (mFontPickerPanel == null)
+               mFontPickerPanel = new FontPickerPanel(pTheme, pInitialFont);
+            if (!mFirstFontPicker)
+               Bounds = mFontPickerBounds;
+            else
+               Bounds = new Rectangle(100, 100, 1000, 800);
+            ShowFontPickerPanel();
+         }
+
+         public void ShowFontPickerPanel() {
+            if (mFontPickerPanel == null)
+               return;
+            if (mForm.Controls.Contains(mThemePanel))
+               mForm.Controls.Remove(mThemePanel);
+            if (!mForm.Controls.Contains(mFontPickerPanel))
+               mForm.Controls.Add(mFontPickerPanel);
+            mFontPickerPanel.PerformLayout();
+            mFontPickerPanel.Dock = DockStyle.Fill;
+            mFontPickerPanel.Visible = true;
+            mFontPickerPanel.BringToFront();
+            mFontPickerPanel.Show();
+         }
+
+         public static void RestoreFromFontPickerPanel() {
+            if (mForm == null)
+               return;
+            if (mFontPickerPanel != null) {
+               mFontPickerPanel.Visible = false;
+               mFontPickerPanel.SendToBack();
+               if (mForm.Controls.Contains(mFontPickerPanel))
+                  mForm.Controls.Remove(mFontPickerPanel);
+            }
+            mForm.Bounds = mPreFontPickerBounds;
+            if (!mForm.Controls.Contains(mThemePanel))
+               mForm.Controls.Add(mThemePanel);
          }
 
          private void CloseThemePanel() {

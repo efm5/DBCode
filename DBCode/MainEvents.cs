@@ -1,4 +1,6 @@
-﻿namespace DBCode {
+﻿using DBCode.Syntax;
+
+namespace DBCode {
    public sealed partial class MainForm : Form {
       #region main form
       private void MainForm_Load(object? pSender, EventArgs pEventArgs) {
@@ -42,18 +44,18 @@
       }
 
       private void ThemeEdit_Click(object? pSender, EventArgs pEventArgs) {
-         EnsureThemePanel(ThemeUsage.Edit);
+         EnsureThemePickerPanel();
       }
 
       private void ThemePick_Click(object? pSender, EventArgs pEventArgs) {
-         EnsureThemePanel(ThemeUsage.Pick);
+         EnsureThemePickerPanel();
       }
 
       private void OnEditorTextChanged(object? pSender, EventArgs pArgs) {
-         if (mSuppressTextChanged)
-            return;
-         mTimer?.Stop();
-         mTimer?.Start();
+         mRichTextBox.TextChanged -= OnEditorTextChanged;
+         //mTimer?.Stop();
+         mHighlighterEngine.HighlightNow();
+         mRichTextBox.TextChanged += OnEditorTextChanged;
       }
 
       private void TargetedTSMI_Click(object? pSender, EventArgs pEventArgs) {
@@ -107,8 +109,22 @@
          mReturnToTop = mReturnToTopTSMI.Checked;
       }
 
+      private void LanguageTSMI_Click(object? pSender, EventArgs pEventArgs) {
+         if (pSender == null)
+            return;
+         ToolStripMenuItem? toolStripMenuItem = pSender as ToolStripMenuItem;
+         if (toolStripMenuItem == null)
+            return;
+         if (!(toolStripMenuItem.Tag is LanguageKind selectedLanguage))
+            return;
+         mCurrentLanguage = selectedLanguage;
+         CheckLanguage();
+         mHighlighterEngine.SetLanguage(mCurrentLanguage);
+         mHighlighterEngine.HighlightNow();
+      }
+
       public static void Help_Click(object? pSender, EventArgs pEventArgs) {
-         UIContext context = UIContext.Main;
+         HelpContext context = HelpContext.Main;
          string? anchor = "";
 
          if (pSender is Control control) {

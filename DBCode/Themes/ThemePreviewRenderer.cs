@@ -49,7 +49,7 @@
          // Draw all colors
          foreach (ColorUsage usage in Enum.GetValues<ColorUsage>()) {
             Rectangle row = new Rectangle(pBounds.X, y, pBounds.Width, SwatchSize);
-            DrawColorSwatch(pGraphics, row, pTheme.mColors[(int)usage], usage.ToString(), pTheme.mFonts[(int)FontUsage.Interface]);
+            DrawColorSwatch(pGraphics, row, pTheme.mInterfaceColors[(int)usage], usage.ToString(), pTheme.mFonts[(int)FontUsage.Interface]);
             y += SwatchSize + SwatchSpacing;
          }
          // Spacer

@@ -8,30 +8,23 @@
          mIdentifierReader = new IdentifierReader();
       }
 
-      public bool TryRead(
-         string pText,
-         int pStartIndex,
-         out Token pToken,
-         out int pNewIndex
-      ) {
+      public bool TryRead(string pText, int pStartIndex, out Token pToken, out int pNewIndex) {
+         int newIndex, startPosition, length;
+         Token identifierToken;
+         string value;
+         TokenKind kind;
+
          pToken = null!;
          pNewIndex = pStartIndex;
-
-         Token identifierToken;
-         int newIndex;
-
          if (!mIdentifierReader.TryRead(pText, pStartIndex, out identifierToken, out newIndex))
             return false;
-
-         int start = identifierToken.StartIndex;
-         int length = identifierToken.Length;
-         string value = pText.Substring(start, length);
-
-         TokenKind kind = mDefinition.Keywords.Contains(value)
+         startPosition = identifierToken.StartIndex;
+         length = identifierToken.Length;
+         value = pText.Substring(startPosition, length);
+         kind = mDefinition.Keywords.Contains(value)
             ? TokenKind.Keyword
             : TokenKind.Identifier;
-
-         pToken = new Token(kind, start, length);
+         pToken = new Token(kind, startPosition, length);
          pNewIndex = newIndex;
          return true;
       }

@@ -11,8 +11,8 @@
                TabIndex = mTabIndex++,
                Text = pText,
                AutoSize = true,
-               Font = LayoutHelpers.CreateNewFont(),
-               ForeColor = mCurrentTheme!.mColors[(int)ColorUsage.InterfaceFont],
+               Font = CreateNewFont(),
+               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont],
                BackColor = pBackgroundColor ?? Color.Transparent
             };
 
