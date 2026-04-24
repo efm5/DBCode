@@ -1,8 +1,10 @@
+using DBCode.Themes;
+
 namespace DBCode {
    internal static partial class LayoutHelpers {
       internal sealed class LabeledButtonCluster : BaseCluster {
-         internal Control mLabel { get; private set; }
-         internal Control mButton { get; private set; }
+         internal Label mLabel { get; private set; }
+         internal Button mButton { get; private set; }
          internal Color? mBackgroundColor;
 
          internal LabeledButtonCluster(string pLabelText, string pButtonText, LabelPosition pLabelPosition,
@@ -30,7 +32,19 @@ namespace DBCode {
             };
          }
 
-         protected override void LayoutCluster() {
+         internal override void LayoutCluster(Theme pTheme) {
+            SetFontAndColor(pTheme);
+            ApplyLabelPosition(mLabel as Label, mButton);
+         }
+
+         public void SetFontAndColor(Theme pTheme) {
+            Theme.ThemeSimpleThings(pTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
+            mLabel.Font = poFont;
+            mLabel.ForeColor = poForeColor;
+            mLabel.BackColor = poBackColor;
+            mButton.Font = poFont;
+            mButton.ForeColor = poForeColor;
+            mButton.BackColor = poBackColor;
          }
       }
    }

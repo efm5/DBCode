@@ -265,10 +265,40 @@ namespace DBCode {
          pSize = new SizeF(width, height);
       }
 
+      public static void SizeTextBoxToFitString(out SizeF pSize, TextBox pTextBox, string pExample = "",
+         bool pDoWidth = true, bool pDoHeight = true, bool pPadWidth = true) {
+         Font font = pTextBox.Font;
+         SizeF stringSize = new SizeF(0, 0);
+         pSize = stringSize;
+
+         using (Graphics graphics = pTextBox.CreateGraphics()) {
+            if (!string.IsNullOrEmpty(pExample)) //Prefer example
+               stringSize = graphics.MeasureString(pExample, font);
+            else if (!string.IsNullOrEmpty(pTextBox.Text))
+               stringSize = graphics.MeasureString(pTextBox.Text, font);
+            else//Worst-case
+               stringSize = graphics.MeasureString("The quick brown fox", font);
+         }
+         if (pDoWidth) {
+            if (pPadWidth)
+               pSize.Width = stringSize.Width + mEm;
+            else
+               pSize.Width = stringSize.Width;
+         }
+         if (pDoHeight)
+            pSize.Height = stringSize.Height;
+      }
+
       internal static void TextBoxSelectAll(TextBox pTextBox) {
          if (pTextBox == null)
             return;
          pTextBox.SelectAll();
+      }
+
+      internal static void ComboBoxSelectAll(ComboBox pComboBox) {
+         pComboBox.Focus();
+         pComboBox.SelectAll();
+         pComboBox.DroppedDown = true;
       }
 
       public static Point GetGroupBoxFirstLineOffset(GroupBox pGroupBox) {

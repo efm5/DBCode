@@ -6,6 +6,7 @@ namespace DBCode {
          return new Font(mCurrentTheme.mFonts[(int)FontUsage.Menu].Name,
             mCurrentTheme.mFonts[(int)FontUsage.Menu].SizeInPoints, FontStyle.Regular);
       }
+
       public static Font CreateStatusBarFont() {
          if (mCurrentTheme == null)
             return new Font("Segoe UI", 14f, FontStyle.Regular);
@@ -65,6 +66,19 @@ namespace DBCode {
       //   float finalSize = baseSize * pSize;
       //   return new Font(mCurrentTheme.mFonts[(int)FontUsage.Interface].Name, finalSize, FontStyle.Bold);
       //}
+
+      public static Font CreateNewTitleFont(Font? pFont, HeaderLabelSize pSize) {
+         if (pFont == null)
+            return new Font("Segoe UI", 18f, FontStyle.Bold);
+         float baseSize = pFont.SizeInPoints, multiplier = (int)pSize / 100f;
+
+         baseSize = (float)Math.Ceiling(baseSize * multiplier);
+         if (baseSize < 8)
+            baseSize = 8f;
+         else if (baseSize > 100)
+            baseSize = 100f;
+         return new Font(pFont.Name, baseSize, FontStyle.Bold);
+      }
 
       public static Font CreateNewTitleFont(HeaderLabelSize pSize) {
          if (mCurrentTheme == null)

@@ -1,4 +1,6 @@
-﻿namespace DBCode {
+﻿using DBCode.Themes;
+
+namespace DBCode {
    internal static partial class LayoutHelpers {
 
       internal sealed class LabeledColorSwatchCluster : BaseCluster {
@@ -18,19 +20,22 @@
                ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont],
                BackColor = Color.Transparent
             };
-            mSwatch = new ColorSwatch(ColorSwatchUsage.Demo, pInitialColor, 50, null);
+            mSwatch = new ColorSwatch(ColorSwatchUsage.Demo, pInitialColor, 50);
             mSwatch.SetSize(mEm3);
             Controls.AddRange(mLabel, mSwatch);
             LayoutControls();
          }
 
-         protected override void OnLayout(LayoutEventArgs pArgs) {
-            base.OnLayout(pArgs);
+         internal override void LayoutCluster(Theme pTheme) {
+            SetFontAndColor(pTheme);
             LayoutControls();
          }
 
-         protected override void LayoutCluster() {
-            // Layout handled in LayoutControls()
+         public void SetFontAndColor(Theme pTheme) {
+            Theme.ThemeSimpleThings(pTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
+            mLabel.Font = poFont;
+            mLabel.ForeColor = poForeColor;
+            mLabel.BackColor = poBackColor;
          }
 
          private void LayoutControls() {

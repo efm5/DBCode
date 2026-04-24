@@ -1,3 +1,5 @@
+using DBCode.Themes;
+
 namespace DBCode {
    internal static partial class LayoutHelpers {
 
@@ -14,11 +16,6 @@ namespace DBCode {
             TabIndex = TAB_INDEX_IGNORED;
             Name = $"BaseCluster{mNextClusterId}";
             mNextClusterId++;
-         }
-
-         protected override void OnLayout(LayoutEventArgs pEventArgs) {
-            base.OnLayout(pEventArgs);
-            LayoutCluster();
          }
 
          protected void GlueControlsHorizontally(Control pFirstControl, Control pSecondControl, int pSpacing) {
@@ -48,10 +45,9 @@ namespace DBCode {
             }
          }
 
+#pragma warning disable IDE0305
          protected void ApplyLabelPosition(Label pLabel, IEnumerable<Control> pControls) {
-            List<Control> controlList = new List<Control>();
-            foreach (Control control in pControls)
-               controlList.Add(control);
+            List<Control> controlList = [.. pControls];
             Control[] controls = controlList.ToArray();
             if (controls.Length == 0)
                return;
@@ -108,14 +104,14 @@ namespace DBCode {
                pLabel.Location = new Point(0, y);
             }
          }
+#pragma warning restore IDE0305
 
          public void RefreshControls() {
             foreach (Control control in Controls)
                control.Refresh();
          }
 
-         protected virtual void LayoutCluster() {
-         }
+         internal abstract void LayoutCluster(Theme pTheme);
 
          protected override void Dispose(bool pDisposing) {
             if (pDisposing) {

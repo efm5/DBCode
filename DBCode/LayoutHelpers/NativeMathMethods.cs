@@ -1,5 +1,8 @@
 ﻿namespace DBCode {
    internal static partial class LayoutHelpers {
+#pragma warning disable IDE0079
+#pragma warning disable IDE1006
+#pragma warning disable SYSLIB1054
       internal class NativeMathMethods {
          internal const uint ABM_GETTASKBARPOS = 0x00000005;
 
@@ -21,5 +24,8 @@
             internal int lParam;
          }
       }
+#pragma warning restore IDE0079
+#pragma warning restore IDE1006
+#pragma warning restore SYSLIB1054
    }
 }

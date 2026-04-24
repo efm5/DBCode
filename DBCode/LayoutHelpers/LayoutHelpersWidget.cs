@@ -210,7 +210,7 @@ namespace DBCode {
       internal static int WidgetLayout(List<Control> pControlList, int pMaxWidth, int pTop = 10, int pLeft = 10) {
          if ((pControlList == null) || (pControlList.Count == 0))
             return 0;
-         List<Control> rowList = new List<Control>();
+         List<Control> rowList = [];
          int tooWide = pMaxWidth, top = pTop, left = pLeft, bottom = pControlList[0].Bottom;
 
          for (int i = 0; i < pControlList.Count; i++) {
@@ -219,7 +219,7 @@ namespace DBCode {
                bottom = pControlList[i].Bottom;
             left = pControlList[i].Right + mEm;
             if (left > tooWide) {
-               top = Bottommost(rowList).Bottom + mEmHalf;
+               top = Bottommost(rowList)!.Bottom + mEmHalf;
                rowList.Clear();
                pControlList[i].Location = new Point(pControlList[0].Left, top);
                left = pControlList[i].Right + mEm;
@@ -232,13 +232,13 @@ namespace DBCode {
 
       internal static void PaintMenuItem(ToolStripMenuItem pTSMI) {
          pTSMI.Font = CreateMenuFont();
-         pTSMI.ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorUsage.MenuFont];
+         pTSMI.ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.MenuFont];
          pTSMI.BackColor = mCurrentTheme.mInterfaceColors[(int)ColorUsage.MenuBackground];
       }
 
       internal static void PaintMenuItemsRecursive(ToolStripMenuItem pTSMI) {
          pTSMI.Font = CreateMenuFont();
-         pTSMI.ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorUsage.MenuFont];
+         pTSMI.ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.MenuFont];
          pTSMI.BackColor = mCurrentTheme.mInterfaceColors[(int)ColorUsage.MenuBackground];
          foreach (ToolStripMenuItem tsmi in pTSMI.DropDownItems.OfType<ToolStripMenuItem>()) {
             tsmi.Font = CreateMenuFont();

@@ -1,11 +1,10 @@
 namespace DBCode {
    static partial class Program {
-      internal static partial class NativeMethods {
+#pragma warning disable IDE0079
 #pragma warning disable IDE1006
-         //#pragma warning disable SYSLIB1054
-
+#pragma warning disable SYSLIB1054
+      internal static partial class NativeMethods {
          #region COM Interop (ShellLink)
-
          [ComImport]
          [Guid("00021401-0000-0000-C000-000000000046")]
          internal class ShellLink { }
@@ -62,8 +61,9 @@ namespace DBCode {
          }
 
          #endregion
-         //#pragma warning restore SYSLIB1054
-#pragma warning restore IDE1006
       }
+#pragma warning restore IDE0079
+#pragma warning restore IDE1006
+#pragma warning restore SYSLIB1054
    }
 }

@@ -1,11 +1,10 @@
 namespace DBCode {
    static partial class Program {
-      internal static partial class NativeMethods {
+#pragma warning disable IDE0079
 #pragma warning disable IDE1006
 #pragma warning disable SYSLIB1054
-
+      internal static partial class NativeMethods {
          #region Messaging, Input & Window Interaction
-
          [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
          internal static extern int MessageBoxTimeout(
             IntPtr hWnd,
@@ -69,11 +68,10 @@ namespace DBCode {
          [DllImport("user32.dll")]
          [return: MarshalAs(UnmanagedType.Bool)]
          internal static extern bool SetProcessDPIAware();
-
          #endregion
-
-#pragma warning restore SYSLIB1054
-#pragma warning restore IDE1006
       }
+#pragma warning restore IDE0079  
+#pragma warning restore IDE1006
+#pragma warning restore SYSLIB1054
    }
 }

@@ -4,19 +4,14 @@ namespace DBCode {
    public sealed partial class MainForm : Form {
       public void EnsureThemePanel(ThemeUsage pThemeUsage) {
          mPreThemeBounds = Bounds;
-         Bounds = new Rectangle(mUiState.mThemeLocation, mUiState.mThemeSize);
          if (mThemePanel == null)
             mThemePanel = new ThemePanel(pThemeUsage, mUiState);
-         mThemePanel.BeginThemeEditSession(mCurrentTheme);
-         if (!mFirstTheme)
-            Bounds = mThemeBounds;
          ShowThemePanel(pThemeUsage);
       }
 
       public void ShowThemePanel(ThemeUsage pThemeUsage) {
          if (pThemeUsage == ThemeUsage.Design) {
-            if (mThemePanel == null)
-               return;
+            ThrowIfNull(mThemePanel, nameof(mThemePanel));
             ControlBox = false;
             if (Controls.Contains(mMenuStrip))
                Controls.Remove(mMenuStrip);
@@ -26,27 +21,40 @@ namespace DBCode {
                Controls.Remove(mStatusStrip);
             if (!Controls.Contains(mThemePanel))
                Controls.Add(mThemePanel);
-            mThemePanel.PerformLayout();
-            mThemePanel.Dock = DockStyle.Fill;
+            mThemePanel.LayoutControls();
+            if (mFirstTheme) {
+               ThrowIfNull(mForm, nameof(mForm));
+               mForm.Size = mThemePanel.GetPreferredContentSizeCached();
+               CenterFormOnMonitor(mForm);
+               mFirstTheme = false;
+            }
+            else {
+               mThemePanel.LayoutControls();
+               Bounds = new Rectangle(mUiState.mThemeLocation, mUiState.mThemeSize);
+            }
+            EnsureWindowFitsMonitor(mForm, false);
             mThemePanel.Visible = true;
             mThemePanel.BringToFront();
             mThemePanel.Show();
          }
          else {
-            TimedMessage("ShowThemePanel(ThemeUsage) neither edit nor pick are working.", "Not Yet IMPLEMENTED");
+            TimedMessage("ShowThemePanel(ThemeUsage) edit is not working.", "Not Yet IMPLEMENTED");
          }
       }
 
-      public static void RestoreFromThemePanel() {
-         if (mForm == null)
-            return;
+      public void RestoreFromThemePanel() {
+         ThrowIfNull(mForm, nameof(mForm));
+         ThrowIfNull(mThemePanel, nameof(mThemePanel));
+         bool dirtyTheme = false;
+         mForm.SuspendLayout();
+         if (!mFirstTheme)
+            mThemeBounds = mForm.Bounds;
          mForm.ControlBox = true;
-         if (mThemePanel != null) {
-            mThemePanel.Visible = false;
-            mThemePanel.SendToBack();
-            if (mForm.Controls.Contains(mThemePanel))
-               mForm.Controls.Remove(mThemePanel);
-         }
+         dirtyTheme = mThemePanel.ThemeIsDirty();
+         mThemePanel.Visible = false;
+         mThemePanel.SendToBack();
+         if (mForm.Controls.Contains(mThemePanel))
+            mForm.Controls.Remove(mThemePanel);
          mForm.Bounds = mPreThemeBounds;
          if (!mForm.Controls.Contains(mRichTextBox))
             mForm.Controls.Add(mRichTextBox);
@@ -58,21 +66,25 @@ namespace DBCode {
          mStatusStrip?.Visible = true;
          if (mCurrentViewMode == ViewMode.Features)
             mMenuStrip?.Visible = true;
+         if (dirtyTheme)
+            LayoutControls();
+         mForm.ResumeLayout(true);
       }
 
       public void EnsureThemePickerPanel() {
          mPreThemePickerBounds = Bounds;
          Bounds = new Rectangle(mUiState.mThemePickerLocation, mUiState.mThemePickerSize);
-         if (mThemePickerPanel == null)
+         if (mThemePickerPanel == null) {
+            ThrowIfNull(mForm, nameof(mForm));
             mThemePickerPanel = new ThemePickerPanel(mForm as MainForm);
+         }
          if (!mFirstThemePicker)
             Bounds = mThemePickerBounds;
          ShowThemePickerPanel();
       }
 
       public void ShowThemePickerPanel() {
-         if (mThemePickerPanel == null)
-            return;
+         ThrowIfNull(mThemePickerPanel, nameof(mThemePickerPanel));
          ControlBox = false;
          if (Controls.Contains(mMenuStrip))
             Controls.Remove(mMenuStrip);
@@ -89,16 +101,16 @@ namespace DBCode {
          mThemePickerPanel.Show();
       }
 
-      public static void RestoreFromThemePickerPanel() {
-         if (mForm == null)
-            return;
+      public void RestoreFromThemePickerPanel() {
+         ThrowIfNull(mForm, nameof(mForm));
+         ThrowIfNull(mThemePickerPanel, nameof(mThemePickerPanel));
          mForm.ControlBox = true;
-         if (mThemePickerPanel != null) {
-            mThemePickerPanel.Visible = false;
-            mThemePickerPanel.SendToBack();
-            if (mForm.Controls.Contains(mThemePickerPanel))
-               mForm.Controls.Remove(mThemePickerPanel);
-         }
+         mThemePickerPanel.Visible = false;
+         mThemePickerPanel.SendToBack();
+         if (mForm.Controls.Contains(mThemePickerPanel))
+            mForm.Controls.Remove(mThemePickerPanel);
+         mThemePickerPanel.Dispose();
+         mThemePickerPanel = null;
          mForm.Bounds = mPreThemePickerBounds;
          if (!mForm.Controls.Contains(mRichTextBox))
             mForm.Controls.Add(mRichTextBox);

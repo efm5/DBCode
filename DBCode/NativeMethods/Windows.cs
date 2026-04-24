@@ -1,5 +1,8 @@
 namespace DBCode {
    static partial class Program {
+#pragma warning disable IDE0079
+#pragma warning disable IDE1006
+#pragma warning disable SYSLIB1054
       internal static partial class NativeMethods {
          // Retrieves the DPI for the specified monitor.
          [LibraryImport("Shcore.dll", EntryPoint = "GetDpiForMonitor")]
@@ -129,5 +132,8 @@ namespace DBCode {
             ForceMinimized = 11
          }
       }
+#pragma warning restore IDE0079
+#pragma warning restore IDE1006
+#pragma warning restore SYSLIB1054
    }
 }

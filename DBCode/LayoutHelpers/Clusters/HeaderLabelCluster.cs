@@ -1,4 +1,6 @@
-﻿namespace DBCode {
+﻿using DBCode.Themes;
+
+namespace DBCode {
    internal static partial class LayoutHelpers {
       internal sealed class HeaderLabelCluster : BaseCluster {
          internal Label mLabel;
@@ -20,8 +22,15 @@
             Dock = DockStyle.Top;
          }
 
-         protected override void OnLayout(LayoutEventArgs pArgs) {
-            base.OnLayout(pArgs);
+         public void SetFontAndColor(Theme pTheme) {
+            Theme.ThemeSimpleThings(pTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
+            mLabel.Font = poFont;
+            mLabel.ForeColor = poForeColor;
+            mLabel.BackColor = poBackColor;
+         }
+
+         internal override void LayoutCluster(Theme pTheme) {
+            SetFontAndColor(pTheme);
             if (mLabel != null) {
                int x = (Width - mLabel.Width) / 2;
                if (x < 0)

@@ -11,6 +11,12 @@
             ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont];
             BackColor = pBackgroundColor ?? Color.Transparent;
          }
+
+         public void SetFontAndColor(Font pFont, Color pForeColor, Color pBackColor) {
+            Font = pFont;
+            ForeColor = pForeColor;
+            BackColor = pBackColor;
+         }
       }
    }
 }

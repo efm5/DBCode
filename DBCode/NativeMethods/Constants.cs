@@ -1,5 +1,8 @@
 namespace DBCode {
    static partial class Program {
+#pragma warning disable IDE0079
+#pragma warning disable IDE1006
+#pragma warning disable SYSLIB1054
       internal static partial class NativeMethods {
          #region Constants
          // EM_  (Edit Control)
@@ -68,5 +71,8 @@ namespace DBCode {
                           WS_VISIBLE = 0x10000000;
          #endregion
       }
+#pragma warning restore IDE0079
+#pragma warning restore IDE1006
+#pragma warning restore SYSLIB1054
    }
 }

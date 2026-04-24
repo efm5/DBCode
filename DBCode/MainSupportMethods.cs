@@ -4,98 +4,100 @@ using DBCode.Themes;
 namespace DBCode {
    public sealed partial class MainForm : Form {
       public static void CheckLanguage() {
-         foreach (ToolStripMenuItem tsmi in mLanguageMenuItem.DropDownItems.OfType<ToolStripMenuItem>())
+         foreach (ToolStripMenuItem tsmi in mLanguageMenuItem!.DropDownItems.OfType<ToolStripMenuItem>())
             tsmi.Checked = false;
          switch (mCurrentLanguage) {
             case LanguageKind.CSharp:
-               mCSharpTSMI.Checked = true;
+               mCSharpTSMI!.Checked = true;
                break;
             case LanguageKind.C:
-               mCTSMI.Checked = true;
+               mCTSMI!.Checked = true;
                break;
             case LanguageKind.Cpp:
-               mCppTSMI.Checked = true;
+               mCppTSMI!.Checked = true;
                break;
             case LanguageKind.Basic:
-               mBasicTSMI.Checked = true;
+               mBasicTSMI!.Checked = true;
                break;
             case LanguageKind.FSharp:
-               mFSharpTSMI.Checked = true;
+               mFSharpTSMI!.Checked = true;
                break;
             case LanguageKind.Html:
-               mHtmlTSMI.Checked = true;
+               mHtmlTSMI!.Checked = true;
                break;
             case LanguageKind.Css:
-               mCssTSMI.Checked = true;
+               mCssTSMI!.Checked = true;
                break;
             case LanguageKind.Xml:
-               mXmlTSMI.Checked = true;
+               mXmlTSMI!.Checked = true;
                break;
             case LanguageKind.Json:
-               mJsonTSMI.Checked = true;
+               mJsonTSMI!.Checked = true;
                break;
             case LanguageKind.PowerShell:
-               mPowerShellTSMI.Checked = true;
+               mPowerShellTSMI!.Checked = true;
                break;
             case LanguageKind.Batch:
-               mBatchTSMI.Checked = true;
+               mBatchTSMI!.Checked = true;
                break;
             case LanguageKind.Sql:
-               mSqlTSMI.Checked = true;
+               mSqlTSMI!.Checked = true;
                break;
             case LanguageKind.Markdown:
-               mMarkdownTSMI.Checked = true;
+               mMarkdownTSMI!.Checked = true;
                break;
             case LanguageKind.Python:
-               mPythonTSMI.Checked = true;
+               mPythonTSMI!.Checked = true;
                break;
             case LanguageKind.PlainText:
-               mPlainTextTSMI.Checked = true;
+               mPlainTextTSMI!.Checked = true;
                break;
          }
       }
 
-      public static void RehighlightText() {
+      public void RehighlightText() {
          //DEBUG efm5 2026 04 20 do the work
          TimedMessage("Rehighlighting text with the new language selection", "Rehighlighting Text", 2000);
+         SuspendLayout();
          switch (mCurrentLanguage) {
             case LanguageKind.PlainText:
                break;
             default:
                break;
          }
+         ResumeLayout(true);
+      }
+
+      public void LayoutControls() {
+         ApplyThemeToMainForm();
+         RehighlightText();
       }
 
       internal void ApplyThemeToMainForm() {
-         mRichTextBox.TextChanged -= OnEditorTextChanged;
-         Theme theme = mCurrentTheme;
-         mCurrentLanguageIsTSMI.Text = mCurrently + theme.mName;
-         mForm.BackColor = theme.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
+         mRichTextBox!.TextChanged -= OnEditorTextChanged;
+         Theme theme = mCurrentTheme!;
+         mCurrentLanguageIsTSMI!.Text = mCurrently + theme.mName;
+         mForm!.BackColor = theme.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
          mRichTextBox.BackColor = theme.mInterfaceColors[(int)ColorUsage.TextBox];
          mRichTextBox.ForeColor = theme.mInterfaceColors[(int)ColorUsage.TextBoxFont];
-         mMenuStrip.BackColor = theme.mInterfaceColors[(int)ColorUsage.MenuBackground];
+         mMenuStrip!.BackColor = theme.mInterfaceColors[(int)ColorUsage.MenuBackground];
          foreach (ToolStripMenuItem toolStripMenuItem in mMenuStrip.Items.OfType<ToolStripMenuItem>()) {
             PaintMenuItem(toolStripMenuItem);
             foreach (ToolStripMenuItem subItem in toolStripMenuItem.DropDownItems.OfType<ToolStripMenuItem>())
                PaintMenuItemsRecursive(subItem);
          }
-         mStatusStrip.Renderer = new ToolStripProfessionalRenderer();
+         mStatusStrip!.Renderer = new ToolStripProfessionalRenderer();
          mStatusStrip.Invalidate(true);
          mStatusStrip.BackColor = theme.mInterfaceColors[(int)ColorUsage.StatusBackground];
          foreach (ToolStripItem item in mStatusStrip.Items) {
-            //if (item is ToolStripControlHost host) {
-            //Control control = host.Control;
-            //Control control = host.Control;
-            //nint handle = control.Handle;
             item.ForeColor = theme.mInterfaceColors[(int)ColorUsage.StatusFont];
             item.BackColor = theme.mInterfaceColors[(int)ColorUsage.StatusBackground];
             item.Font = theme.mFonts[(int)FontUsage.Status];
             item.Invalidate();
-            //item.Update();
-            //}
          }
-         mHighlighterEngine.HighlightNow();
-         mRichTextBox.TextChanged += OnEditorTextChanged;
+         mHighlighterEngine!.HighlightNow();
+         mRichTextBox!.TextChanged += OnEditorTextChanged;
+         ResumeLayout(true);
       }
 
       public static void PerformFirstLaunchInitialization() {

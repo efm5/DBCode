@@ -1,7 +1,6 @@
 ﻿namespace DBCode {
    namespace Themes {
       internal sealed partial class ThemePanel : Panel {
-
          private void PrimaryTabControl_DrawItem(object? pSender, DrawItemEventArgs pArgs) {
             DrawTabControlItem(mPrimaryTabControl, pArgs);
          }
@@ -44,6 +43,13 @@
             if (swatch == null)
                return;
             EnsureColorPickerPanel(mTemporaryTheme, (ColorUsage)pUsage, swatch.GetColor());
+         }
+
+         private void OnFontButtonClicked(object? pSender, EventArgs pArgs) {
+            Button? button = pSender as Button;
+            if (button?.Tag is not FontUsage usage)
+               return;
+            EnsureFontPickerPanel(mTemporaryTheme, usage, mTemporaryTheme.mFonts[(int)usage]);
          }
       }
    }

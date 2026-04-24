@@ -1,7 +1,6 @@
 namespace DBCode {
    namespace Themes {
       public sealed partial class ColorPickerPanel : Panel {
-         private bool mFirstGray = true;
          private Button? mBluePrefixButton, mCancelButton, mGrayPrefixButton, mGreenPrefixButton, mHelpButton,
             mNamedColorPrefixButton, mOkButton, mRedPrefixButton;
          private CheckBox? mUseGrayscaleCheckBox, mUseNamedCheckBox;
@@ -10,8 +9,7 @@ namespace DBCode {
          private ColorUsage mColorUsage;
          private ComboBox? mNamedColorsComboBox;
          private GroupBox? mCustomColorGroupBox, mNamedColorsGroupBox;
-         private HeaderLabelCluster? mTitleLabel;
-         private Label? mUsageLabel;
+         private TwoLineHeaderLabelCluster? mTitleLabel;
          private LabeledColorSwatchCluster? mDemoSwatch;
          private NumericUpDown? mBlueUpDown, mGrayUpDown, mGreenUpDown, mRedUpDown;
          private Panel? mScrollPanel;
@@ -21,8 +19,9 @@ namespace DBCode {
          private ToolStripStatusLabel? mSpringLabel;
          private TrackBar? mBlueSlider, mGraySlider, mGreenSlider, mRedSlider;
 
-         public ColorPickerPanel(Theme pTheme, Color pInitialColor) {
+         public ColorPickerPanel(Theme pTheme, ColorUsage pColorUsage, Color pInitialColor) {
             mInitialColor = pInitialColor;
+            mColorUsage = pColorUsage;
             mTheme = pTheme;
             InitializeUI();
             LayoutControls();
@@ -37,22 +36,14 @@ namespace DBCode {
                groupBoxBackground = mTheme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground];
             Font interfaceTextFont = mTheme.mFonts[(int)FontUsage.Interface];
 
-            mTitleLabel = new HeaderLabelCluster("Select A Color", HeaderLabelSize.Normal);
+            mTitleLabel = new TwoLineHeaderLabelCluster("Select A Color",
+               $"Use this color for {ToDescription((ColorUsage)mColorUsage)}");
             mScrollPanel = new Panel {
                Name = $"ColorPickerScrollPanel{mTabIndex++}",
                TabIndex = TAB_INDEX_IGNORED,
                AutoScroll = true,
                BackColor = interfaceBackground,
                Dock = DockStyle.Fill,
-            };
-            mUsageLabel = new Label {
-               Name = $"ColorPickerUsageLabel{mTabIndex++}",
-               TabIndex = TAB_INDEX_IGNORED,
-               Text = "Use this color for ",
-               AutoSize = true,
-               Font = CreateNewFont(interfaceTextFont),
-               ForeColor = interfaceFont,
-               BackColor = Color.Transparent
             };
             mNamedColorsGroupBox = new GroupBox {
                Name = $"NamedColorsGroupBox{mTabIndex++}",
@@ -258,7 +249,8 @@ namespace DBCode {
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink,
                Font = CreateNewFont(interfaceTextFont),
-               ForeColor = interfaceFont
+               ForeColor = interfaceFont,
+               Anchor = AnchorStyles.Top | AnchorStyles.Right
             };
             mCancelButton = new Button {
                Name = $"ColorPickerCancelButton{mTabIndex}",
@@ -267,7 +259,8 @@ namespace DBCode {
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink,
                Font = CreateNewFont(interfaceTextFont),
-               ForeColor = interfaceFont
+               ForeColor = interfaceFont,
+               Anchor = AnchorStyles.Top | AnchorStyles.Right
             };
             mHelpHost = new ToolStripControlHost(mHelpButton);
             mOkHost = new ToolStripControlHost(mOkButton);
@@ -277,16 +270,17 @@ namespace DBCode {
             };
             mStatusStrip.Items.AddRange([mHelpHost, mSpringLabel, mOkHost, mCancelHost]);
             this.BackColor = interfaceBackground;
-            mScrollPanel.Controls.AddRange([mUsageLabel, mNamedColorsGroupBox, mCustomColorGroupBox]);
-            Controls.AddRange(mTitleLabel, mStatusStrip, mScrollPanel);
+            mScrollPanel.Controls.AddRange([mNamedColorsGroupBox, mCustomColorGroupBox]);
+            Controls.AddRange([mScrollPanel, mTitleLabel, mStatusStrip]);
          }
 
-         private void LayoutControls() {
-            if (mTitleLabel == null || mUsageLabel == null || mNamedColorsGroupBox == null ||
+         public void LayoutControls() {
+            if (mTitleLabel == null || mNamedColorsGroupBox == null ||
                 mCustomColorGroupBox == null || mStatusStrip == null)
                return;
-            mUsageLabel.Location = new Point(mEm, mTitleLabel.Bottom + mEm);
-            mNamedColorsGroupBox.Location = new Point(mEm, mUsageLabel.Bottom + mEm);
+            RemoveEventHandlers();
+            SetFontsAndColors();
+            mNamedColorsGroupBox.Location = new Point(mEm, mEm);
             if (mUseNamedCheckBox != null && mNamedColorPrefixButton != null && mNamedColorsComboBox != null) {
                mUseNamedCheckBox.Location = GetGroupBoxFirstLineOffset(mNamedColorsGroupBox);
                mNamedColorPrefixButton.Location = new Point(mEm, mUseNamedCheckBox.Bottom + mEm);
@@ -328,6 +322,17 @@ namespace DBCode {
             this.Width = Math.Max(mNamedColorsGroupBox.Right, mCustomColorGroupBox.Right) + mEm +
                SystemInformation.VerticalScrollBarWidth;
             this.Height = mCustomColorGroupBox.Bottom + mStatusStrip.Height + mEm + SystemInformation.HorizontalScrollBarHeight;
+            AttachEventHandlers();
+         }
+
+         internal Size GetRequiredSize() {
+            if (mScrollPanel == null || mTitleLabel == null || mStatusStrip == null || mCustomColorGroupBox == null)
+               return new Size(800, 600);
+            int contentWidth = mCustomColorGroupBox.Right + (mEm * 2);
+            int contentHeight = mCustomColorGroupBox.Bottom + (mEm * 2);
+            int totalWidth = contentWidth + SystemInformation.VerticalScrollBarWidth + (mEm * 2);
+            int totalHeight = mTitleLabel.Height + contentHeight + mStatusStrip.Height + (mEm * 2);
+            return new Size(totalWidth, totalHeight);
          }
 
          private void AttachEventHandlers() {
@@ -366,20 +371,46 @@ namespace DBCode {
                mCancelButton.Click += CancelButton_Click;
          }
 
-         public void ShowColorPicker(ColorUsage pColorUsage) {
-            mColorUsage = pColorUsage;
-            if (mUsageLabel != null && mTheme != null) {
-               mUsageLabel.Text = $"Use this color for {ToDescription(pColorUsage)}";
-               Color currentColor = mTheme.mInterfaceColors[(int)pColorUsage];
-               SetColorValues(currentColor);
+         private void RemoveEventHandlers() {
+            if (mUseNamedCheckBox != null)
+               mUseNamedCheckBox.CheckedChanged -= UseNamedCheckBox_CheckedChanged;
+            if (mNamedColorPrefixButton != null)
+               mNamedColorPrefixButton.Click -= NamedColorPrefixButton_Click;
+            if (mNamedColorsComboBox != null) {
+               mNamedColorsComboBox.SelectedValueChanged -= NamedColorsComboBox_SelectedValueChanged;
+               mNamedColorsComboBox.KeyUp -= NamedColorsComboBox_KeyUp;
+               mNamedColorsComboBox.Leave -= NamedColorsComboBox_Leave;
             }
-            this.Visible = true;
-            this.BringToFront();
+            if (mUseGrayscaleCheckBox != null)
+               mUseGrayscaleCheckBox.CheckedChanged -= UseGrayscaleCheckBox_CheckedChanged;
+            if (mGrayUpDown != null)
+               mGrayUpDown.ValueChanged -= GrayUpDown_ValueChanged;
+            if (mGraySlider != null)
+               mGraySlider.ValueChanged -= GraySlider_ValueChanged;
+            if (mRedUpDown != null)
+               mRedUpDown.ValueChanged -= RedUpDown_ValueChanged;
+            if (mRedSlider != null)
+               mRedSlider.ValueChanged -= RedSlider_ValueChanged;
+            if (mGreenUpDown != null)
+               mGreenUpDown.ValueChanged -= GreenUpDown_ValueChanged;
+            if (mGreenSlider != null)
+               mGreenSlider.ValueChanged -= GreenSlider_ValueChanged;
+            if (mBlueUpDown != null)
+               mBlueUpDown.ValueChanged -= BlueUpDown_ValueChanged;
+            if (mBlueSlider != null)
+               mBlueSlider.ValueChanged -= BlueSlider_ValueChanged;
+            if (mHelpButton != null)
+               mHelpButton.Click -= MainForm.Help_Click;
+            if (mOkButton != null)
+               mOkButton.Click -= OkButton_Click;
+            if (mCancelButton != null)
+               mCancelButton.Click -= CancelButton_Click;
          }
 
          private void SetColorValues(Color pColor) {
             int gray = (pColor.R + pColor.G + pColor.B) / 3;
 
+            RemoveEventHandlers();
             if (mGrayUpDown != null)
                mGrayUpDown.Value = gray;
             if (mGraySlider != null)
@@ -397,6 +428,7 @@ namespace DBCode {
             if (mBlueSlider != null)
                mBlueSlider.Value = pColor.B;
             UpdateSwatches();
+            AttachEventHandlers();
          }
 
          private Color GrayFromInitialColor() {
@@ -502,8 +534,84 @@ namespace DBCode {
                mBlueSlider.Enabled = !isGray;
          }
 
-         private void HideColorPickerPanel() {
-            ThemePanel.RestoreFromColorPickerPanel();
+         private void SetFontsAndColors() {
+            Color backColor = mTheme!.mInterfaceColors[(int)ColorUsage.InterfaceBackground],
+               foreColor = mTheme.mInterfaceColors[(int)ColorUsage.InterfaceFont],
+               groupBoxBackgroundColor = mTheme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground],
+               statusBackground = mTheme.mInterfaceColors[(int)ColorUsage.StatusBackground],
+               statusForeColor = mTheme.mInterfaceColors[(int)ColorUsage.StatusFont];
+            Font interfaceFont = mTheme.mFonts[(int)FontUsage.Interface],
+               statusFont = mTheme.mFonts[(int)FontUsage.Status];
+
+            this.BackColor = backColor;
+            mScrollPanel!.BackColor = backColor;
+            mBluePrefixButton!.Font = interfaceFont;
+            mBluePrefixButton.ForeColor = foreColor;
+            mBluePrefixButton.BackColor = backColor;
+            FlattenButton(mBluePrefixButton, groupBoxBackgroundColor);
+            mCancelButton!.Font = statusFont;
+            mCancelButton.ForeColor = statusForeColor;
+            mCancelButton.BackColor = statusBackground;
+            mGrayPrefixButton!.Font = interfaceFont;
+            mGrayPrefixButton.ForeColor = foreColor;
+            mGrayPrefixButton.BackColor = backColor;
+            FlattenButton(mGrayPrefixButton, groupBoxBackgroundColor);
+            mGreenPrefixButton!.Font = interfaceFont;
+            mGreenPrefixButton.ForeColor = foreColor;
+            mGreenPrefixButton.BackColor = backColor;
+            FlattenButton(mGreenPrefixButton, groupBoxBackgroundColor);
+            mHelpButton!.Font = statusFont;
+            mHelpButton.ForeColor = statusForeColor;
+            mHelpButton.BackColor = statusBackground;
+            mNamedColorPrefixButton!.Font = interfaceFont;
+            mNamedColorPrefixButton.ForeColor = foreColor;
+            mNamedColorPrefixButton.BackColor = backColor;
+            FlattenButton(mNamedColorPrefixButton, groupBoxBackgroundColor);
+            mOkButton!.Font = statusFont;
+            mOkButton.ForeColor = statusForeColor;
+            mOkButton.BackColor = statusBackground;
+            mRedPrefixButton!.Font = interfaceFont;
+            mRedPrefixButton.ForeColor = foreColor;
+            mRedPrefixButton.BackColor = backColor;
+            FlattenButton(mRedPrefixButton, groupBoxBackgroundColor);
+            mUseGrayscaleCheckBox!.Font = interfaceFont;
+            mUseGrayscaleCheckBox.ForeColor = foreColor;
+            mUseGrayscaleCheckBox.BackColor = Color.Transparent;
+            mUseNamedCheckBox!.Font = interfaceFont;
+            mUseNamedCheckBox.ForeColor = foreColor;
+            mUseNamedCheckBox.BackColor = Color.Transparent;
+            mNamedColorsComboBox!.Font = interfaceFont;
+            mNamedColorsComboBox.ForeColor = foreColor;
+            mNamedColorsComboBox.BackColor = backColor;
+            mCustomColorGroupBox!.Font = CreateNewBoldFont(interfaceFont);
+            mCustomColorGroupBox.ForeColor = foreColor;
+            mCustomColorGroupBox.BackColor = groupBoxBackgroundColor;
+            mNamedColorsGroupBox!.Font = CreateNewBoldFont(interfaceFont);
+            mNamedColorsGroupBox.ForeColor = foreColor;
+            mNamedColorsGroupBox.BackColor = groupBoxBackgroundColor;
+            mBlueUpDown!.Font = interfaceFont;
+            mBlueUpDown.ForeColor = foreColor;
+            mBlueUpDown.BackColor = backColor;
+            mGrayUpDown!.Font = interfaceFont;
+            mGrayUpDown.ForeColor = foreColor;
+            mGrayUpDown.BackColor = backColor;
+            mGreenUpDown!.Font = interfaceFont;
+            mGreenUpDown.ForeColor = foreColor;
+            mGreenUpDown.BackColor = backColor;
+            mRedUpDown!.Font = interfaceFont;
+            mRedUpDown.ForeColor = foreColor;
+            mRedUpDown.BackColor = backColor;
+            mStatusStrip!.BackColor = statusBackground;
+            mStatusStrip.ForeColor = statusForeColor;
+            mStatusStrip.Font = statusFont;
+            mTitleLabel!.SetFontAndColor(mCurrentTheme!);
+            mDemoSwatch!.SetFontAndColor(mCurrentTheme!);
+         }
+
+         public bool ColorHasChanged() {
+            if (mDemoSwatch!.GetColor() == mInitialColor)
+               return false;
+            return true;
          }
 
          protected override void Dispose(bool pDisposing) {
@@ -542,7 +650,6 @@ namespace DBCode {
                if (mCancelButton != null)
                   mCancelButton.Click -= CancelButton_Click;
                mTitleLabel?.Dispose();
-               mUsageLabel?.Dispose();
                mUseNamedCheckBox?.Dispose();
                mNamedColorPrefixButton?.Dispose();
                mNamedColorsComboBox?.Dispose();

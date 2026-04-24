@@ -1,11 +1,10 @@
 namespace DBCode {
    static partial class Program {
-      internal static partial class NativeMethods {
+#pragma warning disable IDE0079
 #pragma warning disable IDE1006
 #pragma warning disable SYSLIB1054
-
+      internal static partial class NativeMethods {
          #region Shell & File System APIs
-
          [DllImport("shell32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
          [return: MarshalAs(UnmanagedType.Bool)]
          internal static extern bool ShellExecuteEx(ref SHELLEXECUTEINFO lpExecInfo);
@@ -55,8 +54,8 @@ namespace DBCode {
             SHERB_NOPROGRESSUI = 0x00000002,
             SHERB_NOSOUND = 0x00000004
          }
-#pragma warning restore SYSLIB1054
-#pragma warning restore IDE1006
       }
+#pragma warning restore IDE1006
+#pragma warning restore SYSLIB1054
    }
 }

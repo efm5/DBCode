@@ -177,10 +177,10 @@ namespace DBCode {
          mTopRightAnchor = AnchorStyles.Top | AnchorStyles.Right;
       public static bool mFirstGray = true, mFirstLaunch = true, mForceActivation = true, mIsTargetingEnabled = false,
          mPreMinimalControlBox = true, mReturnToTop = true, mFirstTheme = true, mFirstThemePicker = true,
-         mFirstColorPicker = true;
+         mFirstColorPicker = true, mFirstFontPicker = true;
       public static float mFontWidthAdjustment = 0.5f, mOFontSize, mScaling;
       public static FontUsage mFontUsage = FontUsage.Text;
-      public static Form? mForm = null;
+      public static MainForm? mForm = null;
       public static HighlighterEngine? mHighlighterEngine = null;
       public static Icon[] mIcons = new Icon[4];
       public static int mThemeHighlightTabPageIndex = 0, mThemePrimaryTabPageIndex = 0;
@@ -190,12 +190,13 @@ namespace DBCode {
       public static MenuStrip? mMenuStrip = null;
       public static ThemePanel? mThemePanel = null;
       public static ColorPickerPanel? mColorPickerPanel = null;
+      public static FontPickerPanel? mFontPickerPanel = null;
       public static ThemePickerPanel? mThemePickerPanel = null;
       public static readonly PropertyInfo[] mPredefinedColors =
          typeof(Color).GetProperties(BindingFlags.Public | BindingFlags.Static);
       public static Rectangle mPreThemeBounds = new Rectangle(50, 50, 800, 600), mThemeBounds,
          mPreThemePickerBounds = new Rectangle(50, 50, 800, 600), mThemePickerBounds,
-         mPrePickerBounds = new Rectangle(50, 50, 800, 600), mColorPickerBounds;
+         mPrePickerBounds = new Rectangle(50, 50, 800, 600), mColorPickerBounds, mFontPickerBounds;
       public static RichTextBox? mRichTextBox = null;
       public static Size mMonitorSize, mResolution;
       public static StatusStrip? mStatusStrip = null;
@@ -217,7 +218,7 @@ namespace DBCode {
             //Appropriate target Windows to paste into
             "Arduino", "Eclipse", "Emacs", "IntelliJ", "NetBeans", "Particle", "PSPad", "Visual Studio", "vim", "Xcode"  ];
       public static readonly string mUnicodeSampleString = "Unicode test: ÀÑÇ ÿ ɱ ǵ ʰ ā̋ ȇ ō̱ ╭╯ 🜁";
-      public static List<Theme> mThemes = new List<Theme>();//efm5 This line and the next must be before any code that uses mThemes – Such as the next line
+      public static List<Theme> mThemes = [];//efm5 This line and the next must be before any code that uses mThemes – Such as the next line
       public static Theme? mCurrentTheme = ThemeBuiltIns.CreateDarkTheme(false);
       public static readonly ToolStripSeparator toolStripSeparator1 = new ToolStripSeparator();
       public static ToolStripStatusLabel? mTargetingStatusLabel = null, mVersionStatusLabel = null;

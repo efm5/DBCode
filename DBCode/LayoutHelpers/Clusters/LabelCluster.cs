@@ -1,4 +1,6 @@
 ﻿
+using DBCode.Themes;
+
 namespace DBCode {
    internal static partial class LayoutHelpers {
       internal sealed class LabelCluster : BaseCluster {
@@ -13,13 +15,21 @@ namespace DBCode {
                AutoSize = true,
                Font = CreateNewFont(),
                ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont],
-               BackColor = pBackgroundColor ?? Color.Transparent
+               BackColor = pBackgroundColor ?? Color.Transparent,
+               Location = new Point(0, 0)
             };
             Controls.Add(mLabel);
          }
 
-         protected override void LayoutCluster() {
-            // No-op: BaseCluster handles positioning and sizing.
+         internal override void LayoutCluster(Theme pTheme) {
+            SetFontAndColor(pTheme);
+         }
+
+         public void SetFontAndColor(Theme pTheme) {
+            Theme.ThemeSimpleThings(pTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
+            mLabel.Font = poFont;
+            mLabel.ForeColor = poForeColor;
+            mLabel.BackColor = poBackColor;
          }
       }
    }

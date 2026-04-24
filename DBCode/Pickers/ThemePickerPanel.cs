@@ -22,21 +22,15 @@
             mCancelHost = new ToolStripControlHost(mCancelButton);
             mHelpHost = new ToolStripControlHost(mHelpButton);
             mSpringLabel = new ToolStripStatusLabel();
-            mButtonClusters = new List<ButtonCluster>();
+            mButtonClusters = [];
             mButtonPanel = new Panel {
                Name = $"ThemePickerPanelScrollPanel{mTabIndex}",
                TabIndex = mTabIndex++,
                Dock = DockStyle.Fill,
                AutoScroll = true,
-               BackColor = mCurrentTheme.mInterfaceColors[(int)ColorUsage.InterfaceBackground]
+               BackColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceBackground]
             };
             mMainForm = pMainForm;
-         }
-
-         protected override void OnHandleCreated(EventArgs pEventArgs) {
-            base.OnHandleCreated(pEventArgs);
-            CreateLayout();
-            Dock = DockStyle.Fill;
          }
 
          private void CreateLayout() {
@@ -51,7 +45,7 @@
             foreach (ButtonCluster clusterBase in mButtonClusters.OfType<ButtonCluster>())
                clusterBase.ResumeLayout(true);
             mButtonPanel.ResumeLayout(true);
-            WidgetLayout(mButtonClusters.Cast<Control>().ToList(), mForm.Width);
+            WidgetLayout(mButtonClusters.Cast<Control>().ToList(), mForm!.Width);
             ResumeLayout(true);
          }
 
@@ -82,12 +76,12 @@
 
          private void CloseThemePickerPanel() {
             mFirstThemePicker = false;
-            mThemePickerBounds = mForm.Bounds;
-            MainForm.RestoreFromThemePickerPanel();
+            mThemePickerBounds = mForm!.Bounds;
+            mForm.RestoreFromThemePickerPanel();
          }
 
          public void ApplyThemeToPanel() {
-            Theme theme = mCurrentTheme;
+            Theme theme = mCurrentTheme!;
             BackColor = theme.mInterfaceColors[(int)ColorUsage.PanelBackground];
             foreach (Button item in mButtonPanel.Controls.OfType<Button>()) {
                if (item is Button button) {
@@ -109,22 +103,6 @@
                   control.Invalidate();
                   control.Update();
                }
-            }
-         }
-
-         private void CancelButton_Click(object? pSender, EventArgs pArgs) {
-            CloseThemePickerPanel();
-         }
-
-         private void PickThemeButton_Click(object? pSender, EventArgs pArgs) {
-            Button? button = pSender as Button;
-            if (button == null)
-               return;
-            Theme? theme = button.Tag as Theme;
-            if (theme != null) {
-               CloseThemePickerPanel();
-               mCurrentTheme = theme;
-               mMainForm.ApplyThemeToMainForm();
             }
          }
       }

@@ -1,5 +1,8 @@
 namespace DBCode {
    static partial class Program {
+#pragma warning disable IDE0079
+#pragma warning disable IDE1006
+#pragma warning disable SYSLIB1054
       internal static partial class NativeMethods {
          #region Structures
          [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
@@ -163,5 +166,8 @@ namespace DBCode {
          }
          #endregion
       }
+#pragma warning restore IDE0079
+#pragma warning restore IDE1006
+#pragma warning restore SYSLIB1054
    }
 }

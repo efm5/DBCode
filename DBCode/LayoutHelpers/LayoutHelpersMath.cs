@@ -1,8 +1,12 @@
-using DBCode.Themes;
 using System.Collections.ObjectModel;
+using DBCode.Themes;
 
 namespace DBCode {
    internal static partial class LayoutHelpers {
+      internal static Size SizeFromSizeF(SizeF pSizeF) {
+         return new Size((int)Math.Ceiling(pSizeF.Width), (int)Math.Ceiling(pSizeF.Height));
+      }
+
       internal static Size CreateSizeFromFloats(float pWidth, float pHeight) {
          return new Size((int)pWidth, (int)pHeight);
       }
@@ -471,6 +475,7 @@ namespace DBCode {
          if (pControls == null || pControls.Count == 0)
             return null;
          Control currentControl = pControls[0], nextControl = pControls[0];
+
          for (int index = 1; index < pControls.Count; index++) {
             nextControl = pControls[index];
             if (nextControl.Right > currentControl.Right)

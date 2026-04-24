@@ -1,7 +1,7 @@
 namespace DBCode {
    internal static partial class LayoutHelpers {
 
-      internal sealed class ClusterContainer : Panel {
+      internal sealed class ClusterContainer : Panel, IEnumerable<BaseCluster> {
          private readonly List<BaseCluster> mClusters;
          private readonly ClusterLayoutMode mLayoutMode;
          private readonly int mFixedColumns, mFixedRows, mMaxHeight, mMaxWidth;
@@ -18,9 +18,12 @@ namespace DBCode {
                Controls.Add(currentCluster);
          }
 
-         protected override void OnLayout(LayoutEventArgs pLayoutEventArgs) {
-            base.OnLayout(pLayoutEventArgs);
-            LayoutClusters();
+         public IEnumerator<BaseCluster> GetEnumerator() {
+            return mClusters.GetEnumerator();
+         }
+
+         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() {
+            return GetEnumerator();
          }
 
          public void LayoutClusters() {

@@ -2,6 +2,37 @@
    namespace Themes {
       internal sealed class VariableWidthTabControl : TabControl {
          public readonly List<int> TabHeaderWidths = [];
+         private bool mStripBackgroundPainted = false;
+         private bool mAllowStripPainting = true;
+         private Color mCapturedBackColor = SystemColors.Control;
+
+         public void SetStripBackColor(Color pColor) {
+            mCapturedBackColor = pColor;
+         }
+
+         public void ResetStripBackgroundPainted() {
+            mStripBackgroundPainted = false;
+            mAllowStripPainting = true;
+         }
+
+         protected override void OnSelectedIndexChanged(EventArgs pEventArgs) {
+            mAllowStripPainting = false;
+            base.OnSelectedIndexChanged(pEventArgs);
+         }
+
+         protected override void WndProc(ref Message m) {
+            // WM_PAINT = 0x000F
+            if (m.Msg == 0x000F && mAllowStripPainting && !mStripBackgroundPainted && TabCount > 0 && DrawMode == TabDrawMode.OwnerDrawFixed) {
+               using (Graphics g = CreateGraphics()) {
+                  Rectangle displayRect = DisplayRectangle;
+                  Rectangle stripRect = new Rectangle(0, 0, Width, displayRect.Top);
+                  using SolidBrush brush = new SolidBrush(mCapturedBackColor);
+                  g.FillRectangle(brush, stripRect);
+               }
+               mStripBackgroundPainted = true;
+            }
+            base.WndProc(ref m);
+         }
 
          protected override void OnMouseDown(MouseEventArgs pMouseEventArgs) {
             int tabIndex = HitTestTabHeaders(pMouseEventArgs.Location);

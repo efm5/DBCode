@@ -8,7 +8,7 @@ namespace DBCode {
          private Size mSwatchSize = new Size(24, 24);
          public event ColorSwatchClickedHandler? SwatchClicked;
 
-         public ColorSwatch(ColorSwatchUsage pUsage, Color pInitialColor, int pSize, Color? pBackgroundColor = null) {
+         public ColorSwatch(ColorSwatchUsage pUsage, Color pInitialColor, int pSize) {
             mUsage = pUsage;
             mSwatchColor = pInitialColor;
             if (pSize < 8)

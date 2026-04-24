@@ -1,4 +1,6 @@
-﻿namespace DBCode {
+﻿using DBCode.Themes;
+
+namespace DBCode {
    internal static partial class LayoutHelpers {
       internal sealed class LabeledButtonColorSwatchCluster : BaseCluster {
          private Button mButton;
@@ -33,10 +35,19 @@
                Tag = pUsage
             };
             mButton.Click += Button_Click;
-            mSwatch = new ColorSwatch(pUsage, pInitialColor, -1, pBackgroundColor);
+            mSwatch = new ColorSwatch(pUsage, pInitialColor, -1);
             mSwatch.SwatchClicked += Swatch_Click;
             Controls.AddRange(mLabel, mButton, mSwatch);
             LayoutControls();
+         }
+
+         public void SetFontAndColor(Theme pTheme) {
+            Theme.ThemeSimpleThings(pTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
+            mLabel.Font = poFont;
+            mLabel.ForeColor = poForeColor;
+            mLabel.BackColor = poBackColor;
+            mButton.Font = poFont;
+            mButton.ForeColor = poForeColor;
          }
 
          private void Button_Click(object? pSender, EventArgs pArgs) {
@@ -47,13 +58,10 @@
             SwatchClicked?.Invoke(this, pUsage);
          }
 
-         protected override void OnLayout(LayoutEventArgs pArgs) {
-            base.OnLayout(pArgs);
-            LayoutControls();
-         }
-
-         protected override void LayoutCluster() {
-            // Layout handled in LayoutControls()
+         internal override void LayoutCluster(Theme pTheme) {
+            SetFontAndColor(pTheme);
+            ApplyLabelPosition(mLabel, mButton);
+            GlueControlsHorizontally(mButton, mSwatch, mEm);
          }
 
          private void LayoutControls() {

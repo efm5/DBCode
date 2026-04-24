@@ -65,6 +65,7 @@ namespace DBCode {
                return;
             bool useGray = mUseGrayscaleCheckBox.Checked;
 
+            RemoveEventHandlers();
             if (mGrayPrefixButton != null)
                mGrayPrefixButton.Enabled = useGray;
             if (mGrayUpDown != null)
@@ -91,6 +92,7 @@ namespace DBCode {
                mBlueSlider.Enabled = !useGray;
             if (useGray && mUseNamedCheckBox != null)
                mUseNamedCheckBox.Checked = false;
+            AttachEventHandlers();
             UpdateSwatches();
          }
 
@@ -99,8 +101,11 @@ namespace DBCode {
                return;
             int value = (int)mGrayUpDown.Value;
 
-            if (mGraySlider.Value != value)
+            if (mGraySlider.Value != value) {
+               RemoveEventHandlers();
                mGraySlider.Value = value;
+               AttachEventHandlers();
+            }
             UpdateSwatches();
          }
 
@@ -109,8 +114,11 @@ namespace DBCode {
                return;
             int value = mGraySlider.Value;
 
-            if (mGrayUpDown.Value != value)
+            if (mGrayUpDown.Value != value) {
+               RemoveEventHandlers();
                mGrayUpDown.Value = value;
+               AttachEventHandlers();
+            }
             UpdateSwatches();
          }
 
@@ -119,8 +127,11 @@ namespace DBCode {
                return;
             int value = (int)mRedUpDown.Value;
 
-            if (mRedSlider.Value != value)
+            if (mRedSlider.Value != value) {
+               RemoveEventHandlers();
                mRedSlider.Value = value;
+               AttachEventHandlers();
+            }
             UpdateSwatches();
          }
 
@@ -129,8 +140,11 @@ namespace DBCode {
                return;
             int value = mRedSlider.Value;
 
-            if (mRedUpDown.Value != value)
+            if (mRedUpDown.Value != value) {
+               RemoveEventHandlers();
                mRedUpDown.Value = value;
+               AttachEventHandlers();
+            }
             UpdateSwatches();
          }
 
@@ -139,8 +153,11 @@ namespace DBCode {
                return;
             int value = (int)mGreenUpDown.Value;
 
-            if (mGreenSlider.Value != value)
+            if (mGreenSlider.Value != value) {
+               RemoveEventHandlers();
                mGreenSlider.Value = value;
+               AttachEventHandlers();
+            }
             UpdateSwatches();
          }
 
@@ -149,8 +166,11 @@ namespace DBCode {
                return;
             int value = mGreenSlider.Value;
 
-            if (mGreenUpDown.Value != value)
+            if (mGreenUpDown.Value != value) {
+               RemoveEventHandlers();
                mGreenUpDown.Value = value;
+               AttachEventHandlers();
+            }
             UpdateSwatches();
          }
 
@@ -159,8 +179,11 @@ namespace DBCode {
                return;
             int value = (int)mBlueUpDown.Value;
 
-            if (mBlueSlider.Value != value)
+            if (mBlueSlider.Value != value) {
+               RemoveEventHandlers();
                mBlueSlider.Value = value;
+               AttachEventHandlers();
+            }
             UpdateSwatches();
          }
 
@@ -168,8 +191,12 @@ namespace DBCode {
             if (mBlueSlider == null || mBlueUpDown == null)
                return;
             int value = mBlueSlider.Value;
-            if (mBlueUpDown.Value != value)
+
+            if (mBlueUpDown.Value != value) {
+               RemoveEventHandlers();
                mBlueUpDown.Value = value;
+               AttachEventHandlers();
+            }
             UpdateSwatches();
          }
          #endregion
@@ -179,11 +206,11 @@ namespace DBCode {
             if (mTheme == null || mDemoSwatch == null)
                return;
             mTheme.mInterfaceColors[(int)mColorUsage] = mDemoSwatch.BackColor;
-            HideColorPickerPanel();
+            ThemePanel.RestoreFromColorPickerPanel();
          }
 
          private void CancelButton_Click(object? pSender, EventArgs pEventArguments) {
-            HideColorPickerPanel();
+            ThemePanel.RestoreFromColorPickerPanel();
          }
          #endregion
       }

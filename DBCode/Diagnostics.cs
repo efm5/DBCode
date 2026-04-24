@@ -2,10 +2,11 @@
 
 namespace DBCode {
    namespace Diagnostics {
-
+#pragma warning disable IDE0290
       internal sealed class FatalLayoutException : Exception {
          public FatalLayoutException(string pMessage) : base(pMessage) { }
       }
+#pragma warning restore IDE0290
 
       internal static class Fatal {
          public static T Require<T>(

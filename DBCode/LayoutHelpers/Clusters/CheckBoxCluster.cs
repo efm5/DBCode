@@ -1,4 +1,6 @@
-﻿namespace DBCode {
+﻿using DBCode.Themes;
+
+namespace DBCode {
    internal static partial class LayoutHelpers {
       internal sealed class CheckBoxCluster : BaseCluster {
          internal CheckBox mCheckBox;
@@ -19,8 +21,16 @@
             Controls.Add(mCheckBox);
          }
 
-         protected override void LayoutCluster() {
-            // No-op: BaseCluster handles positioning and sizing.
+         internal override void LayoutCluster(Theme pTheme) {
+            SetFontAndColor(pTheme);
+            mCheckBox.Location = new Point(0, 0);
+         }
+
+         public void SetFontAndColor(Theme pTheme) {
+            Theme.ThemeSimpleThings(pTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
+            mCheckBox.Font = poFont;
+            mCheckBox.ForeColor = poForeColor;
+            mCheckBox.BackColor = poBackColor;
          }
       }
    }

@@ -1,3 +1,7 @@
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+
 namespace DBCode {
    internal static partial class Program {
       public static bool gBackgroundWorkerFinished = false;
@@ -20,12 +24,12 @@ namespace DBCode {
          }
       }
 
-      private static void OnUiThreadException(object? pSender, ThreadExceptionEventArgs pE) {
-         ShowFatalErrorAndExit(pE.Exception, "An unexpected error occurred.");
+      private static void OnUiThreadException(object? pSender, ThreadExceptionEventArgs pThreadExceptionEventArgs) {
+         ShowFatalErrorAndExit(pThreadExceptionEventArgs.Exception, "An unexpected error occurred.");
       }
 
-      private static void OnNonUiThreadException(object? pSender, UnhandledExceptionEventArgs pE) {
-         ShowFatalErrorAndExit(pE.ExceptionObject as Exception, "An unexpected error occurred.");
+      private static void OnNonUiThreadException(object? pSender, UnhandledExceptionEventArgs pUnhandledExceptionEventArgs) {
+         ShowFatalErrorAndExit(pUnhandledExceptionEventArgs.ExceptionObject as Exception, "An unexpected error occurred.");
       }
 
       private static void ShowFatalErrorAndExit(Exception? pException, string pMessage) {
@@ -34,13 +38,24 @@ namespace DBCode {
          //string report = pException.ToDiagnosticString();
          string report = ExceptionExtensions.ToDiagnosticString(pException);
          ClipboardHelper.TrySetClipboardText(report);
-         MessageBox.Show(
-            $"{pMessage}\n\nA detailed diagnostic report has been copied to the clipboard.",
-            "DBCode – Fatal Error",
-            MessageBoxButtons.OK,
-            MessageBoxIcon.Error
-         );
+         TimedMessage($"{pMessage}\n\nA detailed diagnostic report has been copied to the clipboard.",
+            "DBCode – Fatal Error", 0);
          Environment.Exit(-1);
+      }
+
+      internal static T ThrowIfNull<T>([NotNull] T? pValue, string pMemberName,
+         [CallerFilePath] string pCallerFilePath = "",
+         [CallerLineNumber] int pCallerLineNumber = 0,
+         [CallerMemberName] string pCallerMemberName = "") where T : class {
+         if (pValue == null) {
+            StackTrace stackTrace = new StackTrace(0, true);
+            string message = $"Fatal: {pMemberName} was unexpectedly null in {pCallerMemberName} at {Path.GetFileName(pCallerFilePath)}:{pCallerLineNumber}";
+            InvalidOperationException exception = new InvalidOperationException(message);
+            exception.Data["CapturedStackTrace"] = stackTrace.ToString();
+            ShowFatalErrorAndExit(exception, $"A critical component was null: {pMemberName}");
+            throw exception;
+         }
+         return pValue;
       }
    }
 }

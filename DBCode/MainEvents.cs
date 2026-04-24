@@ -21,6 +21,7 @@ namespace DBCode {
 
          Opacity = savedOpacity;
          UpdateOpacityMenuChecks(savedOpacity);
+         EnsureWindowFitsMonitor(this, true);
          ApplyViewMode(ViewMode.Features);
       }
 
@@ -52,9 +53,9 @@ namespace DBCode {
       }
 
       private void OnEditorTextChanged(object? pSender, EventArgs pArgs) {
-         mRichTextBox.TextChanged -= OnEditorTextChanged;
+         mRichTextBox!.TextChanged -= OnEditorTextChanged;
          //mTimer?.Stop();
-         mHighlighterEngine.HighlightNow();
+         mHighlighterEngine!.HighlightNow();
          mRichTextBox.TextChanged += OnEditorTextChanged;
       }
 
@@ -119,7 +120,7 @@ namespace DBCode {
             return;
          mCurrentLanguage = selectedLanguage;
          CheckLanguage();
-         mHighlighterEngine.SetLanguage(mCurrentLanguage);
+         mHighlighterEngine!.SetLanguage(mCurrentLanguage);
          mHighlighterEngine.HighlightNow();
       }
 

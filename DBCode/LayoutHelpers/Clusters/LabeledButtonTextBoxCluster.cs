@@ -1,4 +1,6 @@
-﻿namespace DBCode {
+﻿using DBCode.Themes;
+
+namespace DBCode {
    internal static partial class LayoutHelpers {
 
       internal sealed class LabeledButtonTextBoxCluster : BaseCluster {
@@ -7,7 +9,8 @@
          internal TextBox mExampleTextBox { get; private set; }
          internal Color? mBackgroundColor;
 
-         internal LabeledButtonTextBoxCluster(string pLabelText, string pButtonText, LabelPosition pLabelPosition, Color? pBackgroundColor = null)
+         internal LabeledButtonTextBoxCluster(string pLabelText, string pButtonText, LabelPosition pLabelPosition,
+            Color? pBackgroundColor = null)
             : base(pBackgroundColor) {
 
             mBackgroundColor = pBackgroundColor;
@@ -22,7 +25,6 @@
                ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont],
                BackColor = pBackgroundColor ?? Color.Transparent
             };
-
             mButton = new Button() {
                TabIndex = mTabIndex,
                Name = $"LabeledButtonTextBoxCluster{nameof(mButton)}{mTabIndex++}",
@@ -32,7 +34,6 @@
                Font = CreateNewFont(),
                ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont]
             };
-
             mExampleTextBox = new TextBox() {
                TabIndex = mTabIndex,
                Name = $"LabeledButtonTextBoxCluster{nameof(mExampleTextBox)}{mTabIndex++}",
@@ -43,36 +44,26 @@
                ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont],
                BackColor = pBackgroundColor ?? mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceBackground]
             };
-
-            Controls.Add(mLabel);
-            Controls.Add(mButton);
-            Controls.Add(mExampleTextBox);
+            Controls.AddRange([mLabel, mButton, mExampleTextBox]);
          }
 
-         protected override void LayoutCluster() {
-            // Update theme-dependent properties
-            mLabel.Font = CreateNewFont();
-            mLabel.ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont];
-            mLabel.BackColor = mBackgroundColor ?? Color.Transparent;
-
-            mButton.Font = CreateNewFont();
-            mButton.ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont];
-
-            mExampleTextBox.Font = CreateNewFont(mCurrentTheme.mFonts[(int)FontUsage.Interface]);
-            mExampleTextBox.ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont];
-            mExampleTextBox.BackColor = mBackgroundColor ?? mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
-
-            // 1. Label + button: normal label-position logic
+         internal override void LayoutCluster(Theme pTheme) {
+            SetFontAndColor(pTheme);
             ApplyLabelPosition(mLabel, mButton);
-
-            // 2. Button → TextBox: explicit big gap, one line, fixed orientation
             GlueControlsHorizontally(mButton, mExampleTextBox, mEm);
+         }
 
-            // Compute cluster size
-            int rightmost = Math.Max(mLabel.Right, Math.Max(mButton.Right, mExampleTextBox.Right));
-            int bottommost = Math.Max(mLabel.Bottom, Math.Max(mButton.Bottom, mExampleTextBox.Bottom));
-
-            Size = new Size((rightmost + mEm), (bottommost + mEm));
+         public void SetFontAndColor(Theme pTheme) {
+            Theme.ThemeSimpleThings(pTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
+            mLabel.Font = poFont;
+            mLabel.ForeColor = poForeColor;
+            mLabel.BackColor = poBackColor;
+            mButton.Font = poFont;
+            mButton.ForeColor = poForeColor;
+            mButton.BackColor = poBackColor;
+            mExampleTextBox.Font = poFont;
+            mExampleTextBox.ForeColor = poForeColor;
+            mExampleTextBox.BackColor = poBackColor;
          }
       }
    }

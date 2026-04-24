@@ -1,3 +1,5 @@
+using DBCode.Themes;
+
 namespace DBCode {
    internal static partial class LayoutHelpers {
       internal sealed class LabeledCheckBoxCluster : BaseCluster {
@@ -26,12 +28,23 @@ namespace DBCode {
                TabIndex = mTabIndex,
                Name = $"LabeledCheckBoxClusterCheckBox{mTabIndex++}"
             };
-            Controls.Add(mLabel);
-            Controls.Add(mCheckBox);
+            Controls.AddRange(mLabel, mCheckBox);
             ApplyLabelPosition(mLabel, mCheckBox);
          }
 
-         protected override void LayoutCluster() {
+         internal override void LayoutCluster(Theme pTheme) {
+            SetFontAndColor(pTheme);
+            ApplyLabelPosition(mLabel!, mCheckBox!);
+         }
+
+         public void SetFontAndColor(Theme pTheme) {
+            Theme.ThemeSimpleThings(pTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
+            mLabel!.Font = poFont;
+            mLabel.ForeColor = poForeColor;
+            mLabel.BackColor = poBackColor;
+            mCheckBox!.Font = poFont;
+            mCheckBox.ForeColor = poForeColor;
+            mCheckBox.BackColor = poBackColor;
          }
 
          protected override void Dispose(bool pDisposing) {
