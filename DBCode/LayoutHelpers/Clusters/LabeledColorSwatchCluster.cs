@@ -29,6 +29,8 @@ namespace DBCode {
          internal override void LayoutCluster(Theme pTheme) {
             SetFontAndColor(pTheme);
             LayoutControls();
+            mLabel.Invalidate();
+            mSwatch.Invalidate();
          }
 
          public void SetFontAndColor(Theme pTheme) {

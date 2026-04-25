@@ -41,12 +41,7 @@
 
       private static void ApplyThemeInternal(Control pControl, Theme pTheme) {
          ThemeTag? tag = pControl.Tag as ThemeTag;
-         if (tag == null) {
-            string name = pControl.Name ?? "<no name>";
-            string text = pControl.Text ?? "<no text>";
-            throw new Exception($"Control '{name}' ('{text}') is missing a ThemeTag.");
-         }
-
+         ThrowIfNull(tag, nameof(tag));
          Font font = pTheme.mFonts[(int)tag.mFontUsage];
          Color foreColor = pTheme.mInterfaceColors[(int)tag.mForeColorUsage];
          Color backColor = pTheme.mInterfaceColors[(int)tag.mBackColorUsage];
@@ -82,11 +77,7 @@
 
       private static void ApplyMenuItem(ToolStripMenuItem pItem, Theme pTheme, List<Control>? pExclusions) {
          ThemeTag? tag = pItem.Tag as ThemeTag;
-         if (tag == null) {
-            string name = pItem.Name ?? "<no name>";
-            string text = pItem.Text ?? "<no text>";
-            throw new Exception($"Menu item '{name}' ('{text}') is missing a ThemeTag.");
-         }
+         ThrowIfNull(tag, nameof(tag));
          Font font = pTheme.mFonts[(int)tag.mFontUsage];
          Color foreColor = pTheme.mInterfaceColors[(int)tag.mForeColorUsage];
          Color backColor = pTheme.mInterfaceColors[(int)tag.mBackColorUsage];
@@ -102,11 +93,7 @@
 
       private static void ApplyToolStripItem(ToolStripItem pItem, Theme pTheme) {
          ThemeTag? tag = pItem.Tag as ThemeTag;
-         if (tag == null) {
-            string name = pItem.Name ?? "<no name>";
-            string text = pItem.Text ?? "<no text>";
-            throw new Exception($"ToolStrip item '{name}' ('{text}') is missing a ThemeTag.");
-         }
+         ThrowIfNull(tag, nameof(tag));
          Font font = pTheme.mFonts[(int)tag.mFontUsage];
          Color foreColor = pTheme.mInterfaceColors[(int)tag.mForeColorUsage];
          Color backColor = pTheme.mInterfaceColors[(int)tag.mBackColorUsage];

@@ -103,10 +103,7 @@ namespace DBCode {
       }
 
       private void ReturnToTopTSMI_Click(object? pSender, EventArgs pEventArgs) {
-         if (mReturnToTopTSMI == null) {
-            mReturnToTop = false;
-            return;
-         }
+         ThrowIfNull(mReturnToTopTSMI, nameof(mReturnToTopTSMI));
          mReturnToTop = mReturnToTopTSMI.Checked;
       }
 

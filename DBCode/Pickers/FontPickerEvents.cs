@@ -199,10 +199,16 @@ namespace DBCode {
             FontStyle style = GetFontStyle();
             try {
                Font newFont = new Font(familyName, size, style);
+
                if (mFontUsage != null && mTheme != null) {
                   mTheme.mFonts[(int)mFontUsage] = newFont;
-                  mInitialFont = newFont;
                }
+               if (mWorkingFont!.Equals(mInitialFont))
+                  ThemePanel.mRepaint = false;
+               else
+                  ThemePanel.mRepaint = true;
+               RecalculateAssociatedOffsets(newFont);
+               mThemePanel?.UpdateFontLabels(mFontUsage);
                ThemePanel.RestoreFromFontPickerPanel();
             }
             catch (Exception ex) {

@@ -35,6 +35,8 @@ namespace DBCode {
          internal override void LayoutCluster(Theme pTheme) {
             SetFontAndColor(pTheme);
             ApplyLabelPosition(mLabel as Label, mButton);
+            mLabel.Invalidate();
+            mButton.Invalidate();
          }
 
          public void SetFontAndColor(Theme pTheme) {

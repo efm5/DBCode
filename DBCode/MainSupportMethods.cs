@@ -106,10 +106,7 @@ namespace DBCode {
       }
 
       public static void GetHelp(HelpContext pUIContext, string? pSpecificHREFAnchor = "") {
-         if (pSpecificHREFAnchor == null) {
-            TimedMessage("Trying to get help failed! The string was null not empty.", "HTML Specific HREF Anchor ERROR");
-            return;
-         }
+         ThrowIfNull(pSpecificHREFAnchor, nameof(pSpecificHREFAnchor));
          try {
             string? fullyQualifiedPath = Path.GetDirectoryName(Application.ExecutablePath) ?? string.Empty;
 

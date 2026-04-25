@@ -113,12 +113,12 @@ namespace DBCode {
          return true;
       }
 
-#pragma warning disable IDE0600 // Remove unused parameter - this is a placeholder for future logic that may need the window handle.
+#pragma warning disable IDE0060 // Remove unused parameter - this is a placeholder for future logic that may need the window handle.
       private static bool IsBlacklistedWindow(IntPtr pWindowHandle) {
          //DEBUG efm5 2026 04 5 flesh out this stub
          return false;
       }
-#pragma warning restore IDE0600
+#pragma warning restore IDE0060
       #endregion
    }
 }

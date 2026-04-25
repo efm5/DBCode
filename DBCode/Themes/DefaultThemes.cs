@@ -179,8 +179,7 @@ namespace DBCode.Themes {
       }
 
       // === Syntax Color Helpers ===
-
-      private static void SetLightThemeSyntaxColors(Theme theme) {
+      private static void SetLightThemeSyntaxColors(Theme pTheme) {
          // Default colors for all languages (most tokens are language-agnostic)
          Color defaultText = ColorTranslator.FromHtml("#1E1E1E");     // Black text
          Color keyword = ColorTranslator.FromHtml("#0000FF");         // Blue
@@ -192,39 +191,39 @@ namespace DBCode.Themes {
          Color operatorColor = defaultText;
          Color punctuation = defaultText;
 
-         for (int lang = 0; lang < theme.mHighlightColors.Length; lang++) {
-            theme.mHighlightColors[lang][(int)TokenKind.Unknown] = defaultText;
-            theme.mHighlightColors[lang][(int)TokenKind.Whitespace] = defaultText;
-            theme.mHighlightColors[lang][(int)TokenKind.Identifier] = identifier;
-            theme.mHighlightColors[lang][(int)TokenKind.Keyword] = keyword;
-            theme.mHighlightColors[lang][(int)TokenKind.Number] = number;
-            theme.mHighlightColors[lang][(int)TokenKind.StringLiteral] = stringLiteral;
-            theme.mHighlightColors[lang][(int)TokenKind.CharLiteral] = stringLiteral;
-            theme.mHighlightColors[lang][(int)TokenKind.Comment] = comment;
-            theme.mHighlightColors[lang][(int)TokenKind.PreprocessorDirective] = preprocessor;
-            theme.mHighlightColors[lang][(int)TokenKind.Operator] = operatorColor;
-            theme.mHighlightColors[lang][(int)TokenKind.Punctuation] = punctuation;
+         for (int lang = 0; lang < pTheme.mHighlightColors.Length; lang++) {
+            pTheme.mHighlightColors[lang][(int)TokenKind.Unknown] = defaultText;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Whitespace] = defaultText;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Identifier] = identifier;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Keyword] = keyword;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Number] = number;
+            pTheme.mHighlightColors[lang][(int)TokenKind.StringLiteral] = stringLiteral;
+            pTheme.mHighlightColors[lang][(int)TokenKind.CharLiteral] = stringLiteral;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Comment] = comment;
+            pTheme.mHighlightColors[lang][(int)TokenKind.PreprocessorDirective] = preprocessor;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Operator] = operatorColor;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Punctuation] = punctuation;
          }
 
          // Language-specific overrides
          // HTML/XML: tags and attributes
-         theme.mHighlightColors[(int)LanguageKind.Html][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#800000"); // Maroon for tags
-         theme.mHighlightColors[(int)LanguageKind.Xml][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#800000");
+         pTheme.mHighlightColors[(int)LanguageKind.Html][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#800000"); // Maroon for tags
+         pTheme.mHighlightColors[(int)LanguageKind.Xml][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#800000");
 
          // CSS: properties and selectors
-         theme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#800000");
-         theme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Identifier] = ColorTranslator.FromHtml("#FF0000"); // Red for selectors
+         pTheme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#800000");
+         pTheme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Identifier] = ColorTranslator.FromHtml("#FF0000"); // Red for selectors
 
          // Markdown: keep simple
-         theme.mHighlightColors[(int)LanguageKind.Markdown][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#0000FF");
+         pTheme.mHighlightColors[(int)LanguageKind.Markdown][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#0000FF");
 
          // PlainText: all default text
-         for (int token = 0; token < theme.mHighlightColors[(int)LanguageKind.PlainText].Length; token++) {
-            theme.mHighlightColors[(int)LanguageKind.PlainText][token] = defaultText;
+         for (int token = 0; token < pTheme.mHighlightColors[(int)LanguageKind.PlainText].Length; token++) {
+            pTheme.mHighlightColors[(int)LanguageKind.PlainText][token] = defaultText;
          }
       }
 
-      private static void SetDarkThemeSyntaxColors(Theme theme) {
+      private static void SetDarkThemeSyntaxColors(Theme pTheme) {
          // Default colors for all languages
          Color defaultText = ColorTranslator.FromHtml("#D4D4D4");     // Light gray text
          Color keyword = ColorTranslator.FromHtml("#569CD6");         // Light blue
@@ -236,35 +235,35 @@ namespace DBCode.Themes {
          Color operatorColor = defaultText;
          Color punctuation = defaultText;
 
-         for (int lang = 0; lang < theme.mHighlightColors.Length; lang++) {
-            theme.mHighlightColors[lang][(int)TokenKind.Unknown] = defaultText;
-            theme.mHighlightColors[lang][(int)TokenKind.Whitespace] = defaultText;
-            theme.mHighlightColors[lang][(int)TokenKind.Identifier] = identifier;
-            theme.mHighlightColors[lang][(int)TokenKind.Keyword] = keyword;
-            theme.mHighlightColors[lang][(int)TokenKind.Number] = number;
-            theme.mHighlightColors[lang][(int)TokenKind.StringLiteral] = stringLiteral;
-            theme.mHighlightColors[lang][(int)TokenKind.CharLiteral] = stringLiteral;
-            theme.mHighlightColors[lang][(int)TokenKind.Comment] = comment;
-            theme.mHighlightColors[lang][(int)TokenKind.PreprocessorDirective] = preprocessor;
-            theme.mHighlightColors[lang][(int)TokenKind.Operator] = operatorColor;
-            theme.mHighlightColors[lang][(int)TokenKind.Punctuation] = punctuation;
+         for (int lang = 0; lang < pTheme.mHighlightColors.Length; lang++) {
+            pTheme.mHighlightColors[lang][(int)TokenKind.Unknown] = defaultText;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Whitespace] = defaultText;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Identifier] = identifier;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Keyword] = keyword;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Number] = number;
+            pTheme.mHighlightColors[lang][(int)TokenKind.StringLiteral] = stringLiteral;
+            pTheme.mHighlightColors[lang][(int)TokenKind.CharLiteral] = stringLiteral;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Comment] = comment;
+            pTheme.mHighlightColors[lang][(int)TokenKind.PreprocessorDirective] = preprocessor;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Operator] = operatorColor;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Punctuation] = punctuation;
          }
 
          // Language-specific overrides
-         theme.mHighlightColors[(int)LanguageKind.Html][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#808080"); // Gray-blue for tags
-         theme.mHighlightColors[(int)LanguageKind.Xml][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#808080");
+         pTheme.mHighlightColors[(int)LanguageKind.Html][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#808080"); // Gray-blue for tags
+         pTheme.mHighlightColors[(int)LanguageKind.Xml][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#808080");
 
-         theme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#D7BA7D"); // Gold
-         theme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Identifier] = ColorTranslator.FromHtml("#D16969"); // Light red
+         pTheme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#D7BA7D"); // Gold
+         pTheme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Identifier] = ColorTranslator.FromHtml("#D16969"); // Light red
 
-         theme.mHighlightColors[(int)LanguageKind.Markdown][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#569CD6");
+         pTheme.mHighlightColors[(int)LanguageKind.Markdown][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#569CD6");
 
-         for (int token = 0; token < theme.mHighlightColors[(int)LanguageKind.PlainText].Length; token++) {
-            theme.mHighlightColors[(int)LanguageKind.PlainText][token] = defaultText;
+         for (int token = 0; token < pTheme.mHighlightColors[(int)LanguageKind.PlainText].Length; token++) {
+            pTheme.mHighlightColors[(int)LanguageKind.PlainText][token] = defaultText;
          }
       }
 
-      private static void SetClassicThemeSyntaxColors(Theme theme) {
+      private static void SetClassicThemeSyntaxColors(Theme pTheme) {
          // Classic Visual Studio 6.0 style colors
          Color defaultText = Color.Black;
          Color keyword = Color.Blue;
@@ -276,32 +275,32 @@ namespace DBCode.Themes {
          Color operatorColor = defaultText;
          Color punctuation = defaultText;
 
-         for (int lang = 0; lang < theme.mHighlightColors.Length; lang++) {
-            theme.mHighlightColors[lang][(int)TokenKind.Unknown] = defaultText;
-            theme.mHighlightColors[lang][(int)TokenKind.Whitespace] = defaultText;
-            theme.mHighlightColors[lang][(int)TokenKind.Identifier] = identifier;
-            theme.mHighlightColors[lang][(int)TokenKind.Keyword] = keyword;
-            theme.mHighlightColors[lang][(int)TokenKind.Number] = number;
-            theme.mHighlightColors[lang][(int)TokenKind.StringLiteral] = stringLiteral;
-            theme.mHighlightColors[lang][(int)TokenKind.CharLiteral] = stringLiteral;
-            theme.mHighlightColors[lang][(int)TokenKind.Comment] = comment;
-            theme.mHighlightColors[lang][(int)TokenKind.PreprocessorDirective] = preprocessor;
-            theme.mHighlightColors[lang][(int)TokenKind.Operator] = operatorColor;
-            theme.mHighlightColors[lang][(int)TokenKind.Punctuation] = punctuation;
+         for (int lang = 0; lang < pTheme.mHighlightColors.Length; lang++) {
+            pTheme.mHighlightColors[lang][(int)TokenKind.Unknown] = defaultText;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Whitespace] = defaultText;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Identifier] = identifier;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Keyword] = keyword;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Number] = number;
+            pTheme.mHighlightColors[lang][(int)TokenKind.StringLiteral] = stringLiteral;
+            pTheme.mHighlightColors[lang][(int)TokenKind.CharLiteral] = stringLiteral;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Comment] = comment;
+            pTheme.mHighlightColors[lang][(int)TokenKind.PreprocessorDirective] = preprocessor;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Operator] = operatorColor;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Punctuation] = punctuation;
          }
 
-         theme.mHighlightColors[(int)LanguageKind.Html][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#800000");
-         theme.mHighlightColors[(int)LanguageKind.Xml][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#800000");
+         pTheme.mHighlightColors[(int)LanguageKind.Html][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#800000");
+         pTheme.mHighlightColors[(int)LanguageKind.Xml][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#800000");
 
-         theme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#800000");
-         theme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Identifier] = ColorTranslator.FromHtml("#FF0000");
+         pTheme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#800000");
+         pTheme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Identifier] = ColorTranslator.FromHtml("#FF0000");
 
-         for (int token = 0; token < theme.mHighlightColors[(int)LanguageKind.PlainText].Length; token++) {
-            theme.mHighlightColors[(int)LanguageKind.PlainText][token] = defaultText;
+         for (int token = 0; token < pTheme.mHighlightColors[(int)LanguageKind.PlainText].Length; token++) {
+            pTheme.mHighlightColors[(int)LanguageKind.PlainText][token] = defaultText;
          }
       }
 
-      private static void SetHighContrastLightSyntaxColors(Theme theme) {
+      private static void SetHighContrastLightSyntaxColors(Theme pTheme) {
          // High contrast with bold primary colors
          Color defaultText = Color.Black;
          Color keyword = Color.Blue;
@@ -313,32 +312,32 @@ namespace DBCode.Themes {
          Color operatorColor = defaultText;
          Color punctuation = defaultText;
 
-         for (int lang = 0; lang < theme.mHighlightColors.Length; lang++) {
-            theme.mHighlightColors[lang][(int)TokenKind.Unknown] = defaultText;
-            theme.mHighlightColors[lang][(int)TokenKind.Whitespace] = defaultText;
-            theme.mHighlightColors[lang][(int)TokenKind.Identifier] = identifier;
-            theme.mHighlightColors[lang][(int)TokenKind.Keyword] = keyword;
-            theme.mHighlightColors[lang][(int)TokenKind.Number] = number;
-            theme.mHighlightColors[lang][(int)TokenKind.StringLiteral] = stringLiteral;
-            theme.mHighlightColors[lang][(int)TokenKind.CharLiteral] = stringLiteral;
-            theme.mHighlightColors[lang][(int)TokenKind.Comment] = comment;
-            theme.mHighlightColors[lang][(int)TokenKind.PreprocessorDirective] = preprocessor;
-            theme.mHighlightColors[lang][(int)TokenKind.Operator] = operatorColor;
-            theme.mHighlightColors[lang][(int)TokenKind.Punctuation] = punctuation;
+         for (int lang = 0; lang < pTheme.mHighlightColors.Length; lang++) {
+            pTheme.mHighlightColors[lang][(int)TokenKind.Unknown] = defaultText;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Whitespace] = defaultText;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Identifier] = identifier;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Keyword] = keyword;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Number] = number;
+            pTheme.mHighlightColors[lang][(int)TokenKind.StringLiteral] = stringLiteral;
+            pTheme.mHighlightColors[lang][(int)TokenKind.CharLiteral] = stringLiteral;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Comment] = comment;
+            pTheme.mHighlightColors[lang][(int)TokenKind.PreprocessorDirective] = preprocessor;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Operator] = operatorColor;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Punctuation] = punctuation;
          }
 
-         theme.mHighlightColors[(int)LanguageKind.Html][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#800000");
-         theme.mHighlightColors[(int)LanguageKind.Xml][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#800000");
+         pTheme.mHighlightColors[(int)LanguageKind.Html][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#800000");
+         pTheme.mHighlightColors[(int)LanguageKind.Xml][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#800000");
 
-         theme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#800000");
-         theme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Identifier] = ColorTranslator.FromHtml("#C00000");
+         pTheme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#800000");
+         pTheme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Identifier] = ColorTranslator.FromHtml("#C00000");
 
-         for (int token = 0; token < theme.mHighlightColors[(int)LanguageKind.PlainText].Length; token++) {
-            theme.mHighlightColors[(int)LanguageKind.PlainText][token] = defaultText;
+         for (int token = 0; token < pTheme.mHighlightColors[(int)LanguageKind.PlainText].Length; token++) {
+            pTheme.mHighlightColors[(int)LanguageKind.PlainText][token] = defaultText;
          }
       }
 
-      private static void SetHighContrastDarkSyntaxColors(Theme theme) {
+      private static void SetHighContrastDarkSyntaxColors(Theme pTheme) {
          // High contrast dark with vivid colors
          Color defaultText = Color.White;
          Color keyword = ColorTranslator.FromHtml("#569CD6");         // Bright blue
@@ -350,32 +349,32 @@ namespace DBCode.Themes {
          Color operatorColor = defaultText;
          Color punctuation = defaultText;
 
-         for (int lang = 0; lang < theme.mHighlightColors.Length; lang++) {
-            theme.mHighlightColors[lang][(int)TokenKind.Unknown] = defaultText;
-            theme.mHighlightColors[lang][(int)TokenKind.Whitespace] = defaultText;
-            theme.mHighlightColors[lang][(int)TokenKind.Identifier] = identifier;
-            theme.mHighlightColors[lang][(int)TokenKind.Keyword] = keyword;
-            theme.mHighlightColors[lang][(int)TokenKind.Number] = number;
-            theme.mHighlightColors[lang][(int)TokenKind.StringLiteral] = stringLiteral;
-            theme.mHighlightColors[lang][(int)TokenKind.CharLiteral] = stringLiteral;
-            theme.mHighlightColors[lang][(int)TokenKind.Comment] = comment;
-            theme.mHighlightColors[lang][(int)TokenKind.PreprocessorDirective] = preprocessor;
-            theme.mHighlightColors[lang][(int)TokenKind.Operator] = operatorColor;
-            theme.mHighlightColors[lang][(int)TokenKind.Punctuation] = punctuation;
+         for (int lang = 0; lang < pTheme.mHighlightColors.Length; lang++) {
+            pTheme.mHighlightColors[lang][(int)TokenKind.Unknown] = defaultText;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Whitespace] = defaultText;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Identifier] = identifier;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Keyword] = keyword;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Number] = number;
+            pTheme.mHighlightColors[lang][(int)TokenKind.StringLiteral] = stringLiteral;
+            pTheme.mHighlightColors[lang][(int)TokenKind.CharLiteral] = stringLiteral;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Comment] = comment;
+            pTheme.mHighlightColors[lang][(int)TokenKind.PreprocessorDirective] = preprocessor;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Operator] = operatorColor;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Punctuation] = punctuation;
          }
 
-         theme.mHighlightColors[(int)LanguageKind.Html][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#4EC9B0"); // Cyan
-         theme.mHighlightColors[(int)LanguageKind.Xml][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#4EC9B0");
+         pTheme.mHighlightColors[(int)LanguageKind.Html][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#4EC9B0"); // Cyan
+         pTheme.mHighlightColors[(int)LanguageKind.Xml][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#4EC9B0");
 
-         theme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#D7BA7D"); // Gold
-         theme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Identifier] = ColorTranslator.FromHtml("#D16969"); // Light red
+         pTheme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#D7BA7D"); // Gold
+         pTheme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Identifier] = ColorTranslator.FromHtml("#D16969"); // Light red
 
-         for (int token = 0; token < theme.mHighlightColors[(int)LanguageKind.PlainText].Length; token++) {
-            theme.mHighlightColors[(int)LanguageKind.PlainText][token] = defaultText;
+         for (int token = 0; token < pTheme.mHighlightColors[(int)LanguageKind.PlainText].Length; token++) {
+            pTheme.mHighlightColors[(int)LanguageKind.PlainText][token] = defaultText;
          }
       }
 
-      private static void SetPastelThemeSyntaxColors(Theme theme) {
+      private static void SetPastelThemeSyntaxColors(Theme pTheme) {
          // Soft, gentle pastel colors for syntax
          Color defaultText = ColorTranslator.FromHtml("#3A3A3A");     // Charcoal
          Color keyword = ColorTranslator.FromHtml("#7B68A6");         // Muted purple
@@ -387,35 +386,35 @@ namespace DBCode.Themes {
          Color operatorColor = ColorTranslator.FromHtml("#6A6A6A");   // Dark gray
          Color punctuation = ColorTranslator.FromHtml("#6A6A6A");
 
-         for (int lang = 0; lang < theme.mHighlightColors.Length; lang++) {
-            theme.mHighlightColors[lang][(int)TokenKind.Unknown] = defaultText;
-            theme.mHighlightColors[lang][(int)TokenKind.Whitespace] = defaultText;
-            theme.mHighlightColors[lang][(int)TokenKind.Identifier] = identifier;
-            theme.mHighlightColors[lang][(int)TokenKind.Keyword] = keyword;
-            theme.mHighlightColors[lang][(int)TokenKind.Number] = number;
-            theme.mHighlightColors[lang][(int)TokenKind.StringLiteral] = stringLiteral;
-            theme.mHighlightColors[lang][(int)TokenKind.CharLiteral] = stringLiteral;
-            theme.mHighlightColors[lang][(int)TokenKind.Comment] = comment;
-            theme.mHighlightColors[lang][(int)TokenKind.PreprocessorDirective] = preprocessor;
-            theme.mHighlightColors[lang][(int)TokenKind.Operator] = operatorColor;
-            theme.mHighlightColors[lang][(int)TokenKind.Punctuation] = punctuation;
+         for (int lang = 0; lang < pTheme.mHighlightColors.Length; lang++) {
+            pTheme.mHighlightColors[lang][(int)TokenKind.Unknown] = defaultText;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Whitespace] = defaultText;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Identifier] = identifier;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Keyword] = keyword;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Number] = number;
+            pTheme.mHighlightColors[lang][(int)TokenKind.StringLiteral] = stringLiteral;
+            pTheme.mHighlightColors[lang][(int)TokenKind.CharLiteral] = stringLiteral;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Comment] = comment;
+            pTheme.mHighlightColors[lang][(int)TokenKind.PreprocessorDirective] = preprocessor;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Operator] = operatorColor;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Punctuation] = punctuation;
          }
 
          // Language-specific pastel variations
-         theme.mHighlightColors[(int)LanguageKind.Html][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#A88D8D"); // Dusty mauve
-         theme.mHighlightColors[(int)LanguageKind.Xml][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#A88D8D");
+         pTheme.mHighlightColors[(int)LanguageKind.Html][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#A88D8D"); // Dusty mauve
+         pTheme.mHighlightColors[(int)LanguageKind.Xml][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#A88D8D");
 
-         theme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#B8A67D"); // Tan
-         theme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Identifier] = ColorTranslator.FromHtml("#C18686"); // Dusty rose
+         pTheme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#B8A67D"); // Tan
+         pTheme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Identifier] = ColorTranslator.FromHtml("#C18686"); // Dusty rose
 
-         theme.mHighlightColors[(int)LanguageKind.Markdown][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#7B68A6"); // Muted purple
+         pTheme.mHighlightColors[(int)LanguageKind.Markdown][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#7B68A6"); // Muted purple
 
-         for (int token = 0; token < theme.mHighlightColors[(int)LanguageKind.PlainText].Length; token++) {
-            theme.mHighlightColors[(int)LanguageKind.PlainText][token] = defaultText;
+         for (int token = 0; token < pTheme.mHighlightColors[(int)LanguageKind.PlainText].Length; token++) {
+            pTheme.mHighlightColors[(int)LanguageKind.PlainText][token] = defaultText;
          }
       }
 
-      private static void SetDarkPastelThemeSyntaxColors(Theme theme) {
+      private static void SetDarkPastelThemeSyntaxColors(Theme pTheme) {
          // Soft, muted dark pastel colors - gentle on the eyes
          Color defaultText = ColorTranslator.FromHtml("#C9BDD8");     // Soft lavender
          Color keyword = ColorTranslator.FromHtml("#B19CD9");         // Pastel purple
@@ -427,31 +426,31 @@ namespace DBCode.Themes {
          Color operatorColor = ColorTranslator.FromHtml("#A8A8B8");   // Light gray
          Color punctuation = ColorTranslator.FromHtml("#A8A8B8");
 
-         for (int lang = 0; lang < theme.mHighlightColors.Length; lang++) {
-            theme.mHighlightColors[lang][(int)TokenKind.Unknown] = defaultText;
-            theme.mHighlightColors[lang][(int)TokenKind.Whitespace] = defaultText;
-            theme.mHighlightColors[lang][(int)TokenKind.Identifier] = identifier;
-            theme.mHighlightColors[lang][(int)TokenKind.Keyword] = keyword;
-            theme.mHighlightColors[lang][(int)TokenKind.Number] = number;
-            theme.mHighlightColors[lang][(int)TokenKind.StringLiteral] = stringLiteral;
-            theme.mHighlightColors[lang][(int)TokenKind.CharLiteral] = stringLiteral;
-            theme.mHighlightColors[lang][(int)TokenKind.Comment] = comment;
-            theme.mHighlightColors[lang][(int)TokenKind.PreprocessorDirective] = preprocessor;
-            theme.mHighlightColors[lang][(int)TokenKind.Operator] = operatorColor;
-            theme.mHighlightColors[lang][(int)TokenKind.Punctuation] = punctuation;
+         for (int lang = 0; lang < pTheme.mHighlightColors.Length; lang++) {
+            pTheme.mHighlightColors[lang][(int)TokenKind.Unknown] = defaultText;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Whitespace] = defaultText;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Identifier] = identifier;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Keyword] = keyword;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Number] = number;
+            pTheme.mHighlightColors[lang][(int)TokenKind.StringLiteral] = stringLiteral;
+            pTheme.mHighlightColors[lang][(int)TokenKind.CharLiteral] = stringLiteral;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Comment] = comment;
+            pTheme.mHighlightColors[lang][(int)TokenKind.PreprocessorDirective] = preprocessor;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Operator] = operatorColor;
+            pTheme.mHighlightColors[lang][(int)TokenKind.Punctuation] = punctuation;
          }
 
          // Language-specific dark pastel variations
-         theme.mHighlightColors[(int)LanguageKind.Html][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#C4A4A4"); // Soft mauve
-         theme.mHighlightColors[(int)LanguageKind.Xml][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#C4A4A4");
+         pTheme.mHighlightColors[(int)LanguageKind.Html][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#C4A4A4"); // Soft mauve
+         pTheme.mHighlightColors[(int)LanguageKind.Xml][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#C4A4A4");
 
-         theme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#C9B896"); // Soft tan
-         theme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Identifier] = ColorTranslator.FromHtml("#D4A5A5"); // Dusty pink
+         pTheme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#C9B896"); // Soft tan
+         pTheme.mHighlightColors[(int)LanguageKind.Css][(int)TokenKind.Identifier] = ColorTranslator.FromHtml("#D4A5A5"); // Dusty pink
 
-         theme.mHighlightColors[(int)LanguageKind.Markdown][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#B19CD9"); // Pastel purple
+         pTheme.mHighlightColors[(int)LanguageKind.Markdown][(int)TokenKind.Keyword] = ColorTranslator.FromHtml("#B19CD9"); // Pastel purple
 
-         for (int token = 0; token < theme.mHighlightColors[(int)LanguageKind.PlainText].Length; token++) {
-            theme.mHighlightColors[(int)LanguageKind.PlainText][token] = defaultText;
+         for (int token = 0; token < pTheme.mHighlightColors[(int)LanguageKind.PlainText].Length; token++) {
+            pTheme.mHighlightColors[(int)LanguageKind.PlainText][token] = defaultText;
          }
       }
    }

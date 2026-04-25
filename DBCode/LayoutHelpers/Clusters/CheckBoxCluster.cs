@@ -24,6 +24,7 @@ namespace DBCode {
          internal override void LayoutCluster(Theme pTheme) {
             SetFontAndColor(pTheme);
             mCheckBox.Location = new Point(0, 0);
+            mCheckBox.Invalidate();
          }
 
          public void SetFontAndColor(Theme pTheme) {

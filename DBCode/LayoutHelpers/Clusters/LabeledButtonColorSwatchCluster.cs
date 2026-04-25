@@ -62,6 +62,9 @@ namespace DBCode {
             SetFontAndColor(pTheme);
             ApplyLabelPosition(mLabel, mButton);
             GlueControlsHorizontally(mButton, mSwatch, mEm);
+            mLabel.Invalidate();
+            mButton.Invalidate();
+            mSwatch.Invalidate();
          }
 
          private void LayoutControls() {

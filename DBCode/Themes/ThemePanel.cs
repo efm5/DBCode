@@ -9,11 +9,14 @@ namespace DBCode {
             mHTMLcolorClusters = [], mCSScolorClusters = [], mXMLcolorClusters = [], mJSONcolorClusters = [],
             mPowerShellcolorClusters = [], mBatchcolorClusters = [], mSQLcolorClusters = [],
             mMarkdowncolorClusters = [], mPythoncolorClusters = [];
+         private readonly List<List<BaseCluster>> mAllClusters = [];
+         public static bool mRepaint = false;
          private readonly Button mApplyButton, mCancelButton, mCloneButton, mHelpButton, mNewButton, mOkButton;
          private ClusterContainer mFontsContainer, mInterfaceColorsContainer, mCSharpColorsContainer, mCColorsContainer,
             mCppColorsContainer, mBasicColorsContainer, mFSharpColorsContainer, mHTMLColorsContainer,
             mCSSColorsContainer, mXMLColorsContainer, mJSONColorsContainer, mPowerShellColorsContainer,
             mBatchColorsContainer, mSQLColorsContainer, mMarkdownColorsContainer, mPythonColorsContainer;
+         private readonly List<ClusterContainer> mClusterContainers = [];
          private readonly HeaderLabelCluster mFontsHeaderCluster, mColorsHeaderCluster, mInterfaceHeaderCluster,
             mThemesHeaderCluster, mCSharpHeaderCluster, mCHeaderCluster, mCppHeaderCluster, mBasicHeaderCluster,
             mFSharpHeaderCluster, mHTMLHeaderCluster, mCSSHeaderCluster, mXMLHeaderCluster, mJSONHeaderCluster,
@@ -30,7 +33,7 @@ namespace DBCode {
            mHighlightHTMLScrollPanel, mHighlightCSSScrollPanel, mHighlightXMLScrollPanel, mHighlightJSONScrollPanel,
            mHighlightPowerShellScrollPanel, mHighlightBatchScrollPanel, mHighlightSQLScrollPanel,
            mHighlightMarkdownScrollPanel, mHighlightPythonScrollPanel;
-         private Size mCachedPreferredSize;
+         private readonly List<Panel> mAllScrollPanels = [];
          private Theme mTemporaryTheme;
 
          public ThemePanel(ThemeUsage pThemeUsage, UiState pUiState) {
@@ -91,10 +94,6 @@ namespace DBCode {
             mHighlightTabControl.SelectedIndex = mUiState.mThemeHighlightTabPageIndex;
             mPrimaryTabControl.SelectedIndexChanged += PrimaryTabControl_SelectedIndexChanged;
             mHighlightTabControl.SelectedIndexChanged += HighlightTabControl_SelectedIndexChanged;
-            mPrimaryTabControl.ResetStripBackgroundPainted();
-            mHighlightTabControl.ResetStripBackgroundPainted();
-            mPrimaryTabControl.SetStripBackColor(mTemporaryTheme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground]);
-            mHighlightTabControl.SetStripBackColor(mTemporaryTheme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground]);
             mStatusStrip.SizingGrip = true;
             mStatusStrip.Dock = DockStyle.Bottom;
             mSpringLabel = new ToolStripStatusLabel {
@@ -113,11 +112,14 @@ namespace DBCode {
             mOkButton.Click += OkButton_Click;
             mNewButton.Click += NewButton_Click;
             mCloneButton.Click += CloneButton_Click;
-            Controls.AddRange(mPrimaryTabControl, mStatusStrip, mThemesHeaderCluster);
-            AddFontCluster(mFontsClusters, "The Interface Font:", "Interface", FontUsage.Interface, LabelPosition.Left);
-            AddFontCluster(mFontsClusters, "The Menu Font:", "Menu", FontUsage.Menu, LabelPosition.Left);
-            AddFontCluster(mFontsClusters, "The Status Strip Font:", "Status Strip", FontUsage.Status, LabelPosition.Left);
-            AddFontCluster(mFontsClusters, "The Textbox Font:", "Text Box", FontUsage.Text, LabelPosition.Left);
+            string font = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Interface].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Interface].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Interface].Style}";
+            AddFontCluster(mFontsClusters, $"The Interface Font: {font}", "Interface", FontUsage.Interface, LabelPosition.Right);
+            font = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Menu].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Menu].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Menu].Style}";
+            AddFontCluster(mFontsClusters, $"The Menu Font: {font}", "Menu", FontUsage.Menu, LabelPosition.Right);
+            font = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Status].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Status].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Status].Style}";
+            AddFontCluster(mFontsClusters, $"The Status Strip Font: {font}", "Status Strip", FontUsage.Status, LabelPosition.Right);
+            font = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Text].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Text].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Text].Style}";
+            AddFontCluster(mFontsClusters, $"The Textbox Font: {font}", "Text Box", FontUsage.Text, LabelPosition.Right);
             mPrimaryScrollPanel = new Panel {
                Name = $"PrimaryTabControlTabPageScrollPanel{mTabIndex}",
                TabIndex = mTabIndex++,
@@ -125,11 +127,11 @@ namespace DBCode {
                AutoScroll = true
             };
             mFontsContainer = new ClusterContainer(mFontsClusters, ClusterLayoutMode.FixedRows, 0, 0, 0, 4) {
-               Dock = DockStyle.Fill,
                Name = "InterfaceColorsClusterContainer",
-               AutoScroll = true
+               Tag = FontUsage.Interface
             };
             mPrimaryScrollPanel.Controls.AddRange(mFontsHeaderCluster, mFontsContainer);
+            mPrimaryTabControl.TabPages[(int)PrimaryTabPageUsage.Interface].Controls.Add(mPrimaryScrollPanel);
             mHighlightInterfaceScrollPanel = new Panel {
                Name = $"InterfaceColorsTabPagesScrollPanel{mTabIndex}",
                TabIndex = mTabIndex++,
@@ -152,9 +154,8 @@ namespace DBCode {
             AddColorCluster(mInterfaceColorClusters, "Tab Header Unselected Background", ColorSwatchUsage.TabHeaderUnselectedBackground);
             AddColorCluster(mInterfaceColorClusters, "Tab Header Selected Background", ColorSwatchUsage.TabHeaderSelectedBackground);
             mInterfaceColorsContainer = new ClusterContainer(mInterfaceColorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Dock = DockStyle.Fill,
                Name = "InterfaceColorsClusterContainer",
-               AutoScroll = true
+               Tag = ColorUsage.Unknown
             };
             mHighlightInterfaceScrollPanel.Controls.AddRange(mInterfaceHeaderCluster, mInterfaceColorsContainer);
             mHighlightCSharpScrollPanel = new Panel {
@@ -175,9 +176,8 @@ namespace DBCode {
             AddColorCluster(mCSharpcolorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mCSharpcolorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mCSharpColorsContainer = new ClusterContainer(mCSharpcolorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Dock = DockStyle.Fill,
                Name = "CSharpColorsClusterContainer",
-               AutoScroll = true
+               Tag = ColorUsage.Unknown
             };
             mHighlightCSharpScrollPanel.Controls.AddRange(mCSharpHeaderCluster, mCSharpColorsContainer);
 
@@ -199,9 +199,8 @@ namespace DBCode {
             AddColorCluster(mCcolorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mCcolorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mCColorsContainer = new ClusterContainer(mCcolorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Dock = DockStyle.Fill,
                Name = "CColorsClusterContainer",
-               AutoScroll = true
+               Tag = ColorUsage.Unknown
             };
             mHighlightCScrollPanel.Controls.AddRange(mCHeaderCluster, mCColorsContainer);
 
@@ -223,9 +222,8 @@ namespace DBCode {
             AddColorCluster(mCppcolorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mCppcolorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mCppColorsContainer = new ClusterContainer(mCppcolorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Dock = DockStyle.Fill,
                Name = "CppColorsClusterContainer",
-               AutoScroll = true
+               Tag = ColorUsage.Unknown
             };
             mHighlightCppScrollPanel.Controls.AddRange(mCppHeaderCluster, mCppColorsContainer);
 
@@ -247,9 +245,8 @@ namespace DBCode {
             AddColorCluster(mBasiccolorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mBasiccolorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mBasicColorsContainer = new ClusterContainer(mBasiccolorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Dock = DockStyle.Fill,
                Name = "BasicColorsClusterContainer",
-               AutoScroll = true
+               Tag = ColorUsage.Unknown
             };
             mHighlightBasicScrollPanel.Controls.AddRange(mBasicHeaderCluster, mBasicColorsContainer);
 
@@ -271,9 +268,8 @@ namespace DBCode {
             AddColorCluster(mFSharpcolorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mFSharpcolorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mFSharpColorsContainer = new ClusterContainer(mFSharpcolorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Dock = DockStyle.Fill,
                Name = "FSharpColorsClusterContainer",
-               AutoScroll = true
+               Tag = ColorUsage.Unknown
             };
             mHighlightFSharpScrollPanel.Controls.AddRange(mFSharpHeaderCluster, mFSharpColorsContainer);
 
@@ -295,9 +291,8 @@ namespace DBCode {
             AddColorCluster(mHTMLcolorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mHTMLcolorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mHTMLColorsContainer = new ClusterContainer(mHTMLcolorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Dock = DockStyle.Fill,
                Name = "HTMLColorsClusterContainer",
-               AutoScroll = true
+               Tag = ColorUsage.Unknown
             };
             mHighlightHTMLScrollPanel.Controls.AddRange(mHTMLHeaderCluster, mHTMLColorsContainer);
 
@@ -319,9 +314,8 @@ namespace DBCode {
             AddColorCluster(mCSScolorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mCSScolorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mCSSColorsContainer = new ClusterContainer(mCSScolorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Dock = DockStyle.Fill,
                Name = "CSSColorsClusterContainer",
-               AutoScroll = true
+               Tag = ColorUsage.Unknown
             };
             mHighlightCSSScrollPanel.Controls.AddRange(mCSSHeaderCluster, mCSSColorsContainer);
 
@@ -343,9 +337,8 @@ namespace DBCode {
             AddColorCluster(mXMLcolorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mXMLcolorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mXMLColorsContainer = new ClusterContainer(mXMLcolorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Dock = DockStyle.Fill,
                Name = "XMLColorsClusterContainer",
-               AutoScroll = true
+               Tag = ColorUsage.Unknown
             };
             mHighlightXMLScrollPanel.Controls.AddRange(mXMLHeaderCluster, mXMLColorsContainer);
 
@@ -367,9 +360,8 @@ namespace DBCode {
             AddColorCluster(mJSONcolorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mJSONcolorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mJSONColorsContainer = new ClusterContainer(mJSONcolorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Dock = DockStyle.Fill,
                Name = "JSONColorsClusterContainer",
-               AutoScroll = true
+               Tag = ColorUsage.Unknown
             };
             mHighlightJSONScrollPanel.Controls.AddRange(mJSONHeaderCluster, mJSONColorsContainer);
 
@@ -391,9 +383,8 @@ namespace DBCode {
             AddColorCluster(mPowerShellcolorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mPowerShellcolorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mPowerShellColorsContainer = new ClusterContainer(mPowerShellcolorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Dock = DockStyle.Fill,
                Name = "PowerShellColorsClusterContainer",
-               AutoScroll = true
+               Tag = ColorUsage.Unknown
             };
             mHighlightPowerShellScrollPanel.Controls.AddRange(mPowerShellHeaderCluster, mPowerShellColorsContainer);
 
@@ -415,9 +406,8 @@ namespace DBCode {
             AddColorCluster(mBatchcolorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mBatchcolorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mBatchColorsContainer = new ClusterContainer(mBatchcolorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Dock = DockStyle.Fill,
                Name = "BatchColorsClusterContainer",
-               AutoScroll = true
+               Tag = ColorUsage.Unknown
             };
             mHighlightBatchScrollPanel.Controls.AddRange(mBatchHeaderCluster, mBatchColorsContainer);
 
@@ -439,9 +429,8 @@ namespace DBCode {
             AddColorCluster(mSQLcolorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mSQLcolorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mSQLColorsContainer = new ClusterContainer(mSQLcolorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Dock = DockStyle.Fill,
                Name = "SQLColorsClusterContainer",
-               AutoScroll = true
+               Tag = ColorUsage.Unknown
             };
             mHighlightSQLScrollPanel.Controls.AddRange(mSQLHeaderCluster, mSQLColorsContainer);
 
@@ -463,12 +452,10 @@ namespace DBCode {
             AddColorCluster(mMarkdowncolorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mMarkdowncolorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mMarkdownColorsContainer = new ClusterContainer(mMarkdowncolorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Dock = DockStyle.Fill,
                Name = "MarkdownColorsClusterContainer",
-               AutoScroll = true
+               Tag = ColorUsage.Unknown
             };
             mHighlightMarkdownScrollPanel.Controls.AddRange(mMarkdownHeaderCluster, mMarkdownColorsContainer);
-
             mHighlightPythonScrollPanel = new Panel {
                Name = $"PythonColorsTabPagesScrollPanel{mTabIndex}",
                TabIndex = mTabIndex++,
@@ -487,42 +474,74 @@ namespace DBCode {
             AddColorCluster(mPythoncolorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mPythoncolorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mPythonColorsContainer = new ClusterContainer(mPythoncolorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Dock = DockStyle.Fill,
                Name = "PythonColorsClusterContainer",
-               AutoScroll = true
+               Tag = ColorUsage.Unknown
             };
             mHighlightPythonScrollPanel.Controls.AddRange(mPythonHeaderCluster, mPythonColorsContainer);
-
             Dock = DockStyle.Fill;
+            mClusterContainers.AddRange(mFontsContainer, mInterfaceColorsContainer, mCSharpColorsContainer,
+               mCColorsContainer, mCppColorsContainer, mBasicColorsContainer, mFSharpColorsContainer,
+               mHTMLColorsContainer, mCSSColorsContainer, mXMLColorsContainer, mJSONColorsContainer,
+               mPowerShellColorsContainer, mBatchColorsContainer, mSQLColorsContainer, mMarkdownColorsContainer,
+               mPythonColorsContainer);
+            mAllClusters.AddRange(mFontsClusters, mInterfaceColorClusters, mCSharpcolorClusters, mCcolorClusters,
+               mCppcolorClusters, mBasiccolorClusters, mFSharpcolorClusters, mHTMLcolorClusters, mCSScolorClusters,
+               mXMLcolorClusters, mJSONcolorClusters, mPowerShellcolorClusters, mBatchcolorClusters, mSQLcolorClusters,
+               mMarkdowncolorClusters, mPythoncolorClusters);
+            mAllScrollPanels.AddRange(mPrimaryScrollPanel, mHighlightInterfaceScrollPanel, mHighlightCSharpScrollPanel,
+               mHighlightCScrollPanel, mHighlightCppScrollPanel, mHighlightBasicScrollPanel, mHighlightFSharpScrollPanel,
+               mHighlightHTMLScrollPanel, mHighlightCSSScrollPanel, mHighlightXMLScrollPanel, mHighlightJSONScrollPanel,
+               mHighlightPowerShellScrollPanel, mHighlightBatchScrollPanel, mHighlightSQLScrollPanel,
+               mHighlightMarkdownScrollPanel, mHighlightPythonScrollPanel);
             ResumeLayout(false);
          }
 
-         public Size GetPreferredContentSizeCached() {
-            int maxWidth = 300, maxHeight = 300;
-            List<Panel?> allScrollPanels = [ mPrimaryScrollPanel, mHighlightInterfaceScrollPanel,
-            mHighlightCSharpScrollPanel, mHighlightCScrollPanel, mHighlightCppScrollPanel, mHighlightBasicScrollPanel,
-            mHighlightFSharpScrollPanel, mHighlightHTMLScrollPanel, mHighlightCSSScrollPanel, mHighlightXMLScrollPanel,
-            mHighlightJSONScrollPanel, mHighlightPowerShellScrollPanel, mHighlightBatchScrollPanel,
-            mHighlightSQLScrollPanel, mHighlightMarkdownScrollPanel, mHighlightPythonScrollPanel ];
+         protected override void OnHandleCreated(EventArgs pEventArgs) {
+            base.OnHandleCreated(pEventArgs);
+            SuspendLayout();
+            Controls.AddRange(mPrimaryTabControl, mStatusStrip, mThemesHeaderCluster);
+            ResumeLayout(false);
+            BeginInvoke(new Action(() => { LayoutControls(); }));
+         }
 
-            // Measure all scroll panels and find the maximum dimensions
-            foreach (Panel? scrollPanel in allScrollPanels) {
-               if (scrollPanel != null && scrollPanel.Controls.Count > 0) {
-                  Control? rightmost = Rightmost(ControlCollectionAsList(scrollPanel.Controls));
-                  Control? bottommost = Bottommost(ControlCollectionAsList(scrollPanel.Controls));
+         public Size WantedSize() {
+            int maxWidth = 0, maxHeight = 0, pageWidth, pageHeight, wantedWidth, wantedHeight;
 
-                  if (rightmost != null && rightmost.Right > maxWidth)
-                     maxWidth = rightmost.Right;
-                  if (bottommost != null && bottommost.Bottom > maxHeight)
-                     maxHeight = bottommost.Bottom;
+            // Get tab strip heights - use GetTabRect which works even before full layout
+            int primaryTabStripHeight = mPrimaryTabControl.TabCount > 0 ? mPrimaryTabControl.GetTabRect(0).Height + 4 : 25;
+            int highlightTabStripHeight = mHighlightTabControl.TabCount > 0 ? mHighlightTabControl.GetTabRect(0).Height + 4 : 25;
+
+            // Check the Fonts page of the primary tab control
+            foreach (Panel panel in mPrimaryTabControl.TabPages[(int)PrimaryTabPageUsage.Interface].Controls.OfType<Panel>()) {
+               Control? rightmost = Rightmost(ControlCollectionAsList(panel.Controls));
+               Control? bottommost = Bottommost(ControlCollectionAsList(panel.Controls));
+
+               pageWidth = rightmost != null ? rightmost.Right : 300;
+               pageHeight = bottommost != null ? bottommost.Bottom : 300;
+               if (pageWidth > maxWidth)
+                  maxWidth = pageWidth;
+               if (pageHeight > maxHeight)
+                  maxHeight = pageHeight;
+            }
+
+            // Check all pages of the highlight tab control (nested in the Colors page)
+            foreach (TabPage tabPage in mHighlightTabControl.TabPages) {
+               foreach (Panel panel in tabPage.Controls.OfType<Panel>()) {
+                  Control? rightmost = Rightmost(ControlCollectionAsList(panel.Controls));
+                  Control? bottommost = Bottommost(ControlCollectionAsList(panel.Controls));
+
+                  pageWidth = rightmost != null ? rightmost.Right : 300;
+                  pageHeight = bottommost != null ? bottommost.Bottom : 300;
+                  if (pageWidth > maxWidth)
+                     maxWidth = pageWidth;
+                  if (pageHeight > maxHeight)
+                     maxHeight = pageHeight;
                }
             }
-            int primaryTabStripHeight = mPrimaryTabControl.ItemSize.Height + 4;
-            int highlightTabStripHeight = mHighlightTabControl.ItemSize.Height + 4;
-            int wantedWidth = maxWidth + SystemInformation.VerticalScrollBarWidth;
-            int wantedHeight = maxHeight + SystemInformation.HorizontalScrollBarHeight + mThemesHeaderCluster.Height + mStatusStrip.Height +
-               primaryTabStripHeight + highlightTabStripHeight + mEm2;
 
+            wantedWidth = maxWidth + mEm3 + SystemInformation.VerticalScrollBarWidth;
+            wantedHeight = maxHeight + SystemInformation.HorizontalScrollBarHeight + mThemesHeaderCluster.Height +
+               mStatusStrip.Height + primaryTabStripHeight + highlightTabStripHeight + mEm3;
             if (wantedWidth < 300)
                wantedWidth = 300;
             if (wantedHeight < 300)
@@ -533,17 +552,34 @@ namespace DBCode {
          public void LayoutControls() {
             SuspendLayout();
             ApplyThemeToPanel();
-            LayoutClusters();
+            LayoutClustersAndContainers();
             ResumeLayout(true);
          }
 
-         private void LayoutClusters() {
-            foreach (BaseCluster cluster in mFontsClusters.OfType<BaseCluster>())
-               cluster.LayoutCluster(mTemporaryTheme);
+         private void LayoutClustersAndContainers() {
+            foreach (List<BaseCluster> clusterBases in mAllClusters.OfType<List<BaseCluster>>()) {
+               foreach (BaseCluster cluster in clusterBases.OfType<BaseCluster>()) {
+                  cluster.LayoutCluster(mTemporaryTheme);
+                  SizePanel(cluster);
+               }
+            }
+            foreach (ClusterContainer clusterContainer in mClusterContainers.OfType<ClusterContainer>()) {
+               Panel parent = clusterContainer.Parent as Panel ?? throw new InvalidOperationException(
+                  $"Expected parent of ClusterContainer {clusterContainer.Name} to be a Panel.");
+               if (parent.Controls.Count > 1)
+                  parent.Controls[1].Top = parent.Controls[0].Bottom + mEm;
+               clusterContainer.LayoutClusters();
+               if (clusterContainer.Tag is FontUsage)
+                  clusterContainer.ArrangeControlsInRows(mEmHalf);
+               else
+                  clusterContainer.ArrangeControlsInGrid(2, 1, mEmHalf);
+               clusterContainer.SetSize();
+               clusterContainer.Invalidate();
+            }
          }
 
          private void AddFontCluster(List<BaseCluster> pClusters, string pLabelText, string pButtonText, FontUsage pUsage,
-            LabelPosition pLabelPosition = LabelPosition.Left) {
+            LabelPosition pLabelPosition = LabelPosition.Right) {
             LabeledButtonTextBoxCluster cluster = new LabeledButtonTextBoxCluster(pLabelText, pButtonText,
                pLabelPosition) {
                Tag = pUsage
@@ -551,6 +587,25 @@ namespace DBCode {
             cluster.mButton.Tag = pUsage;
             cluster.mButton.Click += OnFontButtonClicked;
             pClusters.Add(cluster);
+         }
+
+         public void UpdateFontLabels(FontUsage? pUsage) {
+            string font = string.Empty;
+
+            switch (pUsage) {
+               case FontUsage.Interface:
+                  font = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Interface].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Interface].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Interface].Style}";
+                  break;
+               case FontUsage.Menu:
+                  font = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Menu].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Menu].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Menu].Style}";
+                  break;
+               case FontUsage.Status:
+                  font = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Status].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Status].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Status].Style}";
+                  break;
+               case FontUsage.Text:
+                  font = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Text].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Text].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Text].Style}";
+                  break;
+            }
          }
 
          private void AddColorCluster(List<BaseCluster> pClusters, string pLabel, ColorSwatchUsage pUsage,
@@ -599,16 +654,9 @@ namespace DBCode {
 
          public void ApplyThemeToPanel() {
             Theme theme = mTemporaryTheme;
+
             BackColor = theme.mInterfaceColors[(int)ColorUsage.PanelBackground];
             mStatusStrip.BackColor = theme.mInterfaceColors[(int)ColorUsage.StatusBackground];
-            foreach (ToolStripItem item in mStatusStrip.Items) {
-               if (item is ToolStripControlHost host) {
-                  Control control = host.Control;
-                  control.ForeColor = theme.mInterfaceColors[(int)ColorUsage.StatusFont];
-                  control.BackColor = theme.mInterfaceColors[(int)ColorUsage.StatusBackground];
-                  control.Font = theme.mFonts[(int)FontUsage.Status];
-               }
-            }
             ApplyThemeToControlTree(mPrimaryTabControl);
             ApplyThemeToControlTree(mHighlightTabControl);
             mStatusStrip.Renderer = new ToolStripProfessionalRenderer();
@@ -616,7 +664,6 @@ namespace DBCode {
             foreach (ToolStripItem item in mStatusStrip.Items) {
                if (item is ToolStripControlHost host) {
                   Control control = host.Control;
-                  nint handle = control.Handle;
                   control.ForeColor = theme.mInterfaceColors[(int)ColorUsage.StatusFont];
                   control.BackColor = theme.mInterfaceColors[(int)ColorUsage.StatusBackground];
                   control.Font = theme.mFonts[(int)FontUsage.Status];
@@ -627,16 +674,21 @@ namespace DBCode {
          }
 
          private void ApplyThemeToControlTree(Control pParent) {
-            Theme theme = mTemporaryTheme;
             foreach (Control control in pParent.Controls) {
                if (control is BaseCluster cluster && cluster.mSkipTheme) {
                   ApplyThemeToControlTree(control);
                   continue;
                }
-               control.ForeColor = theme.mInterfaceColors[(int)ColorUsage.InterfaceFont];
-               if (!(control is BaseCluster))
-                  control.BackColor = theme.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
-               control.Font = theme.mFonts[(int)FontUsage.Interface];
+               control.ForeColor = mTemporaryTheme.mInterfaceColors[(int)ColorUsage.InterfaceFont];
+               // Don't set BackColor on TabControls or TabPages - they handle their own painting
+               if (control is not BaseCluster && control is not TabControl && control is not TabPage)
+                  control.BackColor = mTemporaryTheme.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
+               control.Font = mTemporaryTheme.mFonts[(int)FontUsage.Interface];
+               if (control is BaseCluster basecluster) {
+                  basecluster.LayoutCluster(mTemporaryTheme);
+                  SizePanel(basecluster);
+                  basecluster.Invalidate();
+               }
                ApplyThemeToControlTree(control);
             }
          }
@@ -714,7 +766,8 @@ namespace DBCode {
             mForm.Bounds = mPrePickerBounds;
             if (!mForm.Controls.Contains(mThemePanel))
                mForm.Controls.Add(mThemePanel);
-            if (mColorPickerPanel.ColorHasChanged()) {
+            if (mRepaint) {
+               mRepaint = false;
                mThemePanel.ApplyThemeToPanel();
                mThemePanel.Invalidate(true);
             }
@@ -777,16 +830,16 @@ namespace DBCode {
             mForm.Bounds = mPrePickerBounds;
             if (!mForm.Controls.Contains(mThemePanel))
                mForm.Controls.Add(mThemePanel);
-            if (mFontPickerPanel.FontHasChanged()) {
+            if (mRepaint) {
+               mRepaint = false;
                mThemePanel.ApplyThemeToPanel();
                mThemePanel.Invalidate(true);
             }
          }
 
          private void CloseThemePanel() {
-            mFirstTheme = false;
             ThrowIfNull(mForm, nameof(mForm));
-
+            mFirstTheme = false;
             mThemeBounds = mForm.Bounds;
             mForm.RestoreFromThemePanel();
          }

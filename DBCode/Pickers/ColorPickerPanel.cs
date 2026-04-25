@@ -608,12 +608,6 @@ namespace DBCode {
             mDemoSwatch!.SetFontAndColor(mCurrentTheme!);
          }
 
-         public bool ColorHasChanged() {
-            if (mDemoSwatch!.GetColor() == mInitialColor)
-               return false;
-            return true;
-         }
-
          protected override void Dispose(bool pDisposing) {
             if (pDisposing) {
                if (mUseNamedCheckBox != null)

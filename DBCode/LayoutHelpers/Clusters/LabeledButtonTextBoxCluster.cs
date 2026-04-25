@@ -10,8 +10,7 @@ namespace DBCode {
          internal Color? mBackgroundColor;
 
          internal LabeledButtonTextBoxCluster(string pLabelText, string pButtonText, LabelPosition pLabelPosition,
-            Color? pBackgroundColor = null)
-            : base(pBackgroundColor) {
+            Color? pBackgroundColor = null) : base(pBackgroundColor) {
 
             mBackgroundColor = pBackgroundColor;
             mLabelPosition = pLabelPosition;
@@ -49,8 +48,10 @@ namespace DBCode {
 
          internal override void LayoutCluster(Theme pTheme) {
             SetFontAndColor(pTheme);
-            ApplyLabelPosition(mLabel, mButton);
-            GlueControlsHorizontally(mButton, mExampleTextBox, mEm);
+            ApplyLabelPosition(mLabel, mButton, mExampleTextBox);
+            mLabel.Invalidate();
+            mButton.Invalidate();
+            mExampleTextBox.Invalidate();
          }
 
          public void SetFontAndColor(Theme pTheme) {
@@ -65,6 +66,13 @@ namespace DBCode {
             mExampleTextBox.ForeColor = poForeColor;
             mExampleTextBox.BackColor = poBackColor;
          }
+
+         public void ChangeLabelText(string pNewText) {
+            mLabel.Text = pNewText;
+            mLabel.Invalidate();
+            mLabel.Refresh();
+         }
+
       }
    }
 }

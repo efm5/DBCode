@@ -8,6 +8,8 @@ namespace DBCode {
 
          internal ClusterContainer(List<BaseCluster> pClusters, ClusterLayoutMode pLayoutMode, int pMaxWidth = 0,
             int pMaxHeight = 0, int pFixedColumns = 0, int pFixedRows = 0) {
+            //AutoSize = true;
+            //AutoSizeMode = AutoSizeMode.GrowAndShrink;
             mClusters = pClusters;
             mLayoutMode = pLayoutMode;
             mMaxWidth = pMaxWidth;
@@ -26,8 +28,21 @@ namespace DBCode {
             return GetEnumerator();
          }
 
+         public void SetSize() {
+            Point wantedSize = BottomRight(Controls.Cast<Control>());
+            if (Dock == DockStyle.None) {
+               Width = wantedSize.X + 2;
+               Height = wantedSize.Y + 2;
+            }
+            else {
+               MinimumSize = new Size(wantedSize.X + 2, wantedSize.Y + 2);
+               AutoScrollMinSize = new Size(wantedSize.X + 2, wantedSize.Y + 2);
+            }
+         }
+
          public void LayoutClusters() {
             switch (mLayoutMode) {
+               default:
                case ClusterLayoutMode.FlowLayout:
                   LayoutFlow();
                   break;
@@ -45,9 +60,6 @@ namespace DBCode {
                   break;
                case ClusterLayoutMode.AutoSquareGrid:
                   LayoutAutoSquareGrid();
-                  break;
-               default:
-                  LayoutFlow();
                   break;
             }
          }
@@ -230,6 +242,85 @@ namespace DBCode {
             }
             Width = containerWidth;
             Height = y + mBottomPad;
+         }
+
+         public void ArrangeControlsInRows(int pSpacing = 0) {
+            int y = 0;
+
+            foreach (Control control in Controls) {
+               control.Location = new Point(0, y);
+               y += control.Height + pSpacing;
+            }
+         }
+
+         public void ArrangeControlsInColumns(int pSpacing = 0) {
+            int x = 0;
+
+            foreach (Control control in Controls) {
+               control.Location = new Point(x, 0);
+               x += control.Width + pSpacing;
+            }
+         }
+
+         public void ArrangeControlsInGrid(int pColumns, int pRows, int pSpacing = 0) {
+            if (pColumns <= 0)
+               throw new ArgumentException("Number of columns must be greater than zero.", nameof(pColumns));
+            if (pRows <= 0)
+               throw new ArgumentException("Number of rows must be greater than zero.", nameof(pRows));
+            int controlCount = Controls.Count;
+            int requiredRows = (int)Math.Ceiling((double)controlCount / pColumns);
+            if (requiredRows > pRows)
+               pRows = requiredRows;
+            int left = 0, top = 0, columnIndex = 0, rowIndex = 0;
+            List<int> columnWidths = [];
+            List<int> rowHeights = [];
+            for (int i = 0; i < pColumns; i++)
+               columnWidths.Add(0);
+            for (int i = 0; i < pRows; i++)
+               rowHeights.Add(0);
+            foreach (Control control in Controls) {
+               if (columnIndex >= pColumns) {
+                  columnIndex = 0;
+                  rowIndex++;
+               }
+               if (control.Width > columnWidths[columnIndex])
+                  columnWidths[columnIndex] = control.Width;
+               if (control.Height > rowHeights[rowIndex])
+                  rowHeights[rowIndex] = control.Height;
+               columnIndex++;
+            }
+            columnIndex = 0;
+            rowIndex = 0;
+            left = 0;
+            top = 0;
+            foreach (Control control in Controls) {
+               if (columnIndex >= pColumns) {
+                  columnIndex = 0;
+                  rowIndex++;
+                  left = 0;
+                  top += rowHeights[rowIndex - 1] + pSpacing;
+               }
+               control.Location = new Point(left, top);
+               left += columnWidths[columnIndex] + pSpacing;
+               columnIndex++;
+            }
+         }
+
+         public void ArrangeControlsFlow(int pMaxWidth, int pSpacing = 0) {
+            List<Control> rowList = [];
+            int tooWide = pMaxWidth, top = 0, left = 0;
+
+            for (int i = 0; i < Controls.Count; i++) {
+               Controls[i].Location = new Point(left, top);
+               left = Controls[i].Right + pSpacing;
+               if (left > tooWide) {
+                  top = Bottommost(rowList)!.Bottom + mEmHalf;
+                  rowList.Clear();
+                  Controls[i].Location = new Point(Controls[0].Left, top);
+                  left = Controls[i].Right + pSpacing;
+               }
+               rowList.Add(Controls[i]);
+            }
          }
       }
    }

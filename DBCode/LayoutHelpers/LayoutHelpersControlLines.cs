@@ -4,10 +4,8 @@ namespace DBCode {
       public static bool LocateUpDownLine(out int pONextTop, int pTop, Button? pPrefixButton, NumericUpDown? pUpDown,
          Label? pSuffixLabel = null, int pLeft = -1) {
          pONextTop = pTop;
-         if ((pPrefixButton == null) || (pUpDown == null)) {
-            TimedMessage("LocateUpDownLine() some variable was illegally null.", "Code VIOLATION", 0);
-            return false;
-         }
+         ThrowIfNull(pPrefixButton, nameof(pPrefixButton));
+         ThrowIfNull(pUpDown, nameof(pUpDown));
          if (pLeft == -1)
             pLeft = pPrefixButton.Left;
          pPrefixButton.Location = new Point(pLeft, pTop);
@@ -27,10 +25,7 @@ namespace DBCode {
       public static bool LocateCheckBoxLine(out int oNextTop, int pTop, CheckBox? pCheckBox, Label? pSuffixLabel = null,
          int pLeft = 20) {
          oNextTop = pTop;
-         if (pCheckBox == null) {
-            TimedMessage("LocateCheckBoxLine() some variable was illegally null.", "Code VIOLATION", 0);
-            return false;
-         }
+         ThrowIfNull(pCheckBox, nameof(pCheckBox));
          pCheckBox.Location = new Point(pLeft, pTop);
          if (pSuffixLabel != null) {
             pSuffixLabel.Location = new Point(
@@ -46,10 +41,8 @@ namespace DBCode {
       public static bool LocatePrefixedTextBox(out Point oNextLocation, int pTop, Button? pPrefixButton, TextBox? pTextBox,
          int pLeft = 20) {
          oNextLocation = new Point(pLeft, pTop);
-         if ((pPrefixButton == null) || (pTextBox == null)) {
-            TimedMessage("LocatePrefixedTextBoxLine() some variable was illegally null.", "Code VIOLATION", 0);
-            return false;
-         }
+         ThrowIfNull(pPrefixButton, nameof(pPrefixButton));
+         ThrowIfNull(pTextBox, nameof(pTextBox));
          pPrefixButton.Location = new Point(pLeft, pTop);
          pTextBox.Location = new Point(
             pPrefixButton.Right + mAssociatedTextBoxPostButtonHorizontalSpace,
@@ -62,10 +55,9 @@ namespace DBCode {
          bool pHorizontal, int pPadding) {
          Control? lastControl = pAnchorControl;
          oNextPaddedLocation = new Point(0, 0);
-         if ((pAnchorControl == null) || (pControlList == null) || (lastControl == null)) {
-            TimedMessage("LocateControls() some variable was illegally null.", "Code VIOLATION", 0);
-            return false;
-         }
+         ThrowIfNull(pAnchorControl, nameof(pAnchorControl));
+         ThrowIfNull(pControlList, nameof(pControlList));
+         ThrowIfNull(lastControl, nameof(lastControl));
          foreach (Control control in pControlList.OfType<Control>()) {
             if (pHorizontal)
                control.Location = new Point(lastControl.Right + pPadding, lastControl.Top);

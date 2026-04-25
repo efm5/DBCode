@@ -38,6 +38,7 @@ namespace DBCode {
                mLabel.Left = x;
                mLabel.Top = mEm;
                Height = mLabel.Bottom + mEm;
+               mLabel.Invalidate();
             }
          }
       }

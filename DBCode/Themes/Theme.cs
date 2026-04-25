@@ -82,22 +82,22 @@ namespace DBCode.Themes {
          return pClone;
       }
 
-      public static void ThemeSimpleThings(Theme pTheme, out Font poFont, out Color poForeColor, out Color poBackColor) {
-         poFont = pTheme.mFonts[(int)FontUsage.Interface];
-         poForeColor = pTheme.mInterfaceColors[(int)ColorUsage.InterfaceFont];
-         poBackColor = pTheme.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
+      public static void ThemeSimpleThings(Theme pTheme, out Font pOutFont, out Color pOutForeColor, out Color pOutBackColor) {
+         pOutFont = pTheme.mFonts[(int)FontUsage.Interface];
+         pOutForeColor = pTheme.mInterfaceColors[(int)ColorUsage.InterfaceFont];
+         pOutBackColor = pTheme.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
       }
 
-      public static void ThemeManyThings(Theme pTheme, out Font poFont, out Color poForeColor, out Color poBackColor,
-          out Color poGroupBoxBackgroundColor, out Color poStatusBackgroundColor, out Color poStatusForeColor,
-           out Font poStatusFont) {
-         poFont = pTheme.mFonts[(int)FontUsage.Interface];
-         poForeColor = pTheme.mInterfaceColors[(int)ColorUsage.InterfaceFont];
-         poBackColor = pTheme.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
-         poGroupBoxBackgroundColor = pTheme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground];
-         poStatusBackgroundColor = pTheme.mInterfaceColors[(int)ColorUsage.StatusBackground];
-         poStatusForeColor = pTheme.mInterfaceColors[(int)ColorUsage.StatusFont];
-         poStatusFont = pTheme.mFonts[(int)FontUsage.Status];
+      public static void ThemeManyThings(Theme pTheme, out Font pOutFont, out Color pOutForeColor, out Color pOutBackColor,
+          out Color pOutGroupBoxBackgroundColor, out Color pOutStatusBackgroundColor, out Color pOutStatusForeColor,
+           out Font pOutStatusFont) {
+         pOutFont = pTheme.mFonts[(int)FontUsage.Interface];
+         pOutForeColor = pTheme.mInterfaceColors[(int)ColorUsage.InterfaceFont];
+         pOutBackColor = pTheme.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
+         pOutGroupBoxBackgroundColor = pTheme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground];
+         pOutStatusBackgroundColor = pTheme.mInterfaceColors[(int)ColorUsage.StatusBackground];
+         pOutStatusForeColor = pTheme.mInterfaceColors[(int)ColorUsage.StatusFont];
+         pOutStatusFont = pTheme.mFonts[(int)FontUsage.Status];
       }
    }
 

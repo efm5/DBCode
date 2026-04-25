@@ -62,6 +62,9 @@ namespace DBCode {
          internal override void LayoutCluster(Theme pTheme) {
             SetFontAndColor(pTheme);
             LayoutControls();
+            mLabel!.Invalidate();
+            foreach (RadioButton radioButton in mRadioButtons)
+               radioButton.Invalidate();
          }
 
          protected override void Dispose(bool pDisposing) {

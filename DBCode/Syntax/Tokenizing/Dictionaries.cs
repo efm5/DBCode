@@ -411,10 +411,12 @@ namespace DBCode.Syntax {
       protected readonly Dictionary<TokenKind, ColorRole> mColorRoles;
       protected readonly LanguageKind mLanguage;
 
+#pragma warning disable IDE0290
       protected SyntaxHighlighterBase(LanguageKind pLanguage) {
          mLanguage = pLanguage;
          mColorRoles = LanguageColorRegistry.Get(pLanguage);
       }
+#pragma warning restore IDE0290
 
       public LanguageKind Language => mLanguage;
 

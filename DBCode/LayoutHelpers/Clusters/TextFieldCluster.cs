@@ -12,8 +12,7 @@ namespace DBCode {
             LabelPosition pLabelPosition = LabelPosition.Left, Color? pBackgroundColor = null) : base(pBackgroundColor) {
             if (((pLabelText == null) && (pButtonText == null)) || ((pLabelText != null) && (pButtonText != null)) ||
                ((pButtonText != null) && pBackgroundColor == null))
-               //DEBUG efm5 2026 04 23 throw fatal error
-               return;
+               throw new ArgumentException("Invalid parameter combination: must provide either pLabelText or pButtonText (but not both), and pBackgroundColor is required when pButtonText is used");
             mBackgroundColor = pBackgroundColor;
             mTextBox = new TextBox {
                Text = mUnicodeSampleString,
@@ -58,6 +57,9 @@ namespace DBCode {
          internal override void LayoutCluster(Theme pTheme) {
             SetFontAndColor(pTheme);
             LayoutControls();
+            mLabel?.Invalidate();
+            mTextBox?.Invalidate();
+            mFlattenedButton?.Invalidate();
          }
 
          public void SetFontAndColor(Theme pTheme) {

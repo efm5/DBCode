@@ -10,8 +10,8 @@ namespace DBCode {
 
          protected BaseCluster(Color? pBackgroundColor) {
             BackColor = pBackgroundColor ?? Color.Transparent;
-            AutoSize = true;
-            AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            //AutoSize = true;
+            //AutoSizeMode = AutoSizeMode.GrowAndShrink;
             TabStop = false;
             TabIndex = TAB_INDEX_IGNORED;
             Name = $"BaseCluster{mNextClusterId}";
@@ -29,19 +29,43 @@ namespace DBCode {
          protected void ApplyLabelPosition(Label pLabel, Control pControl) {
             if (mLabelPosition == LabelPosition.Left) {
                pLabel.Location = new Point(0, 0);
-               pControl.Location = new Point(pLabel.Width, 0);
+               pControl.Location = new Point(pLabel.Right + mEm, 0);
             }
             else if (mLabelPosition == LabelPosition.Right) {
                pControl.Location = new Point(0, 0);
-               pLabel.Location = new Point(pControl.Width, 0);
+               pLabel.Location = new Point(pControl.Right + mEm, 0);
             }
             else if (mLabelPosition == LabelPosition.Top) {
                pLabel.Location = new Point(0, 0);
-               pControl.Location = new Point(0, pLabel.Height + mEmHalf);
+               pControl.Location = new Point(0, pLabel.Bottom + mEmHalf);
             }
             else {
                pControl.Location = new Point(0, 0);
-               pLabel.Location = new Point(0, pControl.Height + mEmHalf);
+               pLabel.Location = new Point(0, pControl.Bottom + mEmHalf);
+            }
+         }
+
+         protected void ApplyLabelPosition(Label pLabel, Control pControl1, Control pControl2) {
+            if (mLabelPosition == LabelPosition.Left) {
+               pLabel.Location = new Point(0, 0);
+               pControl1.Location = new Point(pLabel.Right + mEm, 0);
+               pControl2.Location = new Point(pControl1.Right + mEm, 0);
+            }
+            else if (mLabelPosition == LabelPosition.Right) {
+               pControl1.Location = new Point(0, 0);
+               pControl2.Location = new Point(pControl1.Right + mEm, 0);
+               pLabel.Location = new Point(pControl2.Right + mEm, 0);
+               int deltaBug = 0;//DEBUG efm5 2026 04 24 testing
+            }
+            else if (mLabelPosition == LabelPosition.Top) {
+               pLabel.Location = new Point(0, 0);
+               pControl1.Location = new Point(0, pLabel.Bottom + mEmHalf);
+               pControl2.Location = new Point(pControl1.Right + mEm, pControl1.Top);
+            }
+            else {
+               pControl1.Location = new Point(0, 0);
+               pControl2.Location = new Point(pControl1.Right + mEm, 0);
+               pLabel.Location = new Point(0, pControl1.Bottom + mEmHalf);
             }
          }
 
@@ -53,14 +77,14 @@ namespace DBCode {
                return;
             if (mLabelPosition == LabelPosition.Left) {
                pLabel.Location = new Point(0, 0);
-               int x = pLabel.Width + mEm;
+               int x = pLabel.Right + mEm;
                bool isFirstControl = true;
                foreach (Control control in controls) {
                   control.Location = new Point(x, 0);
                   if (isFirstControl)
-                     x += control.Width + mEm;
+                     x += control.Right + mEm;
                   else
-                     x += control.Width + mEm3;
+                     x += control.Right + mEm3;
                   isFirstControl = false;
                }
             }
@@ -70,23 +94,23 @@ namespace DBCode {
                foreach (Control control in controls) {
                   control.Location = new Point(x, 0);
                   if (isFirstControl)
-                     x += control.Width + mEm;
+                     x += control.Right + mEm;
                   else
-                     x += control.Width + mEm3;
+                     x += control.Right + mEm3;
                   isFirstControl = false;
                }
                pLabel.Location = new Point(x, 0);
             }
             else if (mLabelPosition == LabelPosition.Top) {
                pLabel.Location = new Point(0, 0);
-               int y = pLabel.Height + mEm;
+               int y = pLabel.Bottom + mEm;
                bool isFirstControl = true;
                foreach (Control control in controls) {
                   control.Location = new Point(0, y);
                   if (isFirstControl)
-                     y += control.Height + mEm;
+                     y += control.Bottom + mEm;
                   else
-                     y += control.Height + mEm3;
+                     y += control.Bottom + mEm3;
                   isFirstControl = false;
                }
             }
@@ -96,9 +120,9 @@ namespace DBCode {
                foreach (Control control in controls) {
                   control.Location = new Point(0, y);
                   if (isFirstControl)
-                     y += control.Height + mEm;
+                     y += control.Bottom + mEm;
                   else
-                     y += control.Height + mEm3;
+                     y += control.Bottom + mEm3;
                   isFirstControl = false;
                }
                pLabel.Location = new Point(0, y);

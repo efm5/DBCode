@@ -60,6 +60,8 @@ namespace DBCode {
                mBottomLabel.Left = mEm;
                mBottomLabel.Top = mTopLabel.Bottom + mEm;
                Height = mBottomLabel.Bottom + mEm;
+               mTopLabel.Invalidate();
+               mBottomLabel.Invalidate();
             }
          }
       }

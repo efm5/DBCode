@@ -24,7 +24,7 @@ namespace DBCode {
             mThemePanel.LayoutControls();
             if (mFirstTheme) {
                ThrowIfNull(mForm, nameof(mForm));
-               mForm.Size = mThemePanel.GetPreferredContentSizeCached();
+               mForm.Size = mThemePanel.WantedSize();
                CenterFormOnMonitor(mForm);
                mFirstTheme = false;
             }
@@ -46,6 +46,7 @@ namespace DBCode {
          ThrowIfNull(mForm, nameof(mForm));
          ThrowIfNull(mThemePanel, nameof(mThemePanel));
          bool dirtyTheme = false;
+
          mForm.SuspendLayout();
          if (!mFirstTheme)
             mThemeBounds = mForm.Bounds;

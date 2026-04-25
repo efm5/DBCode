@@ -2,7 +2,7 @@
    public static class ThemeRegistry {
       public static List<Theme> mThemeList { get; private set; } = [];
 
-      public static void Initialize(string pFolderPath, string pLastUsedThemeName) {
+      public static void Initialize() {
          List<Theme> themes = [];
          AddBuiltIns(themes);
          List<Theme> loaded = ThemeManager.LoadThemes();
@@ -12,8 +12,8 @@
          mPreviousThemeName = SelectThemeName(validated);
       }
 
-      public static void Reload(string pFolderPath) {
-         Initialize(pFolderPath, mPreviousThemeName);
+      public static void Reload() {
+         Initialize();
       }
 
       public static bool SetCurrentTheme(string pName) {

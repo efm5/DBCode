@@ -509,6 +509,38 @@ namespace DBCode {
          return currentControl;
       }
 
+      internal static Point BottomRight(IEnumerable<Control>? pControls) {
+         if (pControls == null)
+            return Point.Empty;
+         int maxRight = 0;
+         int maxBottom = 0;
+         bool foundControl = false;
+         foreach (Control nextControl in pControls) {
+            foundControl = true;
+            if (nextControl.Right > maxRight)
+               maxRight = nextControl.Right;
+            if (nextControl.Bottom > maxBottom)
+               maxBottom = nextControl.Bottom;
+         }
+         return foundControl ? new Point(maxRight, maxBottom) : Point.Empty;
+      }
+
+      internal static Point TopRight(IEnumerable<Control>? pControls) {
+         if (pControls == null)
+            return Point.Empty;
+         int maxRight = 0;
+         int minTop = int.MaxValue;
+         bool foundControl = false;
+         foreach (Control nextControl in pControls) {
+            foundControl = true;
+            if (nextControl.Right > maxRight)
+               maxRight = nextControl.Right;
+            if (nextControl.Top < minTop)
+               minTop = nextControl.Top;
+         }
+         return foundControl ? new Point(maxRight, minTop) : Point.Empty;
+      }
+
       internal static Control? Topmost(List<Control>? pControls) {
          if (pControls == null || pControls.Count == 0)
             return null;

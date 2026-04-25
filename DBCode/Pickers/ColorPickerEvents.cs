@@ -205,6 +205,10 @@ namespace DBCode {
          private void OkButton_Click(object? pSender, EventArgs pEventArguments) {
             if (mTheme == null || mDemoSwatch == null)
                return;
+            if (mDemoSwatch!.GetColor() == mInitialColor)
+               ThemePanel.mRepaint = false;
+            else
+               ThemePanel.mRepaint = true;
             mTheme.mInterfaceColors[(int)mColorUsage] = mDemoSwatch.BackColor;
             ThemePanel.RestoreFromColorPickerPanel();
          }

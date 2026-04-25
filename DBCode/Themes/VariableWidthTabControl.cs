@@ -20,9 +20,11 @@
             base.OnSelectedIndexChanged(pEventArgs);
          }
 
-         protected override void WndProc(ref Message m) {
-            // WM_PAINT = 0x000F
-            if (m.Msg == 0x000F && mAllowStripPainting && !mStripBackgroundPainted && TabCount > 0 && DrawMode == TabDrawMode.OwnerDrawFixed) {
+         protected override void WndProc(ref Message pMessage) {
+            base.WndProc(ref pMessage);
+
+            // WM_PAINT = 0x000F - Paint strip AFTER base processes the message
+            if (pMessage.Msg == 0x000F && mAllowStripPainting && !mStripBackgroundPainted && TabCount > 0 && DrawMode == TabDrawMode.OwnerDrawFixed) {
                using (Graphics g = CreateGraphics()) {
                   Rectangle displayRect = DisplayRectangle;
                   Rectangle stripRect = new Rectangle(0, 0, Width, displayRect.Top);
@@ -30,8 +32,13 @@
                   g.FillRectangle(brush, stripRect);
                }
                mStripBackgroundPainted = true;
+
+               // Invalidate the tab header rectangles so they repaint on top of our strip background
+               for (int i = 0; i < TabCount; i++) {
+                  Rectangle tabRect = GetTabRect(i);
+                  Invalidate(tabRect);
+               }
             }
-            base.WndProc(ref m);
          }
 
          protected override void OnMouseDown(MouseEventArgs pMouseEventArgs) {
