@@ -40,7 +40,7 @@ namespace DBCode {
          }
 
          public void SetFontAndColor(Theme pTheme) {
-            Theme.ThemeSimpleThings(pTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
+            Theme.ThemeInterfaceThings(pTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
             mTopLabel.Font = CreateNewTitleFont(poFont, HeaderLabelSize.Normal);
             mTopLabel.ForeColor = poForeColor;
             mTopLabel.BackColor = poBackColor;

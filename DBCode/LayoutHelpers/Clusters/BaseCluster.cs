@@ -10,8 +10,6 @@ namespace DBCode {
 
          protected BaseCluster(Color? pBackgroundColor) {
             BackColor = pBackgroundColor ?? Color.Transparent;
-            //AutoSize = true;
-            //AutoSizeMode = AutoSizeMode.GrowAndShrink;
             TabStop = false;
             TabIndex = TAB_INDEX_IGNORED;
             Name = $"BaseCluster{mNextClusterId}";
@@ -55,7 +53,6 @@ namespace DBCode {
                pControl1.Location = new Point(0, 0);
                pControl2.Location = new Point(pControl1.Right + mEm, 0);
                pLabel.Location = new Point(pControl2.Right + mEm, 0);
-               int deltaBug = 0;//DEBUG efm5 2026 04 24 testing
             }
             else if (mLabelPosition == LabelPosition.Top) {
                pLabel.Location = new Point(0, 0);

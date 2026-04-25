@@ -192,11 +192,13 @@ namespace DBCode {
       public static ColorPickerPanel? mColorPickerPanel = null;
       public static FontPickerPanel? mFontPickerPanel = null;
       public static ThemePickerPanel? mThemePickerPanel = null;
+      public static GetString? mGetStringPanel = null;
       public static readonly PropertyInfo[] mPredefinedColors =
          typeof(Color).GetProperties(BindingFlags.Public | BindingFlags.Static);
       public static Rectangle mPreThemeBounds = new Rectangle(50, 50, 800, 600), mThemeBounds,
          mPreThemePickerBounds = new Rectangle(50, 50, 800, 600), mThemePickerBounds,
-         mPrePickerBounds = new Rectangle(50, 50, 800, 600), mColorPickerBounds, mFontPickerBounds;
+         mPrePickerBounds = new Rectangle(50, 50, 800, 600), mColorPickerBounds, mFontPickerBounds,
+         mPreGetStringBounds = new Rectangle(50, 50, 800, 600), mGetStringBounds;
       public static RichTextBox? mRichTextBox = null;
       public static Size mMonitorSize, mResolution;
       public static StatusStrip? mStatusStrip = null;

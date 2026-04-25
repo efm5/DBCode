@@ -26,15 +26,25 @@
          }
 
          private void ApplyButton_Click(object? pSender, EventArgs pArgs) {
-            ApplyTheme();
+            ThrowIfNull(mForm, nameof(mForm));
+            (mForm as MainForm)?.EnsureGetStringPanel(
+               "Enter Theme Name",
+               "Please enter a name for the new theme:",
+               mTemporaryTheme.mName,
+               ApplyThemeCallback
+            );
+         }
+
+         private void ApplyThemeCallback(string? pResult, bool pWasCancelled) {
+            ThrowIfNull(mForm, nameof(mForm));
+            (mForm as MainForm)?.RestoreFromGetStringPanel();
+            if (!pWasCancelled && !string.IsNullOrWhiteSpace(pResult)) {
+               string newName = pResult;
+               //DEBUG efm5 2026 04 25 Eventually, but not now add the new theme to the list of themes and make it the current theme
+            }
          }
 
          private void CancelButton_Click(object? pSender, EventArgs pArgs) {
-            CloseThemePanel();
-         }
-
-         private void OkButton_Click(object? pSender, EventArgs pArgs) {
-            UpdateTheme();
             CloseThemePanel();
          }
 

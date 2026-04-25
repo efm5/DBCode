@@ -3,14 +3,16 @@ using static DBCode.Themes.ThemeBrightnessHelper;
 
 namespace DBCode.Themes {
    public class Theme {
-      public string mName { get; set; } = string.Empty;
-      public ThemeBrightness mBrightness { get; set; } = ThemeBrightness.Light;
-      public Font[] mFonts { get; private set; }
+      public bool mIsBuiltIn = false;
       public Color[] mInterfaceColors { get; private set; }
       public Color[][] mHighlightColors { get; private set; }
+      public Font[] mFonts { get; private set; }
+      public string mName { get; set; } = string.Empty;
+      public ThemeBrightness mBrightness { get; set; } = ThemeBrightness.Light;
 
-      public Theme(string pName) {
+      public Theme(string pName, bool pIsBuiltIn = false) {
          mName = pName;
+         mIsBuiltIn = pIsBuiltIn;
          mFonts = new Font[Enum.GetValues<FontUsage>().Length];
          mInterfaceColors = new Color[Enum.GetValues<ColorUsage>().Length];
          mHighlightColors = new Color[Enum.GetValues<LanguageKind>().Length][];
@@ -82,13 +84,35 @@ namespace DBCode.Themes {
          return pClone;
       }
 
-      public static void ThemeSimpleThings(Theme pTheme, out Font pOutFont, out Color pOutForeColor, out Color pOutBackColor) {
+      public static void ThemeInterfaceThings(Theme pTheme, out Font pOutFont, out Color pOutForeColor,
+         out Color pOutBackColor) {
          pOutFont = pTheme.mFonts[(int)FontUsage.Interface];
          pOutForeColor = pTheme.mInterfaceColors[(int)ColorUsage.InterfaceFont];
          pOutBackColor = pTheme.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
       }
 
-      public static void ThemeManyThings(Theme pTheme, out Font pOutFont, out Color pOutForeColor, out Color pOutBackColor,
+      public static void ThemeMenuThings(Theme pTheme, out Font pOutFont, out Color pOutForeColor,
+         out Color pOutBackColor) {
+         pOutFont = pTheme.mFonts[(int)FontUsage.Menu];
+         pOutForeColor = pTheme.mInterfaceColors[(int)ColorUsage.MenuFont];
+         pOutBackColor = pTheme.mInterfaceColors[(int)ColorUsage.MenuBackground];
+      }
+
+      public static void ThemeStatusThings(Theme pTheme, out Font pOutFont, out Color pOutForeColor,
+         out Color pOutBackColor) {
+         pOutFont = pTheme.mFonts[(int)FontUsage.Status];
+         pOutForeColor = pTheme.mInterfaceColors[(int)ColorUsage.StatusFont];
+         pOutBackColor = pTheme.mInterfaceColors[(int)ColorUsage.StatusBackground];
+      }
+
+      public static void ThemeTextBoxThings(Theme pTheme, out Font pOutFont, out Color pOutForeColor,
+         out Color pOutBackColor) {
+         pOutFont = pTheme.mFonts[(int)FontUsage.Text];
+         pOutForeColor = pTheme.mInterfaceColors[(int)ColorUsage.TextBoxFont];
+         pOutBackColor = pTheme.mInterfaceColors[(int)ColorUsage.TextBox];
+      }
+
+      public static void ThemeAllThings(Theme pTheme, out Font pOutFont, out Color pOutForeColor, out Color pOutBackColor,
           out Color pOutGroupBoxBackgroundColor, out Color pOutStatusBackgroundColor, out Color pOutStatusForeColor,
            out Font pOutStatusFont) {
          pOutFont = pTheme.mFonts[(int)FontUsage.Interface];

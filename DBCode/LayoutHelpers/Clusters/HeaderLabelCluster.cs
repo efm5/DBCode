@@ -19,11 +19,13 @@ namespace DBCode {
                ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont]
             };
             Controls.Add(mLabel);
+            AutoSize = true;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
             Dock = DockStyle.Top;
          }
 
          public void SetFontAndColor(Theme pTheme) {
-            Theme.ThemeSimpleThings(pTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
+            Theme.ThemeInterfaceThings(pTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
             mLabel.Font = poFont;
             mLabel.ForeColor = poForeColor;
             mLabel.BackColor = poBackColor;
@@ -39,6 +41,7 @@ namespace DBCode {
                mLabel.Top = mEm;
                Height = mLabel.Bottom + mEm;
                mLabel.Invalidate();
+               mLabel.Refresh();
             }
          }
       }

@@ -63,7 +63,7 @@ namespace DBCode {
          }
 
          public void SetFontAndColor(Theme pTheme) {
-            Theme.ThemeSimpleThings(pTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
+            Theme.ThemeInterfaceThings(pTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
             mLabel!.Font = poFont;
             mLabel.ForeColor = poForeColor;
             mLabel.BackColor = poBackColor;

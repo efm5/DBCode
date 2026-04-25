@@ -302,8 +302,8 @@ namespace DBCode {
          mExitTSB.Text = "E&xit";
          mExitTSB.Alignment = ToolStripItemAlignment.Right;
          mExitTSB.Click += ExitTSB_Click;
-         mStatusStrip!.Items.AddRange([ mTransferTSB, mTransportTSB, mTargetingStatusLabel,
-            mVersionStatusLabel, mRevertTSB, mExitTSB ]);
-      }
+            mStatusStrip!.Items.AddRange([ mTransferTSB, mTransportTSB, mTargetingStatusLabel,
+               mVersionStatusLabel, mRevertTSB, mExitTSB ]);
+         }
    }
 }

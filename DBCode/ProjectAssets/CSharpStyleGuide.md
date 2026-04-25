@@ -20,11 +20,16 @@ All generated code must follow these rules without exception.
 
 1.1 Parameter Naming
 • All parameters must begin with lowercase "p" followed by PascalCase.
-  Examples:
-    pWindowHandle
-    pIndex
-    pClassName
-    pWindowName
+• Prefer descriptive, full English words over abbreviations.
+• Examples:
+    Good:
+      pWindowHandle
+      pEventArguments
+      pClassName
+      pWindowName
+    Acceptable but discouraged:
+      pE (use pEventArguments instead)
+      pIdx (use pIndex instead)
 
 1.2 Out‑Parameter Naming
 • All out parameters must begin with "pO" followed by PascalCase.
@@ -219,7 +224,19 @@ UI components do not persist state.
 • Variable initialization is explicit.
 • Local variables are declared at the top of methods.
 • Clever or minimalist constructs that sacrifice clarity are avoided.
-• Single‑line AddRange calls are preferred unless the line exceeds the ~130 letter maximum line length, in which case wrapping occurs at comma boundaries.
+
+7.1 Collection Initialization
+• Prefer new‑style AddRange(...) over multiple Add(...) statements.
+• Use single‑line AddRange calls when the line fits within the ~130 letter maximum line length.
+• When wrapping is necessary, wrap at comma boundaries with continuation indentation.
+  Examples:
+    Preferred:
+      Controls.AddRange(mTitleCluster, mPromptLabel, mStatusStrip, mInputTextBox);
+    Discouraged:
+      Controls.Add(mTitleCluster);
+      Controls.Add(mPromptLabel);
+      Controls.Add(mStatusStrip);
+      Controls.Add(mInputTextBox);
 
 ===========================================
 8. DRAGON DICTATION RULES
