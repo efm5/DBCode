@@ -12,12 +12,14 @@
          private List<ButtonCluster> mButtonClusters;
 
          public ThemePickerPanel(MainForm pMainForm) {
+            ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
+
             AutoScroll = true;
             AutoSize = false;
             BackColor = Color.Transparent;
             mCancelButton = new Button();
             mHelpButton = new Button();
-            mTitleLabel = new HeaderLabelCluster("Theme Picker", HeaderLabelSize.Normal);
+            mTitleLabel = new HeaderLabelCluster(mCurrentTheme, "Theme Picker", HeaderLabelSize.Normal);
             mStatusStrip = new StatusStrip();
             mCancelHost = new ToolStripControlHost(mCancelButton);
             mHelpHost = new ToolStripControlHost(mHelpButton);

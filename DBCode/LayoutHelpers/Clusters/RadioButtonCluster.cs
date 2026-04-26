@@ -7,8 +7,9 @@ namespace DBCode {
          List<RadioButton> mRadioButtons = [];
          internal Color? mBackgroundColor;
 
-         public RadioButtonCluster(string pLabelText, LabelPosition pLabelPosition, List<string> pRadioButtonNames, int pInitiallyChecked,
-            Color? pBackgroundColor) : base(pBackgroundColor) {
+         public RadioButtonCluster(Theme pTheme, string pLabelText, LabelPosition pLabelPosition,
+            List<string> pRadioButtonNames, int pInitiallyChecked, Color? pBackgroundColor)
+            : base(pTheme, pBackgroundColor) {
             mBackgroundColor = pBackgroundColor;
             mLabelPosition = pLabelPosition;
             mLabel = new Label {
@@ -43,8 +44,8 @@ namespace DBCode {
             ApplyLabelPosition(mLabel, mRadioButtons);
          }
 
-         public void SetFontAndColor(Theme pTheme) {
-            Theme.ThemeInterfaceThings(pTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
+         internal override void SetFontAndColor() {
+            Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
             mLabel!.Font = poFont;
             mLabel.ForeColor = poForeColor;
             mLabel.BackColor = poBackColor;
@@ -59,8 +60,8 @@ namespace DBCode {
             //DEBUG efm5 2026 04 4 do the math – Just the radio buttons use
          }
 
-         internal override void LayoutCluster(Theme pTheme) {
-            SetFontAndColor(pTheme);
+         internal override void LayoutCluster() {
+            SetFontAndColor();
             LayoutControls();
             mLabel!.Invalidate();
             foreach (RadioButton radioButton in mRadioButtons)

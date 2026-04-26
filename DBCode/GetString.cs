@@ -20,11 +20,13 @@ namespace DBCode {
       public GetString(string pTitle, string pPrompt, string pInitialValue = "") {
          ThrowIfNull(pTitle, nameof(pTitle));
          ThrowIfNull(pPrompt, nameof(pPrompt));
+         ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
+
          mInitialValue = pInitialValue;
          AutoScroll = true;
          AutoSize = false;
          AutoSizeMode = AutoSizeMode.GrowAndShrink;
-         mTitleCluster = new HeaderLabelCluster(pTitle, HeaderLabelSize.Normal);
+         mTitleCluster = new HeaderLabelCluster(mCurrentTheme, pTitle, HeaderLabelSize.Normal);
          mPromptLabel = new Label {
             Name = $"GetString_PromptLabel{mTabIndex}",
             TabIndex = mTabIndex++,
@@ -71,11 +73,50 @@ namespace DBCode {
          CreateLayout();
       }
 
+      public static void Show(string pTitle, string pPrompt, string pInitialValue, Action<string?, bool> pCallback) {
+         ThrowIfNull(mForm, nameof(mForm));
+         ThrowIfNull(mThemePanel, nameof(mThemePanel));
+         mPreGetStringBounds = mForm.Bounds;
+         mGetStringPanel = new GetString(pTitle, pPrompt, pInitialValue) {
+            OnClose = pCallback
+         };
+         mForm.SuspendLayout();
+         mForm.Controls.Add(mGetStringPanel);
+         mGetStringPanel.PerformLayout();
+         mForm.ResumeLayout(true);
+         CenterControl(mForm, mGetStringPanel);
+         Size requiredSize = new Size(mGetStringPanel.Width + 20, mGetStringPanel.Height + 40);
+         if (mForm.ClientSize.Width < requiredSize.Width || mForm.ClientSize.Height < requiredSize.Height) {
+            mForm.ClientSize = requiredSize;
+            CenterControl(mForm, mGetStringPanel);
+         }
+         EnsureWindowFitsMonitor(mForm, false);
+         mGetStringPanel.Visible = true;
+         mGetStringPanel.BringToFront();
+         mGetStringPanel.Show();
+         mGetStringPanel.FocusInputTextBox();
+      }
+
+      public static void Restore() {
+         ThrowIfNull(mForm, nameof(mForm));
+         ThrowIfNull(mGetStringPanel, nameof(mGetStringPanel));
+         ThrowIfNull(mThemePanel, nameof(mThemePanel));
+         mForm.SuspendLayout();
+         mGetStringPanel.Visible = false;
+         mGetStringPanel.SendToBack();
+         if (mForm.Controls.Contains(mGetStringPanel))
+            mForm.Controls.Remove(mGetStringPanel);
+         mGetStringPanel.Dispose();
+         mGetStringPanel = null;
+         mForm.Bounds = mPreGetStringBounds;
+         mForm.ResumeLayout(true);
+      }
+
       private void CreateLayout() {
          SuspendLayout();
          ApplyTheme();
          Controls.AddRange(mTitleCluster, mPromptLabel, mStatusStrip, mInputTextBox);
-         mTitleCluster.LayoutCluster(mCurrentTheme!);
+         mTitleCluster.LayoutCluster();
          if (!string.IsNullOrEmpty(mInitialValue)) {
             SizeTextBoxToFitString(out SizeF size, mInputTextBox, mInitialValue);
             mInputTextBox.Width = (int)Math.Max(300, size.Width);

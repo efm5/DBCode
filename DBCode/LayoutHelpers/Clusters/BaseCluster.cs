@@ -7,13 +7,17 @@ namespace DBCode {
          protected LabelPosition mLabelPosition = LabelPosition.Left;
          private static int mNextClusterId = 1;
          internal bool mSkipTheme = false;
+         public Theme mTheme;
 
-         protected BaseCluster(Color? pBackgroundColor) {
+         protected BaseCluster(Theme pTheme, Color? pBackgroundColor) {
+            mTheme = pTheme;
             BackColor = pBackgroundColor ?? Color.Transparent;
             TabStop = false;
             TabIndex = TAB_INDEX_IGNORED;
             Name = $"BaseCluster{mNextClusterId}";
             mNextClusterId++;
+            AutoSize = true;//DEBUG efm5 2026 04 25 testing
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
          }
 
          protected void GlueControlsHorizontally(Control pFirstControl, Control pSecondControl, int pSpacing) {
@@ -64,6 +68,7 @@ namespace DBCode {
                pControl2.Location = new Point(pControl1.Right + mEm, 0);
                pLabel.Location = new Point(0, pControl1.Bottom + mEmHalf);
             }
+            SizePanel(this);
          }
 
 #pragma warning disable IDE0305
@@ -132,7 +137,9 @@ namespace DBCode {
                control.Refresh();
          }
 
-         internal abstract void LayoutCluster(Theme pTheme);
+         internal abstract void LayoutCluster();
+
+         internal abstract void SetFontAndColor();
 
          protected override void Dispose(bool pDisposing) {
             if (pDisposing) {

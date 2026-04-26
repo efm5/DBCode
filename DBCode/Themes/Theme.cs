@@ -123,6 +123,14 @@ namespace DBCode.Themes {
          pOutStatusForeColor = pTheme.mInterfaceColors[(int)ColorUsage.StatusFont];
          pOutStatusFont = pTheme.mFonts[(int)FontUsage.Status];
       }
+
+      public void Dispose() {
+         if (mFonts != null) {
+            foreach (Font font in mFonts) {
+               font?.Dispose();
+            }
+         }
+      }
    }
 
    public static class ThemeDefaults {

@@ -7,8 +7,8 @@ namespace DBCode {
          private ColorSwatch mSwatch;
          private Label mLabel;
 
-         public LabeledColorSwatchCluster(string pLabelText, LabelPosition pLabelPosition, Color pInitialColor) :
-            base(null) {
+         public LabeledColorSwatchCluster(Theme pTheme, string pLabelText, LabelPosition pLabelPosition, Color pInitialColor)
+            : base(pTheme, null) {
             mLabelPosition = pLabelPosition;
             mLabel = new Label() {
                TabIndex = TAB_INDEX_IGNORED,
@@ -16,9 +16,7 @@ namespace DBCode {
                Text = pLabelText,
                AutoSize = true,
                TextAlign = ContentAlignment.MiddleCenter,
-               Font = CreateNewFont(),
-               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont],
-               BackColor = Color.Transparent
+               Font = CreateNewFont()
             };
             mSwatch = new ColorSwatch(ColorSwatchUsage.Demo, pInitialColor, 50);
             mSwatch.SetSize(mEm3);
@@ -26,15 +24,15 @@ namespace DBCode {
             LayoutControls();
          }
 
-         internal override void LayoutCluster(Theme pTheme) {
-            SetFontAndColor(pTheme);
+         internal override void LayoutCluster() {
+            SetFontAndColor();
             LayoutControls();
             mLabel.Invalidate();
             mSwatch.Invalidate();
          }
 
-         public void SetFontAndColor(Theme pTheme) {
-            Theme.ThemeInterfaceThings(pTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
+         internal override void SetFontAndColor() {
+            Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
             mLabel.Font = poFont;
             mLabel.ForeColor = poForeColor;
             mLabel.BackColor = poBackColor;

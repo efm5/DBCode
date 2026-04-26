@@ -238,6 +238,15 @@ UI components do not persist state.
       Controls.Add(mStatusStrip);
       Controls.Add(mInputTextBox);
 
+7.2 Named Arguments
+• Do not use named arguments in method calls.
+• Pass all arguments positionally.
+  Examples:
+    Preferred:
+      EnsureWindowFitsMonitor(mForm, false);
+    Discouraged:
+      EnsureWindowFitsMonitor(mForm, pControlBox: false);
+
 ===========================================
 8. DRAGON DICTATION RULES
 ===========================================
@@ -253,7 +262,20 @@ UI components do not persist state.
     nextControl
 8.3 Method Names
 • Full English words.
-• Verb‑first.
+• Verb‑first by default for clarity and action‑oriented naming.
+• Noun‑first (military nomenclature) when disambiguation is necessary across similar methods in different contexts.
+  Examples:
+    Preferred (verb‑first):
+      ApplyTheme()
+      ValidateInput()
+      CalculateTotal()
+    Acceptable (noun‑first for disambiguation):
+      ThemeApplyCallback()         // vs ColorPickerApplyCallback(), FontPickerApplyCallback()
+      ColorPickerShowPanel()       // vs FontPickerShowPanel(), ThemePickerShowPanel()
+      FontValidationComplete()     // vs ThemeValidationComplete()
+    Context matters:
+      • Use verb‑first when the method's action is unique or context is obvious.
+      • Use noun‑first when multiple similar methods exist across different subsystems or panels.
 
 ===========================================
 9. WORKFLOW ASSUMPTIONS

@@ -2,27 +2,20 @@
 
 namespace DBCode {
    internal static partial class LayoutHelpers {
-
       internal sealed class LabeledButtonTextBoxCluster : BaseCluster {
          internal Label mLabel { get; private set; }
          internal Button mButton { get; private set; }
          internal TextBox mExampleTextBox { get; private set; }
-         internal Color? mBackgroundColor;
 
-         internal LabeledButtonTextBoxCluster(string pLabelText, string pButtonText, LabelPosition pLabelPosition,
-            Color? pBackgroundColor = null) : base(pBackgroundColor) {
-
-            mBackgroundColor = pBackgroundColor;
+         internal LabeledButtonTextBoxCluster(Theme pTheme, string pLabelText, string pButtonText,
+            LabelPosition pLabelPosition, Color? pBackgroundColor = null) : base(pTheme, pBackgroundColor) {
             mLabelPosition = pLabelPosition;
             mLabel = new Label() {
                TabIndex = TAB_INDEX_IGNORED,
                Name = $"LabeledButtonTextBoxCluster{nameof(mLabel)}{mTabIndex++}",
                Text = pLabelText,
                TextAlign = ContentAlignment.MiddleCenter,
-               AutoSize = true,
-               Font = CreateNewFont(),
-               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont],
-               BackColor = pBackgroundColor ?? Color.Transparent
+               AutoSize = true
             };
             mButton = new Button() {
                TabIndex = mTabIndex,
@@ -30,8 +23,6 @@ namespace DBCode {
                Text = pButtonText,
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-               Font = CreateNewFont(),
-               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont]
             };
             mExampleTextBox = new TextBox() {
                TabIndex = mTabIndex,
@@ -39,40 +30,62 @@ namespace DBCode {
                Width = 300,
                Text = mUnicodeSampleString,
                Multiline = false,
-               Font = CreateNewFont(mCurrentTheme.mFonts[(int)FontUsage.Interface]),
-               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont],
-               BackColor = pBackgroundColor ?? mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceBackground]
             };
             Controls.AddRange([mLabel, mButton, mExampleTextBox]);
          }
 
-         internal override void LayoutCluster(Theme pTheme) {
-            SetFontAndColor(pTheme);
+         internal override void LayoutCluster() {
+            SetFontAndColor();
             ApplyLabelPosition(mLabel, mButton, mExampleTextBox);
             mLabel.Invalidate();
             mButton.Invalidate();
             mExampleTextBox.Invalidate();
-         }
-
-         public void SetFontAndColor(Theme pTheme) {
-            Theme.ThemeInterfaceThings(pTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
-            mLabel.Font = poFont;
-            mLabel.ForeColor = poForeColor;
-            mLabel.BackColor = poBackColor;
-            mButton.Font = poFont;
-            mButton.ForeColor = poForeColor;
-            mButton.BackColor = poBackColor;
-            mExampleTextBox.Font = poFont;
-            mExampleTextBox.ForeColor = poForeColor;
-            mExampleTextBox.BackColor = poBackColor;
-         }
-
-         public void ChangeLabelText(string pNewText) {
-            mLabel.Text = pNewText;
-            mLabel.Invalidate();
             mLabel.Refresh();
+            mButton.Refresh();
+            mExampleTextBox.Refresh();
          }
 
+         internal override void SetFontAndColor() {
+            LabeledButtonTextBoxCluster Me = this;
+            object? tag = Tag;
+            ThrowIfNull(tag, $"Tag was null for {nameof(LabeledButtonTextBoxCluster)}. This should never happen.");
+
+            if (tag is FontUsage) {
+               FontUsage fontUsage = (FontUsage)tag;
+               Font poFont;
+               Color poForeColor;
+               Color poBackColor;
+
+               switch (fontUsage) {
+                  case FontUsage.Interface:
+                  default:
+                     Theme.ThemeInterfaceThings(mTheme, out poFont, out poForeColor, out poBackColor);
+                     break;
+                  case FontUsage.Menu:
+                     Theme.ThemeMenuThings(mTheme, out poFont, out poForeColor, out poBackColor);
+                     break;
+                  case FontUsage.Status:
+                     Theme.ThemeStatusThings(mTheme, out poFont, out poForeColor, out poBackColor);
+                     break;
+                  case FontUsage.Text:
+                     Theme.ThemeTextBoxThings(mTheme, out poFont, out poForeColor, out poBackColor);
+                     break;
+               }
+               mLabel.Font = CreateNewFont(poFont);
+               mLabel.ForeColor = poForeColor;
+               mLabel.BackColor = poBackColor;
+               mButton.Font = CreateNewFont(poFont);
+               mButton.ForeColor = poForeColor;
+               mButton.BackColor = poBackColor;
+               mExampleTextBox.Font = CreateNewFont(poFont);
+               mExampleTextBox.ForeColor = poForeColor;
+               mExampleTextBox.BackColor = poBackColor;
+            }
+         }
+
+         public void UpdateLabel(string pNewText) {
+            mLabel.Text = pNewText;
+         }
       }
    }
 }

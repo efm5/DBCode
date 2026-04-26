@@ -1,4 +1,6 @@
-﻿namespace DBCode {
+﻿using static DBCode.Themes.ThemeRegistry;
+
+namespace DBCode {
    namespace Themes {
       internal sealed partial class ThemePanel : Panel {
          private void PrimaryTabControl_DrawItem(object? pSender, DrawItemEventArgs pArgs) {
@@ -26,22 +28,30 @@
          }
 
          private void ApplyButton_Click(object? pSender, EventArgs pArgs) {
-            ThrowIfNull(mForm, nameof(mForm));
-            (mForm as MainForm)?.EnsureGetStringPanel(
+            GetString.Show(
                "Enter Theme Name",
                "Please enter a name for the new theme:",
                mTemporaryTheme.mName,
-               ApplyThemeCallback
+               ThemeApplyCallback
             );
          }
 
-         private void ApplyThemeCallback(string? pResult, bool pWasCancelled) {
-            ThrowIfNull(mForm, nameof(mForm));
-            (mForm as MainForm)?.RestoreFromGetStringPanel();
-            if (!pWasCancelled && !string.IsNullOrWhiteSpace(pResult)) {
-               string newName = pResult;
-               //DEBUG efm5 2026 04 25 Eventually, but not now add the new theme to the list of themes and make it the current theme
+         private void ThemeApplyCallback(string? pResult, bool pWasCancelled) {
+            GetString.Restore();
+            if (pWasCancelled || string.IsNullOrWhiteSpace(pResult))
+               return;
+            if (!ThemeNameIsUnique(pResult)) {
+               GetString.Show("Theme Name Collision",
+                  $"A theme named '{pResult}' already exists. Please enter a different name:",
+                  pResult, ThemeApplyCallback);
+               return;
             }
+            Theme newTheme = mTemporaryTheme.Clone(pResult);
+            AddTheme(newTheme);
+            SetCurrentTheme(pResult);
+            mCurrentTheme = newTheme;
+            mThemeIsDirty = true;
+            CloseThemePanel();
          }
 
          private void CancelButton_Click(object? pSender, EventArgs pArgs) {
@@ -57,6 +67,7 @@
 
          private void OnFontButtonClicked(object? pSender, EventArgs pArgs) {
             Button? button = pSender as Button;
+
             if (button?.Tag is not FontUsage usage)
                return;
             EnsureFontPickerPanel(mTemporaryTheme, usage, mTemporaryTheme.mFonts[(int)usage]);

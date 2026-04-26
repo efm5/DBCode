@@ -1,15 +1,12 @@
 ﻿namespace DBCode.Themes {
    public static class ThemeRegistry {
-      public static List<Theme> mThemeList { get; private set; } = [];
-
       public static void Initialize() {
-         List<Theme> themes = [];
-         AddBuiltIns(themes);
+         AddBuiltIns();
          List<Theme> loaded = ThemeManager.LoadThemes();
-         AddUserThemes(themes, loaded);
-         List<Theme> validated = ValidateThemes(themes);
-         mThemeList = validated;
-         mPreviousThemeName = SelectThemeName(validated);
+         AddUserThemes(loaded);
+         List<Theme> validated = ValidateThemes(mThemes);
+         mThemes = validated;
+         mPreviousThemeName = SelectThemeName(mThemes);
       }
 
       public static void Reload() {
@@ -17,7 +14,7 @@
       }
 
       public static bool SetCurrentTheme(string pName) {
-         foreach (Theme theme in mThemeList) {
+         foreach (Theme theme in mThemes) {
             if (String.Equals(theme.mName, pName, StringComparison.OrdinalIgnoreCase)) {
                mPreviousThemeName = theme.mName;
                return true;
@@ -26,35 +23,49 @@
          return false;
       }
 
+      public static bool ThemeNameIsUnique(string pName) {
+         foreach (Theme theme in mThemes) {
+            if (String.Equals(theme.mName, pName, StringComparison.OrdinalIgnoreCase))
+               return false;
+         }
+         return true;
+      }
+
+      public static void AddTheme(Theme pTheme) {
+         if (ThemeNameIsUnique(pTheme.mName))
+            mThemes.Add(pTheme);
+      }
+
       public static Theme GetCurrentThemeClone() {
-         foreach (Theme theme in mThemeList) {
+         foreach (Theme theme in mThemes) {
             if (String.Equals(theme.mName, mPreviousThemeName, StringComparison.OrdinalIgnoreCase))
                return theme.Clone();
          }
          return ThemeDefaults.DefaultLight;
       }
 
-      private static void AddBuiltIns(List<Theme> pList) {
-         pList.Add(ThemeDefaults.DefaultLight);
-         pList.Add(ThemeDefaults.DefaultDark);
-         pList.Add(ThemeDefaults.HighContrastLight);
-         pList.Add(ThemeDefaults.HighContrastDark);
-         pList.Add(ThemeDefaults.Classic);
-         pList.Add(ThemeDefaults.LightPastel);
-         pList.Add(ThemeDefaults.DarkPastel);
+      private static void AddBuiltIns() {
+         mThemes.Add(ThemeDefaults.DefaultLight);
+         mThemes.Add(ThemeDefaults.DefaultDark);
+         mThemes.Add(ThemeDefaults.HighContrastLight);
+         mThemes.Add(ThemeDefaults.HighContrastDark);
+         mThemes.Add(ThemeDefaults.Classic);
+         mThemes.Add(ThemeDefaults.LightPastel);
+         mThemes.Add(ThemeDefaults.DarkPastel);
       }
 
-      private static void AddUserThemes(List<Theme> pList, List<Theme> pUserThemes) {
+      private static void AddUserThemes(List<Theme> pUserThemes) {
          foreach (Theme theme in pUserThemes)
-            AddThemeIfUnique(pList, theme);
+            AddThemeIfUnique(theme);
       }
 
-      private static void AddThemeIfUnique(List<Theme> pList, Theme pTheme) {
-         foreach (Theme existing in pList) {
+      private static bool AddThemeIfUnique(Theme pTheme) {
+         foreach (Theme existing in mThemes) {
             if (String.Equals(existing.mName, pTheme.mName, StringComparison.OrdinalIgnoreCase))
-               return;
+               return false;
          }
-         pList.Add(pTheme);
+         mThemes.Add(pTheme);
+         return true;
       }
 
       private static List<Theme> ValidateThemes(List<Theme> pThemes) {

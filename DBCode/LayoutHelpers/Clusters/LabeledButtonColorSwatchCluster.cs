@@ -10,8 +10,8 @@ namespace DBCode {
 
          public event ColorSwatchClickedHandler? SwatchClicked;
 
-         public LabeledButtonColorSwatchCluster(string pLabelText, string pButtonText, ColorSwatchUsage pUsage,
-            LabelPosition pLabelPosition, Color pInitialColor, Color? pBackgroundColor = null) : base(pBackgroundColor) {
+         public LabeledButtonColorSwatchCluster(Theme pTheme, string pLabelText, string pButtonText, ColorSwatchUsage pUsage,
+            LabelPosition pLabelPosition, Color pInitialColor, Color? pBackgroundColor = null) : base(pTheme, pBackgroundColor) {
             mUsage = pUsage;
             mLabelPosition = pLabelPosition;
             mLabel = new Label() {
@@ -41,8 +41,8 @@ namespace DBCode {
             LayoutControls();
          }
 
-         public void SetFontAndColor(Theme pTheme) {
-            Theme.ThemeInterfaceThings(pTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
+         internal override void SetFontAndColor() {
+            Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
             mLabel.Font = poFont;
             mLabel.ForeColor = poForeColor;
             mLabel.BackColor = poBackColor;
@@ -58,8 +58,8 @@ namespace DBCode {
             SwatchClicked?.Invoke(this, pUsage);
          }
 
-         internal override void LayoutCluster(Theme pTheme) {
-            SetFontAndColor(pTheme);
+         internal override void LayoutCluster() {
+            SetFontAndColor();
             ApplyLabelPosition(mLabel, mButton);
             GlueControlsHorizontally(mButton, mSwatch, mEm);
             mLabel.Invalidate();

@@ -177,14 +177,21 @@ namespace DBCode {
          }
 
          private void OkButton_Click(object? pSender, EventArgs pEventArguments) {
-            if (!int.TryParse(mFontSizeTextBox!.Text, out int size) || size < 1 || size > 999) {
+            ThrowIfNull(mTheme, nameof(mTheme));
+            ThrowIfNull(mThemePanel, nameof(mThemePanel));
+            ThrowIfNull(mFontSizeTextBox, nameof(mFontSizeTextBox));
+            ThrowIfNull(mFontFamilyNameTextBox, nameof(mFontFamilyNameTextBox));
+            ThrowIfNull(mFontFamilyComboBox, nameof(mFontFamilyComboBox));
+            ThrowIfNull(mWorkingFont, nameof(mWorkingFont));
+
+            if (!int.TryParse(mFontSizeTextBox.Text, out int size) || size < 1 || size > 999) {
                TimedMessage("The font size must be a number between 1 and 999.", "Invalid Font Size");
-               TextBoxSelectAll(mFontSizeTextBox!);
+               TextBoxSelectAll(mFontSizeTextBox);
                return;
             }
-            string familyName = mFontFamilyNameTextBox!.Text;
+            string familyName = mFontFamilyNameTextBox.Text;
             bool found = false;
-            for (int i = 0; i < mFontFamilyComboBox!.Items.Count; i++) {
+            for (int i = 0; i < mFontFamilyComboBox.Items.Count; i++) {
                if (string.Equals((string)mFontFamilyComboBox.Items[i]!, familyName,
                   StringComparison.OrdinalIgnoreCase)) {
                   found = true;
@@ -193,22 +200,21 @@ namespace DBCode {
             }
             if (!found) {
                TimedMessage("That family name is not an installed font name.", "Unrecognized Font Family");
-               TextBoxSelectAll(mFontFamilyNameTextBox!);
+               TextBoxSelectAll(mFontFamilyNameTextBox);
                return;
             }
             FontStyle style = GetFontStyle();
             try {
                Font newFont = new Font(familyName, size, style);
 
-               if (mFontUsage != null && mTheme != null) {
-                  mTheme.mFonts[(int)mFontUsage] = newFont;
-               }
-               if (mWorkingFont!.Equals(mInitialFont))
+               mTheme.mFonts[(int)mFontUsage] = newFont;
+               if (mWorkingFont.Equals(mInitialFont))
                   ThemePanel.mRepaint = false;
                else
                   ThemePanel.mRepaint = true;
                RecalculateAssociatedOffsets(newFont);
-               mThemePanel?.UpdateFontLabels(mFontUsage);
+               mThemePanel.UpdateFontLabels(mFontUsage);
+               ThemePanel.mRepaint = true;
                ThemePanel.RestoreFromFontPickerPanel();
             }
             catch (Exception ex) {

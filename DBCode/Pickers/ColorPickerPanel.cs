@@ -36,7 +36,7 @@ namespace DBCode {
                groupBoxBackground = mTheme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground];
             Font interfaceTextFont = mTheme.mFonts[(int)FontUsage.Interface];
 
-            mTitleLabel = new TwoLineHeaderLabelCluster("Select A Color",
+            mTitleLabel = new TwoLineHeaderLabelCluster(mTheme, "Select A Color",
                $"Use this color for {ToDescription((ColorUsage)mColorUsage)}");
             mScrollPanel = new Panel {
                Name = $"ColorPickerScrollPanel{mTabIndex++}",
@@ -223,7 +223,7 @@ namespace DBCode {
                mGreenPrefixButton, mGreenUpDown, mGreenSlider, mGreenSwatch,
                mBluePrefixButton, mBlueUpDown, mBlueSlider, mBlueSwatch
             ]);
-            mDemoSwatch = new LabeledColorSwatchCluster("Example:", LabelPosition.Left, mInitialColor);
+            mDemoSwatch = new LabeledColorSwatchCluster(mTheme, "Example:", LabelPosition.Left, mInitialColor);
             mCustomColorGroupBox.Controls.Add(mDemoSwatch);
             // Status strip with buttons
             mStatusStrip = new StatusStrip {
@@ -604,8 +604,8 @@ namespace DBCode {
             mStatusStrip!.BackColor = statusBackground;
             mStatusStrip.ForeColor = statusForeColor;
             mStatusStrip.Font = statusFont;
-            mTitleLabel!.SetFontAndColor(mCurrentTheme!);
-            mDemoSwatch!.SetFontAndColor(mCurrentTheme!);
+            mTitleLabel!.SetFontAndColor();
+            mDemoSwatch!.SetFontAndColor();
          }
 
          protected override void Dispose(bool pDisposing) {

@@ -6,8 +6,8 @@ namespace DBCode {
       internal sealed class LabelCluster : BaseCluster {
          internal Label mLabel;
 
-         internal LabelCluster(string pText, Color? pBackgroundColor = null)
-            : base(pBackgroundColor) {
+         internal LabelCluster(Theme pTheme, string pText, Color? pBackgroundColor = null)
+            : base(pTheme, pBackgroundColor) {
             mLabel = new Label() {
                Name = $"LabelCluster{nameof(mLabel)}{mTabIndex}",
                TabIndex = mTabIndex++,
@@ -21,12 +21,12 @@ namespace DBCode {
             Controls.Add(mLabel);
          }
 
-         internal override void LayoutCluster(Theme pTheme) {
-            SetFontAndColor(pTheme);
+         internal override void LayoutCluster() {
+            SetFontAndColor();
          }
 
-         public void SetFontAndColor(Theme pTheme) {
-            Theme.ThemeInterfaceThings(pTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
+         internal override void SetFontAndColor() {
+            Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
             mLabel.Font = poFont;
             mLabel.ForeColor = poForeColor;
             mLabel.BackColor = poBackColor;

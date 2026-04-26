@@ -1,8 +1,6 @@
 ﻿using DBCode.Syntax;
 using DBCode.Themes;
 
-#pragma warning disable CS0649//DEBUG efm5 2026 03 31 just until we start using the layout
-#pragma warning disable CS0414//DEBUG efm5 2026 03 31 just until we start using the layout
 namespace DBCode {
    #region enumerations
    public enum ViewMode { Features, Minimal }
@@ -23,7 +21,7 @@ namespace DBCode {
       Tiny = 100
    }
 
-   public enum PrimaryTabPageUsage : int { Interface, Color }
+   public enum PrimaryTabPageUsage : int { Interface, Color, Examples }
 
    public enum HighlightTabPageUsage : int {
       Interface, CSharp, C, Cpp, Basic, FSharp, HTML, CSS, XML, JSON, PowerShell, Batch, SQL, Markdown, Python
@@ -178,7 +176,7 @@ namespace DBCode {
       public static bool mFirstGray = true, mFirstLaunch = true, mForceActivation = true, mIsTargetingEnabled = false,
          mPreMinimalControlBox = true, mReturnToTop = true, mFirstTheme = true, mFirstThemePicker = true,
          mFirstColorPicker = true, mFirstFontPicker = true;
-      public static float mFontWidthAdjustment = 0.5f, mOFontSize, mScaling;
+      public static float mFontWidthAdjustment = 0.5f;
       public static FontUsage mFontUsage = FontUsage.Text;
       public static MainForm? mForm = null;
       public static HighlighterEngine? mHighlighterEngine = null;
@@ -241,6 +239,4 @@ namespace DBCode {
       #endregion
    }
    #endregion
-#pragma warning restore CS0649//DEBUG efm5 2026 03 31 just until we start using the layout
-#pragma warning restore CS0414//DEBUG efm5 2026 03 31 just until we start using the layout
 }

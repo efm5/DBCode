@@ -5,10 +5,10 @@ namespace DBCode {
       internal class TwoLineHeaderLabelCluster : BaseCluster {
          internal Label mTopLabel, mBottomLabel;
 
-         internal TwoLineHeaderLabelCluster(string pTopText, string pBottomText,
+         internal TwoLineHeaderLabelCluster(Theme pTheme, string pTopText, string pBottomText,
             HeaderLabelSize pTopSizeMultiplier = HeaderLabelSize.Normal,
             HeaderLabelSize pBottomSizeMultiplier = HeaderLabelSize.Small,
-            Color? pBackgroundColor = null) : base(pBackgroundColor) {
+            Color? pBackgroundColor = null) : base(pTheme, pBackgroundColor) {
             mSkipTheme = true;
             mTopLabel = new Label() {
                Name = $"HeaderLabelCluster{nameof(mTopLabel)}{mTabIndex}",
@@ -16,9 +16,7 @@ namespace DBCode {
                Text = pTopText,
                AutoSize = true,
                Font = CreateNewTitleFont(pTopSizeMultiplier),
-               TextAlign = ContentAlignment.MiddleCenter,
-               BackColor = pBackgroundColor ?? Color.Transparent,
-               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont]
+               TextAlign = ContentAlignment.MiddleCenter
             };
             mBottomLabel = new Label() {
                Name = $"HeaderLabelCluster{nameof(mBottomLabel)}{mTabIndex}",
@@ -26,9 +24,7 @@ namespace DBCode {
                Text = pBottomText,
                AutoSize = true,
                Font = CreateNewTitleFont(pBottomSizeMultiplier),
-               TextAlign = ContentAlignment.MiddleLeft,
-               BackColor = pBackgroundColor ?? Color.Transparent,
-               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont]
+               TextAlign = ContentAlignment.MiddleLeft
             };
             Controls.AddRange(mTopLabel, mBottomLabel);
             Dock = DockStyle.Top;
@@ -39,8 +35,8 @@ namespace DBCode {
             mBottomLabel.Refresh();
          }
 
-         public void SetFontAndColor(Theme pTheme) {
-            Theme.ThemeInterfaceThings(pTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
+         internal override void SetFontAndColor() {
+            Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
             mTopLabel.Font = CreateNewTitleFont(poFont, HeaderLabelSize.Normal);
             mTopLabel.ForeColor = poForeColor;
             mTopLabel.BackColor = poBackColor;
@@ -49,8 +45,8 @@ namespace DBCode {
             mBottomLabel.BackColor = poBackColor;
          }
 
-         internal override void LayoutCluster(Theme pTheme) {
-            SetFontAndColor(pTheme);
+         internal override void LayoutCluster() {
+            SetFontAndColor();
             if ((mTopLabel != null) && (mBottomLabel != null)) {
                int x = (Width - mTopLabel.Width) / 2;
                if (x < 0)

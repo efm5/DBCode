@@ -8,8 +8,8 @@ namespace DBCode {
 
          internal ClusterContainer(List<BaseCluster> pClusters, ClusterLayoutMode pLayoutMode, int pMaxWidth = 0,
             int pMaxHeight = 0, int pFixedColumns = 0, int pFixedRows = 0) {
-            //AutoSize = true;
-            //AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            AutoSize = true;//DEBUG efm5 2026 04 25 testing
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
             mClusters = pClusters;
             mLayoutMode = pLayoutMode;
             mMaxWidth = pMaxWidth;
@@ -28,17 +28,19 @@ namespace DBCode {
             return GetEnumerator();
          }
 
-         public void SetSize() {
-            Point wantedSize = BottomRight(Controls.Cast<Control>());
-            if (Dock == DockStyle.None) {
-               Width = wantedSize.X + 2;
-               Height = wantedSize.Y + 2;
-            }
-            else {
-               MinimumSize = new Size(wantedSize.X + 2, wantedSize.Y + 2);
-               AutoScrollMinSize = new Size(wantedSize.X + 2, wantedSize.Y + 2);
-            }
-         }
+         //DEBUG efm5 2026 04 25 testing
+         //public void SetSize() {
+         //   Point wantedSize = BottomRight(Controls.Cast<Control>());
+
+         //   if (Dock == DockStyle.None) {
+         //      Width = wantedSize.X + 2;
+         //      Height = wantedSize.Y + 2;
+         //   }
+         //   else {
+         //      MinimumSize = new Size(wantedSize.X + 2, wantedSize.Y + 2);
+         //      AutoScrollMinSize = new Size(wantedSize.X + 2, wantedSize.Y + 2);
+         //   }
+         //}
 
          public void LayoutClusters() {
             switch (mLayoutMode) {

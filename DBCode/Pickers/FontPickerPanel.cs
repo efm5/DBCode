@@ -2,7 +2,7 @@ namespace DBCode {
    namespace Themes {
       public sealed partial class FontPickerPanel : Panel {
          private static Font? mInitialFont, mWorkingFont;
-         private static FontUsage? mFontUsage;
+         private static FontUsage mFontUsage;
          private static Theme? mTheme;
          private Button? mCancelButton, mFamilyPrefixButton, mFontDropDownPrefixButton, mFontSizeDropDownPrefixButton,
             mFontSizePrefixButton, mHelpButton, mOkButton;
@@ -35,7 +35,7 @@ namespace DBCode {
                groupBoxBackground = mTheme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground];
             Font interfaceTextFont = mTheme.mFonts[(int)FontUsage.Interface];
 
-            mTitleLabel = new TwoLineHeaderLabelCluster("Select A Font",
+            mTitleLabel = new TwoLineHeaderLabelCluster(mTheme, "Select A Font",
                $"Use this font for {ToDescription((FontUsage)mFontUsage!)}");
             mScrollPanel = new Panel {
                Name = $"FontPickerScrollPanel{mTabIndex++}",
@@ -549,7 +549,7 @@ namespace DBCode {
             mStatusStrip!.BackColor = statusBackground;
             mStatusStrip.ForeColor = statusForeColor;
             mStatusStrip.Font = statusFont;
-            mTitleLabel!.SetFontAndColor(mTheme);
+            mTitleLabel!.SetFontAndColor();
          }
 
          public bool FontHasChanged() {

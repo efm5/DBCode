@@ -7,8 +7,8 @@ namespace DBCode {
          internal Button mButton { get; private set; }
          internal Color? mBackgroundColor;
 
-         internal LabeledButtonCluster(string pLabelText, string pButtonText, LabelPosition pLabelPosition,
-            Color? pBackgroundColor = null) : base(pBackgroundColor) {
+         internal LabeledButtonCluster(Theme pTheme, string pLabelText, string pButtonText, LabelPosition pLabelPosition,
+            Color? pBackgroundColor = null) : base(pTheme, pBackgroundColor) {
             mBackgroundColor = pBackgroundColor;
             mLabelPosition = pLabelPosition;
             mLabel = new Label() {
@@ -32,15 +32,15 @@ namespace DBCode {
             };
          }
 
-         internal override void LayoutCluster(Theme pTheme) {
-            SetFontAndColor(pTheme);
+         internal override void LayoutCluster() {
+            SetFontAndColor();
             ApplyLabelPosition(mLabel as Label, mButton);
             mLabel.Invalidate();
             mButton.Invalidate();
          }
 
-         public void SetFontAndColor(Theme pTheme) {
-            Theme.ThemeInterfaceThings(pTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
+         internal override void SetFontAndColor() {
+            Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
             mLabel.Font = poFont;
             mLabel.ForeColor = poForeColor;
             mLabel.BackColor = poBackColor;

@@ -5,9 +5,8 @@ namespace DBCode {
       internal sealed class CheckBoxCluster : BaseCluster {
          internal CheckBox mCheckBox;
 
-         internal CheckBoxCluster(string pText, Color? pBackgroundColor = null)
-            : base(pBackgroundColor) {
-
+         internal CheckBoxCluster(Theme pTheme, string pText, Color? pBackgroundColor = null)
+            : base(pTheme, pBackgroundColor) {
             mCheckBox = new CheckBox() {
                Name = $"CheckBoxCluster{nameof(mCheckBox)}{mTabIndex}",
                TabIndex = mTabIndex++,
@@ -21,14 +20,14 @@ namespace DBCode {
             Controls.Add(mCheckBox);
          }
 
-         internal override void LayoutCluster(Theme pTheme) {
-            SetFontAndColor(pTheme);
+         internal override void LayoutCluster() {
+            SetFontAndColor();
             mCheckBox.Location = new Point(0, 0);
             mCheckBox.Invalidate();
          }
 
-         public void SetFontAndColor(Theme pTheme) {
-            Theme.ThemeInterfaceThings(pTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
+         internal override void SetFontAndColor() {
+            Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
             mCheckBox.Font = poFont;
             mCheckBox.ForeColor = poForeColor;
             mCheckBox.BackColor = poBackColor;

@@ -37,6 +37,10 @@ namespace DBCode {
             Settings.Default.ThemeSize = mThemeBounds.Size;
          }
          Settings.Default.Save();
+         mThemePanel?.Dispose();
+         foreach (Themes.Theme theme in mThemes.OfType<Themes.Theme>()) {
+            theme.Dispose();
+         }
       }
       #endregion
 

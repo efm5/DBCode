@@ -7,8 +7,8 @@ namespace DBCode {
          private CheckBox? mCheckBox = null;
          internal Color? mBackgroundColor;
 
-         public LabeledCheckBoxCluster(string pLabelText, string pCheckBoxText, bool pInitialChecked, LabelPosition pLabelPosition,
-            Color? pBackgroundColor) : base(pBackgroundColor) {
+         public LabeledCheckBoxCluster(Theme pTheme, string pLabelText, string pCheckBoxText, bool pInitialChecked,
+            LabelPosition pLabelPosition, Color? pBackgroundColor) : base(pTheme, pBackgroundColor) {
             mBackgroundColor = pBackgroundColor;
             mLabelPosition = pLabelPosition;
             if ((mLabelPosition == LabelPosition.Top) || (mLabelPosition == LabelPosition.Bottom))
@@ -32,15 +32,15 @@ namespace DBCode {
             ApplyLabelPosition(mLabel, mCheckBox);
          }
 
-         internal override void LayoutCluster(Theme pTheme) {
-            SetFontAndColor(pTheme);
+         internal override void LayoutCluster() {
+            SetFontAndColor();
             ApplyLabelPosition(mLabel!, mCheckBox!);
             mLabel!.Invalidate();
             mCheckBox!.Invalidate();
          }
 
-         public void SetFontAndColor(Theme pTheme) {
-            Theme.ThemeInterfaceThings(pTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
+         internal override void SetFontAndColor() {
+            Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
             mLabel!.Font = poFont;
             mLabel.ForeColor = poForeColor;
             mLabel.BackColor = poBackColor;

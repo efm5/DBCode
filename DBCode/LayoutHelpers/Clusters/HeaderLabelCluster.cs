@@ -5,8 +5,8 @@ namespace DBCode {
       internal sealed class HeaderLabelCluster : BaseCluster {
          internal Label mLabel;
 
-         internal HeaderLabelCluster(string pText, HeaderLabelSize pSizeMultiplier, Color? pBackgroundColor = null)
-            : base(pBackgroundColor) {
+         internal HeaderLabelCluster(Theme pTheme, string pText, HeaderLabelSize pSizeMultiplier, Color?
+            pBackgroundColor = null) : base(pTheme, pBackgroundColor) {
             mSkipTheme = true;
             mLabel = new Label() {
                Name = $"HeaderLabelCluster{nameof(mLabel)}{mTabIndex}",
@@ -24,15 +24,15 @@ namespace DBCode {
             Dock = DockStyle.Top;
          }
 
-         public void SetFontAndColor(Theme pTheme) {
-            Theme.ThemeInterfaceThings(pTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
+         internal override void SetFontAndColor() {
+            Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
             mLabel.Font = poFont;
             mLabel.ForeColor = poForeColor;
             mLabel.BackColor = poBackColor;
          }
 
-         internal override void LayoutCluster(Theme pTheme) {
-            SetFontAndColor(pTheme);
+         internal override void LayoutCluster() {
+            SetFontAndColor();
             if (mLabel != null) {
                int x = (Width - mLabel.Width) / 2;
                if (x < 0)

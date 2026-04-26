@@ -10,11 +10,12 @@ namespace DBCode {
             mHTMLColorClusters = [], mCSSColorClusters = [], mXMLColorClusters = [],
             mJSONColorClusters = [], mPowerShellColorClusters = [],
             mBatchColorClusters = [], mSQLColorClusters = [],
-            mMarkdownColorClusters = [], mPythonColorClusters = [];
+            mMarkdownColorClusters = [], mPythonColorClusters = [],
+            mExamplesClusters = [];
          private readonly List<List<BaseCluster>> mAllClusters = [];
          public static bool mRepaint = false;
-         private readonly Button mApplyButton, mCancelButton, mCloneButton, mHelpButton, mNewButton;
-         private ClusterContainer mFontsContainer, mInterfaceColorsContainer, mCSharpColorsContainer, mCColorsContainer,
+         private readonly Button mApplyButton, mCancelButton, mCloneButton, mHelpButton, mNewButton, mExampleButton;
+         private ClusterContainer mExamplesContainer, mFontsContainer, mInterfaceColorsContainer, mCSharpColorsContainer, mCColorsContainer,
             mCppColorsContainer, mBasicColorsContainer, mFSharpColorsContainer, mHTMLColorsContainer,
             mCSSColorsContainer, mXMLColorsContainer, mJSONColorsContainer, mPowerShellColorsContainer,
             mBatchColorsContainer, mSQLColorsContainer, mMarkdownColorsContainer, mPythonColorsContainer;
@@ -23,7 +24,11 @@ namespace DBCode {
             mCHeaderCluster, mCppHeaderCluster, mBasicHeaderCluster, mFSharpHeaderCluster, mHTMLHeaderCluster,
             mCSSHeaderCluster, mXMLHeaderCluster, mJSONHeaderCluster, mPowerShellHeaderCluster, mBatchHeaderCluster,
             mSQLHeaderCluster, mMarkdownHeaderCluster, mPythonHeaderCluster;
-         private readonly StatusStrip mStatusStrip;
+         private readonly MenuStrip mExampleMenuStrip;
+         private readonly ToolStripMenuItem mExampleTSMI;
+         private readonly RichTextBox[] mExampleRichTextBoxs;
+         private readonly StatusStrip mStatusStrip, mExampleStatusStrip;
+         private static readonly string[] mLanguageExamples;
          private readonly ToolStripControlHost mApplyHost, mCancelHost, mCloneHost, mHelpHost, mNewHost;
          private readonly ToolStripStatusLabel mSpringLabel;
          private readonly UiState mUiState;
@@ -33,14 +38,17 @@ namespace DBCode {
            mHighlightCScrollPanel, mHighlightCppScrollPanel, mHighlightBasicScrollPanel, mHighlightFSharpScrollPanel,
            mHighlightHTMLScrollPanel, mHighlightCSSScrollPanel, mHighlightXMLScrollPanel, mHighlightJSONScrollPanel,
            mHighlightPowerShellScrollPanel, mHighlightBatchScrollPanel, mHighlightSQLScrollPanel,
-           mHighlightMarkdownScrollPanel, mHighlightPythonScrollPanel;
-         private readonly List<Panel> mAllScrollPanels = [];
+           mHighlightMarkdownScrollPanel, mHighlightPythonScrollPanel, mExampleScrollPanel;
+         private readonly List<Panel?> mAllScrollPanels = [];
          private Theme mTemporaryTheme;
 
          public ThemePanel(ThemeUsage pThemeUsage, UiState pUiState) {
+            ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
             SuspendLayout();
-            mTemporaryTheme = mCurrentTheme!.Clone(TemporaryThemePrefix +
-               DateTime.UtcNow.Ticks.ToString(CultureInfo.InvariantCulture));
+            string temporaryName = TemporaryThemePrefix + DateTime.UtcNow.Ticks.ToString(CultureInfo.InvariantCulture);
+            if (mCurrentTheme.mIsBuiltIn)
+               temporaryName += " CLONED FROM " + mCurrentTheme.mName;
+            mTemporaryTheme = mCurrentTheme.Clone(temporaryName);
             mUiState = pUiState;
             AutoScroll = true;
             AutoSize = false;
@@ -50,23 +58,23 @@ namespace DBCode {
             mHelpButton = new Button() { Tag = new HelpTag(HelpContext.Theme, ToDescription(pThemeUsage)) };
             mNewButton = new Button();
             mCloneButton = new Button();
-            mThemesHeaderCluster = new HeaderLabelCluster($"Current Theme’s Name: “{mCurrentTheme.mName}”",
+            mThemesHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, $"Current Theme’s Name: “{mCurrentTheme.mName}”",
                HeaderLabelSize.Normal);
-            mInterfaceHeaderCluster = new HeaderLabelCluster("Interface Callers", HeaderLabelSize.Small);
-            mCSharpHeaderCluster = new HeaderLabelCluster("C# Token Highlight Colors", HeaderLabelSize.Small);
-            mCHeaderCluster = new HeaderLabelCluster("C Token Highlight Colors", HeaderLabelSize.Small);
-            mCppHeaderCluster = new HeaderLabelCluster("C++ Token Highlight Colors", HeaderLabelSize.Small);
-            mBasicHeaderCluster = new HeaderLabelCluster("Basic Token Highlight Colors", HeaderLabelSize.Small);
-            mFSharpHeaderCluster = new HeaderLabelCluster("F# Token Highlight Colors", HeaderLabelSize.Small);
-            mHTMLHeaderCluster = new HeaderLabelCluster("HTML Token Highlight Colors", HeaderLabelSize.Small);
-            mCSSHeaderCluster = new HeaderLabelCluster("CSS Token Highlight Colors", HeaderLabelSize.Small);
-            mXMLHeaderCluster = new HeaderLabelCluster("XML Token Highlight Colors", HeaderLabelSize.Small);
-            mJSONHeaderCluster = new HeaderLabelCluster("JSON Token Highlight Colors", HeaderLabelSize.Small);
-            mPowerShellHeaderCluster = new HeaderLabelCluster("PowerShell Token Highlight Colors", HeaderLabelSize.Small);
-            mBatchHeaderCluster = new HeaderLabelCluster("Batch Token Highlight Colors", HeaderLabelSize.Small);
-            mSQLHeaderCluster = new HeaderLabelCluster("SQL Token Highlight Colors", HeaderLabelSize.Small);
-            mMarkdownHeaderCluster = new HeaderLabelCluster("Markdown Token Highlight Colors", HeaderLabelSize.Small);
-            mPythonHeaderCluster = new HeaderLabelCluster("Python Token Highlight Colors", HeaderLabelSize.Small);
+            mInterfaceHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "Interface Colors", HeaderLabelSize.Small);
+            mCSharpHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "C# Token Highlight Colors", HeaderLabelSize.Small);
+            mCHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "C Token Highlight Colors", HeaderLabelSize.Small);
+            mCppHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "C++ Token Highlight Colors", HeaderLabelSize.Small);
+            mBasicHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "Basic Token Highlight Colors", HeaderLabelSize.Small);
+            mFSharpHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "F# Token Highlight Colors", HeaderLabelSize.Small);
+            mHTMLHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "HTML Token Highlight Colors", HeaderLabelSize.Small);
+            mCSSHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "CSS Token Highlight Colors", HeaderLabelSize.Small);
+            mXMLHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "XML Token Highlight Colors", HeaderLabelSize.Small);
+            mJSONHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "JSON Token Highlight Colors", HeaderLabelSize.Small);
+            mPowerShellHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "PowerShell Token Highlight Colors", HeaderLabelSize.Small);
+            mBatchHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "Batch Token Highlight Colors", HeaderLabelSize.Small);
+            mSQLHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "SQL Token Highlight Colors", HeaderLabelSize.Small);
+            mMarkdownHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "Markdown Token Highlight Colors", HeaderLabelSize.Small);
+            mPythonHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "Python Token Highlight Colors", HeaderLabelSize.Small);
             mStatusStrip = new StatusStrip();
             mApplyHost = new ToolStripControlHost(mApplyButton);
             mCancelHost = new ToolStripControlHost(mCancelButton);
@@ -74,7 +82,7 @@ namespace DBCode {
             mNewHost = new ToolStripControlHost(mNewButton);
             mCloneHost = new ToolStripControlHost(mCloneButton);
             mPrimaryTabControl = new VariableWidthTabControl();
-            mPrimaryTabControl.TabPages.AddRange([new TabPage("Fonts"), new TabPage("Colors")]);
+            mPrimaryTabControl.TabPages.AddRange([new TabPage("Fonts"), new TabPage("Colors"), new TabPage("Examples")]);
             mHighlightTabControl = new VariableWidthTabControl();
             mHighlightTabControl.TabPages.AddRange([new TabPage("Interface"), new TabPage("C#"), new TabPage("C"), new TabPage("C++"),
                new TabPage("Basic"), new TabPage("F#"), new TabPage("HTML"), new TabPage("CSS"), new TabPage("XML"), new TabPage("JSON"),
@@ -108,6 +116,9 @@ namespace DBCode {
             mHelpButton.Click += MainForm.Help_Click;
             mNewButton.Click += NewButton_Click;
             mCloneButton.Click += CloneButton_Click;
+            mExamplesContainer = new ClusterContainer(mExamplesClusters, ClusterLayoutMode.FlowLayout) {
+               Name = "ExamplesClusterContainer"
+            };
             string font = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Interface].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Interface].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Interface].Style}";
             AddFontCluster(mFontsClusters, $"The Interface Font: {font}", "Interface", FontUsage.Interface, LabelPosition.Right);
             font = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Menu].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Menu].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Menu].Style}";
@@ -488,7 +499,7 @@ namespace DBCode {
                mHighlightCScrollPanel, mHighlightCppScrollPanel, mHighlightBasicScrollPanel, mHighlightFSharpScrollPanel,
                mHighlightHTMLScrollPanel, mHighlightCSSScrollPanel, mHighlightXMLScrollPanel, mHighlightJSONScrollPanel,
                mHighlightPowerShellScrollPanel, mHighlightBatchScrollPanel, mHighlightSQLScrollPanel,
-               mHighlightMarkdownScrollPanel, mHighlightPythonScrollPanel);
+               mHighlightMarkdownScrollPanel, mHighlightPythonScrollPanel, mExampleScrollPanel);
             ResumeLayout(false);
          }
 
@@ -547,7 +558,7 @@ namespace DBCode {
 
          public void LayoutControls() {
             SuspendLayout();
-            ApplyThemeToPanel();
+            ApplyThemeToPanel(mTemporaryTheme);
             LayoutClustersAndContainers();
             ResumeLayout(true);
          }
@@ -555,7 +566,7 @@ namespace DBCode {
          private void LayoutClustersAndContainers() {
             foreach (List<BaseCluster> clusterBases in mAllClusters.OfType<List<BaseCluster>>()) {
                foreach (BaseCluster cluster in clusterBases.OfType<BaseCluster>()) {
-                  cluster.LayoutCluster(mTemporaryTheme);
+                  cluster.LayoutCluster();
                   SizePanel(cluster);
                }
             }
@@ -569,51 +580,49 @@ namespace DBCode {
                   clusterContainer.ArrangeControlsInRows(mEmHalf);
                else
                   clusterContainer.ArrangeControlsInGrid(2, 1, mEmHalf);
-               clusterContainer.SetSize();
+               //clusterContainer.SetSize();//DEBUG efm5 2026 04 25 testing
                clusterContainer.Invalidate();
             }
          }
 
          private void AddFontCluster(List<BaseCluster> pClusters, string pLabelText, string pButtonText, FontUsage pUsage,
             LabelPosition pLabelPosition = LabelPosition.Right) {
-            LabeledButtonTextBoxCluster cluster = new LabeledButtonTextBoxCluster(pLabelText, pButtonText,
+            LabeledButtonTextBoxCluster cluster = new LabeledButtonTextBoxCluster(mTemporaryTheme, pLabelText, pButtonText,
                pLabelPosition) {
                Tag = pUsage
             };
             cluster.mButton.Tag = pUsage;
+            cluster.LayoutCluster();
             cluster.mButton.Click += OnFontButtonClicked;
             pClusters.Add(cluster);
          }
 
-         public void UpdateFontLabels(FontUsage? pUsage) {
-            string font = string.Empty;
+         public void UpdateFontLabels(FontUsage pUsage) {
+            string fontDescription = string.Empty;
+            Font font = mTemporaryTheme.mFonts[(int)pUsage];
 
             switch (pUsage) {
                case FontUsage.Interface:
-                  font = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Interface].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Interface].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Interface].Style}";
+                  fontDescription = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Interface].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Interface].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Interface].Style}";
                   break;
                case FontUsage.Menu:
-                  font = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Menu].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Menu].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Menu].Style}";
+                  fontDescription = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Menu].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Menu].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Menu].Style}";
                   break;
                case FontUsage.Status:
-                  font = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Status].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Status].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Status].Style}";
+                  fontDescription = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Status].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Status].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Status].Style}";
                   break;
                case FontUsage.Text:
-                  font = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Text].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Text].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Text].Style}";
+                  fontDescription = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Text].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Text].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Text].Style}";
                   break;
             }
+            ((LabeledButtonTextBoxCluster)mFontsClusters[(int)pUsage]).UpdateLabel(fontDescription);
          }
 
          private void AddColorCluster(List<BaseCluster> pClusters, string pLabel, ColorSwatchUsage pUsage,
             LabelPosition pLabelPosition = LabelPosition.Left) {
             Color color = mTemporaryTheme.mInterfaceColors[(int)pUsage];
-            LabeledButtonColorSwatchCluster cluster = new LabeledButtonColorSwatchCluster(
-               pLabel,
-               ToDescription(pUsage),
-               pUsage,
-               pLabelPosition,
-               color
-            );
+            LabeledButtonColorSwatchCluster cluster = new LabeledButtonColorSwatchCluster(mTemporaryTheme, pLabel,
+               ToDescription(pUsage), pUsage, pLabelPosition, color);
             cluster.SwatchClicked += OnColorSwatchClicked;
             pClusters.Add(cluster);
          }
@@ -624,8 +633,8 @@ namespace DBCode {
                string labelText = ToDescription(usage);
                string buttonText = ColorUsageButtonNames.Names[usage];
                Color initialColor = mTemporaryTheme.mInterfaceColors[(int)usage];
-               LabeledButtonColorSwatchCluster cluster = new LabeledButtonColorSwatchCluster(labelText, buttonText,
-                  (ColorSwatchUsage)usage, LabelPosition.Left, initialColor, null);
+               LabeledButtonColorSwatchCluster cluster = new LabeledButtonColorSwatchCluster(mTemporaryTheme, labelText,
+                  buttonText, (ColorSwatchUsage)usage, LabelPosition.Left, initialColor, null);
                cluster.SwatchClicked += OnColorSwatchClicked;
                clusters.Add(cluster);
             }
@@ -648,9 +657,11 @@ namespace DBCode {
                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
          }
 
-         public void ApplyThemeToPanel() {
-            Theme theme = mTemporaryTheme;
-
+         public void ApplyThemeToPanel(Theme pTheme) {
+            Theme clonedTheme = pTheme.Clone();
+            mTemporaryTheme.Dispose();
+            mTemporaryTheme = clonedTheme;
+            Theme theme = clonedTheme;
             BackColor = theme.mInterfaceColors[(int)ColorUsage.PanelBackground];
             mStatusStrip.BackColor = theme.mInterfaceColors[(int)ColorUsage.StatusBackground];
             ApplyThemeToControlTree(mPrimaryTabControl);
@@ -662,7 +673,7 @@ namespace DBCode {
                   Control control = host.Control;
                   control.ForeColor = theme.mInterfaceColors[(int)ColorUsage.StatusFont];
                   control.BackColor = theme.mInterfaceColors[(int)ColorUsage.StatusBackground];
-                  control.Font = theme.mFonts[(int)FontUsage.Status];
+                  control.Font = (Font)theme.mFonts[(int)FontUsage.Status].Clone();
                   control.Invalidate();
                   control.Update();
                }
@@ -677,18 +688,22 @@ namespace DBCode {
                }
                control.ForeColor = mTemporaryTheme.mInterfaceColors[(int)ColorUsage.InterfaceFont];
                // Don't set BackColor on TabControls or TabPages - they handle their own painting
-               if (control is not BaseCluster && control is not TabControl && control is not TabPage)
+               if (control is not BaseCluster && control is not TabControl && control is not TabPage) {
                   control.BackColor = mTemporaryTheme.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
-               control.Font = mTemporaryTheme.mFonts[(int)FontUsage.Interface];
+                  control.Font = mTemporaryTheme.mFonts[(int)FontUsage.Interface];
+               }
                if (control is BaseCluster basecluster) {
-                  basecluster.LayoutCluster(mTemporaryTheme);
-                  if (basecluster is not HeaderLabelCluster)
-                     SizePanel(basecluster);
-                  else {
-                     HeaderLabelCluster headerCluster = (HeaderLabelCluster)basecluster;
-                     headerCluster.LayoutCluster(mTemporaryTheme);
-                  }
-                  basecluster.Invalidate();
+                  basecluster.LayoutCluster();
+                  //if (basecluster is not HeaderLabelCluster)
+                  //   SizePanel(basecluster);
+                  //else {
+                  //   HeaderLabelCluster headerCluster = (HeaderLabelCluster)basecluster;
+                  basecluster.LayoutCluster();
+                  //headerCluster.LayoutCluster(mTemporaryTheme);
+                  //}
+                  basecluster.BackColor = Color.Aquamarine;//DEBUG efm5 2026 04 25 testing – Breaks painting of the tab page strip, but allows me to see if the cluster is being properly sized to its contents
+                  //basecluster.Invalidate();
+                  //basecluster.Refresh();
                }
                ApplyThemeToControlTree(control);
             }
@@ -757,7 +772,7 @@ namespace DBCode {
                mForm.Controls.Add(mThemePanel);
             if (mRepaint) {
                mRepaint = false;
-               mThemePanel.ApplyThemeToPanel();
+               mThemePanel.ApplyThemeToPanel(mThemePanel.mTemporaryTheme);
                mThemePanel.Invalidate(true);
             }
          }
@@ -806,7 +821,7 @@ namespace DBCode {
             }
          }
 
-         public static void RestoreFromFontPickerPanel() {
+         public static void RestoreFromFontPickerPanel(Theme? pTheme = null) {
             ThrowIfNull(mForm, nameof(mForm));
             ThrowIfNull(mFontPickerPanel, nameof(mFontPickerPanel));
             ThrowIfNull(mThemePanel, nameof(mThemePanel));
@@ -821,7 +836,8 @@ namespace DBCode {
                mForm.Controls.Add(mThemePanel);
             if (mRepaint) {
                mRepaint = false;
-               mThemePanel.ApplyThemeToPanel();
+               if (pTheme != null)
+                  mThemePanel.ApplyThemeToPanel(pTheme);
                mThemePanel.Invalidate(true);
             }
          }
@@ -831,6 +847,63 @@ namespace DBCode {
             mFirstTheme = false;
             mThemeBounds = mForm.Bounds;
             mForm.RestoreFromThemePanel();
+         }
+
+         protected override void Dispose(bool pDisposing) {
+            if (pDisposing) {
+               // Dispose buttons
+               mApplyButton?.Dispose();
+               mCancelButton?.Dispose();
+               mCloneButton?.Dispose();
+               mHelpButton?.Dispose();
+               mNewButton?.Dispose();
+
+               // Dispose ToolStrip components
+               mApplyHost?.Dispose();
+               mCancelHost?.Dispose();
+               mCloneHost?.Dispose();
+               mHelpHost?.Dispose();
+               mNewHost?.Dispose();
+               mSpringLabel?.Dispose();
+               mStatusStrip?.Dispose();
+
+               // Dispose tab controls
+               mHighlightTabControl?.Dispose();
+               mPrimaryTabControl?.Dispose();
+
+               // Dispose cluster containers
+               foreach (ClusterContainer container in mClusterContainers)
+                  container?.Dispose();
+
+               // Dispose header clusters
+               mInterfaceHeaderCluster?.Dispose();
+               mThemesHeaderCluster?.Dispose();
+               mCSharpHeaderCluster?.Dispose();
+               mCHeaderCluster?.Dispose();
+               mCppHeaderCluster?.Dispose();
+               mBasicHeaderCluster?.Dispose();
+               mFSharpHeaderCluster?.Dispose();
+               mHTMLHeaderCluster?.Dispose();
+               mCSSHeaderCluster?.Dispose();
+               mXMLHeaderCluster?.Dispose();
+               mJSONHeaderCluster?.Dispose();
+               mPowerShellHeaderCluster?.Dispose();
+               mBatchHeaderCluster?.Dispose();
+               mSQLHeaderCluster?.Dispose();
+               mMarkdownHeaderCluster?.Dispose();
+               mPythonHeaderCluster?.Dispose();
+
+               // Dispose scroll panels
+               foreach (Panel? panel in mAllScrollPanels)
+                  panel?.Dispose();
+
+               // Dispose clusters in lists
+               foreach (List<BaseCluster> clusterList in mAllClusters) {
+                  foreach (BaseCluster cluster in clusterList)
+                     cluster?.Dispose();
+               }
+            }
+            base.Dispose(pDisposing);
          }
       }
    }
