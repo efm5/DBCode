@@ -65,13 +65,15 @@ namespace DBCode {
 
          internal override void SetFontAndColor() {
             Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
-            mLabel!.Font = poFont;
+            mLabel!.Font = CreateNewFont(poFont);
             mLabel.ForeColor = poForeColor;
             mLabel.BackColor = poBackColor;
-            mRichTextBox!.Font = poFont;
+            mRichTextBox!.Font = CreateNewFont(poFont);
             mRichTextBox.ForeColor = poForeColor;
             mRichTextBox.BackColor = poBackColor;
          }
+
+         public RichTextBox GetRichTextBox => mRichTextBox!;
 
          protected override void Dispose(bool pDisposing) {
             if (pDisposing) {

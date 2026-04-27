@@ -63,10 +63,10 @@ namespace DBCode {
 
          internal override void SetFontAndColor() {
             Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
-            mLabel!.Font = poFont;
+            mLabel!.Font = CreateNewFont(poFont);
             mLabel.ForeColor = poForeColor;
             mLabel.BackColor = poBackColor;
-            mTextBox!.Font = poFont;
+            mTextBox!.Font = CreateNewFont(poFont);
             mTextBox.ForeColor = poForeColor;
             mTextBox.BackColor = poBackColor;
          }
