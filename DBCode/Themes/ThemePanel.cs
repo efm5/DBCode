@@ -14,7 +14,7 @@ namespace DBCode {
             mExamplesClusters = [];
          private readonly List<List<BaseCluster>> mAllClusters = [];
          public static bool mRepaint = false;
-         private readonly Button mApplyButton, mCancelButton, mCloneButton, mHelpButton, mNewButton, mExampleButton;
+         private readonly Button mApplyButton, mCancelButton, mCloneButton, mHelpButton, mNewButton;
          private ClusterContainer mExamplesContainer, mFontsContainer, mInterfaceColorsContainer, mCSharpColorsContainer, mCColorsContainer,
             mCppColorsContainer, mBasicColorsContainer, mFSharpColorsContainer, mHTMLColorsContainer,
             mCSSColorsContainer, mXMLColorsContainer, mJSONColorsContainer, mPowerShellColorsContainer,
@@ -24,11 +24,20 @@ namespace DBCode {
             mCHeaderCluster, mCppHeaderCluster, mBasicHeaderCluster, mFSharpHeaderCluster, mHTMLHeaderCluster,
             mCSSHeaderCluster, mXMLHeaderCluster, mJSONHeaderCluster, mPowerShellHeaderCluster, mBatchHeaderCluster,
             mSQLHeaderCluster, mMarkdownHeaderCluster, mPythonHeaderCluster, mExamplesHeaderCluster;
+         private readonly Button mExampleButton, mExampleHostButton;
          private readonly MenuStrip mExampleMenuStrip;
-         private readonly ToolStripMenuItem mExampleTSMI;
+         private readonly ToolStripMenuItem mExampleTSMI, mExampleTSMISubItem;
+         private readonly ToolStripControlHost mExampleStatusButtonHost;
+         private readonly ToolStripStatusLabel mExampleStatusLabel;
+         private readonly StatusStrip mExampleStatusStrip;
+         private readonly GroupBox mExampleGroupBox;
+         private readonly CheckBox mExampleCheckBox;
+         private readonly RichTextBox mExampleRichTextBox;
+         private readonly RadioButton mExampleRadioButton;
          private readonly RichTextBox[] mExampleRichTextBoxs;
-         private readonly RichTextFieldCluster[] mExampleRichTextBoxClusters;
-         private readonly StatusStrip mStatusStrip, mExampleStatusStrip;
+         private readonly RichTextBoxCluster[] mExampleRichTextBoxClusters;
+         private readonly StatusStrip mStatusStrip;
+#pragma warning disable IDE0300
          private static readonly string[] mLanguageExamples = new string[] {
     // CSharp
     @"// C# example
@@ -249,6 +258,7 @@ print(f""Primes: {primes}"")",
     @"Plain text example - no syntax highlighting is applied to this content.
 All text appears in the default foreground color."
 };
+#pragma warning restore IDE0300
          private readonly ToolStripControlHost mApplyHost, mCancelHost, mCloneHost, mHelpHost, mNewHost;
          private readonly ToolStripStatusLabel mSpringLabel;
          private readonly UiState mUiState;
@@ -440,10 +450,12 @@ All text appears in the default foreground color."
                Dock = DockStyle.Fill,
                AutoScroll = true
             };
+#pragma warning disable CA2263
             mExampleRichTextBoxs = new RichTextBox[Enum.GetValues(typeof(DBCode.Syntax.LanguageKind)).Length];
-            mExampleRichTextBoxClusters = new RichTextFieldCluster[Enum.GetValues(typeof(DBCode.Syntax.LanguageKind)).Length];
+            mExampleRichTextBoxClusters = new RichTextBoxCluster[Enum.GetValues(typeof(DBCode.Syntax.LanguageKind)).Length];
+#pragma warning restore CA2263
             for (int i = 0; i < mExampleRichTextBoxClusters.Length; i++) {
-               mExampleRichTextBoxClusters[i] = new RichTextFieldCluster(
+               mExampleRichTextBoxClusters[i] = new RichTextBoxCluster(
                    mTemporaryTheme,
                    400,
                    Enum.GetName(typeof(DBCode.Syntax.LanguageKind), i),
@@ -470,9 +482,71 @@ All text appears in the default foreground color."
             mPrimaryScrollPanel.Controls.AddRange(mFontsContainer);
             mExamplesContainer = new ClusterContainer(mExampleScrollPanel, mExamplesClusters, ClusterLayoutMode.FlowLayout) {
                Name = "ExamplesClusterContainer",
+               Dock = DockStyle.Fill,
                Tag = "Examples"
             };
-            mExampleScrollPanel.Controls.AddRange(mExamplesHeaderCluster, mExamplesContainer);
+            mExampleMenuStrip = new MenuStrip() { Name = "ExampleMenuStrip" };
+            mExampleTSMI = new ToolStripMenuItem { Name = "ExampleTSMI", Text = "Example &Menu" };
+            mExampleTSMISubItem = new ToolStripMenuItem { Name = "ExampleTSMISubItem", Text = "Example &Item" };
+            mExampleTSMI.DropDownItems.Add(mExampleTSMISubItem);
+            mExampleMenuStrip.Items.Add(mExampleTSMI);
+            mExampleMenuStrip.Dock = DockStyle.Top;
+            mExampleGroupBox = new GroupBox {
+               Name = "ExampleGroupBox",
+               Text = "Example Group",
+               AutoSize = false,
+               Dock = DockStyle.Top
+            };
+            mExampleButton = new Button {
+               Name = "ExampleButton",
+               Text = "&Button",
+               AutoSize = true,
+               AutoSizeMode = AutoSizeMode.GrowAndShrink
+            };
+            mExampleCheckBox = new CheckBox {
+               Name = "ExampleCheckBox",
+               Text = "Option",
+               AutoSize = true
+            };
+            mExampleRichTextBox = new RichTextBox {
+               Name = "ExampleRichTextBox",
+               Text = mUnicodeSampleString,
+               Multiline = true,
+               ScrollBars = RichTextBoxScrollBars.Both,
+               Width = 300,
+               Height = mEm * 4
+            };
+            mExampleRadioButton = new RadioButton {
+               Name = "ExampleRadioButton",
+               Text = "Testing",
+               AutoSize = true
+            };
+            mExampleGroupBox.Controls.AddRange([ mExampleButton, mExampleCheckBox, mExampleRichTextBox,
+               mExampleRadioButton ]);
+            mExampleStatusLabel = new ToolStripStatusLabel {
+               Name = "ExampleStatusLabel",
+               Text = "Status: Ready",
+               Spring = true
+            };
+            mExampleHostButton = new Button {
+               Name = "ExampleHostButton",
+               Text = "&Host",
+               AutoSize = true,
+               AutoSizeMode = AutoSizeMode.GrowAndShrink,
+               Location = new Point(1, 1)
+            };
+            mExampleStatusButtonHost = new ToolStripControlHost(mExampleHostButton) {
+               Name = "ExampleStatusButtonHost"
+            };
+            mExampleStatusStrip = new StatusStrip {
+               Name = "ExampleStatusStrip",
+               SizingGrip = false,
+               AutoSize = true,
+               Dock = DockStyle.Top
+            };
+            mExampleStatusStrip.Items.AddRange([mExampleStatusButtonHost, mExampleStatusLabel]);
+            mExampleScrollPanel.Controls.AddRange(mExamplesContainer, mExampleStatusStrip, mExampleGroupBox,
+               mExampleMenuStrip, mExamplesHeaderCluster);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Interface].Controls.Add(mHighlightInterfaceScrollPanel);
             AddColorCluster(mInterfaceColorClusters, "Panel Background", ColorSwatchUsage.PanelBackground);
             AddColorCluster(mInterfaceColorClusters, "TextBox Background", ColorSwatchUsage.TextBox);
@@ -822,6 +896,22 @@ All text appears in the default foreground color."
          }
 
          private void LayoutClustersAndContainers() {
+            Point location = GetGroupBoxFirstLineOffset(mExampleGroupBox);
+            int x = location.X, y = location.Y;
+            int tallest = Tallest([ mExampleButton, mExampleCheckBox,
+               mExampleRichTextBox,  mExampleRadioButton ]);
+
+            mExampleButton.Location = new Point(x, y + (tallest - mExampleButton.Height) / 2);
+            x += mExampleButton.Width + mEm;
+            mExampleCheckBox.Location = new Point(x, y + (tallest - mExampleCheckBox.Height) / 2);
+            x += mExampleCheckBox.Width + mEm;
+            mExampleRichTextBox.Location = new Point(x, y);
+            x += mExampleRichTextBox.Width + mEm;
+            mExampleRadioButton.Location = new Point(x, y + (tallest - mExampleRadioButton.Height) / 2);
+            x += mExampleRadioButton.Width + mEm;
+            SizeTextBoxToFitString(out SizeF pOSize, mExampleRichTextBox);
+            mExampleRichTextBox.Size = LayoutHelpers.SizeFromSizeF(pOSize);
+            SizeGroupBox(mExampleGroupBox);
             foreach (List<BaseCluster> clusterBases in mAllClusters.OfType<List<BaseCluster>>()) {
                foreach (BaseCluster cluster in clusterBases.OfType<BaseCluster>()) {
                   cluster.LayoutCluster();
@@ -829,9 +919,6 @@ All text appears in the default foreground color."
                }
             }
             foreach (ClusterContainer clusterContainer in mClusterContainers.OfType<ClusterContainer>()) {
-               if (clusterContainer.Name == "ExamplesClusterContainer") {
-                  int debugging = 0;
-               }
                Panel parent = clusterContainer.Parent as Panel ?? throw new InvalidOperationException(
                   $"Expected parent of ClusterContainer {clusterContainer.Name} to be a Panel.");
                if (parent.Controls.Count > 1)
@@ -845,6 +932,88 @@ All text appears in the default foreground color."
                   clusterContainer.ArrangeControlsFlow(mEmHalf);
                clusterContainer.Invalidate();
             }
+         }
+
+         private void ApplyThemeToControlTree(Control pParent) {
+            Color color = mTemporaryTheme.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
+            foreach (Control control in pParent.Controls) {
+               if (control is BaseCluster cluster && cluster.mSkipTheme) {
+                  ApplyThemeToControlTree(control);
+                  continue;
+               }
+               control.ForeColor = mTemporaryTheme.mInterfaceColors[(int)ColorUsage.InterfaceFont];
+               if (control is not BaseCluster && control is not TabControl && control is not TabPage) {
+                  control.BackColor = mTemporaryTheme.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
+                  control.Font = CreateNewFont(mTemporaryTheme.mFonts[(int)FontUsage.Interface]);
+               }
+               if (control is BaseCluster baseCluster) {
+                  baseCluster.LayoutCluster();
+                  baseCluster.LayoutCluster();
+               }
+               if (control is GroupBox groupBox) {
+                  groupBox.Font = CreateNewBoldFont();
+                  groupBox.BackColor = mTemporaryTheme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground];
+                  groupBox.ForeColor = mTemporaryTheme.mInterfaceColors[(int)ColorUsage.GroupBoxFont];
+               }
+               if (control is MenuStrip menuStrip) {
+                  menuStrip.BackColor = mTemporaryTheme.mInterfaceColors[(int)ColorUsage.MenuBackground];
+                  foreach (ToolStripItem item in menuStrip.Items)
+                     if (item is ToolStripMenuItem tsmi)
+                        PaintMenuItemsRecursive(tsmi, mTemporaryTheme);
+               }
+               if (control is StatusStrip statusStrip)
+                  ApplyThemeToToolStrip(statusStrip, FontUsage.Status, ColorUsage.StatusFont, ColorUsage.StatusBackground);
+               ApplyThemeToControlTree(control);
+            }
+         }
+
+         private void ApplyThemeToToolStrip(ToolStrip pToolStrip, FontUsage pFontUsage, ColorUsage pForeUsage,
+            ColorUsage pBackUsage) {
+            pToolStrip.BackColor = mTemporaryTheme.mInterfaceColors[(int)pBackUsage];
+            pToolStrip.ForeColor = mTemporaryTheme.mInterfaceColors[(int)pForeUsage];
+            pToolStrip.Font = CreateNewFont(mTemporaryTheme.mFonts[(int)pFontUsage]);
+            pToolStrip.Renderer = new ToolStripProfessionalRenderer();
+            foreach (ToolStripItem item in pToolStrip.Items) {
+               if (item is ToolStripControlHost host) {
+                  host.Control.ForeColor = mTemporaryTheme.mInterfaceColors[(int)pForeUsage];
+                  host.Control.BackColor = mTemporaryTheme.mInterfaceColors[(int)pBackUsage];
+                  host.Control.Font = CreateNewFont(mTemporaryTheme.mFonts[(int)pFontUsage]);
+               }
+               else {
+                  item.ForeColor = mTemporaryTheme.mInterfaceColors[(int)pForeUsage];
+                  item.BackColor = mTemporaryTheme.mInterfaceColors[(int)pBackUsage];
+                  item.Font = CreateNewFont(mTemporaryTheme.mFonts[(int)pFontUsage]);
+               }
+            }
+         }
+
+         public void ApplyThemeToPanel(Theme pTheme) {
+            Theme clonedTheme = pTheme.Clone();
+            mTemporaryTheme.Dispose();
+            mTemporaryTheme = clonedTheme;
+            Theme theme = clonedTheme;
+            BackColor = theme.mInterfaceColors[(int)ColorUsage.PanelBackground];
+            mStatusStrip.BackColor = theme.mInterfaceColors[(int)ColorUsage.StatusBackground];
+            mPrimaryTabControl.SetStripBackColor(theme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground]);
+            mPrimaryTabControl.ResetStripBackgroundPainted();
+            mHighlightTabControl.SetStripBackColor(theme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground]);
+            mHighlightTabControl.ResetStripBackgroundPainted();
+            ApplyThemeToControlTree(mPrimaryTabControl);
+            ApplyThemeToControlTree(mHighlightTabControl);
+            mStatusStrip.Renderer = new ToolStripProfessionalRenderer();
+            mStatusStrip.Invalidate(true);
+            foreach (ToolStripItem item in mStatusStrip.Items) {
+               if (item is ToolStripControlHost host) {
+                  Control control = host.Control;
+                  control.ForeColor = theme.mInterfaceColors[(int)ColorUsage.StatusFont];
+                  control.BackColor = theme.mInterfaceColors[(int)ColorUsage.StatusBackground];
+                  control.Font = (Font)theme.mFonts[(int)FontUsage.Status].Clone();
+                  control.Invalidate();
+                  control.Update();
+               }
+            }
+            mPrimaryTabControl.Invalidate(true);
+            mHighlightTabControl.Invalidate(true);
          }
 
          private void AddFontCluster(List<BaseCluster> pClusters, string pLabelText, string pButtonText, FontUsage pUsage,
@@ -917,49 +1086,6 @@ All text appears in the default foreground color."
                pArgs.Graphics.FillRectangle(brush, rect);
             TextRenderer.DrawText(pArgs.Graphics, page.Text, font, rect, fore,
                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
-         }
-
-         public void ApplyThemeToPanel(Theme pTheme) {
-            Theme clonedTheme = pTheme.Clone();
-            mTemporaryTheme.Dispose();
-            mTemporaryTheme = clonedTheme;
-            Theme theme = clonedTheme;
-            BackColor = theme.mInterfaceColors[(int)ColorUsage.PanelBackground];
-            mStatusStrip.BackColor = theme.mInterfaceColors[(int)ColorUsage.StatusBackground];
-            ApplyThemeToControlTree(mPrimaryTabControl);
-            ApplyThemeToControlTree(mHighlightTabControl);
-            mStatusStrip.Renderer = new ToolStripProfessionalRenderer();
-            mStatusStrip.Invalidate(true);
-            foreach (ToolStripItem item in mStatusStrip.Items) {
-               if (item is ToolStripControlHost host) {
-                  Control control = host.Control;
-                  control.ForeColor = theme.mInterfaceColors[(int)ColorUsage.StatusFont];
-                  control.BackColor = theme.mInterfaceColors[(int)ColorUsage.StatusBackground];
-                  control.Font = (Font)theme.mFonts[(int)FontUsage.Status].Clone();
-                  control.Invalidate();
-                  control.Update();
-               }
-            }
-         }
-
-         private void ApplyThemeToControlTree(Control pParent) {
-            foreach (Control control in pParent.Controls) {
-               if (control is BaseCluster cluster && cluster.mSkipTheme) {
-                  ApplyThemeToControlTree(control);
-                  continue;
-               }
-               control.ForeColor = mTemporaryTheme.mInterfaceColors[(int)ColorUsage.InterfaceFont];
-               // Don't set BackColor on TabControls or TabPages - they handle their own painting
-               if (control is not BaseCluster && control is not TabControl && control is not TabPage) {
-                  control.BackColor = mTemporaryTheme.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
-                  control.Font = mTemporaryTheme.mFonts[(int)FontUsage.Interface];
-               }
-               if (control is BaseCluster basecluster) {
-                  basecluster.LayoutCluster();
-                  basecluster.LayoutCluster();
-               }
-               ApplyThemeToControlTree(control);
-            }
          }
 
          public bool ThemeIsDirty() {
@@ -1104,13 +1230,24 @@ All text appears in the default foreground color."
 
          protected override void Dispose(bool pDisposing) {
             if (pDisposing) {
+               // Unhook event handlers before disposing controls
+               mApplyButton.Click -= ApplyButton_Click;
+               mCancelButton.Click -= CancelButton_Click;
+               mHelpButton.Click -= MainForm.Help_Click;
+               mNewButton.Click -= NewButton_Click;
+               mCloneButton.Click -= CloneButton_Click;
+               mPrimaryTabControl.DrawItem -= PrimaryTabControl_DrawItem;
+               mHighlightTabControl.DrawItem -= HighlightTabControl_DrawItem;
+               mPrimaryTabControl.SelectedIndexChanged -= PrimaryTabControl_SelectedIndexChanged;
+               mHighlightTabControl.SelectedIndexChanged -= HighlightTabControl_SelectedIndexChanged;
+               // Dispose temporary theme (not a Control, not covered by base)
+               mTemporaryTheme?.Dispose();
                // Dispose buttons
                mApplyButton?.Dispose();
                mCancelButton?.Dispose();
                mCloneButton?.Dispose();
                mHelpButton?.Dispose();
                mNewButton?.Dispose();
-
                // Dispose ToolStrip components
                mApplyHost?.Dispose();
                mCancelHost?.Dispose();
@@ -1119,15 +1256,12 @@ All text appears in the default foreground color."
                mNewHost?.Dispose();
                mSpringLabel?.Dispose();
                mStatusStrip?.Dispose();
-
                // Dispose tab controls
                mHighlightTabControl?.Dispose();
                mPrimaryTabControl?.Dispose();
-
                // Dispose cluster containers
                foreach (ClusterContainer container in mClusterContainers)
                   container?.Dispose();
-
                // Dispose header clusters
                mInterfaceHeaderCluster?.Dispose();
                mThemesHeaderCluster?.Dispose();
@@ -1146,11 +1280,13 @@ All text appears in the default foreground color."
                mSQLHeaderCluster?.Dispose();
                mMarkdownHeaderCluster?.Dispose();
                mPythonHeaderCluster?.Dispose();
-
+               mExampleMenuStrip?.Dispose();
+               mExampleStatusStrip?.Dispose();
+               mExampleStatusButtonHost?.Dispose();
+               mExampleGroupBox?.Dispose(); // cascades Button, CheckBox, RichTextBox, RadioButton
                // Dispose scroll panels
                foreach (Panel? panel in mAllScrollPanels)
                   panel?.Dispose();
-
                // Dispose clusters in lists
                foreach (List<BaseCluster> clusterList in mAllClusters) {
                   foreach (BaseCluster cluster in clusterList)

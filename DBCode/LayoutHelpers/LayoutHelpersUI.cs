@@ -245,27 +245,31 @@ namespace DBCode {
          }
       }
 
-      internal static void SizeTextBoxToFitString(out SizeF pSize, RichTextBox pTextBox, string pExample = "",
-        bool pDoWidth = true, bool pDoHeight = true, bool pPadWidth = true) {
+      internal static void SizeTextBoxToFitString(out SizeF pSize, RichTextBox pTextBox,
+         string pExample = "", bool pDoWidth = true, bool pDoHeight = true, bool pPadWidth = true) {
          Font font = pTextBox.Font;
          SizeF stringSize = new SizeF(0, 0);
+         pSize = stringSize;
+
          using (Graphics graphics = pTextBox.CreateGraphics()) {
-            if (!string.IsNullOrEmpty(pExample))
+            if (!string.IsNullOrEmpty(pExample)) //Prefer example
                stringSize = graphics.MeasureString(pExample, font);
             else if (!string.IsNullOrEmpty(pTextBox.Text))
                stringSize = graphics.MeasureString(pTextBox.Text, font);
-            else
-               stringSize = graphics.MeasureString("X", font);
+            else//Worst-case
+               stringSize = graphics.MeasureString(mUnicodeSampleString, font);
          }
-         float width = pDoWidth ? stringSize.Width : pTextBox.Width;
-         float height = pDoHeight ? stringSize.Height : pTextBox.Height;
-
-         if (pPadWidth)
-            width += mIndent;
-         pSize = new SizeF(width, height);
+         if (pDoWidth) {
+            if (pPadWidth)
+               pSize.Width = stringSize.Width + mEm;
+            else
+               pSize.Width = stringSize.Width;
+         }
+         if (pDoHeight)
+            pSize.Height = (int)Math.Ceiling(stringSize.Height * 1.3f);
       }
 
-      public static void SizeTextBoxToFitString(out SizeF pSize, TextBox pTextBox, string pExample = "",
+      internal static void SizeTextBoxToFitString(out SizeF pSize, TextBox pTextBox, string pExample = "",
          bool pDoWidth = true, bool pDoHeight = true, bool pPadWidth = true) {
          Font font = pTextBox.Font;
          SizeF stringSize = new SizeF(0, 0);
@@ -277,7 +281,7 @@ namespace DBCode {
             else if (!string.IsNullOrEmpty(pTextBox.Text))
                stringSize = graphics.MeasureString(pTextBox.Text, font);
             else//Worst-case
-               stringSize = graphics.MeasureString("The quick brown fox", font);
+               stringSize = graphics.MeasureString(mUnicodeSampleString, font);
          }
          if (pDoWidth) {
             if (pPadWidth)

@@ -52,7 +52,7 @@
          }
 
          private void AddButtonCluster(List<ButtonCluster> pClusters, Theme pTheme) {
-            ButtonCluster cluster = new ButtonCluster(pTheme.mName) {
+            ButtonCluster cluster = new ButtonCluster(pTheme, pTheme.mName) {
                Tag = pTheme
             };
             cluster.SuspendLayout();

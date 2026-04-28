@@ -5,12 +5,10 @@ namespace DBCode {
       internal sealed class RadioButtonCluster : BaseCluster {
          private Label? mLabel = null;
          List<RadioButton> mRadioButtons = [];
-         internal Color? mBackgroundColor;
 
          public RadioButtonCluster(Theme pTheme, string pLabelText, LabelPosition pLabelPosition,
             List<string> pRadioButtonNames, int pInitiallyChecked, Color? pBackgroundColor)
             : base(pTheme, pBackgroundColor) {
-            mBackgroundColor = pBackgroundColor;
             mLabelPosition = pLabelPosition;
             mLabel = new Label {
                TabIndex = TAB_INDEX_IGNORED,
@@ -46,18 +44,18 @@ namespace DBCode {
 
          internal override void SetFontAndColor() {
             Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
-            mLabel!.Font = poFont;
+            mLabel!.Font = CreateNewFont(poFont);
             mLabel.ForeColor = poForeColor;
             mLabel.BackColor = poBackColor;
             foreach (RadioButton radioButton in mRadioButtons) {
-               radioButton.Font = poFont;
+               radioButton.Font = CreateNewFont(poFont);
                radioButton.ForeColor = poForeColor;
                radioButton.BackColor = poBackColor;
             }
          }
 
          internal void LayoutControls() {
-            //DEBUG efm5 2026 04 4 do the math – Just the radio buttons use
+            //DEBUG efm5 2026 04 4 do the math – Just the radio buttons
          }
 
          internal override void LayoutCluster() {
@@ -68,21 +66,12 @@ namespace DBCode {
                radioButton.Invalidate();
          }
 
-         protected override void Dispose(bool pDisposing) {
-            if (pDisposing) {
-               if (mRadioButtons != null) {
-                  foreach (RadioButton radioButton in mRadioButtons) {
-                     radioButton.Dispose();
-                  }
-                  mRadioButtons.Clear();
-               }
-               if (mLabel != null) {
-                  mLabel.Dispose();
-                  mLabel = null;
-               }
-            }
-            base.Dispose(pDisposing);
-         }
+         //protected override void Dispose(bool pDisposing) {
+         //   if (pDisposing) {
+         //      //DEBUG efm5 2026 04 27 if there are ever handlers dispose of them here
+         //   }
+         //   base.Dispose(pDisposing);
+         //}
       }
    }
 }

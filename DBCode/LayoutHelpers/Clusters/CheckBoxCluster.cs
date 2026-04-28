@@ -28,7 +28,7 @@ namespace DBCode {
 
          internal override void SetFontAndColor() {
             Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
-            mCheckBox.Font = poFont;
+            mCheckBox.Font = CreateNewFont(poFont);
             mCheckBox.ForeColor = poForeColor;
             mCheckBox.BackColor = poBackColor;
          }

@@ -82,9 +82,9 @@ namespace DBCode {
          mRichTextBox.ForeColor = theme.mInterfaceColors[(int)ColorUsage.TextBoxFont];
          mMenuStrip!.BackColor = theme.mInterfaceColors[(int)ColorUsage.MenuBackground];
          foreach (ToolStripMenuItem toolStripMenuItem in mMenuStrip.Items.OfType<ToolStripMenuItem>()) {
-            PaintMenuItem(toolStripMenuItem);
+            PaintMenuItem(toolStripMenuItem, theme);
             foreach (ToolStripMenuItem subItem in toolStripMenuItem.DropDownItems.OfType<ToolStripMenuItem>())
-               PaintMenuItemsRecursive(subItem);
+               PaintMenuItemsRecursive(subItem, theme);
          }
          mStatusStrip!.Renderer = new ToolStripProfessionalRenderer();
          mStatusStrip.Invalidate(true);

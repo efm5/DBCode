@@ -230,22 +230,22 @@ namespace DBCode {
          return bottom;
       }
 
-      internal static void PaintMenuItem(ToolStripMenuItem pTSMI) {
+      internal static void PaintMenuItem(ToolStripMenuItem pTSMI, Themes.Theme pTheme) {
          pTSMI.Font = CreateMenuFont();
-         pTSMI.ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.MenuFont];
-         pTSMI.BackColor = mCurrentTheme.mInterfaceColors[(int)ColorUsage.MenuBackground];
+         pTSMI.ForeColor = pTheme.mInterfaceColors[(int)ColorUsage.MenuFont];
+         pTSMI.BackColor = pTheme.mInterfaceColors[(int)ColorUsage.MenuBackground];
       }
 
-      internal static void PaintMenuItemsRecursive(ToolStripMenuItem pTSMI) {
+      internal static void PaintMenuItemsRecursive(ToolStripMenuItem pTSMI, Themes.Theme pTheme) {
          pTSMI.Font = CreateMenuFont();
-         pTSMI.ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.MenuFont];
-         pTSMI.BackColor = mCurrentTheme.mInterfaceColors[(int)ColorUsage.MenuBackground];
+         pTSMI.ForeColor = pTheme.mInterfaceColors[(int)ColorUsage.MenuFont];
+         pTSMI.BackColor = pTheme.mInterfaceColors[(int)ColorUsage.MenuBackground];
          foreach (ToolStripMenuItem tsmi in pTSMI.DropDownItems.OfType<ToolStripMenuItem>()) {
             tsmi.Font = CreateMenuFont();
-            tsmi.ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorUsage.MenuFont];
-            tsmi.BackColor = mCurrentTheme.mInterfaceColors[(int)ColorUsage.MenuBackground];
+            tsmi.ForeColor = pTheme.mInterfaceColors[(int)ColorUsage.MenuFont];
+            tsmi.BackColor = pTheme.mInterfaceColors[(int)ColorUsage.MenuBackground];
             if (tsmi.DropDownItems.Count > 0)
-               PaintMenuItemsRecursive(tsmi);
+               PaintMenuItemsRecursive(tsmi, pTheme);
          }
       }
    }

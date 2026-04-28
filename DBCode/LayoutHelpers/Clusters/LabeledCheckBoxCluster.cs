@@ -41,27 +41,20 @@ namespace DBCode {
 
          internal override void SetFontAndColor() {
             Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
-            mLabel!.Font = poFont;
+            mLabel!.Font = CreateNewFont(poFont);
             mLabel.ForeColor = poForeColor;
             mLabel.BackColor = poBackColor;
-            mCheckBox!.Font = poFont;
+            mCheckBox!.Font = CreateNewFont(poFont);
             mCheckBox.ForeColor = poForeColor;
             mCheckBox.BackColor = poBackColor;
          }
 
-         protected override void Dispose(bool pDisposing) {
-            if (pDisposing) {
-               if (mCheckBox != null) {
-                  mCheckBox.Dispose();
-                  mCheckBox = null;
-               }
-               if (mLabel != null) {
-                  mLabel.Dispose();
-                  mLabel = null;
-               }
-            }
-            base.Dispose(pDisposing);
-         }
+         //protected override void Dispose(bool pDisposing) {
+         //   if (pDisposing) {
+         //      //DEBUG efm5 2026 04 27 if there are ever handlers, dispose of them here
+         //   }
+         //   base.Dispose(pDisposing);
+         //}
       }
    }
 }

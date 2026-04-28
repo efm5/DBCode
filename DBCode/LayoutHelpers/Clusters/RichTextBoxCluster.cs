@@ -1,24 +1,26 @@
-﻿using DBCode.Themes;
+using DBCode.Themes;
 
 namespace DBCode {
    internal static partial class LayoutHelpers {
-      internal sealed class TextFieldCluster : BaseCluster {
+      internal sealed class RichTextBoxCluster : BaseCluster {
          private Label? mLabel = null;
          private Button? mFlattenedButton = null;
-         private TextBox? mTextBox = null;
+         private RichTextBox? mRichTextBox = null;
          internal Color? mBackgroundColor;
 
-         public TextFieldCluster(Theme pTheme, int pTextBoxWidth, string? pLabelText = null, string? pButtonText = null,
+         public RichTextBoxCluster(Theme pTheme, int pTextBoxWidth, string? pLabelText = null, string? pButtonText = null,
             LabelPosition pLabelPosition = LabelPosition.Left, Color? pBackgroundColor = null)
             : base(pTheme, pBackgroundColor) {
             if (((pLabelText == null) && (pButtonText == null)) || ((pLabelText != null) && (pButtonText != null)) ||
                ((pButtonText != null) && pBackgroundColor == null))
                throw new ArgumentException("Invalid parameter combination: must provide either pLabelText or pButtonText (but not both), and pBackgroundColor is required when pButtonText is used");
             mBackgroundColor = pBackgroundColor;
-            mTextBox = new TextBox {
+            mRichTextBox = new RichTextBox {
                Text = mUnicodeSampleString,
                Width = pTextBoxWidth,
-               Name = $"TextFieldClusterTextBox{mTabIndex++}"
+               Name = $"RichTextFieldClusterRichTextBox{mTabIndex++}",
+               Multiline = true,
+               ScrollBars = RichTextBoxScrollBars.Both
             };
             if (pLabelText == null) {
                mFlattenedButton = new Button {
@@ -27,11 +29,11 @@ namespace DBCode {
                   AutoSizeMode = AutoSizeMode.GrowAndShrink,
                   Location = new Point(0, 0),
                   TabIndex = mTabIndex++,
-                  Name = $"TextFieldClusterButton{mTabIndex++}"
+                  Name = $"RichTextFieldClusterButton{mTabIndex++}"
                };
-               Controls.AddRange(mFlattenedButton, mTextBox!);
+               Controls.AddRange(mFlattenedButton, mRichTextBox!);
                FlattenButton(mFlattenedButton, pBackgroundColor);
-               mTextBox.Location = new Point(mFlattenedButton.Right, 0);
+               mRichTextBox.Location = new Point(mFlattenedButton.Right, 0);
             }
             else {
                mLabelPosition = pLabelPosition;
@@ -40,24 +42,24 @@ namespace DBCode {
                   Text = pLabelText,
                   TabIndex = TAB_INDEX_IGNORED
                };
-               Controls.AddRange(mLabel, mTextBox!);
-               ApplyLabelPosition(mLabel, mTextBox);
+               Controls.AddRange(mLabel, mRichTextBox!);
+               ApplyLabelPosition(mLabel, mRichTextBox);
             }
-            mTextBox.TabIndex = mTabIndex++;
+            mRichTextBox.TabIndex = mTabIndex++;
          }
 
          private void LayoutControls() {
             if (mLabel != null)
-               ApplyLabelPosition(mLabel, mTextBox!);
+               ApplyLabelPosition(mLabel, mRichTextBox!);
             else
-               mTextBox!.Location = new Point(mFlattenedButton!.Right, 0);
+               mRichTextBox!.Location = new Point(mFlattenedButton!.Right, 0);
          }
 
          internal override void LayoutCluster() {
             SetFontAndColor();
             LayoutControls();
             mLabel?.Invalidate();
-            mTextBox?.Invalidate();
+            mRichTextBox?.Invalidate();
             mFlattenedButton?.Invalidate();
          }
 
@@ -66,24 +68,12 @@ namespace DBCode {
             mLabel!.Font = CreateNewFont(poFont);
             mLabel.ForeColor = poForeColor;
             mLabel.BackColor = poBackColor;
-            mTextBox!.Font = CreateNewFont(poFont);
-            mTextBox.ForeColor = poForeColor;
-            mTextBox.BackColor = poBackColor;
+            mRichTextBox!.Font = CreateNewFont(poFont);
+            mRichTextBox.ForeColor = poForeColor;
+            mRichTextBox.BackColor = poBackColor;
          }
 
-         protected override void Dispose(bool pDisposing) {
-            if (pDisposing) {
-               if (mTextBox != null) {
-                  mTextBox.Dispose();
-                  mTextBox = null;
-               }
-               if (mLabel != null) {
-                  mLabel.Dispose();
-                  mLabel = null;
-               }
-            }
-            base.Dispose(pDisposing);
-         }
+         public RichTextBox GetRichTextBox => mRichTextBox!;
       }
    }
 }

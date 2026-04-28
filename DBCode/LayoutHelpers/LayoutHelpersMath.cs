@@ -323,7 +323,19 @@ namespace DBCode {
          return maxBottom;
       }
 
-      internal static Control? Tallest(List<Control>? pControls) {
+      internal static int Tallest(List<Control>? pControls) {
+         if (pControls == null || pControls.Count == 0)
+            return 0;
+         Control currentControl = pControls[0], nextControl = pControls[0];
+         for (int index = 1; index < pControls.Count; index++) {
+            nextControl = pControls[index];
+            if (nextControl.Height > currentControl.Height)
+               currentControl = nextControl;
+         }
+         return currentControl.Height;
+      }
+
+      internal static Control? TallestControl(List<Control>? pControls) {
          if (pControls == null || pControls.Count == 0)
             return null;
          Control currentControl = pControls[0], nextControl = pControls[0];
@@ -335,7 +347,7 @@ namespace DBCode {
          return currentControl;
       }
 
-      internal static Control? Tallest(Collection<Control>? pControls) {
+      internal static Control? TallestControl(Collection<Control>? pControls) {
          if (pControls == null || pControls.Count == 0)
             return null;
          Control currentControl = pControls[0], nextControl = pControls[0];
@@ -347,7 +359,7 @@ namespace DBCode {
          return currentControl;
       }
 
-      internal static Control? Tallest(IEnumerable<Control>? pControls) {
+      internal static Control? TallestControl(IEnumerable<Control>? pControls) {
          if (pControls == null)
             return null;
          Control? currentControl = null;
