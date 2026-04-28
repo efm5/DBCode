@@ -1,6 +1,4 @@
-﻿using DBCode.Syntax;
-
-namespace DBCode {
+﻿namespace DBCode {
    public sealed partial class MainForm : Form {
       #region main form
       private void MainForm_Load(object? pSender, EventArgs pEventArgs) {

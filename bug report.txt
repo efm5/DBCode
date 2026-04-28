@@ -1,0 +1,57 @@
+Here is the complete consolidated report, organized by severity:
+
+BUGS — Will Cause Compile Errors or Runtime Crashes
+1. HighlighterEngine.HighlightNow() — undefined field mCurrentLanguage
+mCurrentLanguage doesn't exist in HighlighterEngine. Fix: replace with mLanguage.
+2. LanguageRegistry — only CSharp registered
+All other 13 languages will throw KeyNotFoundException at runtime. Fix: register all languages, or switch HighlighterEngine to use HighlighterFactory instead.
+3. HighlighterFactory — malformed namespace nesting
+SyntaxHighlighterEngine is accidentally nested inside the HighlighterFactory static class block due to a missing closing brace. Compile error.
+4. IdentifierReader — declared twice, identical
+Two exact duplicates in DBCode.Syntax.Tokenizing. One must be deleted.
+5. SyntaxHighlighterBase.ApplyHighlighting() — double SuspendLayout/ResumeLayout
+HighlighterEngine.HighlightNow() calls SuspendLayout then calls ApplyHighlighting, which calls it again internally. The outer SuspendLayout is never balanced. Fix: remove the inner pair from ApplyHighlighting.
+6. SyntaxHighlighterEngine vs HighlighterEngine — two engines
+MainForm and Fields both reference HighlighterEngine. SyntaxHighlighterEngine is dead code and should be deleted.
+7. ThemePanel.cs — corrupted string literal
+â€™, â€œ, â€ are UTF-8 curly quotes mangled by encoding. Fix:
+csharp$"Current Theme's Name: \"{mCurrentTheme.mName}\""
+
+BUGS — Silent Failures (Compile Fine, Produce Wrong Results)
+8. ThemeColorProvider never populated — highlighting renders nothing
+SyntaxHighlighterBase.ApplyHighlighting() calls ThemeColorProvider.Get(role) but nothing ever calls ThemeColorProvider.Set() when a theme is applied. All tokens get Color.Empty. This is the primary reason highlighting will appear to do nothing. Fix: add a sync method called whenever the theme or language changes:
+csharpinternal static void SyncFromTheme(Theme pTheme, LanguageKind pLanguage) {
+   foreach (TokenKind token in Enum.GetValues<TokenKind>()) {
+      ColorRole role = LanguageColorRegistry.Get(pLanguage)[token];
+      ThemeColorProvider.Set(role,
+         pTheme.mHighlightColors[(int)pLanguage][(int)token]);
+   }
+}
+9. Theme constructor — syntax token colors written to wrong array
+mInterfaceColors[(int)ColorUsage.Unknown], mInterfaceColors[(int)ColorUsage.Keyword], etc. are set in the constructor, but the highlighter reads from mHighlightColors, not mInterfaceColors. These assignments are silently ignored. Fix: remove them from the constructor; the SetXxxThemeSyntaxColors() methods in ThemeBuiltIns correctly populate mHighlightColors.
+10. ThemeColorProvider / LanguageColorRegistry architectural mismatch
+LanguageColorRegistry maps TokenKind → ColorRole per language, and ThemeColorProvider maps ColorRole → Color. But mHighlightColors in Theme is indexed directly by [LanguageKind][TokenKind] → Color, bypassing both intermediaries entirely. The ColorRole indirection layer adds complexity without benefit. Recommend: have SyntaxHighlighterBase read directly from mCurrentTheme.mHighlightColors[language][token], eliminating ThemeColorProvider and LanguageColorRegistry as runtime dependencies.
+11. ThemeDefaults — built-in themes added to mThemes twice
+ThemeBuiltIns.Create*Theme() defaults to pAdd = true, so each static property initializer in ThemeDefaults adds to mThemes immediately. Then ThemeRegistry.AddBuiltIns() adds them again. Deduplication catches it but it's wasteful and fragile. Fix: pass pAdd: false in all ThemeDefaults property initializers.
+12. ThemeRegistry.Initialize() — redundant built-in population
+AddBuiltIns() and the ThemeManager.LoadThemes() fallback both add the same 7 built-ins. Fix: ThemeManager.LoadThemes() should never return built-ins as a fallback — that's ThemeRegistry's job.
+
+DEAD CODE — Safe to Delete
+13. Dictionaries class — entire class is unreferenced. Duplicates LanguageColorRegistry exactly. Delete it.
+14. DBCode.Syntax.CSharpTokenizer — the simple early version in the DBCode.Syntax namespace is superseded by the full reader-pipeline version in DBCode.Syntax.Tokenizing. Will cause ambiguity. Delete the simpler one.
+15. SyntaxHighlighterEngine — confirmed dead (see bug 6). Delete it.
+
+QUALITY / CORRECTNESS ISSUES
+16. ThemeDiagnostics.ValidateColors() — false positives on unnamed black
+ColorTranslator.FromHtml("#000000") produces unnamed black and would be flagged as a parse failure even though it's valid. The check needs refinement.
+17. CSharpTokenizer (Tokenizing namespace) — missing @ verbatim string prefix handling in StringReader
+StringReader handles @"..." and $"..." but not $@"..." or @$"..." (both valid C# 14). Minor gap.
+18. NumberReader — no hex literal support
+0xFF, 0b1010, and 0o77 (C# integer literals) are not recognized and will tokenize as Unknown. Worth adding.
+19. LanguageRegistry — only CSharp has a real tokenizer
+The other 13 languages have highlighters via HighlighterFactory but no tokenizers registered anywhere. They need either full tokenizers or at minimum a shared fallback tokenizer so HighlightNow() doesn't crash.
+20. PreprocessorReader — scans backward past start of string
+The backward scan scanIndex = index - 1 could theoretically be fine, but if pStartIndex is 0 and index is 0, it initializes scanIndex to -1 and the while loop condition scanIndex >= 0 exits immediately — which is correct. This one is actually safe, just worth a confirming note.
+
+SUMMARY TABLE
+#FileSeverityOne-liner1HighlighterEngine🔴 CrashmCurrentLanguage → mLanguage2LanguageRegistry🔴 CrashOnly CSharp registered3HighlighterFactory🔴 CompileMissing brace, bad nesting4IdentifierReader🔴 CompileDuplicate class5SyntaxHighlighterBase🔴 CrashDouble SuspendLayout6SyntaxHighlighterEngine🔴 CompileDead engine, naming conflict7ThemePanel🔴 CompileEncoding-mangled string8ThemeColorProvider🟠 SilentNever populated, no colors applied9Theme constructor🟠 SilentToken colors in wrong array10ColorRole architecture🟠 SilentIndirection layer bypassed11ThemeDefaults🟡 QualityThemes added twice12ThemeRegistry🟡 QualityRedundant built-in population13Dictionaries class🟡 DeadDelete it14DBCode.Syntax.CSharpTokenizer🟡 DeadDelete simple version15SyntaxHighlighterEngine🟡 DeadDelete it16ThemeDiagnostics🟡 QualityFalse positive on unnamed black17StringReader🟢 GapMissing $@ / @$ prefix18NumberReader🟢 GapNo hex/binary literals19LanguageRegistry🟢 Gap13 languages have no tokenizer20PreprocessorReader✅ OKConfirmed safe

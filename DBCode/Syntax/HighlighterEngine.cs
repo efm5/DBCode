@@ -40,7 +40,7 @@
             mRichTextBox.Select(0, mRichTextBox.TextLength);
             if (mRichTextBox.SelectionColor != Color.Black)
                mRichTextBox.SelectionColor = Color.Black;
-            highlighter.ApplyHighlighting(mRichTextBox, tokens);
+            highlighter.ApplyHighlighting(mRichTextBox, tokens, mCurrentTheme!);
             mRichTextBox.Select(selectionStart, selectionLength);
          }
          finally {

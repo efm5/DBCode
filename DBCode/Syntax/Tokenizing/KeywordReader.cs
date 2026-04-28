@@ -21,7 +21,7 @@
          startPosition = identifierToken.StartIndex;
          length = identifierToken.Length;
          value = pText.Substring(startPosition, length);
-         kind = mDefinition.Keywords.Contains(value)
+         kind = mDefinition.Keywords.Contains(value, mDefinition.KeywordComparer)
             ? TokenKind.Keyword
             : TokenKind.Identifier;
          pToken = new Token(kind, startPosition, length);

@@ -1,5 +1,4 @@
-﻿using DBCode.Syntax;
-using static DBCode.Themes.ThemeBrightnessHelper;
+﻿using static DBCode.Themes.ThemeBrightnessHelper;
 
 namespace DBCode.Themes {
    public class Theme {
@@ -37,17 +36,6 @@ namespace DBCode.Themes {
          mInterfaceColors[(int)ColorUsage.TabHeaderSelectedFont] = Color.Blue;
          mInterfaceColors[(int)ColorUsage.TabHeaderUnselectedBackground] = Color.DarkGray;
          mInterfaceColors[(int)ColorUsage.TabHeaderSelectedBackground] = Color.Goldenrod;
-         mInterfaceColors[(int)ColorUsage.Unknown] = Color.White;
-         mInterfaceColors[(int)ColorUsage.Whitespace] = Color.DarkGray;
-         mInterfaceColors[(int)ColorUsage.Identifier] = Color.Goldenrod;
-         mInterfaceColors[(int)ColorUsage.Keyword] = Color.LightGoldenrodYellow;
-         mInterfaceColors[(int)ColorUsage.Number] = Color.Blue;
-         mInterfaceColors[(int)ColorUsage.StringLiteral] = Color.Cornsilk;
-         mInterfaceColors[(int)ColorUsage.CharLiteral] = Color.Yellow;
-         mInterfaceColors[(int)ColorUsage.Comment] = Color.Green;
-         mInterfaceColors[(int)ColorUsage.PreprocessorDirective] = Color.LightBlue;
-         mInterfaceColors[(int)ColorUsage.Operator] = Color.Magenta;
-         mInterfaceColors[(int)ColorUsage.Punctuation] = Color.IndianRed;
       }
 
       public Theme Clone() {

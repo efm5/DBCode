@@ -2,6 +2,6 @@
    internal interface IHighlighter {
       LanguageKind Language { get; }
 
-      void ApplyHighlighting(RichTextBox pRichTextBox, IReadOnlyList<Token> pTokens);
+      void ApplyHighlighting(RichTextBox pRichTextBox, IReadOnlyList<Token> pTokens, Theme pTheme);
    }
 }
