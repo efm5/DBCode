@@ -261,7 +261,6 @@ All text appears in the default foreground color."
 #pragma warning restore IDE0300
          private readonly ToolStripControlHost mApplyHost, mCancelHost, mCloneHost, mHelpHost, mNewHost;
          private readonly ToolStripStatusLabel mSpringLabel;
-         private readonly UiState mUiState;
          private readonly VariableWidthTabControl mPrimaryTabControl, mHighlightTabControl;
          private bool mThemeIsDirty = false;
          private Panel? mPrimaryScrollPanel, mHighlightInterfaceScrollPanel, mExampleScrollPanel, mHighlightCSharpScrollPanel,
@@ -272,7 +271,7 @@ All text appears in the default foreground color."
          private readonly List<Panel?> mAllScrollPanels = [];
          private Theme mTemporaryTheme;
 
-         public ThemePanel(ThemeUsage pThemeUsage, UiState pUiState) {
+         public ThemePanel(ThemeUsage pThemeUsage) {
             ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
             SuspendLayout();
             string temporaryName = TemporaryThemePrefix + DateTime.UtcNow.Ticks.ToString(CultureInfo.InvariantCulture);
@@ -281,7 +280,6 @@ All text appears in the default foreground color."
             if (mCurrentTheme.mIsBuiltIn)
                temporaryName += " CLONED FROM " + mCurrentTheme.mName;
             mTemporaryTheme = mCurrentTheme.Clone(temporaryName);
-            mUiState = pUiState;
             AutoScroll = true;
             AutoSize = false;
             BackColor = Color.Transparent;
@@ -328,8 +326,6 @@ All text appears in the default foreground color."
             mHighlightTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
             mPrimaryTabControl.DrawItem += PrimaryTabControl_DrawItem;
             mHighlightTabControl.DrawItem += HighlightTabControl_DrawItem;
-            mPrimaryTabControl.SelectedIndex = mUiState.mThemePrimaryTabPageIndex;
-            mHighlightTabControl.SelectedIndex = mUiState.mThemeHighlightTabPageIndex;
             mPrimaryTabControl.SelectedIndexChanged += PrimaryTabControl_SelectedIndexChanged;
             mHighlightTabControl.SelectedIndexChanged += HighlightTabControl_SelectedIndexChanged;
             mStatusStrip.SizingGrip = true;
@@ -482,9 +478,9 @@ All text appears in the default foreground color."
             mPrimaryScrollPanel.Controls.AddRange(mFontsContainer);
             mExamplesContainer = new ClusterContainer(mExampleScrollPanel, mExamplesClusters, ClusterLayoutMode.FlowLayout) {
                Name = "ExamplesClusterContainer",
-               Dock = DockStyle.Fill,
                Tag = "Examples"
             };
+            mExamplesContainer.AutoSize = false;
             mExampleMenuStrip = new MenuStrip() { Name = "ExampleMenuStrip" };
             mExampleTSMI = new ToolStripMenuItem { Name = "ExampleTSMI", Text = "Example &Menu" };
             mExampleTSMISubItem = new ToolStripMenuItem { Name = "ExampleTSMISubItem", Text = "Example &Item" };
@@ -892,6 +888,9 @@ All text appears in the default foreground color."
             mHighlightTabControl.SelectedIndex = savedIndex;
             ApplyThemeToPanel(mTemporaryTheme);
             LayoutClustersAndContainers();
+            SizePanel(mExamplesContainer, mIndent, false);
+            mExamplesContainer.Height += mEmHalf;
+            mExamplesContainer.Location = new Point(mIndent, mExampleStatusStrip.Bottom + mEmHalf);
             ResumeLayout(true);
          }
 
@@ -1014,6 +1013,40 @@ All text appears in the default foreground color."
             }
             mPrimaryTabControl.Invalidate(true);
             mHighlightTabControl.Invalidate(true);
+         }
+
+         private void HighlightExampleBox(RichTextBox pBox, LanguageKind pLanguage) {
+            string text;
+            ITokenizer tokenizer;
+            IHighlighter highlighter;
+            IReadOnlyList<Token> tokens;
+            int selectionStart, selectionLength;
+            if (pLanguage == LanguageKind.PlainText)
+               return;
+            text = pBox.Text;
+            if (text.Length == 0)
+               return;
+            tokenizer = LanguageRegistry.GetTokenizer(pLanguage);
+            highlighter = LanguageRegistry.GetHighlighter(pLanguage);
+            tokens = tokenizer.Tokenize(text);
+            selectionStart = pBox.SelectionStart;
+            selectionLength = pBox.SelectionLength;
+            pBox.SuspendLayout();
+            try {
+               pBox.Select(0, pBox.TextLength);
+               pBox.SelectionColor = mTemporaryTheme.mInterfaceColors[(int)ColorUsage.TextBoxFont];
+               highlighter.ApplyHighlighting(pBox, tokens, mTemporaryTheme);
+               pBox.Select(selectionStart, selectionLength);
+            }
+            finally {
+               pBox.ResumeLayout();
+            }
+         }
+
+         private void HighlightAllExampleBoxes() {
+            for (int i = 0; i < mExampleRichTextBoxs.Length; i++) {
+               HighlightExampleBox(mExampleRichTextBoxs[i], (LanguageKind)i);
+            }
          }
 
          private void AddFontCluster(List<BaseCluster> pClusters, string pLabelText, string pButtonText, FontUsage pUsage,

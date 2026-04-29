@@ -4,7 +4,7 @@ namespace DBCode {
       internal sealed class ClusterContainer : Panel, IEnumerable<BaseCluster> {
          private readonly List<BaseCluster> mClusters;
          private readonly ClusterLayoutMode mLayoutMode;
-         private readonly int mFixedColumns, mFixedRows, mMaxHeight, mMaxWidth;
+         private readonly int mFixedColumns, mFixedRows;
          private Panel mPanelParent;
 
          internal ClusterContainer(Panel pParent, List<BaseCluster> pClusters, ClusterLayoutMode pLayoutMode, int pMaxWidth = 0,
@@ -14,8 +14,6 @@ namespace DBCode {
             mPanelParent = pParent;
             mClusters = pClusters;
             mLayoutMode = pLayoutMode;
-            mMaxWidth = pMaxWidth;
-            mMaxHeight = pMaxHeight;
             mFixedColumns = pFixedColumns;
             mFixedRows = pFixedRows;
             foreach (BaseCluster currentCluster in mClusters)

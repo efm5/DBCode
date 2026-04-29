@@ -1,11 +1,9 @@
-﻿using DBCode.Themes;
-
-namespace DBCode {
+﻿namespace DBCode {
    public sealed partial class MainForm : Form {
       public void EnsureThemePanel(ThemeUsage pThemeUsage) {
          mPreThemeBounds = Bounds;
          if (mThemePanel == null)
-            mThemePanel = new ThemePanel(pThemeUsage, mUiState);
+            mThemePanel = new ThemePanel(pThemeUsage);
          ShowThemePanel(pThemeUsage);
       }
 

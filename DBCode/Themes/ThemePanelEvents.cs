@@ -13,10 +13,21 @@ namespace DBCode {
 
          private void PrimaryTabControl_SelectedIndexChanged(object? pSender, EventArgs pArgs) {
             mUiState.mThemePrimaryTabPageIndex = mPrimaryTabControl.SelectedIndex;
+            if (mPrimaryTabControl.SelectedIndex == (int)PrimaryTabPageUsage.Examples)
+               HighlightAllExampleBoxes();
          }
 
          private void HighlightTabControl_SelectedIndexChanged(object? pSender, EventArgs pArgs) {
             mUiState.mThemeHighlightTabPageIndex = mHighlightTabControl.SelectedIndex;
+         }
+
+         private void OnExampleTextChanged(object? pSender, EventArgs pArgs) {
+            RichTextBox? box = pSender as RichTextBox;
+            if (box?.Tag is not LanguageKind language)
+               return;
+            box.TextChanged -= OnExampleTextChanged;
+            HighlightExampleBox(box, language);
+            box.TextChanged += OnExampleTextChanged;
          }
 
          private void NewButton_Click(object? pSender, EventArgs pArgs) {

@@ -1,6 +1,5 @@
 ﻿namespace DBCode.Syntax {
    internal abstract class SyntaxHighlighterBase : IHighlighter {
-      protected readonly Dictionary<TokenKind, ColorRole> mColorRoles;
       protected readonly LanguageKind mLanguage;
 
 #pragma warning disable IDE0290
