@@ -2,7 +2,7 @@
    #region enumerations
    public enum ViewMode { Features, Minimal }
 
-   public enum PasteMode { Transfer, Transport }
+   public enum PasteMode { SendAll, PasteSelected }
 
    public enum Icons { CurlyTargeted, CurlyUntargeted, StatusTargeted, StatusUntargeted }
 
@@ -67,30 +67,7 @@
       [DisplayText("Tab Header Selected Font Color")]
       TabHeaderSelectedFont,
       [DisplayText("Tab Header Unselected Color")]
-      TabHeaderUnselectedFont,
-      // Syntax Tokens
-      [DisplayText("Unknown Color")]
-      Unknown,
-      [DisplayText("Whitespace Color")]
-      Whitespace,
-      [DisplayText("Identifier Color")]
-      Identifier,
-      [DisplayText("Keyword Color")]
-      Keyword,
-      [DisplayText("Number Color")]
-      Number,
-      [DisplayText("String Literal Color")]
-      StringLiteral,
-      [DisplayText("Character Literal Color")]
-      CharLiteral,
-      [DisplayText("Comment Color")]
-      Comment,
-      [DisplayText("Preprocessor Directive Color")]
-      PreprocessorDirective,
-      [DisplayText("Operator Color")]
-      Operator,
-      [DisplayText("Punctuation Color")]
-      Punctuation
+      TabHeaderUnselectedFont
    }
 
    internal enum ColorRole : int {
@@ -228,11 +205,10 @@
       public static ViewMode mCurrentViewMode = ViewMode.Features;
       public static BottomPanel? mMainBottomPanel = null;
       public static Label? mTargetingLabel = null, mVersionLabel = null;
-      public static Button? mSendAllButton = null, mPasteSelectedButton = null;
+      public static Button? mSendAllButton = null, mPasteSelectedButton = null, mRevertButton = null;
       #endregion
 
       #region main menu
-      public static ToolStripButton? mExitTSB = null, mRevertTSB = null, mTransferTSB = null, mTransportTSB = null;
       public static ToolStripMenuItem? mFeaturesTSMI = null, mFiftyTSMI = null, mHelpMenuItem = null, mMinimalTSMI = null,
          mModeMenuItem = null, mLanguageMenuItem = null, mOpaqueTSMI = null, mRetargetTSMI = null, mReturnToTopTSMI = null, mSeventyFiveTSMI = null,
          mTargetedTSMI = null, mTargetingMenuItem = null, mThemeDesignTSMI = null, mThemeEditTSMI = null,

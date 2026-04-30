@@ -1,5 +1,10 @@
 ﻿namespace DBCode {
    public sealed partial class MainForm : Form {
+      public static void DisposeFontIfOwned(Font? pFont) {
+         if (pFont != null && !pFont.IsSystemFont)
+            pFont.Dispose();
+      }
+
       public static void CheckLanguage() {
          foreach (ToolStripMenuItem tsmi in mLanguageMenuItem!.DropDownItems.OfType<ToolStripMenuItem>())
             tsmi.Checked = false;
@@ -185,11 +190,11 @@
             return;
 
          switch (pPasteMode) {
-            case PasteMode.Transport:
-               TimedMessage("transporting data to the target window", "PASTING", 2000);
+            case PasteMode.SendAll:
+               TimedMessage("sending all data to the target window", "PASTING", 2000);
                break;
-            case PasteMode.Transfer:
-               TimedMessage("transferring data to the target window", "PASTING", 2000);
+            case PasteMode.PasteSelected:
+               TimedMessage("pasting selected data to the target window", "PASTING", 2000);
                break;
          }
          //DEBUG bring to top, paste, restore DBCode if AlwaysOnTop
@@ -244,20 +249,20 @@
          if (mTargetingLabel == null)
             return;
          float fontSize = mTargetingLabel.Font.Size;
+         Size fontMeasure = TextRenderer.MeasureText("Wg", mTargetingLabel.Font); // avoids Font.Height DC dependency
          if (mIsTargetingEnabled) {
             Image image = GetSizedImage(Icons.StatusTargeted, fontSize);
             mTargetingLabel.Image = image;
             mTargetingLabel.Text = GetWindowTitle(mTargetWindow);
-            using Graphics g = mTargetingLabel.CreateGraphics();
-            int textWidth = (int)g.MeasureString(mTargetingLabel.Text, mTargetingLabel.Font).Width;
-            int height = Math.Max(image.Height, mTargetingLabel.Font.Height);
+            int textWidth = TextRenderer.MeasureText(mTargetingLabel.Text, mTargetingLabel.Font).Width;
+            int height = Math.Max(image.Height, fontMeasure.Height);
             mTargetingLabel.Size = new Size(image.Width + textWidth + 4, height);
          }
          else {
             Image image = GetSizedImage(Icons.StatusUntargeted, fontSize);
             mTargetingLabel.Image = image;
             mTargetingLabel.Text = string.Empty;
-            int height = Math.Max(image.Height, mTargetingLabel.Font.Height);
+            int height = Math.Max(image.Height, fontMeasure.Height);
             mTargetingLabel.Size = new Size(image.Width, height);
          }
          mTargetingLabel.Top = (mMainBottomPanel!.Height - mTargetingLabel.Height) / 2;

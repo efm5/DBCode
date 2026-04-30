@@ -3,10 +3,10 @@
       internal sealed class BottomPanel : Panel {
          private readonly List<Control> mLeftControls = [];
          private readonly List<Control> mRightControls = [];
-         internal Button? mHelpButton = null, mOKButton = null, mCancelButton = null;
+         internal Button? mHelpButton = null, mCancelButton = null;
          private Theme mTheme;
 
-         public BottomPanel(Theme pTheme, bool pDoOkay, string pOKText, string pCancelText = "") {
+         public BottomPanel(Theme pTheme, string pCancelText = "") {
             mTheme = pTheme;
             mHelpButton = new Button() {
                Name = $"BottomPanelDefaultButtonsHelp{mTabIndex}",
@@ -19,17 +19,6 @@
             };
             Controls.Add(mHelpButton);
             mHelpButton.Click += MainForm.Help_Click;
-            if (pDoOkay) {
-               mOKButton = new Button() {
-                  Name = $"BottomPanelDefaultButtonsOK{mTabIndex}",
-                  TabIndex = mTabIndex++,
-                  Text = pOKText,
-                  AutoSize = true,
-                  AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                  Top = 1
-               };
-               Controls.Add(mOKButton);
-            }
             mCancelButton = new Button() {
                Name = $"BottomPanelDefaultButtonsCancel{mTabIndex}",
                TabIndex = mTabIndex++,
@@ -43,7 +32,8 @@
             AutoSize = false;
          }
 
-         public int NeededWidth => mHelpButton!.Width + mEm2 + mLeftControls.Sum(pC => pC.Width + mEm) + mRightControls.Sum(pC => pC.Width + mEm) + (mOKButton?.Width ?? 0) + (mCancelButton?.Width ?? 0) + mCancelOffset * 2;
+         public int NeededWidth => mHelpButton!.Width + mEm2 + mLeftControls.Sum(pC => pC.Width + mEm) +
+            mRightControls.Sum(pC => pC.Width + mEm) + mCancelButton!.Width + mCancelOffset * 2;
 
          internal Control AddLeftControl(Control pControl) {
             mLeftControls.Add(pControl);
@@ -74,13 +64,9 @@
                control.Left = leftEdge;
                leftEdge += control.Width + mEm;
             }
-            // Right pass: Cancel (Exit) at far right, then mRightControls leftward, then OK (Revert)
+            // Right pass: Cancel at far right, then mRightControls leftward
             mCancelButton!.Left = Width - mCancelButton.Width - mCancelOffset;
             int rightEdge = mCancelButton.Left - mCancelOffset;
-            if (mOKButton != null) {
-               mOKButton.Left = rightEdge - mOKButton.Width;
-               rightEdge = mOKButton.Left - mEm;
-            }
             for (int i = mRightControls.Count - 1; i >= 0; i--) {
                Control control = mRightControls[i];
                control.Left = rightEdge - control.Width;
@@ -90,28 +76,44 @@
 
          internal void SetFontAndColor() {
             Theme.ThemeStatusThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
-            mHelpButton!.Font = CreateNewFont(poFont);
+            MainForm.DisposeFontIfOwned(mHelpButton!.Font);
+            mHelpButton.Font = CreateNewFont(poFont);
             mHelpButton.ForeColor = poForeColor;
             mHelpButton.BackColor = poBackColor;
-            if (mOKButton != null) {
-               mOKButton.Font = CreateNewFont(poFont);
-               mOKButton.ForeColor = poForeColor;
-               mOKButton.BackColor = poBackColor;
-            }
-            mCancelButton!.Font = CreateNewFont(poFont);
+            MainForm.DisposeFontIfOwned(mCancelButton!.Font);
+            mCancelButton.Font = CreateNewFont(poFont);
             mCancelButton.ForeColor = poForeColor;
             mCancelButton.BackColor = poBackColor;
             foreach (Control control in mLeftControls) {
+               MainForm.DisposeFontIfOwned(control.Font);
                control.Font = CreateNewFont(poFont);
                control.ForeColor = poForeColor;
                control.BackColor = poBackColor;
             }
             foreach (Control control in mRightControls) {
+               MainForm.DisposeFontIfOwned(control.Font);
                control.Font = CreateNewFont(poFont);
                control.ForeColor = poForeColor;
                control.BackColor = poBackColor;
             }
             BackColor = poBackColor;
+         }
+
+         protected override void Dispose(bool pDisposing) {
+            if (pDisposing) {
+               mHelpButton!.Click -= MainForm.Help_Click;
+               MainForm.DisposeFontIfOwned(mHelpButton!.Font);
+               MainForm.DisposeFontIfOwned(mCancelButton!.Font);
+               foreach (Control control in mLeftControls) {
+                  MainForm.DisposeFontIfOwned(control.Font);
+                  Controls.Remove(control);
+               }
+               foreach (Control control in mRightControls) {
+                  MainForm.DisposeFontIfOwned(control.Font);
+                  Controls.Remove(control);
+               }
+            }
+            base.Dispose(pDisposing);
          }
       }
    }

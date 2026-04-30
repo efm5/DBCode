@@ -11,6 +11,7 @@ namespace DBCode {
             int pMaxHeight = 0, int pFixedColumns = 0, int pFixedRows = 0) {
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            TabIndex = mTabIndex++;
             mPanelParent = pParent;
             mClusters = pClusters;
             mLayoutMode = pLayoutMode;

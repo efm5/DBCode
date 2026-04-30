@@ -65,12 +65,10 @@
          mRichTextBox = new RichTextBox();
          mSendAllButton = new Button();
          mPasteSelectedButton = new Button();
-         mRevertTSB = new ToolStripButton();
-         mExitTSB = new ToolStripButton();
          mTargetingLabel = new Label();
          mVersionLabel = new Label();
-         mMainBottomPanel = new BottomPanel(mCurrentTheme!, pDoOkay: true, pOKText: "&Revert",
-            pCancelText: "E&xit");
+         mRevertButton = new Button();
+         mMainBottomPanel = new BottomPanel(mCurrentTheme!, "E&xit");
       }
 
       private void InitializeUIPart1() {
@@ -82,11 +80,11 @@
             PerformFirstLaunchInitialization();
             Settings.Default.FirstLaunch = false;
          }
+         ThemeRegistry.Initialize(); // must precede MakeNews so mCurrentTheme and mThemes are ready
          MakeNews();
          LoadEmbeddedIcons();
          InitializeUIPart2();
          InitializeUIPart3();
-         Themes.ThemeManager.LoadThemes();
          SuspendLayout();
          //DEBUG efm5 2026 04 2 many of these need tab index – TabIndex = mTabIndex++;
          StartPosition = FormStartPosition.Manual;
@@ -269,14 +267,14 @@
          mSendAllButton.TabIndex = mTabIndex++;
          mSendAllButton.AutoSize = true;
          mSendAllButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-         mSendAllButton.Tag = PasteMode.Transfer;
+         mSendAllButton.Tag = PasteMode.SendAll;
          mSendAllButton.Click += TransMove_Click;
          mPasteSelectedButton!.Text = "&Paste Selected";
          mPasteSelectedButton.Name = "pasteSelectedButton";
          mPasteSelectedButton.TabIndex = mTabIndex++;
          mPasteSelectedButton.AutoSize = true;
          mPasteSelectedButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-         mPasteSelectedButton.Tag = PasteMode.Transport;
+         mPasteSelectedButton.Tag = PasteMode.PasteSelected;
          mPasteSelectedButton.Click += TransMove_Click;
          mTargetingLabel!.Name = "targetingLabel";
          mTargetingLabel.Text = string.Empty;
@@ -288,18 +286,19 @@
          mVersionLabel.AutoSize = true;
          mVersionLabel.TextAlign = ContentAlignment.MiddleLeft;
          mVersionLabel.TabIndex = mTabIndex++;
-         mRevertTSB!.Name = "revertTSB";
-         mRevertTSB.Text = "&Revert";
-         mRevertTSB.Click += RevertTSB_Click;
-         mExitTSB!.Name = "exitTSB";
-         mExitTSB.Text = "E&xit";
-         mExitTSB.Click += ExitTSB_Click;
+         mRevertButton!.Text = "&Revert";
+         mRevertButton.Name = "revertButton";
+         mRevertButton.TabIndex = mTabIndex++;
+         mRevertButton.AutoSize = true;
+         mRevertButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+         mRevertButton.Tag = PasteMode.SendAll;
+         mRevertButton.Click += RevertButton_Click;
          mMainBottomPanel!.AddLeftControl(mSendAllButton);
          mMainBottomPanel.AddLeftControl(mPasteSelectedButton);
          mMainBottomPanel.AddLeftControl(mTargetingLabel); // must be last — stretches to fill
          mMainBottomPanel.AddRightControl(mVersionLabel);  // added first = leftmost of right group
-         mMainBottomPanel.mOKButton!.Click += RevertTSB_Click;
-         mMainBottomPanel.mCancelButton!.Click += ExitTSB_Click;
+         mMainBottomPanel.AddRightControl(mRevertButton);
+         mMainBottomPanel.mCancelButton!.Click += ExitButton_Click;
          Controls.AddRange([mRichTextBox!, mMainBottomPanel!, mMenuStrip!]);
       }
    }

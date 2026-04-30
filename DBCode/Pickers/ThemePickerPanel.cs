@@ -1,79 +1,70 @@
 ﻿namespace DBCode {
    namespace Themes {
       internal sealed partial class ThemePickerPanel : Panel {
-         private const string TemporaryThemePrefix = "\u26A0 TEMPORARY THEME PICKER \u26A0";
-         private readonly Button mCancelButton, mHelpButton;
-         private readonly MainForm mMainForm;
          private readonly HeaderLabelCluster mTitleLabel;
          private readonly Panel mButtonPanel;
-         private readonly StatusStrip mStatusStrip;
-         private readonly ToolStripControlHost mCancelHost, mHelpHost;
-         private readonly ToolStripStatusLabel mSpringLabel;
-         private List<ButtonCluster> mButtonClusters;
+         private readonly BottomPanel mThemePickerBottomPanel;
+         private ClusterContainer? mClusterContainer;
+         private List<BaseCluster> mButtonBaseClusters;
 
-         public ThemePickerPanel(MainForm pMainForm) {
+         public ThemePickerPanel() {
             ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
-
             AutoScroll = true;
             AutoSize = false;
-            BackColor = Color.Transparent;
-            mCancelButton = new Button();
-            mHelpButton = new Button();
             mTitleLabel = new HeaderLabelCluster(mCurrentTheme, "Theme Picker", HeaderLabelSize.Normal);
-            mStatusStrip = new StatusStrip();
-            mCancelHost = new ToolStripControlHost(mCancelButton);
-            mHelpHost = new ToolStripControlHost(mHelpButton);
-            mSpringLabel = new ToolStripStatusLabel();
-            mButtonClusters = [];
             mButtonPanel = new Panel {
                Name = $"ThemePickerPanelScrollPanel{mTabIndex}",
                TabIndex = mTabIndex++,
                Dock = DockStyle.Fill,
                AutoScroll = true,
-               BackColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceBackground]
+               BackColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.GroupBoxBackground]
             };
-            mMainForm = pMainForm;
+            mButtonBaseClusters = [];
+            mClusterContainer = new ClusterContainer(mButtonPanel, mButtonBaseClusters, ClusterLayoutMode.FlowLayout);
+            mButtonPanel.Controls.Add(mClusterContainer);
+            mThemePickerBottomPanel = new BottomPanel(mCurrentTheme);
          }
 
          private void CreateLayout() {
             SuspendLayout();
-            CreateStatusStrip();
             CreateButtons();
-            mCancelButton.Click += CancelButton_Click;
-            mHelpButton.Click += MainForm.Help_Click;
-            Controls.AddRange([mButtonPanel, mStatusStrip, mTitleLabel]);
-            mButtonPanel.Controls.AddRange(mButtonClusters.Cast<Control>().ToArray());//DEBUG efm5 2026 04 28 this might not be right either
+            mThemePickerBottomPanel.mCancelButton!.Click += CancelButton_Click;
+            mThemePickerBottomPanel.mHelpButton!.Click += MainForm.Help_Click;
+            Controls.AddRange([mThemePickerBottomPanel, mButtonPanel, mTitleLabel]);
             ApplyThemeToPanel();
-            foreach (ButtonCluster clusterBase in mButtonClusters.OfType<ButtonCluster>())
-               clusterBase.ResumeLayout(true);
+            foreach (BaseCluster cluster in mButtonBaseClusters) {
+               //cluster.LayoutCluster();//efm5 did not help
+               cluster.ResumeLayout(true);
+               //cluster.RefreshControls();//efm5 did not help
+            }
             mButtonPanel.ResumeLayout(true);
-            WidgetLayout(mButtonClusters.Cast<Control>().ToList(), mForm!.Width);
+            mClusterContainer!.LayoutClusters();
             ResumeLayout(true);
-         }
-
-         private void AddButtonCluster(List<ButtonCluster> pClusters, Theme pTheme) {
-            ButtonCluster cluster = new ButtonCluster(pTheme, pTheme.mName) {
-               Tag = pTheme
-            };
-            cluster.SuspendLayout();
-            cluster.Click += PickThemeButton_Click;
-            pClusters.Add(cluster);
          }
 
          private void CreateButtons() {
             mButtonPanel.SuspendLayout();
             foreach (Theme theme in mThemes.OfType<Theme>())
-               AddButtonCluster(mButtonClusters, theme);
-            mButtonPanel.Dock = DockStyle.Fill;
+               AddButtonCluster(mButtonBaseClusters, theme);
+            mButtonPanel.Controls.Add(mClusterContainer);
          }
 
-         private void CreateStatusStrip() {
-            mStatusStrip.SizingGrip = true;
-            mStatusStrip.Dock = DockStyle.Bottom;
-            mSpringLabel.Spring = true;
-            mHelpButton.Text = "Help";
-            mCancelButton.Text = "Cancel";
-            mStatusStrip.Items.AddRange([mHelpHost, mSpringLabel, mCancelHost]);
+         private void AddButtonCluster(List<BaseCluster> pClusters, Theme pTheme) {
+            ButtonCluster cluster = new ButtonCluster(pTheme, pTheme.mName);
+            cluster.SuspendLayout();
+            cluster.mButton!.Tag = pTheme;
+            cluster.mButton.Click += PickThemeButton_Click;
+            pClusters.Add(cluster);
+            mClusterContainer.Controls.Add(cluster);
+         }
+
+         public void ApplyThemeToPanel() {
+            Theme theme = mCurrentTheme!;
+            BackColor = theme.mInterfaceColors[(int)ColorUsage.PanelBackground];
+            mButtonPanel.BackColor = theme.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
+            foreach (BaseCluster cluster in mButtonBaseClusters)
+               cluster.SetFontAndColor();
+            mThemePickerBottomPanel.SetFontAndColor();
          }
 
          private void CloseThemePickerPanel() {
@@ -82,30 +73,19 @@
             mForm.RestoreFromThemePickerPanel();
          }
 
-         public void ApplyThemeToPanel() {
-            Theme theme = mCurrentTheme!;
-            BackColor = theme.mInterfaceColors[(int)ColorUsage.PanelBackground];
-            foreach (Button item in mButtonPanel.Controls.OfType<Button>()) {
-               if (item is Button button) {
-                  button.ForeColor = theme.mInterfaceColors[(int)ColorUsage.InterfaceFont];
-                  button.BackColor = theme.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
-                  button.Font = theme.mFonts[(int)FontUsage.Interface];
-               }
+         protected override void Dispose(bool pDisposing) {
+            if (pDisposing) {
+               mThemePickerBottomPanel.mCancelButton!.Click -= CancelButton_Click;
+               mThemePickerBottomPanel.mHelpButton!.Click -= MainForm.Help_Click;
+               foreach (BaseCluster cluster in mButtonBaseClusters)
+                  if (cluster is ButtonCluster buttonCluster)
+                     buttonCluster.mButton!.Click -= PickThemeButton_Click;
+               mTitleLabel.Dispose();
+               mClusterContainer?.Dispose();
+               mThemePickerBottomPanel.Dispose();
+               mButtonPanel.Dispose();
             }
-            mStatusStrip.Renderer = new ToolStripProfessionalRenderer();
-            mStatusStrip.Invalidate(true);
-            mStatusStrip.BackColor = theme.mInterfaceColors[(int)ColorUsage.StatusBackground];
-            foreach (ToolStripItem item in mStatusStrip.Items) {
-               if (item is ToolStripControlHost host) {
-                  Control control = host.Control;
-                  nint handle = control.Handle;
-                  control.ForeColor = theme.mInterfaceColors[(int)ColorUsage.StatusFont];
-                  control.BackColor = theme.mInterfaceColors[(int)ColorUsage.StatusBackground];
-                  control.Font = theme.mFonts[(int)FontUsage.Status];
-                  control.Invalidate();
-                  control.Update();
-               }
-            }
+            base.Dispose(pDisposing);
          }
       }
    }

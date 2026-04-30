@@ -159,10 +159,10 @@
       }
 
       private void TransMove_Click(object? pSender, EventArgs pEventArgs) {
-         ToolStripButton? toolStripButton = pSender as ToolStripButton;
-         if (toolStripButton == null)
+         Button? button = pSender as Button;
+         if (button == null)
             return;
-         PasteMode pasteMode = toolStripButton == mTransferTSB ? PasteMode.Transfer : PasteMode.Transport;
+         PasteMode pasteMode = button == mSendAllButton ? PasteMode.SendAll : PasteMode.PasteSelected;
 
          Paste(pasteMode);
          if (mReturnToTop) {
@@ -171,11 +171,11 @@
          }
       }
 
-      private void RevertTSB_Click(object? pSender, EventArgs pEventArgs) {
+      private void RevertButton_Click(object? pSender, EventArgs pEventArgs) {
          ApplyViewMode(ViewMode.Features);
       }
 
-      private void ExitTSB_Click(object? pSender, EventArgs pEventArgs) {
+      private void ExitButton_Click(object? pSender, EventArgs pEventArgs) {
          Close();
       }
    }

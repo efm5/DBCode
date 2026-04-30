@@ -12,15 +12,18 @@
          }
 
          private void PickThemeButton_Click(object? pSender, EventArgs pArgs) {
+            ThrowIfNull(mForm, nameof(mForm));
+            ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
             Button? button = pSender as Button;
             if (button == null)
                return;
             Theme? theme = button.Tag as Theme;
             if (theme != null) {
                CloseThemePickerPanel();
-               mCurrentTheme = theme;
-               mMainForm.ApplyThemeToMainForm();
+               mCurrentTheme = theme.Clone();
+               mForm.ApplyThemeToMainForm();
             }
+            CloseThemePickerPanel();
          }
       }
    }

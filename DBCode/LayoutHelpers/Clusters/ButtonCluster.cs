@@ -1,6 +1,4 @@
-﻿using DBCode.Themes;
-
-namespace DBCode {
+﻿namespace DBCode {
    internal static partial class LayoutHelpers {
       internal sealed class ButtonCluster : BaseCluster {
          internal Button? mButton;
@@ -18,6 +16,7 @@ namespace DBCode {
                ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont],
                BackColor = pBackgroundColor ?? Color.Transparent
             };
+            Controls.Add(mButton);
          }
 
          internal override void LayoutCluster() {

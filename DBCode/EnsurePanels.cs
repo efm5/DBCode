@@ -77,7 +77,7 @@
          Bounds = new Rectangle(mUiState.mThemePickerLocation, mUiState.mThemePickerSize);
          if (mThemePickerPanel == null) {
             ThrowIfNull(mForm, nameof(mForm));
-            mThemePickerPanel = new ThemePickerPanel(mForm as MainForm);
+            mThemePickerPanel = new ThemePickerPanel();
          }
          if (!mFirstThemePicker)
             Bounds = mThemePickerBounds;

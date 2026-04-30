@@ -2,6 +2,7 @@ namespace DBCode {
    internal sealed class GetString : Panel {
       private static bool mHasControlBox;
       private readonly BottomPanel mGetStringBottomPanel;
+      private readonly Button mOKButton;
       private readonly HeaderLabelCluster mTitleCluster;
       private readonly Label mPromptLabel;
       private readonly Panel mOuterPanel, mInnerPanel;
@@ -28,7 +29,7 @@ namespace DBCode {
             Name = $"GetString_OuterPanel{mTabIndex}",
             TabIndex = mTabIndex++,
             Location = new Point(mEmFifth, mEmFifth),
-            BackColor = Color.White,
+            BackColor = Color.White
          };
          mInnerPanel = new Panel {
             Name = $"GetString_InnerPanel{mTabIndex}",
@@ -43,25 +44,35 @@ namespace DBCode {
             TabIndex = mTabIndex++,
             Text = pPrompt,
             AutoSize = true,
-            Dock = DockStyle.Fill
+            Dock = DockStyle.Top
          };
          mInputTextBox = new TextBox {
             Name = $"GetString_InputTextBox{mTabIndex}",
             TabIndex = mTabIndex++,
             AutoSize = false,
             Text = pInitialValue,
-            Multiline = false
+            Multiline = false,
+            Dock = DockStyle.Top
          };
-         mGetStringBottomPanel = new BottomPanel(mCurrentTheme!, true, "&OK", "&Cancel");
-         mGetStringBottomPanel!.mHelpButton?.Tag = new HelpTag(HelpContext.Main, "GetString");
+         mOKButton = new Button {
+            Name = $"GetString_OKButton{mTabIndex}",
+            TabIndex = mTabIndex++,
+            Text = "&OK",
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink
+         };
+         mGetStringBottomPanel = new BottomPanel(mCurrentTheme!, pCancelText: "&Cancel") {
+            Dock = DockStyle.Top
+         };
+         mGetStringBottomPanel.mHelpButton!.Tag = new HelpTag(HelpContext.Main, "GetString");
+         mGetStringBottomPanel.AddRightControl(mOKButton);
+         mGetStringBottomPanel.mCancelButton!.Click += CancelButton_Click;
+         mOKButton.Click += OKButton_Click;
+         mInputTextBox.KeyDown += InputTextBox_KeyDown;
          mInnerPanel.Controls.AddRange([mGetStringBottomPanel, mInputTextBox, mPromptLabel, mTitleCluster]);
          mOuterPanel.Controls.Add(mInnerPanel);
          Controls.Add(mOuterPanel);
          LayoutClusters();
-         mGetStringBottomPanel.mOKButton?.Click += OKButton_Click;
-         mGetStringBottomPanel.mCancelButton?.Click += CancelButton_Click;
-         mGetStringBottomPanel.mHelpButton?.Click += HelpButton_Click;
-         mInputTextBox.KeyDown += InputTextBox_KeyDown;
       }
 
       public static void Show(string pTitle, string pPrompt, string pInitialValue, Action<string?, bool> pCallback) {
@@ -104,6 +115,7 @@ namespace DBCode {
 
       private void LayoutClusters() {
          SuspendLayout();
+         mInnerPanel.SuspendLayout();
          ApplyTheme();
          mTitleCluster.LayoutCluster();
          SizeF size;
@@ -114,23 +126,22 @@ namespace DBCode {
             SizeTextBoxToFitString(out size, mInputTextBox);
          }
          mInputTextBox.Size = new Size((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height));
-         mPromptLabel.Top = mTitleCluster.Bottom + mEm;
-         mInputTextBox.Top = mPromptLabel.Bottom + mEmHalf;
          mInputTextBox.Left = mIndent;
-         mGetStringBottomPanel.Top = mInputTextBox.Bottom + mEm;
          int wantedWidth = mTitleCluster.Width;
          wantedWidth = Math.Max(wantedWidth, mPromptLabel.Width);
          wantedWidth = Math.Max(wantedWidth, mInputTextBox.Width);
          wantedWidth = Math.Max(wantedWidth, mGetStringBottomPanel.NeededWidth);
-         mGetStringBottomPanel.LayoutControls();
-         mInnerPanel.Size = new Size(wantedWidth + mEm, mInputTextBox.Bottom +
-            mGetStringBottomPanel.Height + mEmHalf);
-         mOuterPanel.Size = new Size(mInnerPanel.Width + (mEmFifth * 2), mInnerPanel.Height + (mEmFifth * 2));
+         mTitleCluster.LayoutCluster();
+         mGetStringBottomPanel.LayoutControls();// efm5 this is needed to get the correct sizes after the font is applied
+         mInnerPanel.Size = new Size(wantedWidth + mEm, mTitleCluster.Height + mPromptLabel.Height +
+            mInputTextBox.Height + mGetStringBottomPanel.Height);
+         mGetStringBottomPanel.LayoutControls();// efm5 this is needed to recalculate the needed width after the inner panel is sized
+         mOuterPanel.Size =
+            new Size(mInnerPanel.Width + (mEmFifth * 2), mInnerPanel.Height + (mEmFifth * 2));
          Size = new Size(mOuterPanel.Width + (mEmFifth * 2), mOuterPanel.Height + (mEmFifth * 2));
          Width += SystemInformation.VerticalScrollBarWidth;
          Height += SystemInformation.HorizontalScrollBarHeight;
-         mGetStringBottomPanel.Width = mInnerPanel.Width;
-         mGetStringBottomPanel.LayoutControls();
+         mInnerPanel.ResumeLayout(true);
          ResumeLayout(true);
       }
 
@@ -139,20 +150,16 @@ namespace DBCode {
          Theme.ThemeInterfaceThings(theme, out Font interfaceFont, out Color interfaceForeColor,
             out Color interfaceBackColor);
          mInnerPanel.BackColor = theme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground];
-         mPromptLabel.Font = interfaceFont;
+         MainForm.DisposeFontIfOwned(mPromptLabel.Font);
+         mPromptLabel.Font = CreateNewFont(interfaceFont);
          mPromptLabel.ForeColor = interfaceForeColor;
          mPromptLabel.BackColor = interfaceBackColor;
          Theme.ThemeTextBoxThings(theme, out Font textBoxFont, out Color textBoxForeColor,
             out Color textBoxBackColor);
-         mInputTextBox.Font = textBoxFont;
+         MainForm.DisposeFontIfOwned(mInputTextBox.Font);
+         mInputTextBox.Font = CreateNewFont(textBoxFont);
          mInputTextBox.ForeColor = textBoxForeColor;
          mInputTextBox.BackColor = textBoxBackColor;
-         Theme.ThemeStatusThings(theme, out Font statusFont, out Color statusForeColor, out Color statusBackColor);
-         foreach (Button button in mGetStringBottomPanel.Controls.OfType<Button>()) {
-            button.Font = statusFont;
-            button.ForeColor = statusForeColor;
-            button.BackColor = statusBackColor;
-         }
       }
 
       internal void FocusInputTextBox() {
@@ -173,10 +180,6 @@ namespace DBCode {
          CloseDialog(true);
       }
 
-      private void HelpButton_Click(object? pSender, EventArgs pEventArguments) {
-         MainForm.Help_Click(pSender, pEventArguments);
-      }
-
       private void InputTextBox_KeyDown(object? pSender, KeyEventArgs pEventArguments) {
          if (pEventArguments.KeyCode == Keys.Enter) {
             pEventArguments.Handled = true;
@@ -192,10 +195,11 @@ namespace DBCode {
 
       protected override void Dispose(bool pDisposing) {
          if (pDisposing) {
-            mGetStringBottomPanel?.mOKButton?.Click -= OKButton_Click;
-            mGetStringBottomPanel?.mCancelButton?.Click -= CancelButton_Click;
-            mGetStringBottomPanel?.mHelpButton?.Click -= HelpButton_Click;
+            mOKButton.Click -= OKButton_Click;
+            mGetStringBottomPanel.mCancelButton!.Click -= CancelButton_Click;
             mInputTextBox.KeyDown -= InputTextBox_KeyDown;
+            MainForm.DisposeFontIfOwned(mPromptLabel.Font);
+            MainForm.DisposeFontIfOwned(mInputTextBox.Font);
          }
          base.Dispose(pDisposing);
       }

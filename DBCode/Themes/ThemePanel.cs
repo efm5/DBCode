@@ -633,8 +633,7 @@ All text appears in the default foreground color."
             AddColorCluster(mInterfaceColorClusters, "Tab Header Unselected Background", ColorSwatchUsage.TabHeaderUnselectedBackground);
             AddColorCluster(mInterfaceColorClusters, "Tab Header Selected Background", ColorSwatchUsage.TabHeaderSelectedBackground);
             mInterfaceColorsContainer = new ClusterContainer(mHighlightInterfaceScrollPanel, mInterfaceColorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Name = "InterfaceColorsClusterContainer",
-               Tag = ColorUsage.Unknown
+               Name = "InterfaceColorsClusterContainer"
             };
             mHighlightInterfaceScrollPanel.Controls.AddRange([mInterfaceHeaderCluster, mInterfaceColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.CSharp].Controls.Add(mHighlightCSharpScrollPanel);
@@ -650,8 +649,7 @@ All text appears in the default foreground color."
             AddColorCluster(mCSharpColorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mCSharpColorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mCSharpColorsContainer = new ClusterContainer(mHighlightCSharpScrollPanel, mCSharpColorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Name = "CSharpColorsClusterContainer",
-               Tag = ColorUsage.Unknown
+               Name = "CSharpColorsClusterContainer"
             };
             mHighlightCSharpScrollPanel.Controls.AddRange([mCSharpHeaderCluster, mCSharpColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.C].Controls.Add(mHighlightCScrollPanel);
@@ -667,8 +665,7 @@ All text appears in the default foreground color."
             AddColorCluster(mCColorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mCColorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mCColorsContainer = new ClusterContainer(mHighlightCScrollPanel, mCColorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Name = "CColorsClusterContainer",
-               Tag = ColorUsage.Unknown
+               Name = "CColorsClusterContainer"
             };
             mHighlightCScrollPanel.Controls.AddRange([mCHeaderCluster, mCColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Cpp].Controls.Add(mHighlightCppScrollPanel);
@@ -684,8 +681,7 @@ All text appears in the default foreground color."
             AddColorCluster(mCppColorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mCppColorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mCppColorsContainer = new ClusterContainer(mHighlightCppScrollPanel, mCppColorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Name = "CppColorsClusterContainer",
-               Tag = ColorUsage.Unknown
+               Name = "CppColorsClusterContainer"
             };
             mHighlightCppScrollPanel.Controls.AddRange([mCppHeaderCluster, mCppColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Basic].Controls.Add(mHighlightBasicScrollPanel);
@@ -701,8 +697,7 @@ All text appears in the default foreground color."
             AddColorCluster(mBasicColorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mBasicColorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mBasicColorsContainer = new ClusterContainer(mHighlightBasicScrollPanel, mBasicColorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Name = "BasicColorsClusterContainer",
-               Tag = ColorUsage.Unknown
+               Name = "BasicColorsClusterContainer"
             };
             mHighlightBasicScrollPanel.Controls.AddRange([mBasicHeaderCluster, mBasicColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.FSharp].Controls.Add(mHighlightFSharpScrollPanel);
@@ -718,8 +713,7 @@ All text appears in the default foreground color."
             AddColorCluster(mFSharpColorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mFSharpColorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mFSharpColorsContainer = new ClusterContainer(mHighlightFSharpScrollPanel, mFSharpColorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Name = "FSharpColorsClusterContainer",
-               Tag = ColorUsage.Unknown
+               Name = "FSharpColorsClusterContainer"
             };
             mHighlightFSharpScrollPanel.Controls.AddRange([mFSharpHeaderCluster, mFSharpColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.HTML].Controls.Add(mHighlightHTMLScrollPanel);
@@ -735,8 +729,7 @@ All text appears in the default foreground color."
             AddColorCluster(mHTMLColorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mHTMLColorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mHTMLColorsContainer = new ClusterContainer(mHighlightHTMLScrollPanel, mHTMLColorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Name = "HTMLColorsClusterContainer",
-               Tag = ColorUsage.Unknown
+               Name = "HTMLColorsClusterContainer"
             };
             mHighlightHTMLScrollPanel.Controls.AddRange([mHTMLHeaderCluster, mHTMLColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.CSS].Controls.Add(mHighlightCSSScrollPanel);
@@ -752,8 +745,7 @@ All text appears in the default foreground color."
             AddColorCluster(mCSSColorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mCSSColorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mCSSColorsContainer = new ClusterContainer(mHighlightCSSScrollPanel, mCSSColorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Name = "CSSColorsClusterContainer",
-               Tag = ColorUsage.Unknown
+               Name = "CSSColorsClusterContainer"
             };
             mHighlightCSSScrollPanel.Controls.AddRange([mCSSHeaderCluster, mCSSColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.XML].Controls.Add(mHighlightXMLScrollPanel);
@@ -769,8 +761,7 @@ All text appears in the default foreground color."
             AddColorCluster(mXMLColorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mXMLColorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mXMLColorsContainer = new ClusterContainer(mHighlightXMLScrollPanel, mXMLColorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Name = "XMLColorsClusterContainer",
-               Tag = ColorUsage.Unknown
+               Name = "XMLColorsClusterContainer"
             };
             mHighlightXMLScrollPanel.Controls.AddRange([mXMLHeaderCluster, mXMLColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.JSON].Controls.Add(mHighlightJSONScrollPanel);
@@ -786,8 +777,7 @@ All text appears in the default foreground color."
             AddColorCluster(mJSONColorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mJSONColorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mJSONColorsContainer = new ClusterContainer(mHighlightJSONScrollPanel, mJSONColorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Name = "JSONColorsClusterContainer",
-               Tag = ColorUsage.Unknown
+               Name = "JSONColorsClusterContainer"
             };
             mHighlightJSONScrollPanel.Controls.AddRange([mJSONHeaderCluster, mJSONColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.PowerShell].Controls.Add(mHighlightPowerShellScrollPanel);
@@ -803,8 +793,7 @@ All text appears in the default foreground color."
             AddColorCluster(mPowerShellColorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mPowerShellColorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mPowerShellColorsContainer = new ClusterContainer(mHighlightPowerShellScrollPanel, mPowerShellColorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Name = "PowerShellColorsClusterContainer",
-               Tag = ColorUsage.Unknown
+               Name = "PowerShellColorsClusterContainer"
             };
             mHighlightPowerShellScrollPanel.Controls.AddRange([mPowerShellHeaderCluster, mPowerShellColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Batch].Controls.Add(mHighlightBatchScrollPanel);
@@ -820,8 +809,7 @@ All text appears in the default foreground color."
             AddColorCluster(mBatchColorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mBatchColorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mBatchColorsContainer = new ClusterContainer(mHighlightBatchScrollPanel, mBatchColorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Name = "BatchColorsClusterContainer",
-               Tag = ColorUsage.Unknown
+               Name = "BatchColorsClusterContainer"
             };
             mHighlightBatchScrollPanel.Controls.AddRange([mBatchHeaderCluster, mBatchColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.SQL].Controls.Add(mHighlightSQLScrollPanel);
@@ -837,8 +825,7 @@ All text appears in the default foreground color."
             AddColorCluster(mSQLColorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mSQLColorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mSQLColorsContainer = new ClusterContainer(mHighlightSQLScrollPanel, mSQLColorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Name = "SQLColorsClusterContainer",
-               Tag = ColorUsage.Unknown
+               Name = "SQLColorsClusterContainer"
             };
             mHighlightSQLScrollPanel.Controls.AddRange([mSQLHeaderCluster, mSQLColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Markdown].Controls.Add(mHighlightMarkdownScrollPanel);
@@ -854,8 +841,7 @@ All text appears in the default foreground color."
             AddColorCluster(mMarkdownColorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mMarkdownColorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mMarkdownColorsContainer = new ClusterContainer(mHighlightMarkdownScrollPanel, mMarkdownColorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Name = "MarkdownColorsClusterContainer",
-               Tag = ColorUsage.Unknown
+               Name = "MarkdownColorsClusterContainer"
             };
             mHighlightMarkdownScrollPanel.Controls.AddRange([mMarkdownHeaderCluster, mMarkdownColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Python].Controls.Add(mHighlightPythonScrollPanel);
@@ -871,8 +857,7 @@ All text appears in the default foreground color."
             AddColorCluster(mPythonColorClusters, "Operator", ColorSwatchUsage.Operator);
             AddColorCluster(mPythonColorClusters, "Punctuation", ColorSwatchUsage.Punctuation);
             mPythonColorsContainer = new ClusterContainer(mHighlightPythonScrollPanel, mPythonColorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Name = "PythonColorsClusterContainer",
-               Tag = ColorUsage.Unknown
+               Name = "PythonColorsClusterContainer"
             };
             mHighlightPythonScrollPanel.Controls.AddRange([mPythonHeaderCluster, mPythonColorsContainer]);
             mPrimaryTabControl.TabPages[(int)PrimaryTabPageUsage.Interface].Controls.Add(mPrimaryScrollPanel);
