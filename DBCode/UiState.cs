@@ -1,6 +1,4 @@
-﻿using DBCode.Syntax;
-
-namespace DBCode {
+﻿namespace DBCode {
    internal sealed class UiState {
       public Size mFormSize;
       public Point mFormLocation;
@@ -10,6 +8,7 @@ namespace DBCode {
       public Point mThemePickerLocation;
       public double mFormOpacity;
       public int mThemePrimaryTabPageIndex;
+      public int mThemeTargetingTabIndexIndex;
       public int mThemeHighlightTabPageIndex;
 
       public UiState() {
@@ -21,6 +20,7 @@ namespace DBCode {
          mThemePickerLocation = new Point(100, 100);
          mFormOpacity = 1.0;
          mThemePrimaryTabPageIndex = 0;
+         mThemeTargetingTabIndexIndex = 0;
          mThemeHighlightTabPageIndex = 0;
       }
 
@@ -31,6 +31,7 @@ namespace DBCode {
          mThemeLocation = Settings.Default.ThemeLocation;
          mFormOpacity = Settings.Default.FormOpacity;
          mThemePrimaryTabPageIndex = Settings.Default.ThemePrimaryTabPageIndex;
+         mThemeTargetingTabIndexIndex = Settings.Default.ThemeTargetingTabPageIndex;
          mThemeHighlightTabPageIndex = Settings.Default.ThemeHighlightTabPageIndex;
          mPreviousThemeName = Settings.Default.CurrentThemeName;
          mThemePickerSize = Settings.Default.ThemePickerSize;
@@ -45,6 +46,7 @@ namespace DBCode {
          Settings.Default.ThemeLocation = mThemeLocation;
          Settings.Default.FormOpacity = mFormOpacity;
          Settings.Default.ThemePrimaryTabPageIndex = mThemePrimaryTabPageIndex;
+         Settings.Default.ThemeTargetingTabPageIndex = mThemeTargetingTabIndexIndex;
          Settings.Default.ThemeHighlightTabPageIndex = mThemeHighlightTabPageIndex;
          Settings.Default.ThemePickerSize = mThemePickerSize;
          Settings.Default.ThemePickerLocation = mThemePickerLocation;

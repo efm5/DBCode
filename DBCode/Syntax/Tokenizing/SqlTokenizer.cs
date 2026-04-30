@@ -6,7 +6,7 @@
          mReaders = [
             new WhitespaceReader(),
             new SqlCommentReader(),
-            new StringReader(),
+            new SqlStringReader(),
             new NumberReader(),
             new KeywordReader(pDefinition),
             new OperatorReader()

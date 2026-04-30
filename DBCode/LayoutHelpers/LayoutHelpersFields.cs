@@ -40,11 +40,11 @@
          mAssociatedUpDownPostButtonVerticalOffset = 0, mAssociatedUpDownPostCheckBoxHorizontalSpace = 0,
          mAssociatedUpDownPostCheckBoxVerticalOffset = 0, mBottomButtonTop = 0, mCancelOffset = 0, mBottomPad = 0,
          mComboBoxMaxDropdownHeight = 0, mComboBoxMaxDropdownWidth = 0, mEm = 0, mEm2 = 0, mEm3 = 0, mEmHalf = 0,
-         mGroupBottomPad = 0, mGroupLeftPad = 0, mGroupRightPad = 0, mGroupTopPad = 0, mHorizontalScrollOffset = 0,
-         mIndent = 0, mMaximumGridWidth = 0, mMenuLeftOffset = 0, mOkOffset = 0, mScalePad = 0, mRightPad = 0,
-         mScalingGroupBoxTopLinePad = 0, mTabIndex = 1, mTitleBarHeight = 0, mVerticalScrollOffset = 0,
-         mWidgetBigHorizontalSpace = 0, mWidgetBigVerticalOffset = 0, mWidgetHorizontalSpace = 0,
-         mWidgetVerticalOffset = 0,
+         mEmFifth = 0, mGroupBottomPad = 0, mGroupLeftPad = 0, mGroupRightPad = 0, mGroupTopPad = 0,
+         mHorizontalScrollOffset = 0, mIndent = 0, mMaximumGridWidth = 0, mMenuLeftOffset = 0, mOkOffset = 0,
+         mScalePad = 0, mRightPad = 0, mScalingGroupBoxTopLinePad = 0, mTabIndex = 1, mTitleBarHeight = 0,
+         mVerticalScrollOffset = 0, mWidgetBigHorizontalSpace = 0, mWidgetBigVerticalOffset = 0,
+         mWidgetHorizontalSpace = 0, mWidgetVerticalOffset = 0,
 #pragma warning disable CS8602
          COMBOBOX_MAXIMUM_DROPDOWN_WIDTH = Screen.PrimaryScreen.WorkingArea.Width - 100;
 #pragma warning restore CS8602

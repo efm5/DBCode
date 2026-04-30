@@ -20,7 +20,7 @@ namespace DBCode {
             };
             mSwatch = new ColorSwatch(ColorSwatchUsage.Demo, pInitialColor, 50);
             mSwatch.SetSize(mEm3);
-            Controls.AddRange(mLabel, mSwatch);
+            Controls.AddRange([mLabel, mSwatch]);
             LayoutControls();
          }
 

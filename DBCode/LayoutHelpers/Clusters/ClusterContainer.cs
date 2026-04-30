@@ -2,10 +2,10 @@ namespace DBCode {
    internal static partial class LayoutHelpers {
 
       internal sealed class ClusterContainer : Panel, IEnumerable<BaseCluster> {
-         private readonly List<BaseCluster> mClusters;
+         public readonly List<BaseCluster> mClusters;
          private readonly ClusterLayoutMode mLayoutMode;
-         private readonly int mFixedColumns, mFixedRows;
-         private Panel mPanelParent;
+         private readonly int mFixedColumns, mFixedRows, mMaxWidth, mMaxHeight;
+         public Panel mPanelParent;
 
          internal ClusterContainer(Panel pParent, List<BaseCluster> pClusters, ClusterLayoutMode pLayoutMode, int pMaxWidth = 0,
             int pMaxHeight = 0, int pFixedColumns = 0, int pFixedRows = 0) {
@@ -16,6 +16,8 @@ namespace DBCode {
             mLayoutMode = pLayoutMode;
             mFixedColumns = pFixedColumns;
             mFixedRows = pFixedRows;
+            mMaxWidth = pMaxWidth;
+            mMaxHeight = pMaxHeight;
             foreach (BaseCluster currentCluster in mClusters)
                Controls.Add(currentCluster);
          }
@@ -73,7 +75,7 @@ namespace DBCode {
 
          private void LayoutMaxWidth() {
             int x = mIndent, y = 0;
-
+            //DEBUG efm5 2026 04 28 this needs to take into account max width and wrap to next line if necessary
             foreach (BaseCluster currentCluster in mClusters) {
                currentCluster.Left = x;
                currentCluster.Top = y;
@@ -83,7 +85,7 @@ namespace DBCode {
 
          private void LayoutMaxHeight() {
             int x = mIndent, y = 0, columnWidth = 0;
-
+            //DEBUG efm5 2026 04 28 this needs to take into account max height and wrap to next column if necessary
             foreach (BaseCluster currentCluster in mClusters) {
                int clusterWidth = currentCluster.Width, clusterHeight = currentCluster.Height;
 

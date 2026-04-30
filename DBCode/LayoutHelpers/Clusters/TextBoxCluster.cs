@@ -29,7 +29,7 @@ namespace DBCode {
                   TabIndex = mTabIndex++,
                   Name = $"TextFieldClusterButton{mTabIndex++}"
                };
-               Controls.AddRange(mFlattenedButton, mTextBox!);
+               Controls.AddRange([mFlattenedButton, mTextBox!]);
                FlattenButton(mFlattenedButton, pBackgroundColor);
                mTextBox.Location = new Point(mFlattenedButton.Right, 0);
             }
@@ -40,7 +40,7 @@ namespace DBCode {
                   Text = pLabelText,
                   TabIndex = TAB_INDEX_IGNORED
                };
-               Controls.AddRange(mLabel, mTextBox!);
+               Controls.AddRange([mLabel, mTextBox!]);
                ApplyLabelPosition(mLabel, mTextBox);
             }
             mTextBox.TabIndex = mTabIndex++;

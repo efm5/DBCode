@@ -120,14 +120,4 @@ namespace DBCode.Themes {
          }
       }
    }
-
-   public static class ThemeDefaults {
-      public static Theme DefaultLight { get => field.Clone(); } = ThemeBuiltIns.CreateLightTheme();
-      public static Theme DefaultDark { get => field.Clone(); } = ThemeBuiltIns.CreateDarkTheme();
-      public static Theme HighContrastLight { get => field.Clone(); } = ThemeBuiltIns.CreateHighContrastLightTheme();
-      public static Theme HighContrastDark { get => field.Clone(); } = ThemeBuiltIns.CreateHighContrastDarkTheme();
-      public static Theme Classic { get => field.Clone(); } = ThemeBuiltIns.CreateClassicTheme();
-      public static Theme LightPastel { get => field.Clone(); } = ThemeBuiltIns.CreateLightPastelTheme();
-      public static Theme DarkPastel { get => field.Clone(); } = ThemeBuiltIns.CreateDarkPastelTheme();
-   }
 }

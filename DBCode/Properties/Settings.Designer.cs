@@ -190,5 +190,17 @@ namespace DBCode.Properties {
                 this["CurrentLanguage"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ThemeTargetingTabPageIndex {
+            get {
+                return ((int)(this["ThemeTargetingTabPageIndex"]));
+            }
+            set {
+                this["ThemeTargetingTabPageIndex"] = value;
+            }
+        }
     }
 }

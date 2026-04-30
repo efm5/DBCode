@@ -1,15 +1,12 @@
-using DBCode.Themes;
-
 namespace DBCode {
    internal sealed class GetString : Panel {
-      private readonly Button mOKButton, mCancelButton, mHelpButton;
+      private static bool mHasControlBox;
+      private readonly BottomPanel mGetStringBottomPanel;
       private readonly HeaderLabelCluster mTitleCluster;
       private readonly Label mPromptLabel;
-      private readonly StatusStrip mStatusStrip;
+      private readonly Panel mOuterPanel, mInnerPanel;
       private readonly string mInitialValue;
       private readonly TextBox mInputTextBox;
-      private readonly ToolStripControlHost mOKHost, mCancelHost, mHelpHost;
-      private readonly ToolStripStatusLabel mSpringLabel;
 
       public string? ResultValue => WasCancelled ? null : mInputTextBox.Text;
       public bool WasCancelled { get; private set; }
@@ -20,21 +17,33 @@ namespace DBCode {
       public GetString(string pTitle, string pPrompt, string pInitialValue = "") {
          ThrowIfNull(pTitle, nameof(pTitle));
          ThrowIfNull(pPrompt, nameof(pPrompt));
+         ThrowIfNull(mForm, nameof(mForm));
          ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
 
+         mHasControlBox = mForm.ControlBox;
+         if (mHasControlBox)
+            mForm.ControlBox = false;
          mInitialValue = pInitialValue;
-         AutoScroll = true;
-         AutoSize = false;
-         AutoSizeMode = AutoSizeMode.GrowAndShrink;
+         mOuterPanel = new Panel {
+            Name = $"GetString_OuterPanel{mTabIndex}",
+            TabIndex = mTabIndex++,
+            Location = new Point(mEmFifth, mEmFifth),
+            BackColor = Color.White,
+         };
+         mInnerPanel = new Panel {
+            Name = $"GetString_InnerPanel{mTabIndex}",
+            TabIndex = mTabIndex++,
+            Location = new Point(mEmFifth, mEmFifth),
+            BackColor = Color.Black,
+            AutoScroll = true
+         };
          mTitleCluster = new HeaderLabelCluster(mCurrentTheme, pTitle, HeaderLabelSize.Normal);
          mPromptLabel = new Label {
             Name = $"GetString_PromptLabel{mTabIndex}",
             TabIndex = mTabIndex++,
             Text = pPrompt,
             AutoSize = true,
-            MaximumSize = new Size(600, 0),
-            TextAlign = ContentAlignment.TopLeft,
-            Dock = DockStyle.Top
+            Dock = DockStyle.Fill
          };
          mInputTextBox = new TextBox {
             Name = $"GetString_InputTextBox{mTabIndex}",
@@ -43,39 +52,22 @@ namespace DBCode {
             Text = pInitialValue,
             Multiline = false
          };
-         mStatusStrip = new StatusStrip {
-            SizingGrip = false,
-            Dock = DockStyle.Bottom
-         };
-         mHelpButton = new Button {
-            Text = "&Help",
-            AutoSize = true
-         };
-         mOKButton = new Button {
-            Text = "&OK",
-            AutoSize = true
-         };
-         mCancelButton = new Button {
-            Text = "&Cancel",
-            AutoSize = true
-         };
-         mHelpHost = new ToolStripControlHost(mHelpButton);
-         mOKHost = new ToolStripControlHost(mOKButton);
-         mCancelHost = new ToolStripControlHost(mCancelButton);
-         mSpringLabel = new ToolStripStatusLabel {
-            Spring = true
-         };
-         mStatusStrip.Items.AddRange(mHelpHost, mSpringLabel, mOKHost, mCancelHost);
-         mOKButton.Click += OKButton_Click;
-         mCancelButton.Click += CancelButton_Click;
-         mHelpButton.Click += HelpButton_Click;
+         mGetStringBottomPanel = new BottomPanel(mCurrentTheme!, true, "&OK", "&Cancel");
+         mGetStringBottomPanel!.mHelpButton?.Tag = new HelpTag(HelpContext.Main, "GetString");
+         mInnerPanel.Controls.AddRange([mGetStringBottomPanel, mInputTextBox, mPromptLabel, mTitleCluster]);
+         mOuterPanel.Controls.Add(mInnerPanel);
+         Controls.Add(mOuterPanel);
+         LayoutClusters();
+         mGetStringBottomPanel.mOKButton?.Click += OKButton_Click;
+         mGetStringBottomPanel.mCancelButton?.Click += CancelButton_Click;
+         mGetStringBottomPanel.mHelpButton?.Click += HelpButton_Click;
          mInputTextBox.KeyDown += InputTextBox_KeyDown;
-         CreateLayout();
       }
 
       public static void Show(string pTitle, string pPrompt, string pInitialValue, Action<string?, bool> pCallback) {
          ThrowIfNull(mForm, nameof(mForm));
-         ThrowIfNull(mThemePanel, nameof(mThemePanel));
+         foreach (Control control in mForm.Controls.OfType<Control>())
+            control.Enabled = false;
          mPreGetStringBounds = mForm.Bounds;
          mGetStringPanel = new GetString(pTitle, pPrompt, pInitialValue) {
             OnClose = pCallback
@@ -85,11 +77,6 @@ namespace DBCode {
          mGetStringPanel.PerformLayout();
          mForm.ResumeLayout(true);
          CenterControl(mForm, mGetStringPanel);
-         Size requiredSize = new Size(mGetStringPanel.Width + 20, mGetStringPanel.Height + 40);
-         if (mForm.ClientSize.Width < requiredSize.Width || mForm.ClientSize.Height < requiredSize.Height) {
-            mForm.ClientSize = requiredSize;
-            CenterControl(mForm, mGetStringPanel);
-         }
          EnsureWindowFitsMonitor(mForm, false);
          mGetStringPanel.Visible = true;
          mGetStringPanel.BringToFront();
@@ -100,7 +87,6 @@ namespace DBCode {
       public static void Restore() {
          ThrowIfNull(mForm, nameof(mForm));
          ThrowIfNull(mGetStringPanel, nameof(mGetStringPanel));
-         ThrowIfNull(mThemePanel, nameof(mThemePanel));
          mForm.SuspendLayout();
          mGetStringPanel.Visible = false;
          mGetStringPanel.SendToBack();
@@ -109,32 +95,42 @@ namespace DBCode {
          mGetStringPanel.Dispose();
          mGetStringPanel = null;
          mForm.Bounds = mPreGetStringBounds;
+         foreach (Control control in mForm.Controls.OfType<Control>())
+            control.Enabled = true;
+         if (mHasControlBox)
+            mForm.ControlBox = true;
          mForm.ResumeLayout(true);
       }
 
-      private void CreateLayout() {
+      private void LayoutClusters() {
          SuspendLayout();
          ApplyTheme();
-         Controls.AddRange(mTitleCluster, mPromptLabel, mStatusStrip, mInputTextBox);
          mTitleCluster.LayoutCluster();
-         if (!string.IsNullOrEmpty(mInitialValue)) {
-            SizeTextBoxToFitString(out SizeF size, mInputTextBox, mInitialValue);
-            mInputTextBox.Width = (int)Math.Max(300, size.Width);
-            mInputTextBox.Height = (int)size.Height;
-         }
+         SizeF size;
+         if (!string.IsNullOrEmpty(mInitialValue))
+            SizeTextBoxToFitString(out size, mInputTextBox, mInitialValue);
          else {
             mInputTextBox.Width = 300;
-            SizeTextBoxToFitString(out SizeF size, mInputTextBox);
-            mInputTextBox.Height = (int)Math.Ceiling(size.Height);
+            SizeTextBoxToFitString(out size, mInputTextBox);
          }
-         mInputTextBox.Top = mTitleCluster.Height + mPromptLabel.Height + mEm;
-         mInputTextBox.Left = mEm;
-         SizePanel(this, mEm);
+         mInputTextBox.Size = new Size((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height));
+         mPromptLabel.Top = mTitleCluster.Bottom + mEm;
+         mInputTextBox.Top = mPromptLabel.Bottom + mEmHalf;
+         mInputTextBox.Left = mIndent;
+         mGetStringBottomPanel.Top = mInputTextBox.Bottom + mEm;
+         int wantedWidth = mTitleCluster.Width;
+         wantedWidth = Math.Max(wantedWidth, mPromptLabel.Width);
+         wantedWidth = Math.Max(wantedWidth, mInputTextBox.Width);
+         wantedWidth = Math.Max(wantedWidth, mGetStringBottomPanel.NeededWidth);
+         mGetStringBottomPanel.LayoutControls();
+         mInnerPanel.Size = new Size(wantedWidth + mEm, mInputTextBox.Bottom +
+            mGetStringBottomPanel.Height + mEmHalf);
+         mOuterPanel.Size = new Size(mInnerPanel.Width + (mEmFifth * 2), mInnerPanel.Height + (mEmFifth * 2));
+         Size = new Size(mOuterPanel.Width + (mEmFifth * 2), mOuterPanel.Height + (mEmFifth * 2));
          Width += SystemInformation.VerticalScrollBarWidth;
-         Height = mTitleCluster.Height + mPromptLabel.Height + mInputTextBox.Height + mStatusStrip.Height + mEm3 +
-            SystemInformation.HorizontalScrollBarHeight;
-         mInputTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-         Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+         Height += SystemInformation.HorizontalScrollBarHeight;
+         mGetStringBottomPanel.Width = mInnerPanel.Width;
+         mGetStringBottomPanel.LayoutControls();
          ResumeLayout(true);
       }
 
@@ -142,7 +138,7 @@ namespace DBCode {
          Theme theme = mCurrentTheme!;
          Theme.ThemeInterfaceThings(theme, out Font interfaceFont, out Color interfaceForeColor,
             out Color interfaceBackColor);
-         BackColor = theme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground];
+         mInnerPanel.BackColor = theme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground];
          mPromptLabel.Font = interfaceFont;
          mPromptLabel.ForeColor = interfaceForeColor;
          mPromptLabel.BackColor = interfaceBackColor;
@@ -152,17 +148,10 @@ namespace DBCode {
          mInputTextBox.ForeColor = textBoxForeColor;
          mInputTextBox.BackColor = textBoxBackColor;
          Theme.ThemeStatusThings(theme, out Font statusFont, out Color statusForeColor, out Color statusBackColor);
-         mStatusStrip.Renderer = new ToolStripProfessionalRenderer();
-         mStatusStrip.BackColor = statusBackColor;
-         foreach (ToolStripItem item in mStatusStrip.Items) {
-            if (item is ToolStripControlHost host) {
-               Control control = host.Control;
-               control.Font = statusFont;
-               control.ForeColor = statusForeColor;
-               control.BackColor = statusBackColor;
-               control.Invalidate();
-               control.Update();
-            }
+         foreach (Button button in mGetStringBottomPanel.Controls.OfType<Button>()) {
+            button.Font = statusFont;
+            button.ForeColor = statusForeColor;
+            button.BackColor = statusBackColor;
          }
       }
 
@@ -203,9 +192,9 @@ namespace DBCode {
 
       protected override void Dispose(bool pDisposing) {
          if (pDisposing) {
-            mOKButton.Click -= OKButton_Click;
-            mCancelButton.Click -= CancelButton_Click;
-            mHelpButton.Click -= HelpButton_Click;
+            mGetStringBottomPanel?.mOKButton?.Click -= OKButton_Click;
+            mGetStringBottomPanel?.mCancelButton?.Click -= CancelButton_Click;
+            mGetStringBottomPanel?.mHelpButton?.Click -= HelpButton_Click;
             mInputTextBox.KeyDown -= InputTextBox_KeyDown;
          }
          base.Dispose(pDisposing);

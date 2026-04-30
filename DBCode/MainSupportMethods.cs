@@ -1,7 +1,4 @@
-﻿using DBCode.Syntax;
-using DBCode.Themes;
-
-namespace DBCode {
+﻿namespace DBCode {
    public sealed partial class MainForm : Form {
       public static void CheckLanguage() {
          foreach (ToolStripMenuItem tsmi in mLanguageMenuItem!.DropDownItems.OfType<ToolStripMenuItem>())
@@ -86,15 +83,10 @@ namespace DBCode {
             foreach (ToolStripMenuItem subItem in toolStripMenuItem.DropDownItems.OfType<ToolStripMenuItem>())
                PaintMenuItemsRecursive(subItem, theme);
          }
-         mStatusStrip!.Renderer = new ToolStripProfessionalRenderer();
-         mStatusStrip.Invalidate(true);
-         mStatusStrip.BackColor = theme.mInterfaceColors[(int)ColorUsage.StatusBackground];
-         foreach (ToolStripItem item in mStatusStrip.Items) {
-            item.ForeColor = theme.mInterfaceColors[(int)ColorUsage.StatusFont];
-            item.BackColor = theme.mInterfaceColors[(int)ColorUsage.StatusBackground];
-            item.Font = theme.mFonts[(int)FontUsage.Status];
-            item.Invalidate();
-         }
+         mMainBottomPanel!.BackColor = theme.mInterfaceColors[(int)ColorUsage.StatusBackground];
+         mMainBottomPanel!.SetFontAndColor();
+         LayoutMainBottomPanel();
+         mMainBottomPanel.Invalidate(true);
          mHighlighterEngine!.HighlightNow();
          mRichTextBox!.TextChanged += OnEditorTextChanged;
          ResumeLayout(true);
@@ -249,18 +241,26 @@ namespace DBCode {
       }
 
       private static void UpdateTargetingStatusLabel() {
-         if (mTargetingStatusLabel == null)
+         if (mTargetingLabel == null)
             return;
-         float fontSize = mTargetingStatusLabel.Font.Size;
-
+         float fontSize = mTargetingLabel.Font.Size;
          if (mIsTargetingEnabled) {
-            mTargetingStatusLabel.Image = GetSizedImage(Icons.StatusTargeted, fontSize);
-            mTargetingStatusLabel.Text = GetWindowTitle(mTargetWindow);
+            Image image = GetSizedImage(Icons.StatusTargeted, fontSize);
+            mTargetingLabel.Image = image;
+            mTargetingLabel.Text = GetWindowTitle(mTargetWindow);
+            using Graphics g = mTargetingLabel.CreateGraphics();
+            int textWidth = (int)g.MeasureString(mTargetingLabel.Text, mTargetingLabel.Font).Width;
+            int height = Math.Max(image.Height, mTargetingLabel.Font.Height);
+            mTargetingLabel.Size = new Size(image.Width + textWidth + 4, height);
          }
          else {
-            mTargetingStatusLabel.Image = GetSizedImage(Icons.StatusUntargeted, fontSize);
-            mTargetingStatusLabel.Text = string.Empty;
+            Image image = GetSizedImage(Icons.StatusUntargeted, fontSize);
+            mTargetingLabel.Image = image;
+            mTargetingLabel.Text = string.Empty;
+            int height = Math.Max(image.Height, mTargetingLabel.Font.Height);
+            mTargetingLabel.Size = new Size(image.Width, height);
          }
+         mTargetingLabel.Top = (mMainBottomPanel!.Height - mTargetingLabel.Height) / 2;
       }
 
       private static void LoadEmbeddedIcons() {
@@ -349,6 +349,15 @@ namespace DBCode {
 
          mMinimalTSMI?.Checked = false;
          mFeaturesTSMI?.Checked = true;
+      }
+
+      private void LayoutMainBottomPanel() {
+         mMainBottomPanel!.LayoutControls();
+         mRichTextBox!.Top = mMenuStrip!.Bottom;
+         mRichTextBox.Left = 0;
+         mRichTextBox.Width = ClientSize.Width;
+         mRichTextBox.Height = ClientSize.Height - mMainBottomPanel.Height - mMenuStrip.Height;
+         mMainBottomPanel.Top = mRichTextBox!.Bottom;
       }
    }
 }

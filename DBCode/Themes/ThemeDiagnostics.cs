@@ -52,13 +52,10 @@
          foreach (ColorUsage usage in Enum.GetValues<ColorUsage>()) {
             Color color = pTheme.mInterfaceColors[(int)usage];
 
-            if (color.A == 0)
+            if (color.IsEmpty)
+               pIssues.Add($"Color '{usage}' is unset (Color.Empty) — possible missing assignment.");
+            else if (color.A == 0)
                pIssues.Add($"Color '{usage}' is fully transparent (A=0).");
-            if (color.R == 0 && color.G == 0 && color.B == 0 && !color.IsNamedColor) {
-               // Black is valid, but only if explicitly named or hex-coded.
-               // If it's unnamed black, it may indicate a parse failure.
-               pIssues.Add($"Color '{usage}' is pure black and unnamed — possible parse failure.");
-            }
          }
       }
    }

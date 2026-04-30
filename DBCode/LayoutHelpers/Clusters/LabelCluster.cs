@@ -1,7 +1,4 @@
-﻿
-using DBCode.Themes;
-
-namespace DBCode {
+﻿namespace DBCode {
    internal static partial class LayoutHelpers {
       internal sealed class LabelCluster : BaseCluster {
          internal Label mLabel;

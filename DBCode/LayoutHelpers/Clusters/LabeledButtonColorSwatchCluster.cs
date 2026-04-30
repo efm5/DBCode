@@ -1,6 +1,4 @@
-﻿using DBCode.Themes;
-
-namespace DBCode {
+﻿namespace DBCode {
    internal static partial class LayoutHelpers {
       internal sealed class LabeledButtonColorSwatchCluster : BaseCluster {
          private Button mButton;
@@ -37,7 +35,7 @@ namespace DBCode {
             mButton.Click += Button_Click;
             mSwatch = new ColorSwatch(pUsage, pInitialColor, -1);
             mSwatch.SwatchClicked += Swatch_Click;
-            Controls.AddRange(mLabel, mButton, mSwatch);
+            Controls.AddRange([mLabel, mButton, mSwatch]);
             LayoutControls();
          }
 

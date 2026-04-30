@@ -5,35 +5,18 @@ namespace DBCode.Themes {
    public static class ThemeManager {
       public static List<Theme> LoadThemes() {
          List<Theme> themes = [];
-         if (!Directory.Exists(mDataFolder)) {
-            themes.Add(ThemeDefaults.DefaultDark);
-            themes.Add(ThemeDefaults.DefaultLight);
-            themes.Add(ThemeDefaults.LightPastel);
-            themes.Add(ThemeDefaults.DarkPastel);
-            themes.Add(ThemeDefaults.Classic);
-            themes.Add(ThemeDefaults.HighContrastDark);
-            themes.Add(ThemeDefaults.HighContrastLight);
+         if (!Directory.Exists(mDataFolder))
             return themes;
-         }
          string[] files = Directory.GetFiles(mDataFolder, "*.json", SearchOption.TopDirectoryOnly);
          foreach (string file in files) {
             try {
                Theme theme = LoadThemeFromJson(file);
                themes.Add(theme);
             }
-            catch (Exception ex) {
+            catch (Exception pException) {
                string name = Path.GetFileName(file);
-               throw new Exception($"Failed to load theme '{name}'.", ex);
+               throw new Exception($"Failed to load theme '{name}'.", pException);
             }
-         }
-         if (themes.Count == 0) {
-            themes.Add(ThemeDefaults.DefaultDark);
-            themes.Add(ThemeDefaults.DefaultLight);
-            themes.Add(ThemeDefaults.LightPastel);
-            themes.Add(ThemeDefaults.DarkPastel);
-            themes.Add(ThemeDefaults.Classic);
-            themes.Add(ThemeDefaults.HighContrastDark);
-            themes.Add(ThemeDefaults.HighContrastLight);
          }
          return themes;
       }

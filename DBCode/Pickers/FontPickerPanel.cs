@@ -87,8 +87,7 @@ namespace DBCode {
             mFontFamilyComboBox.Items.AddRange(fontNames.ToArray());
             FlattenButton(mFamilyPrefixButton, interfaceBackground);
             FlattenButton(mFontDropDownPrefixButton, interfaceBackground);
-            mPickFontPanel.Controls.AddRange([mFamilyPrefixButton, mFontFamilyNameTextBox!,
-               mFontDropDownPrefixButton, mFontFamilyComboBox!]);
+            mPickFontPanel.Controls.AddRange([mFamilyPrefixButton, mFontFamilyNameTextBox!, mFontDropDownPrefixButton, mFontFamilyComboBox!]);
             mFontStyleGroupBox = new GroupBox {
                Name = $"FontStyleGroupBox{mTabIndex++}",
                TabIndex = TAB_INDEX_IGNORED,
@@ -142,8 +141,7 @@ namespace DBCode {
                ForeColor = interfaceFont,
                BackColor = Color.Transparent
             };
-            mFontStyleGroupBox.Controls.AddRange([mNormalStyleCheckBox, mBoldStyleCheckBox, mItalicsStyleCheckBox,
-               mUnderlineStyleCheckBox, mStrikethroughStyleCheckBox]);
+            mFontStyleGroupBox.Controls.AddRange([mNormalStyleCheckBox, mBoldStyleCheckBox, mItalicsStyleCheckBox, mUnderlineStyleCheckBox, mStrikethroughStyleCheckBox]);
             mFontSizePanel = new Panel {
                Name = $"FontSizePanel{mTabIndex++}",
                TabIndex = TAB_INDEX_IGNORED,
@@ -185,8 +183,7 @@ namespace DBCode {
                mFontSizeComboBox.Items.Add(size.ToString());
             FlattenButton(mFontSizePrefixButton, groupBoxBackground);
             FlattenButton(mFontSizeDropDownPrefixButton, groupBoxBackground);
-            mFontSizePanel.Controls.AddRange([mFontSizePrefixButton, mFontSizeTextBox,
-               mFontSizeDropDownPrefixButton, mFontSizeComboBox]);
+            mFontSizePanel.Controls.AddRange([mFontSizePrefixButton, mFontSizeTextBox, mFontSizeDropDownPrefixButton, mFontSizeComboBox]);
             mScrollPanel.Controls.AddRange([mPickFontPanel, mFontStyleGroupBox, mFontSizePanel]);
             mStatusStrip = new StatusStrip {
                Name = $"FontPickerStatusStrip{mTabIndex++}",

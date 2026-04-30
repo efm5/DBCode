@@ -1,7 +1,4 @@
-﻿using DBCode.Syntax;
-using DBCode.Themes;
-
-namespace DBCode {
+﻿namespace DBCode {
    #region enumerations
    public enum ViewMode { Features, Minimal }
 
@@ -9,7 +6,7 @@ namespace DBCode {
 
    public enum Icons { CurlyTargeted, CurlyUntargeted, StatusTargeted, StatusUntargeted }
 
-   public enum HelpContext { Main, Theme, ColorPicker, FontPicker }
+   public enum HelpContext { Main, Theme, ColorPicker, FontPicker, BottomPanel }
 
    public enum LabelUsage : int { Interface, Title }
 
@@ -21,7 +18,9 @@ namespace DBCode {
       Tiny = 100
    }
 
-   public enum PrimaryTabPageUsage : int { Interface, Color, Examples }
+   public enum PrimaryTabPageUsage : int { Interface, Color, Targeting, Examples }
+
+   public enum TargetingTabPageUsage : int { Include, Exclude }
 
    public enum HighlightTabPageUsage : int {
       Interface, CSharp, C, Cpp, Basic, FSharp, HTML, CSS, XML, JSON, PowerShell, Batch, SQL, Markdown, Python
@@ -168,14 +167,16 @@ namespace DBCode {
    #region fields
    internal static class Fields {
       #region general
-      public const AnchorStyles mBottomLeftAnchor = AnchorStyles.Bottom | AnchorStyles.Left,
-         mBottomRightAnchor = AnchorStyles.Bottom | AnchorStyles.Right,
-         mTopLeftAnchor = AnchorStyles.Top | AnchorStyles.Left,
-         mTopLeftBottomRightAnchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right,
-         mTopRightAnchor = AnchorStyles.Top | AnchorStyles.Right;
+      public const AnchorStyles mAnchorBottomLeft = AnchorStyles.Bottom | AnchorStyles.Left,
+         mAnchorBottomLeftRight = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
+         mAnchorBottomRight = AnchorStyles.Bottom | AnchorStyles.Right,
+         mAnchorTopLeft = AnchorStyles.Top | AnchorStyles.Left,
+         mAnchorTopLeftBottomRight = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right,
+         mAnchorTopRight = AnchorStyles.Top | AnchorStyles.Right;
       public static bool mFirstGray = true, mFirstLaunch = true, mForceActivation = true, mIsTargetingEnabled = false,
          mPreMinimalControlBox = true, mReturnToTop = true, mFirstTheme = true, mFirstThemePicker = true,
          mFirstColorPicker = true, mFirstFontPicker = true;
+      public static double mOpacity;
       public static float mFontWidthAdjustment = 0.5f;
       public static FontUsage mFontUsage = FontUsage.Text;
       public static MainForm? mForm = null;
@@ -201,7 +202,6 @@ namespace DBCode {
 #pragma warning disable CS0649
       public static Size mMonitorSize, mResolution;
 #pragma warning restore CS0649
-      public static StatusStrip? mStatusStrip = null;
       public static string mPreMinimalText = string.Empty, mTargetWindowName = "Under construction",
          mVersionString = "0.0.0.0", mPreviousThemeName = string.Empty;
       public static readonly string mAppFolder = AppDomain.CurrentDomain.BaseDirectory,
@@ -223,10 +223,12 @@ namespace DBCode {
       public static List<Theme> mThemes = [];//efm5 This line and the next must be before any code that uses mThemes – Such as the next line
       public static Theme? mCurrentTheme = ThemeBuiltIns.CreateDarkTheme(false);
       public static readonly ToolStripSeparator toolStripSeparator1 = new ToolStripSeparator();
-      public static ToolStripStatusLabel? mTargetingStatusLabel = null, mVersionStatusLabel = null;
       public static HelpContext mUIContext = HelpContext.Main;
       public static UiState mUiState = null!;
       public static ViewMode mCurrentViewMode = ViewMode.Features;
+      public static BottomPanel? mMainBottomPanel = null;
+      public static Label? mTargetingLabel = null, mVersionLabel = null;
+      public static Button? mSendAllButton = null, mPasteSelectedButton = null;
       #endregion
 
       #region main menu

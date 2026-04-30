@@ -1,6 +1,4 @@
-﻿using DBCode.Syntax;
-
-namespace DBCode {
+﻿namespace DBCode {
    public sealed partial class MainForm : Form {
       public MainForm() {
          mForm = this;
@@ -19,13 +17,12 @@ namespace DBCode {
                   mVersionString = "0.0.0.0";
             }
          }
-         mVersionStatusLabel?.Text = "v: " + mVersionString;
+         mVersionLabel?.Text = "v: " + mVersionString;
          mCurrentViewMode = ViewMode.Features;
          mIsTargetingEnabled = false;
          mTargetWindowName = string.Empty;
          mPreMinimalText = Text;
          mPreMinimalControlBox = ControlBox;
-         UpdateTargetingStatusLabel();
       }
 
       private void MakeNews() {
@@ -66,13 +63,14 @@ namespace DBCode {
          mPythonTSMI = new ToolStripMenuItem();
          mCurrentLanguageIsTSMI = new ToolStripMenuItem();
          mRichTextBox = new RichTextBox();
-         mStatusStrip = new StatusStrip();
-         mTransferTSB = new ToolStripButton();
-         mTransportTSB = new ToolStripButton();
-         mTargetingStatusLabel = new ToolStripStatusLabel();
-         mVersionStatusLabel = new ToolStripStatusLabel();
+         mSendAllButton = new Button();
+         mPasteSelectedButton = new Button();
          mRevertTSB = new ToolStripButton();
          mExitTSB = new ToolStripButton();
+         mTargetingLabel = new Label();
+         mVersionLabel = new Label();
+         mMainBottomPanel = new BottomPanel(mCurrentTheme!, pDoOkay: true, pOKText: "&Revert",
+            pCancelText: "E&xit");
       }
 
       private void InitializeUIPart1() {
@@ -85,6 +83,7 @@ namespace DBCode {
             Settings.Default.FirstLaunch = false;
          }
          MakeNews();
+         LoadEmbeddedIcons();
          InitializeUIPart2();
          InitializeUIPart3();
          Themes.ThemeManager.LoadThemes();
@@ -121,8 +120,7 @@ namespace DBCode {
          mThemePickTSMI.Text = "&Pick";
          mThemePickTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.P;
          mThemePickTSMI.Click += ThemePick_Click;
-         mThemeMenuItem.DropDownItems.AddRange(mCurrentLanguageIsTSMI!, toolStripSeparator1, mThemePickTSMI,
-            mThemeDesignTSMI, mThemeEditTSMI);
+         mThemeMenuItem.DropDownItems.AddRange([mCurrentLanguageIsTSMI!, toolStripSeparator1, mThemePickTSMI, mThemeDesignTSMI, mThemeEditTSMI]);
          mHelpMenuItem!.Name = "helpMenuItem";
          mHelpMenuItem.Text = "&Help";
          mHelpMenuItem.Tag = new HelpTag(HelpContext.Main);
@@ -139,16 +137,16 @@ namespace DBCode {
          mRetargetTSMI.Click += RetargetTSMI_Click;
          mTargetingMenuItem.DropDownItems.Add(mTargetedTSMI);
          mTargetingMenuItem.DropDownItems.Add(mRetargetTSMI);
-         Controls.AddRange(mRichTextBox!, mStatusStrip!, mMenuStrip);
          Load += MainForm_Load;
+         Shown += MainForm_Shown;
          FormClosing += MainForm_FormClosing;
          mHighlighterEngine = new HighlighterEngine(mRichTextBox!, mCurrentLanguage);
          mRichTextBox!.TextChanged += OnEditorTextChanged;
-         LoadEmbeddedIcons();
          InitializeIcon();
          CheckLanguage();
          AdjustForThemeFont(mCurrentTheme!.mFonts[(int)FontUsage.Interface]);
          ApplyThemeToMainForm();
+         UpdateTargetingStatusLabel();
          ResumeLayout(false);
          PerformLayout();
       }
@@ -253,12 +251,9 @@ namespace DBCode {
          mPythonTSMI.Click += LanguageTSMI_Click;
          mCurrentLanguageIsTSMI!.Name = "currentLanguageIsTSMI";
          mCurrentLanguageIsTSMI.Text = mCurrently + mCurrentTheme!.mName;
-         mModeMenuItem!.DropDownItems.AddRange(mMinimalTSMI, mFeaturesTSMI, mReturnToTopTSMI);
-         mLanguageMenuItem!.DropDownItems.AddRange(mPlainTextTSMI, mCSharpTSMI, mCTSMI, mCppTSMI, mBasicTSMI,
-            mFSharpTSMI, mHtmlTSMI, mCssTSMI, mXmlTSMI, mJsonTSMI, mPowerShellTSMI, mBatchTSMI, mSqlTSMI,
-            mMarkdownTSMI, mPythonTSMI);
-         mMenuStrip!.Items.AddRange(mTargetingMenuItem!, mVisibilityMenuItem, mModeMenuItem, mLanguageMenuItem,
-            mThemeMenuItem!, mHelpMenuItem!);
+         mModeMenuItem!.DropDownItems.AddRange([mMinimalTSMI, mFeaturesTSMI, mReturnToTopTSMI]);
+         mLanguageMenuItem!.DropDownItems.AddRange([mPlainTextTSMI, mCSharpTSMI, mCTSMI, mCppTSMI, mBasicTSMI, mFSharpTSMI, mHtmlTSMI, mCssTSMI, mXmlTSMI, mJsonTSMI, mPowerShellTSMI, mBatchTSMI, mSqlTSMI, mMarkdownTSMI, mPythonTSMI]);
+         mMenuStrip!.Items.AddRange([mTargetingMenuItem!, mVisibilityMenuItem, mModeMenuItem, mLanguageMenuItem, mThemeMenuItem!, mHelpMenuItem!]);
       }
 
       private void InitializeUIPart3() {
@@ -266,44 +261,46 @@ namespace DBCode {
          mRichTextBox.ScrollBars = RichTextBoxScrollBars.Both;
          mRichTextBox.AcceptsTab = true;
          mRichTextBox.WordWrap = false;
-         mRichTextBox.Dock = DockStyle.Fill;
+         mRichTextBox.Anchor = mAnchorTopLeftBottomRight;
          mRichTextBox.Name = "mainTextBox";
          mRichTextBox.TabIndex = mTabIndex++;
-         mStatusStrip!.Dock = DockStyle.Bottom;
-         mStatusStrip.SizingGrip = true;
-         mStatusStrip.Name = "statusStrip";
-         mStatusStrip.TabIndex = mTabIndex++;
-         mTransferTSB!.DisplayStyle = ToolStripItemDisplayStyle.Text;
-         mTransferTSB.Name = "transferTSB";
-         mTransferTSB.Text = "&Transfer";
-         mTransferTSB.Tag = PasteMode.Transfer;
-         mTransferTSB.Click += TransMove_Click;
-         mTransportTSB!.DisplayStyle = ToolStripItemDisplayStyle.Text;
-         mTransportTSB.Name = "transportTSB";
-         mTransportTSB.Text = "Trans&port";
-         mTransportTSB.Tag = PasteMode.Transport;
-         mTransportTSB.Click += TransMove_Click;
-         mTargetingStatusLabel!.Name = "targetingStatusLabel";
-         mTargetingStatusLabel.Text = "Untargeted";
-         mTargetingStatusLabel.Spring = false;
-         mTargetingStatusLabel.Tag = LabelUsage.Interface;
-         mVersionStatusLabel!.Name = "versionStatusLabel";
-         mVersionStatusLabel.Text = "v 0.0.0.0";
-         mVersionStatusLabel.Spring = true;
-         mVersionStatusLabel.TextAlign = ContentAlignment.MiddleRight;
-         mVersionStatusLabel.Tag = LabelUsage.Interface;
-         mRevertTSB!.DisplayStyle = ToolStripItemDisplayStyle.Text;
-         mRevertTSB.Name = "revertTSB";
+         mSendAllButton!.Text = "&Send All";
+         mSendAllButton.Name = "sendAllButton";
+         mSendAllButton.TabIndex = mTabIndex++;
+         mSendAllButton.AutoSize = true;
+         mSendAllButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+         mSendAllButton.Tag = PasteMode.Transfer;
+         mSendAllButton.Click += TransMove_Click;
+         mPasteSelectedButton!.Text = "&Paste Selected";
+         mPasteSelectedButton.Name = "pasteSelectedButton";
+         mPasteSelectedButton.TabIndex = mTabIndex++;
+         mPasteSelectedButton.AutoSize = true;
+         mPasteSelectedButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+         mPasteSelectedButton.Tag = PasteMode.Transport;
+         mPasteSelectedButton.Click += TransMove_Click;
+         mTargetingLabel!.Name = "targetingLabel";
+         mTargetingLabel.Text = string.Empty;
+         mTargetingLabel.ImageAlign = ContentAlignment.MiddleLeft;
+         mTargetingLabel.TextAlign = ContentAlignment.MiddleRight;
+         mTargetingLabel.TabIndex = mTabIndex++;
+         mVersionLabel!.Name = "versionLabel";
+         mVersionLabel.Text = "v: " + mVersionString;
+         mVersionLabel.AutoSize = true;
+         mVersionLabel.TextAlign = ContentAlignment.MiddleLeft;
+         mVersionLabel.TabIndex = mTabIndex++;
+         mRevertTSB!.Name = "revertTSB";
          mRevertTSB.Text = "&Revert";
-         mRevertTSB.Alignment = ToolStripItemAlignment.Right;
          mRevertTSB.Click += RevertTSB_Click;
-         mExitTSB!.DisplayStyle = ToolStripItemDisplayStyle.Text;
-         mExitTSB.Name = "exitTSB";
+         mExitTSB!.Name = "exitTSB";
          mExitTSB.Text = "E&xit";
-         mExitTSB.Alignment = ToolStripItemAlignment.Right;
          mExitTSB.Click += ExitTSB_Click;
-            mStatusStrip!.Items.AddRange([ mTransferTSB, mTransportTSB, mTargetingStatusLabel,
-               mVersionStatusLabel, mRevertTSB, mExitTSB ]);
-         }
+         mMainBottomPanel!.AddLeftControl(mSendAllButton);
+         mMainBottomPanel.AddLeftControl(mPasteSelectedButton);
+         mMainBottomPanel.AddLeftControl(mTargetingLabel); // must be last — stretches to fill
+         mMainBottomPanel.AddRightControl(mVersionLabel);  // added first = leftmost of right group
+         mMainBottomPanel.mOKButton!.Click += RevertTSB_Click;
+         mMainBottomPanel.mCancelButton!.Click += ExitTSB_Click;
+         Controls.AddRange([mRichTextBox!, mMainBottomPanel!, mMenuStrip!]);
+      }
    }
 }

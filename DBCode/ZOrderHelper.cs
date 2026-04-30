@@ -78,7 +78,7 @@ namespace DBCode {
       private static unsafe void EnumWindowsCollect(List<IntPtr> pList) {
          var handle = GCHandle.Alloc(pList);
          try {
-            delegate* unmanaged[Stdcall]<nint, nint, bool> pCallback = &EnumWindowsCallback;
+            delegate* unmanaged[Stdcall]<nint, nint, int> pCallback = &EnumWindowsCallback;
             NativeMethods.EnumWindows(pCallback, GCHandle.ToIntPtr(handle));
          }
          finally {
@@ -86,11 +86,12 @@ namespace DBCode {
          }
       }
 
-      [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
-      private static bool EnumWindowsCallback(nint pWindowHandle, nint pLeftParameter) {
-         var list = (List<IntPtr>)GCHandle.FromIntPtr(pLeftParameter).Target!;
-         list.Add(pWindowHandle);
-         return true;
+      [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
+      private static int EnumWindowsCallback(nint pHwnd, nint pParam) {
+         var handle = GCHandle.FromIntPtr(pParam);
+         if (handle.Target is List<IntPtr> list)
+            list.Add(pHwnd);
+         return 1; // continue enumeration
       }
 
       private static bool IsRealVisibleWindow(IntPtr pWindowHandle) {

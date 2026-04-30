@@ -1,35 +1,36 @@
 ﻿namespace DBCode {
    public sealed partial class MainForm : Form {
       public void EnsureThemePanel(ThemeUsage pThemeUsage) {
+         ThrowIfNull(mForm, nameof(mForm));
          mPreThemeBounds = Bounds;
+         mOpacity = mForm.Opacity;
+         mForm.Opacity = 0;
          if (mThemePanel == null)
             mThemePanel = new ThemePanel(pThemeUsage);
          ShowThemePanel(pThemeUsage);
       }
 
       public void ShowThemePanel(ThemeUsage pThemeUsage) {
+         ThrowIfNull(mThemePanel, nameof(mThemePanel));
+         ThrowIfNull(mForm, nameof(mForm));
          if (pThemeUsage == ThemeUsage.Design) {
-            ThrowIfNull(mThemePanel, nameof(mThemePanel));
             ControlBox = false;
             if (Controls.Contains(mMenuStrip))
                Controls.Remove(mMenuStrip);
             if (Controls.Contains(mRichTextBox))
                Controls.Remove(mRichTextBox);
-            if (Controls.Contains(mStatusStrip))
-               Controls.Remove(mStatusStrip);
+            if (Controls.Contains(mMainBottomPanel))
+               Controls.Remove(mMainBottomPanel);
             if (!Controls.Contains(mThemePanel))
                Controls.Add(mThemePanel);
             mThemePanel.LayoutControls();
             if (mFirstTheme) {
-               ThrowIfNull(mForm, nameof(mForm));
                mForm.Size = mThemePanel.WantedSize();
                CenterFormOnMonitor(mForm);
                mFirstTheme = false;
             }
-            else {
-               mThemePanel.LayoutControls();
+            else
                Bounds = new Rectangle(mUiState.mThemeLocation, mUiState.mThemeSize);
-            }
             EnsureWindowFitsMonitor(mForm, false);
             mThemePanel.Visible = true;
             mThemePanel.BringToFront();
@@ -38,6 +39,7 @@
          else {
             TimedMessage("ShowThemePanel(ThemeUsage) edit is not working.", "Not Yet IMPLEMENTED");
          }
+         mForm.Opacity = mOpacity;
       }
 
       public void RestoreFromThemePanel() {
@@ -57,12 +59,12 @@
          mForm.Bounds = mPreThemeBounds;
          if (!mForm.Controls.Contains(mRichTextBox))
             mForm.Controls.Add(mRichTextBox);
-         if (!mForm.Controls.Contains(mStatusStrip))
-            mForm.Controls.Add(mStatusStrip);
+         if (!mForm.Controls.Contains(mMainBottomPanel))
+            mForm.Controls.Add(mMainBottomPanel);
          if (mCurrentViewMode == ViewMode.Features && !mForm.Controls.Contains(mMenuStrip))
             mForm.Controls.Add(mMenuStrip);
          mRichTextBox?.Visible = true;
-         mStatusStrip?.Visible = true;
+         mMainBottomPanel?.Visible = true;
          if (mCurrentViewMode == ViewMode.Features)
             mMenuStrip?.Visible = true;
          if (dirtyTheme)
@@ -89,8 +91,8 @@
             Controls.Remove(mMenuStrip);
          if (Controls.Contains(mRichTextBox))
             Controls.Remove(mRichTextBox);
-         if (Controls.Contains(mStatusStrip))
-            Controls.Remove(mStatusStrip);
+         if (Controls.Contains(mMainBottomPanel))
+            Controls.Remove(mMainBottomPanel);
          if (!Controls.Contains(mThemePickerPanel))
             Controls.Add(mThemePickerPanel);
          mThemePickerPanel.PerformLayout();
@@ -104,7 +106,7 @@
          ThrowIfNull(mForm, nameof(mForm));
          ThrowIfNull(mThemePickerPanel, nameof(mThemePickerPanel));
          ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
-         ThrowIfNull(mStatusStrip, nameof(mStatusStrip));
+         ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
          ThrowIfNull(mMenuStrip, nameof(mMenuStrip));
          mForm.SuspendLayout();
          mForm.ControlBox = true;
@@ -117,12 +119,12 @@
          mForm.Bounds = mPreThemePickerBounds;
          if (!mForm.Controls.Contains(mRichTextBox))
             mForm.Controls.Add(mRichTextBox);
-         if (!mForm.Controls.Contains(mStatusStrip))
-            mForm.Controls.Add(mStatusStrip);
+         if (!mForm.Controls.Contains(mMainBottomPanel))
+            mForm.Controls.Add(mMainBottomPanel);
          if (mCurrentViewMode == ViewMode.Features && !mForm.Controls.Contains(mMenuStrip))
             mForm.Controls.Add(mMenuStrip);
          mRichTextBox.Visible = true;
-         mStatusStrip.Visible = true;
+         mMainBottomPanel.Visible = true;
          if (mCurrentViewMode == ViewMode.Features)
             mMenuStrip.Visible = true;
          mForm.Activate();

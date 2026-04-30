@@ -69,22 +69,23 @@ namespace DBCode {
          return true;
       }
 
-      public static void SetBottomPanelHeight(Panel pPanel) {
-         int top = 1;
-         int height = 1;
-         foreach (Button button in pPanel.Controls.OfType<Button>()) {
-            if (button.Top > top)
-               top = button.Top;
-            if (button.Height > height)
-               height = button.Height;
+      public static void SetBottomPanelHeight(Panel pPanel, int pVerticalPadding = -1) {
+         int contentTop = int.MaxValue;
+         int contentBottom = 0;
+
+         if (pVerticalPadding < 0)
+            pVerticalPadding = mEmFifth;
+         foreach (Control control in pPanel.Controls) {
+            if (control.Top < contentTop)
+               contentTop = control.Top;
+            if (control.Bottom > contentBottom)
+               contentBottom = control.Bottom;
          }
-         foreach (MenuStrip menu in pPanel.Controls.OfType<MenuStrip>()) {
-            if (menu.Top > top)
-               top = menu.Top;
-            if (menu.Height > height)
-               height = menu.Height;
-         }
-         pPanel.Height = height + (top * 2);
+         if (contentTop == int.MaxValue)
+            return;
+         pPanel.Height = (contentBottom - contentTop) + (pVerticalPadding * 2);
+         foreach (Control control in pPanel.Controls)
+            CenterControlVertically(pPanel, control);
       }
 
       internal static bool ControlHasLines(Control? pControl) {

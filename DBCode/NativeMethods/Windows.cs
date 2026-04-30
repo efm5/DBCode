@@ -15,8 +15,8 @@ namespace DBCode {
          // Enumerates all top-level windows on the screen.
 #pragma warning disable SYSLIB1054 
          // Using DllImport instead of LibraryImport is intentional for this API.
-         [DllImport("user32.dll", EntryPoint = "EnumWindows", ExactSpelling = true, SetLastError = true)]
-         internal static extern unsafe bool EnumWindows(delegate* unmanaged[Stdcall]<nint, nint, bool> pCallback, nint pLeftParameters);
+         [DllImport("user32.dll", SetLastError = true)]
+         internal static extern unsafe bool EnumWindows(delegate* unmanaged[Stdcall]<nint, nint, int> pCallback, nint pParam);
 #pragma warning restore SYSLIB1054
 
          // Retrieves a handle to a window that has the specified relationship to the specified window.

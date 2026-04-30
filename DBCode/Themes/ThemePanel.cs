@@ -15,12 +15,14 @@ namespace DBCode {
          private readonly List<List<BaseCluster>> mAllClusters = [];
          public static bool mRepaint = false;
          private readonly Button mApplyButton, mCancelButton, mCloneButton, mHelpButton, mNewButton;
-         private ClusterContainer mExamplesContainer, mFontsContainer, mInterfaceColorsContainer, mCSharpColorsContainer, mCColorsContainer,
-            mCppColorsContainer, mBasicColorsContainer, mFSharpColorsContainer, mHTMLColorsContainer,
+         private ClusterContainer mExamplesContainer, mFontsContainer, mInterfaceColorsContainer, mCSharpColorsContainer,
+            mCColorsContainer, mCppColorsContainer, mBasicColorsContainer, mFSharpColorsContainer, mHTMLColorsContainer,
             mCSSColorsContainer, mXMLColorsContainer, mJSONColorsContainer, mPowerShellColorsContainer,
             mBatchColorsContainer, mSQLColorsContainer, mMarkdownColorsContainer, mPythonColorsContainer;
          private readonly List<ClusterContainer> mClusterContainers = [];
-         private readonly HeaderLabelCluster mInterfaceHeaderCluster, mThemesHeaderCluster, mCSharpHeaderCluster,
+         private readonly DataGridView mIncludeDataGridView, mExcludeDataGridView;
+         private readonly HeaderLabelCluster mInterfaceHeaderCluster, mThemesHeaderCluster, mTargetingHeaderCluster,
+            mIncludeHeaderCluster, mExcludeHeaderCluster, mCSharpHeaderCluster,
             mCHeaderCluster, mCppHeaderCluster, mBasicHeaderCluster, mFSharpHeaderCluster, mHTMLHeaderCluster,
             mCSSHeaderCluster, mXMLHeaderCluster, mJSONHeaderCluster, mPowerShellHeaderCluster, mBatchHeaderCluster,
             mSQLHeaderCluster, mMarkdownHeaderCluster, mPythonHeaderCluster, mExamplesHeaderCluster;
@@ -261,18 +263,19 @@ All text appears in the default foreground color."
 #pragma warning restore IDE0300
          private readonly ToolStripControlHost mApplyHost, mCancelHost, mCloneHost, mHelpHost, mNewHost;
          private readonly ToolStripStatusLabel mSpringLabel;
-         private readonly VariableWidthTabControl mPrimaryTabControl, mHighlightTabControl;
+         private readonly VariableWidthTabControl mPrimaryTabControl, mHighlightTabControl, mIncludeExcludeTabControl;
          private bool mThemeIsDirty = false;
          private Panel? mPrimaryScrollPanel, mHighlightInterfaceScrollPanel, mExampleScrollPanel, mHighlightCSharpScrollPanel,
            mHighlightCScrollPanel, mHighlightCppScrollPanel, mHighlightBasicScrollPanel, mHighlightFSharpScrollPanel,
            mHighlightHTMLScrollPanel, mHighlightCSSScrollPanel, mHighlightXMLScrollPanel, mHighlightJSONScrollPanel,
            mHighlightPowerShellScrollPanel, mHighlightBatchScrollPanel, mHighlightSQLScrollPanel,
-           mHighlightMarkdownScrollPanel, mHighlightPythonScrollPanel;
+           mHighlightMarkdownScrollPanel, mHighlightPythonScrollPanel, mIncludeScrollPanel, mExcludeScrollPanel;
          private readonly List<Panel?> mAllScrollPanels = [];
          private Theme mTemporaryTheme;
 
          public ThemePanel(ThemeUsage pThemeUsage) {
             ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
+            ThrowIfNull(mForm, nameof(mForm));
             SuspendLayout();
             string temporaryName = TemporaryThemePrefix + DateTime.UtcNow.Ticks.ToString(CultureInfo.InvariantCulture);
 
@@ -288,8 +291,11 @@ All text appears in the default foreground color."
             mHelpButton = new Button() { Tag = new HelpTag(HelpContext.Theme, ToDescription(pThemeUsage)) };
             mNewButton = new Button();
             mCloneButton = new Button();
-            mThemesHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, $"Current Theme’s Name: “{mCurrentTheme.mName}”",
-               HeaderLabelSize.Normal);
+            mThemesHeaderCluster = new HeaderLabelCluster(mTemporaryTheme,
+               $"Current Theme’s Name: “{mCurrentTheme.mName}”", HeaderLabelSize.Normal);
+            mTargetingHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "Targeting", HeaderLabelSize.Small);
+            mIncludeHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "Windows To Include While Transferring", HeaderLabelSize.Small);
+            mExcludeHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "Windows To Exclude While Transferring", HeaderLabelSize.Small);
             mInterfaceHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "Interface Colors", HeaderLabelSize.Small);
             mExamplesHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "Examples", HeaderLabelSize.Small);
             mCSharpHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "C# Token Highlight Colors", HeaderLabelSize.Small);
@@ -306,6 +312,51 @@ All text appears in the default foreground color."
             mSQLHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "SQL Token Highlight Colors", HeaderLabelSize.Small);
             mMarkdownHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "Markdown Token Highlight Colors", HeaderLabelSize.Small);
             mPythonHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "Python Token Highlight Colors", HeaderLabelSize.Small);
+            mIncludeDataGridView = new DataGridView {
+               Name = "IncludeDataGridView",
+               AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+               AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None,
+               AllowUserToAddRows = true,
+               AllowUserToDeleteRows = true,
+               AllowUserToResizeRows = false,
+               RowHeadersVisible = false,
+               ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize,
+               SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+               MultiSelect = true,
+               Dock = DockStyle.Fill
+            };
+            mExcludeDataGridView = new DataGridView {
+               Name = "ExcludeDataGridView",
+               AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+               AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None,
+               AllowUserToAddRows = true,
+               AllowUserToDeleteRows = true,
+               AllowUserToResizeRows = false,
+               RowHeadersVisible = false,
+               ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize,
+               SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+               MultiSelect = true,
+               Dock = DockStyle.Fill
+            };
+            mIncludeDataGridView.ColumnHeadersVisible = false;
+            mExcludeDataGridView.ColumnHeadersVisible = false;
+            mIncludeDataGridView.RowTemplate.Height = 25;
+            mExcludeDataGridView.RowTemplate.Height = 25;// Add columns
+            mIncludeDataGridView.Columns.Add(new DataGridViewTextBoxColumn {
+               HeaderText = "Include",
+               Name = "IncludeColumn"
+            });
+
+            mExcludeDataGridView.Columns.Add(new DataGridViewTextBoxColumn {
+               HeaderText = "Exclude",
+               Name = "ExcludeColumn"
+            });
+
+            // Add 10 empty rows to each
+            for (int i = 0; i < 10; i++) {
+               mIncludeDataGridView.Rows.Add("");
+               mExcludeDataGridView.Rows.Add("");
+            }
             mStatusStrip = new StatusStrip();
             mApplyHost = new ToolStripControlHost(mApplyButton);
             mCancelHost = new ToolStripControlHost(mCancelButton);
@@ -313,20 +364,25 @@ All text appears in the default foreground color."
             mNewHost = new ToolStripControlHost(mNewButton);
             mCloneHost = new ToolStripControlHost(mCloneButton);
             mPrimaryTabControl = new VariableWidthTabControl();
-            mPrimaryTabControl.TabPages.AddRange([new TabPage("Fonts"), new TabPage("Colors"), new TabPage("Examples")]);
+            mPrimaryTabControl.TabPages.AddRange([new TabPage("Fonts"), new TabPage("Colors"), new TabPage("Targeting"), new TabPage("Examples")]);
+            mIncludeExcludeTabControl = new VariableWidthTabControl();
+            mIncludeExcludeTabControl.TabPages.AddRange([new TabPage("Inclusions"), new TabPage("Exclusions")]);
             mHighlightTabControl = new VariableWidthTabControl();
-            mHighlightTabControl.TabPages.AddRange([new TabPage("Interface"), new TabPage("C#"), new TabPage("C"), new TabPage("C++"),
-               new TabPage("Basic"), new TabPage("F#"), new TabPage("HTML"), new TabPage("CSS"), new TabPage("XML"), new TabPage("JSON"),
-               new TabPage("Power Shell"), new TabPage("Batch"), new TabPage("SQL"), new TabPage("Markdown"), new TabPage("Python")]);
+            mHighlightTabControl.TabPages.AddRange([new TabPage("Interface"), new TabPage("C#"), new TabPage("C"), new TabPage("C++"), new TabPage("Basic"), new TabPage("F#"), new TabPage("HTML"), new TabPage("CSS"), new TabPage("XML"), new TabPage("JSON"), new TabPage("Power Shell"), new TabPage("Batch"), new TabPage("SQL"), new TabPage("Markdown"), new TabPage("Python")]);
             mPrimaryTabControl.Dock = DockStyle.Fill;
+            mIncludeExcludeTabControl.Dock = DockStyle.Fill;
             mHighlightTabControl.Dock = DockStyle.Fill;
             mPrimaryTabControl.SetStripBackColor(mTemporaryTheme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground]);
+            mIncludeExcludeTabControl.SetStripBackColor(mTemporaryTheme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground]);
             mHighlightTabControl.SetStripBackColor(mTemporaryTheme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground]);
             mPrimaryTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
+            mIncludeExcludeTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
             mHighlightTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
             mPrimaryTabControl.DrawItem += PrimaryTabControl_DrawItem;
+            mIncludeExcludeTabControl.DrawItem += IncludeExcludeTabControl_DrawItem;
             mHighlightTabControl.DrawItem += HighlightTabControl_DrawItem;
             mPrimaryTabControl.SelectedIndexChanged += PrimaryTabControl_SelectedIndexChanged;
+            mIncludeExcludeTabControl.SelectedIndexChanged += IncludeExcludeTabControl_SelectedIndexChanged;
             mHighlightTabControl.SelectedIndexChanged += HighlightTabControl_SelectedIndexChanged;
             mStatusStrip.SizingGrip = true;
             mStatusStrip.Dock = DockStyle.Bottom;
@@ -338,7 +394,7 @@ All text appears in the default foreground color."
             mCancelButton.Text = "&Cancel";
             mNewButton.Text = "&New";
             mCloneButton.Text = "C&lone";
-            mStatusStrip.Items.AddRange(mHelpHost, mNewHost, mCloneHost, mSpringLabel, mApplyHost, mCancelHost);
+            mStatusStrip.Items.AddRange([mHelpHost, mNewHost, mCloneHost, mSpringLabel, mApplyHost, mCancelHost]);
             mApplyButton.Click += ApplyButton_Click;
             mCancelButton.Click += CancelButton_Click;
             mHelpButton.Click += MainForm.Help_Click;
@@ -346,6 +402,18 @@ All text appears in the default foreground color."
             mCloneButton.Click += CloneButton_Click;
             mPrimaryScrollPanel = new Panel {
                Name = $"PrimaryTabControlTabPageScrollPanel{mTabIndex}",
+               TabIndex = mTabIndex++,
+               Dock = DockStyle.Fill,
+               AutoScroll = true
+            };
+            mIncludeScrollPanel = new Panel {
+               Name = $"IncludeTabControlTabPageScrollPanel{mTabIndex}",
+               TabIndex = mTabIndex++,
+               Dock = DockStyle.Fill,
+               AutoScroll = true
+            };
+            mExcludeScrollPanel = new Panel {
+               Name = $"ExcludeTabControlTabPageScrollPanel{mTabIndex}",
                TabIndex = mTabIndex++,
                Dock = DockStyle.Fill,
                AutoScroll = true
@@ -475,12 +543,15 @@ All text appears in the default foreground color."
                Name = "InterfaceColorsClusterContainer",
                Tag = FontUsage.Interface
             };
-            mPrimaryScrollPanel.Controls.AddRange(mFontsContainer);
+            mPrimaryScrollPanel.Controls.AddRange(mFontsContainer.mClusters.Cast<Control>().ToArray());//DEBUG efm5 2026 04 28 this may be a problem
+#pragma warning disable IDE0017
             mExamplesContainer = new ClusterContainer(mExampleScrollPanel, mExamplesClusters, ClusterLayoutMode.FlowLayout) {
                Name = "ExamplesClusterContainer",
                Tag = "Examples"
             };
+            //efm5 autosize = false may not happen in the ctor – It would be overridden by the flow layout logic, so set it explicitly here after construction
             mExamplesContainer.AutoSize = false;
+#pragma warning restore IDE0017
             mExampleMenuStrip = new MenuStrip() { Name = "ExampleMenuStrip" };
             mExampleTSMI = new ToolStripMenuItem { Name = "ExampleTSMI", Text = "Example &Menu" };
             mExampleTSMISubItem = new ToolStripMenuItem { Name = "ExampleTSMISubItem", Text = "Example &Item" };
@@ -517,8 +588,7 @@ All text appears in the default foreground color."
                Text = "Testing",
                AutoSize = true
             };
-            mExampleGroupBox.Controls.AddRange([ mExampleButton, mExampleCheckBox, mExampleRichTextBox,
-               mExampleRadioButton ]);
+            mExampleGroupBox.Controls.AddRange([mExampleButton, mExampleCheckBox, mExampleRichTextBox, mExampleRadioButton]);
             mExampleStatusLabel = new ToolStripStatusLabel {
                Name = "ExampleStatusLabel",
                Text = "Status: Ready",
@@ -541,8 +611,11 @@ All text appears in the default foreground color."
                Dock = DockStyle.Top
             };
             mExampleStatusStrip.Items.AddRange([mExampleStatusButtonHost, mExampleStatusLabel]);
-            mExampleScrollPanel.Controls.AddRange(mExamplesContainer, mExampleStatusStrip, mExampleGroupBox,
-               mExampleMenuStrip, mExamplesHeaderCluster);
+            mExampleScrollPanel.Controls.AddRange([mExamplesContainer, mExampleStatusStrip, mExampleGroupBox, mExampleMenuStrip, mExamplesHeaderCluster]);
+            mIncludeExcludeTabControl.TabPages[(int)TargetingTabPageUsage.Include].Controls.Add(mIncludeScrollPanel);
+            mIncludeScrollPanel.Controls.AddRange([mIncludeDataGridView, mIncludeHeaderCluster]);
+            mIncludeExcludeTabControl.TabPages[(int)TargetingTabPageUsage.Exclude].Controls.Add(mExcludeScrollPanel);
+            mExcludeScrollPanel.Controls.AddRange([mExcludeDataGridView, mExcludeHeaderCluster]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Interface].Controls.Add(mHighlightInterfaceScrollPanel);
             AddColorCluster(mInterfaceColorClusters, "Panel Background", ColorSwatchUsage.PanelBackground);
             AddColorCluster(mInterfaceColorClusters, "TextBox Background", ColorSwatchUsage.TextBox);
@@ -563,7 +636,7 @@ All text appears in the default foreground color."
                Name = "InterfaceColorsClusterContainer",
                Tag = ColorUsage.Unknown
             };
-            mHighlightInterfaceScrollPanel.Controls.AddRange(mInterfaceHeaderCluster, mInterfaceColorsContainer);
+            mHighlightInterfaceScrollPanel.Controls.AddRange([mInterfaceHeaderCluster, mInterfaceColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.CSharp].Controls.Add(mHighlightCSharpScrollPanel);
             AddColorCluster(mCSharpColorClusters, "Unknown", ColorSwatchUsage.Unknown);
             AddColorCluster(mCSharpColorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
@@ -580,7 +653,7 @@ All text appears in the default foreground color."
                Name = "CSharpColorsClusterContainer",
                Tag = ColorUsage.Unknown
             };
-            mHighlightCSharpScrollPanel.Controls.AddRange(mCSharpHeaderCluster, mCSharpColorsContainer);
+            mHighlightCSharpScrollPanel.Controls.AddRange([mCSharpHeaderCluster, mCSharpColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.C].Controls.Add(mHighlightCScrollPanel);
             AddColorCluster(mCColorClusters, "Unknown", ColorSwatchUsage.Unknown);
             AddColorCluster(mCColorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
@@ -597,7 +670,7 @@ All text appears in the default foreground color."
                Name = "CColorsClusterContainer",
                Tag = ColorUsage.Unknown
             };
-            mHighlightCScrollPanel.Controls.AddRange(mCHeaderCluster, mCColorsContainer);
+            mHighlightCScrollPanel.Controls.AddRange([mCHeaderCluster, mCColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Cpp].Controls.Add(mHighlightCppScrollPanel);
             AddColorCluster(mCppColorClusters, "Unknown", ColorSwatchUsage.Unknown);
             AddColorCluster(mCppColorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
@@ -614,7 +687,7 @@ All text appears in the default foreground color."
                Name = "CppColorsClusterContainer",
                Tag = ColorUsage.Unknown
             };
-            mHighlightCppScrollPanel.Controls.AddRange(mCppHeaderCluster, mCppColorsContainer);
+            mHighlightCppScrollPanel.Controls.AddRange([mCppHeaderCluster, mCppColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Basic].Controls.Add(mHighlightBasicScrollPanel);
             AddColorCluster(mBasicColorClusters, "Unknown", ColorSwatchUsage.Unknown);
             AddColorCluster(mBasicColorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
@@ -631,7 +704,7 @@ All text appears in the default foreground color."
                Name = "BasicColorsClusterContainer",
                Tag = ColorUsage.Unknown
             };
-            mHighlightBasicScrollPanel.Controls.AddRange(mBasicHeaderCluster, mBasicColorsContainer);
+            mHighlightBasicScrollPanel.Controls.AddRange([mBasicHeaderCluster, mBasicColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.FSharp].Controls.Add(mHighlightFSharpScrollPanel);
             AddColorCluster(mFSharpColorClusters, "Unknown", ColorSwatchUsage.Unknown);
             AddColorCluster(mFSharpColorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
@@ -648,7 +721,7 @@ All text appears in the default foreground color."
                Name = "FSharpColorsClusterContainer",
                Tag = ColorUsage.Unknown
             };
-            mHighlightFSharpScrollPanel.Controls.AddRange(mFSharpHeaderCluster, mFSharpColorsContainer);
+            mHighlightFSharpScrollPanel.Controls.AddRange([mFSharpHeaderCluster, mFSharpColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.HTML].Controls.Add(mHighlightHTMLScrollPanel);
             AddColorCluster(mHTMLColorClusters, "Unknown", ColorSwatchUsage.Unknown);
             AddColorCluster(mHTMLColorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
@@ -665,7 +738,7 @@ All text appears in the default foreground color."
                Name = "HTMLColorsClusterContainer",
                Tag = ColorUsage.Unknown
             };
-            mHighlightHTMLScrollPanel.Controls.AddRange(mHTMLHeaderCluster, mHTMLColorsContainer);
+            mHighlightHTMLScrollPanel.Controls.AddRange([mHTMLHeaderCluster, mHTMLColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.CSS].Controls.Add(mHighlightCSSScrollPanel);
             AddColorCluster(mCSSColorClusters, "Unknown", ColorSwatchUsage.Unknown);
             AddColorCluster(mCSSColorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
@@ -682,7 +755,7 @@ All text appears in the default foreground color."
                Name = "CSSColorsClusterContainer",
                Tag = ColorUsage.Unknown
             };
-            mHighlightCSSScrollPanel.Controls.AddRange(mCSSHeaderCluster, mCSSColorsContainer);
+            mHighlightCSSScrollPanel.Controls.AddRange([mCSSHeaderCluster, mCSSColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.XML].Controls.Add(mHighlightXMLScrollPanel);
             AddColorCluster(mXMLColorClusters, "Unknown", ColorSwatchUsage.Unknown);
             AddColorCluster(mXMLColorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
@@ -699,7 +772,7 @@ All text appears in the default foreground color."
                Name = "XMLColorsClusterContainer",
                Tag = ColorUsage.Unknown
             };
-            mHighlightXMLScrollPanel.Controls.AddRange(mXMLHeaderCluster, mXMLColorsContainer);
+            mHighlightXMLScrollPanel.Controls.AddRange([mXMLHeaderCluster, mXMLColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.JSON].Controls.Add(mHighlightJSONScrollPanel);
             AddColorCluster(mJSONColorClusters, "Unknown", ColorSwatchUsage.Unknown);
             AddColorCluster(mJSONColorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
@@ -716,7 +789,7 @@ All text appears in the default foreground color."
                Name = "JSONColorsClusterContainer",
                Tag = ColorUsage.Unknown
             };
-            mHighlightJSONScrollPanel.Controls.AddRange(mJSONHeaderCluster, mJSONColorsContainer);
+            mHighlightJSONScrollPanel.Controls.AddRange([mJSONHeaderCluster, mJSONColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.PowerShell].Controls.Add(mHighlightPowerShellScrollPanel);
             AddColorCluster(mPowerShellColorClusters, "Unknown", ColorSwatchUsage.Unknown);
             AddColorCluster(mPowerShellColorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
@@ -733,7 +806,7 @@ All text appears in the default foreground color."
                Name = "PowerShellColorsClusterContainer",
                Tag = ColorUsage.Unknown
             };
-            mHighlightPowerShellScrollPanel.Controls.AddRange(mPowerShellHeaderCluster, mPowerShellColorsContainer);
+            mHighlightPowerShellScrollPanel.Controls.AddRange([mPowerShellHeaderCluster, mPowerShellColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Batch].Controls.Add(mHighlightBatchScrollPanel);
             AddColorCluster(mBatchColorClusters, "Unknown", ColorSwatchUsage.Unknown);
             AddColorCluster(mBatchColorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
@@ -750,7 +823,7 @@ All text appears in the default foreground color."
                Name = "BatchColorsClusterContainer",
                Tag = ColorUsage.Unknown
             };
-            mHighlightBatchScrollPanel.Controls.AddRange(mBatchHeaderCluster, mBatchColorsContainer);
+            mHighlightBatchScrollPanel.Controls.AddRange([mBatchHeaderCluster, mBatchColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.SQL].Controls.Add(mHighlightSQLScrollPanel);
             AddColorCluster(mSQLColorClusters, "Unknown", ColorSwatchUsage.Unknown);
             AddColorCluster(mSQLColorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
@@ -767,7 +840,7 @@ All text appears in the default foreground color."
                Name = "SQLColorsClusterContainer",
                Tag = ColorUsage.Unknown
             };
-            mHighlightSQLScrollPanel.Controls.AddRange(mSQLHeaderCluster, mSQLColorsContainer);
+            mHighlightSQLScrollPanel.Controls.AddRange([mSQLHeaderCluster, mSQLColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Markdown].Controls.Add(mHighlightMarkdownScrollPanel);
             AddColorCluster(mMarkdownColorClusters, "Unknown", ColorSwatchUsage.Unknown);
             AddColorCluster(mMarkdownColorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
@@ -784,7 +857,7 @@ All text appears in the default foreground color."
                Name = "MarkdownColorsClusterContainer",
                Tag = ColorUsage.Unknown
             };
-            mHighlightMarkdownScrollPanel.Controls.AddRange(mMarkdownHeaderCluster, mMarkdownColorsContainer);
+            mHighlightMarkdownScrollPanel.Controls.AddRange([mMarkdownHeaderCluster, mMarkdownColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Python].Controls.Add(mHighlightPythonScrollPanel);
             AddColorCluster(mPythonColorClusters, "Unknown", ColorSwatchUsage.Unknown);
             AddColorCluster(mPythonColorClusters, "Whitespace", ColorSwatchUsage.Whitespace);
@@ -801,31 +874,33 @@ All text appears in the default foreground color."
                Name = "PythonColorsClusterContainer",
                Tag = ColorUsage.Unknown
             };
-            mHighlightPythonScrollPanel.Controls.AddRange(mPythonHeaderCluster, mPythonColorsContainer);
+            mHighlightPythonScrollPanel.Controls.AddRange([mPythonHeaderCluster, mPythonColorsContainer]);
             mPrimaryTabControl.TabPages[(int)PrimaryTabPageUsage.Interface].Controls.Add(mPrimaryScrollPanel);
             mPrimaryTabControl.TabPages[(int)PrimaryTabPageUsage.Color].Controls.Add(mHighlightTabControl);
+            mPrimaryTabControl.TabPages[(int)PrimaryTabPageUsage.Targeting].Controls.Add(mIncludeExcludeTabControl);
             mPrimaryTabControl.TabPages[(int)PrimaryTabPageUsage.Examples].Controls.Add(mExampleScrollPanel);
-            mClusterContainers.AddRange(mFontsContainer, mInterfaceColorsContainer, mCSharpColorsContainer,
-               mCColorsContainer, mCppColorsContainer, mBasicColorsContainer, mFSharpColorsContainer,
-               mHTMLColorsContainer, mCSSColorsContainer, mXMLColorsContainer, mJSONColorsContainer,
-               mPowerShellColorsContainer, mBatchColorsContainer, mSQLColorsContainer, mMarkdownColorsContainer,
-               mPythonColorsContainer, mExamplesContainer);
-            mAllClusters.AddRange(mFontsClusters, mInterfaceColorClusters, mCSharpColorClusters, mCColorClusters,
-               mCppColorClusters, mBasicColorClusters, mFSharpColorClusters, mHTMLColorClusters, mCSSColorClusters,
-               mXMLColorClusters, mJSONColorClusters, mPowerShellColorClusters, mBatchColorClusters, mSQLColorClusters,
-               mMarkdownColorClusters, mPythonColorClusters, mExamplesClusters);
-            mAllScrollPanels.AddRange(mPrimaryScrollPanel, mHighlightInterfaceScrollPanel, mExampleScrollPanel,
-               mHighlightCSharpScrollPanel, mHighlightCScrollPanel, mHighlightCppScrollPanel, mHighlightBasicScrollPanel,
-               mHighlightFSharpScrollPanel, mHighlightHTMLScrollPanel, mHighlightCSSScrollPanel, mHighlightXMLScrollPanel,
-               mHighlightJSONScrollPanel, mHighlightPowerShellScrollPanel, mHighlightBatchScrollPanel,
-               mHighlightSQLScrollPanel, mHighlightMarkdownScrollPanel, mHighlightPythonScrollPanel);
+            mClusterContainers.AddRange([mFontsContainer, mInterfaceColorsContainer,
+               mCSharpColorsContainer, mCColorsContainer, mCppColorsContainer, mBasicColorsContainer,
+               mFSharpColorsContainer, mHTMLColorsContainer, mCSSColorsContainer, mXMLColorsContainer,
+               mJSONColorsContainer, mPowerShellColorsContainer, mBatchColorsContainer, mSQLColorsContainer,
+               mMarkdownColorsContainer, mPythonColorsContainer, mExamplesContainer]);
+            mAllClusters.AddRange([mFontsClusters, mInterfaceColorClusters, mCSharpColorClusters,
+               mCColorClusters, mCppColorClusters, mBasicColorClusters, mFSharpColorClusters, mHTMLColorClusters,
+               mCSSColorClusters, mXMLColorClusters, mJSONColorClusters, mPowerShellColorClusters, mBatchColorClusters,
+               mSQLColorClusters, mMarkdownColorClusters, mPythonColorClusters, mExamplesClusters]);
+            mAllScrollPanels.AddRange([mPrimaryScrollPanel, mIncludeScrollPanel,
+               mHighlightInterfaceScrollPanel, mExampleScrollPanel, mHighlightCSharpScrollPanel, mHighlightCScrollPanel,
+               mHighlightCppScrollPanel, mHighlightBasicScrollPanel, mHighlightFSharpScrollPanel, mHighlightHTMLScrollPanel,
+               mHighlightCSSScrollPanel, mHighlightXMLScrollPanel, mHighlightJSONScrollPanel,
+               mHighlightPowerShellScrollPanel, mHighlightBatchScrollPanel, mHighlightSQLScrollPanel,
+               mHighlightMarkdownScrollPanel, mHighlightPythonScrollPanel]);
             ResumeLayout(false);
          }
 
          protected override void OnHandleCreated(EventArgs pEventArgs) {
             base.OnHandleCreated(pEventArgs);
             SuspendLayout();
-            Controls.AddRange(mPrimaryTabControl, mStatusStrip, mThemesHeaderCluster);
+            Controls.AddRange([mPrimaryTabControl, mStatusStrip, mThemesHeaderCluster]);
             ResumeLayout(false);
             BeginInvoke(new Action(() => { LayoutControls(); }));
          }
@@ -877,15 +952,21 @@ All text appears in the default foreground color."
 
          public void LayoutControls() {
             SuspendLayout();
+            ThrowIfNull(mForm, nameof(mForm));
             int savedIndex = mPrimaryTabControl.SelectedIndex;
             mPrimaryTabControl.SelectedIndex = (int)PrimaryTabPageUsage.Interface;
             mPrimaryTabControl.SelectedIndex = (int)PrimaryTabPageUsage.Color;
             mPrimaryTabControl.SelectedIndex = (int)PrimaryTabPageUsage.Examples;
+            mPrimaryTabControl.SelectedIndex = (int)PrimaryTabPageUsage.Targeting;
             mPrimaryTabControl.SelectedIndex = savedIndex;
             savedIndex = mHighlightTabControl.SelectedIndex;
             for (int i = 0; i < mHighlightTabControl.TabPages.Count; i++)
                mHighlightTabControl.SelectedIndex = i;
             mHighlightTabControl.SelectedIndex = savedIndex;
+            savedIndex = mIncludeExcludeTabControl.SelectedIndex;
+            for (int i = 0; i < mIncludeExcludeTabControl.TabPages.Count; i++)
+               mIncludeExcludeTabControl.SelectedIndex = i;
+            mIncludeExcludeTabControl.SelectedIndex = savedIndex;
             ApplyThemeToPanel(mTemporaryTheme);
             LayoutClustersAndContainers();
             SizePanel(mExamplesContainer, mIndent, false);
@@ -918,7 +999,7 @@ All text appears in the default foreground color."
                }
             }
             foreach (ClusterContainer clusterContainer in mClusterContainers.OfType<ClusterContainer>()) {
-               Panel parent = clusterContainer.Parent as Panel ?? throw new InvalidOperationException(
+               Panel parent = clusterContainer.mPanelParent as Panel ?? throw new InvalidOperationException(
                   $"Expected parent of ClusterContainer {clusterContainer.Name} to be a Panel.");
                if (parent.Controls.Count > 1)
                   parent.Controls[1].Top = parent.Controls[0].Bottom + mEm;
@@ -1185,6 +1266,8 @@ All text appears in the default foreground color."
             if (mRepaint) {
                mRepaint = false;
                mThemePanel.ApplyThemeToPanel(mThemePanel.mTemporaryTheme);
+               if (mThemePanel.mPrimaryTabControl.SelectedIndex == (int)PrimaryTabPageUsage.Examples)
+                  mThemePanel.HighlightAllExampleBoxes();
                mThemePanel.Invalidate(true);
             }
          }
@@ -1250,6 +1333,8 @@ All text appears in the default foreground color."
                mRepaint = false;
                if (pTheme != null)
                   mThemePanel.ApplyThemeToPanel(pTheme);
+               if (mThemePanel.mPrimaryTabControl.SelectedIndex == (int)PrimaryTabPageUsage.Examples)
+                  mThemePanel.HighlightAllExampleBoxes();
                mThemePanel.Invalidate(true);
             }
          }
@@ -1297,6 +1382,9 @@ All text appears in the default foreground color."
                   container?.Dispose();
                // Dispose header clusters
                mInterfaceHeaderCluster?.Dispose();
+               mTargetingHeaderCluster?.Dispose();
+               mIncludeHeaderCluster?.Dispose();
+               mExcludeHeaderCluster?.Dispose();
                mThemesHeaderCluster?.Dispose();
                mExamplesHeaderCluster?.Dispose();
                mCSharpHeaderCluster?.Dispose();

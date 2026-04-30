@@ -7,6 +7,11 @@ namespace DBCode {
             DrawTabControlItem(mPrimaryTabControl, pArgs);
          }
 
+         private void IncludeExcludeTabControl_DrawItem(object? pSender, DrawItemEventArgs pArgs) {
+            DrawTabControlItem(mIncludeExcludeTabControl, pArgs);
+         }
+
+
          private void HighlightTabControl_DrawItem(object? pSender, DrawItemEventArgs pArgs) {
             DrawTabControlItem(mHighlightTabControl, pArgs);
          }
@@ -15,6 +20,10 @@ namespace DBCode {
             mUiState.mThemePrimaryTabPageIndex = mPrimaryTabControl.SelectedIndex;
             if (mPrimaryTabControl.SelectedIndex == (int)PrimaryTabPageUsage.Examples)
                HighlightAllExampleBoxes();
+         }
+
+         private void IncludeExcludeTabControl_SelectedIndexChanged(object? pSender, EventArgs pArgs) {
+            mUiState.mThemeHighlightTabPageIndex = mHighlightTabControl.SelectedIndex;
          }
 
          private void HighlightTabControl_SelectedIndexChanged(object? pSender, EventArgs pArgs) {

@@ -31,7 +31,7 @@ namespace DBCode {
                   TabIndex = mTabIndex++,
                   Name = $"RichTextFieldClusterButton{mTabIndex++}"
                };
-               Controls.AddRange(mFlattenedButton, mRichTextBox!);
+               Controls.AddRange([mFlattenedButton, mRichTextBox!]);
                FlattenButton(mFlattenedButton, pBackgroundColor);
                mRichTextBox.Location = new Point(mFlattenedButton.Right, 0);
             }
@@ -42,7 +42,7 @@ namespace DBCode {
                   Text = pLabelText,
                   TabIndex = TAB_INDEX_IGNORED
                };
-               Controls.AddRange(mLabel, mRichTextBox!);
+               Controls.AddRange([mLabel, mRichTextBox!]);
                ApplyLabelPosition(mLabel, mRichTextBox);
             }
             mRichTextBox.TabIndex = mTabIndex++;

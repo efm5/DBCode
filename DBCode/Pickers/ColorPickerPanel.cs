@@ -82,8 +82,7 @@ namespace DBCode {
             foreach (PropertyInfo color in predefinedColors)
                mNamedColorsComboBox.Items.Add(MassageColorName(color.Name));
             FlattenButton(mNamedColorPrefixButton, groupBoxBackground);
-            mNamedColorsGroupBox.Controls.AddRange([mUseNamedCheckBox, mNamedColorPrefixButton,
-               mNamedColorsComboBox]);
+            mNamedColorsGroupBox.Controls.AddRange([mUseNamedCheckBox, mNamedColorPrefixButton, mNamedColorsComboBox]);
             mCustomColorGroupBox = new GroupBox {
                Name = $"CustomColorGroupBox{mTabIndex++}",
                TabIndex = TAB_INDEX_IGNORED,
@@ -217,12 +216,7 @@ namespace DBCode {
             };
             mBlueSwatch = new ColorSwatch(ColorSwatchUsage.Blue, BlueFromInitialColor(), -1);
             FlattenButton(mBluePrefixButton, groupBoxBackground);
-            mCustomColorGroupBox.Controls.AddRange([
-               mUseGrayscaleCheckBox, mGrayPrefixButton, mGrayUpDown, mGraySlider, mGraySwatch,
-               mRedPrefixButton, mRedUpDown, mRedSlider, mRedSwatch,
-               mGreenPrefixButton, mGreenUpDown, mGreenSlider, mGreenSwatch,
-               mBluePrefixButton, mBlueUpDown, mBlueSlider, mBlueSwatch
-            ]);
+            mCustomColorGroupBox.Controls.AddRange([mUseGrayscaleCheckBox, mGrayPrefixButton, mGrayUpDown, mGraySlider, mGraySwatch, mRedPrefixButton, mRedUpDown, mRedSlider, mRedSwatch, mGreenPrefixButton, mGreenUpDown, mGreenSlider, mGreenSwatch, mBluePrefixButton, mBlueUpDown, mBlueSlider, mBlueSwatch]);
             mDemoSwatch = new LabeledColorSwatchCluster(mTheme, "Example:", LabelPosition.Left, mInitialColor);
             mCustomColorGroupBox.Controls.Add(mDemoSwatch);
             // Status strip with buttons

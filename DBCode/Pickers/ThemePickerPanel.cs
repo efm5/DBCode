@@ -41,8 +41,8 @@
             CreateButtons();
             mCancelButton.Click += CancelButton_Click;
             mHelpButton.Click += MainForm.Help_Click;
-            Controls.AddRange(mButtonPanel, mStatusStrip, mTitleLabel);
-            mButtonPanel.Controls.AddRange(mButtonClusters.ToArray());
+            Controls.AddRange([mButtonPanel, mStatusStrip, mTitleLabel]);
+            mButtonPanel.Controls.AddRange(mButtonClusters.Cast<Control>().ToArray());//DEBUG efm5 2026 04 28 this might not be right either
             ApplyThemeToPanel();
             foreach (ButtonCluster clusterBase in mButtonClusters.OfType<ButtonCluster>())
                clusterBase.ResumeLayout(true);
@@ -73,7 +73,7 @@
             mSpringLabel.Spring = true;
             mHelpButton.Text = "Help";
             mCancelButton.Text = "Cancel";
-            mStatusStrip.Items.AddRange(mHelpHost, mSpringLabel, mCancelHost);
+            mStatusStrip.Items.AddRange([mHelpHost, mSpringLabel, mCancelHost]);
          }
 
          private void CloseThemePickerPanel() {

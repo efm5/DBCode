@@ -156,6 +156,7 @@ namespace DBCode {
          mEm2 = mEm * 2;
          mEm3 = mEm * 3;
          mEmHalf = (int)Math.Ceiling(mEm * 0.5f);
+         mEmFifth = Math.Clamp(mEm / 5, 3, 14);
          mBottomPad = (int)Math.Ceiling(fontSize * 0.75f);
          mRightPad = (int)Math.Ceiling(fontSize * 0.75f);
          mMenuLeftOffset = (int)Math.Ceiling(fontSize * 2.5f);

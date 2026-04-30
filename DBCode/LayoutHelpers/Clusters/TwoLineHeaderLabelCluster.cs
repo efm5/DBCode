@@ -26,7 +26,7 @@ namespace DBCode {
                Font = CreateNewTitleFont(pBottomSizeMultiplier),
                TextAlign = ContentAlignment.MiddleLeft
             };
-            Controls.AddRange(mTopLabel, mBottomLabel);
+            Controls.AddRange([mTopLabel, mBottomLabel]);
             Dock = DockStyle.Top;
          }
 

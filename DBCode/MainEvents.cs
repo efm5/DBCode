@@ -23,6 +23,12 @@
          ApplyViewMode(ViewMode.Features);
       }
 
+      private void MainForm_Shown(object? pSender, EventArgs pEventArgs) {
+         //LayoutBottomPanel();
+         UpdateTargetingStatusLabel();
+         mVersionLabel?.Top = (mMainBottomPanel!.Height - mVersionLabel.Height) / 2;
+      }
+
       private void MainForm_FormClosing(object? pSender, FormClosingEventArgs pEventArgs) {
          mUiState.mFormOpacity = Opacity;
          mUiState.mFormSize = Size;
@@ -36,9 +42,16 @@
          }
          Settings.Default.Save();
          mThemePanel?.Dispose();
+         mMainBottomPanel?.Dispose();
          foreach (Themes.Theme theme in mThemes.OfType<Themes.Theme>()) {
             theme.Dispose();
          }
+      }
+
+      protected override void OnClientSizeChanged(EventArgs pEventArgs) {
+         base.OnClientSizeChanged(pEventArgs);
+         if (mMainBottomPanel != null && mRichTextBox != null && mMenuStrip != null)
+            LayoutMainBottomPanel();
       }
       #endregion
 

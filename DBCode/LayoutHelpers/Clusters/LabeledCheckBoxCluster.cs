@@ -1,5 +1,3 @@
-using DBCode.Themes;
-
 namespace DBCode {
    internal static partial class LayoutHelpers {
       internal sealed class LabeledCheckBoxCluster : BaseCluster {
@@ -28,7 +26,7 @@ namespace DBCode {
                TabIndex = mTabIndex,
                Name = $"LabeledCheckBoxClusterCheckBox{mTabIndex++}"
             };
-            Controls.AddRange(mLabel, mCheckBox);
+            Controls.AddRange([mLabel, mCheckBox]);
             ApplyLabelPosition(mLabel, mCheckBox);
          }
 

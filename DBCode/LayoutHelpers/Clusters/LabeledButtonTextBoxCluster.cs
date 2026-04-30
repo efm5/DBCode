@@ -1,6 +1,4 @@
-﻿using DBCode.Themes;
-
-namespace DBCode {
+﻿namespace DBCode {
    internal static partial class LayoutHelpers {
       internal sealed class LabeledButtonTextBoxCluster : BaseCluster {
          internal Label mLabel { get; private set; }

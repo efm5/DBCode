@@ -22,9 +22,15 @@
             }
          }
          if (pText[index] == '@') {
-            if (index + 1 < length && pText[index + 1] == '"') {
+            if (index + 1 < length && (pText[index + 1] == '"' || pText[index + 1] == '$')) {
                isVerbatim = true;
                index++;
+               if (index < length && pText[index] == '$') { // @$" — skip the $
+                  if (index + 1 < length && pText[index + 1] == '"')
+                     index++;
+                  else
+                     return false;
+               }
             }
             else {
                return false;
