@@ -9,6 +9,8 @@
          private SyntaxColorSwatchUsage mSyntaxColorUsage = (SyntaxColorSwatchUsage)(-1);
 
          public event ColorSwatchClickedHandler? SwatchClicked;
+         public event ColorPickerSwatchClickedHandler? PickerSwatchClicked;
+         public event SyntaxColorSwatchClickedHandler? SyntaxSwatchClicked;
 
          public LabeledButtonColorSwatchCluster(Theme pTheme, string pLabelText, string pButtonText, ColorSwatchUsage pUsage,
             LabelPosition pLabelPosition, Color pInitialColor, Color? pBackgroundColor = null) : base(pTheme, pBackgroundColor) {
@@ -36,7 +38,7 @@
             };
             mButton.Click += Button_Click;
             mSwatch = new ColorSwatch(pUsage, pInitialColor, -1);
-            mSwatch.SwatchClicked += Swatch_Click;
+            mSwatch.ColorSwatchClicked += Swatch_Click;
             Controls.AddRange([mLabel, mButton, mSwatch]);
             LayoutControls();
          }
@@ -68,7 +70,7 @@
             };
             mButton.Click += Button_Click;
             mSwatch = new ColorSwatch(pUsage, pInitialColor, -1);
-            mSwatch.SwatchClicked += Swatch_Click;
+            mSwatch.PickerSwatchClicked += Swatch_Click;
             Controls.AddRange([mLabel, mButton, mSwatch]);
             LayoutControls();
          }
@@ -100,7 +102,7 @@
             };
             mButton.Click += Button_Click;
             mSwatch = new ColorSwatch(pUsage, pInitialColor, -1);
-            mSwatch.SwatchClicked += Swatch_Click;
+            mSwatch.SyntaxSwatchClicked += Swatch_Click;
             Controls.AddRange([mLabel, mButton, mSwatch]);
             LayoutControls();
          }
@@ -115,11 +117,24 @@
          }
 
          private void Button_Click(object? pSender, EventArgs pArgs) {
-            SwatchClicked?.Invoke(this, mColorUsage);
+            if (mColorUsage != (ColorSwatchUsage)(-1))
+               SwatchClicked?.Invoke(this, mColorUsage);
+            else if (mColorPickerUsage != (ColorPickerSwatchUsage)(-1))
+               PickerSwatchClicked?.Invoke(this, mColorPickerUsage);
+            else if (mSyntaxColorUsage != (SyntaxColorSwatchUsage)(-1))
+               SyntaxSwatchClicked?.Invoke(this, mSyntaxColorUsage);
          }
 
          private void Swatch_Click(object? pSender, ColorSwatchUsage pUsage) {
             SwatchClicked?.Invoke(this, pUsage);
+         }
+
+         private void Swatch_Click(object? pSender, ColorPickerSwatchUsage pUsage) {
+            PickerSwatchClicked?.Invoke(this, pUsage);
+         }
+
+         private void Swatch_Click(object? pSender, SyntaxColorSwatchUsage pUsage) {
+            SyntaxSwatchClicked?.Invoke(this, pUsage);
          }
 
          internal override void LayoutCluster() {
@@ -177,7 +192,9 @@
          protected override void Dispose(bool pDisposing) {
             if (pDisposing) {
                mButton.Click -= Button_Click;
-               mSwatch.SwatchClicked -= Swatch_Click;
+               mSwatch.ColorSwatchClicked -= Swatch_Click;
+               mSwatch.PickerSwatchClicked -= Swatch_Click;
+               mSwatch.SyntaxSwatchClicked -= Swatch_Click;
             }
             base.Dispose(pDisposing);
          }

@@ -526,16 +526,15 @@ All text appears in the default foreground color."
             AddFontCluster(mFontsClusters, $"The Status Strip Font: {font}", "Status Strip", FontUsage.Status, LabelPosition.Right);
             font = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Text].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Text].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Text].Style}";
             AddFontCluster(mFontsClusters, $"The Textbox Font: {font}", "Text Box", FontUsage.Text, LabelPosition.Right);
-            mFontsContainer = new ClusterContainer(mPrimaryScrollPanel, mFontsClusters, ClusterLayoutMode.FixedRows, 0, 0, 0, 4) {
-               Name = "FontsClusterContainer"
-            };
-            mPrimaryScrollPanel.Controls.AddRange(mFontsContainer.mClusters.Cast<Control>().ToArray());//DEBUG efm5 2026 04 28 this may be a problem
-#pragma warning disable IDE0017
+            mFontsContainer =
+               new ClusterContainer(mPrimaryScrollPanel, mFontsClusters, ClusterLayoutMode.FixedRows, 0, 0, 0, 4) {
+                  Name = "FontsClusterContainer"
+               };
+            mPrimaryScrollPanel.Controls.AddRange(mFontsContainer.mClusters.Cast<Control>().ToArray());
             mExamplesContainer = new ClusterContainer(mExampleScrollPanel, mExamplesClusters, ClusterLayoutMode.FlowLayout) {
+               AutoSize = false,
                Name = "ExamplesClusterContainer"
             };
-            mExamplesContainer.AutoSize = false;
-#pragma warning restore IDE0017
             mExampleMenuStrip = new MenuStrip() { Name = "ExampleMenuStrip" };
             mExampleTSMI = new ToolStripMenuItem { Name = "ExampleTSMI", Text = "Example &Menu" };
             mExampleTSMISubItem = new ToolStripMenuItem { Name = "ExampleTSMISubItem", Text = "Example &Item" };
@@ -617,10 +616,11 @@ All text appears in the default foreground color."
             AddColorCluster(mInterfaceColorClusters, "Tab Header Selected Font", ColorSwatchUsage.TabHeaderSelectedFont);
             AddColorCluster(mInterfaceColorClusters, "Tab Header Unselected Background", ColorSwatchUsage.TabHeaderUnselectedBackground);
             AddColorCluster(mInterfaceColorClusters, "Tab Header Selected Background", ColorSwatchUsage.TabHeaderSelectedBackground);
-            mInterfaceColorsContainer = new ClusterContainer(mHighlightInterfaceScrollPanel, mInterfaceColorClusters,
-               ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Name = "InterfaceColorsClusterContainer"
-            };
+            mInterfaceColorsContainer =
+               new ClusterContainer(mHighlightInterfaceScrollPanel, mInterfaceColorClusters,
+                  ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+                  Name = "InterfaceColorsClusterContainer"
+               };
             mHighlightInterfaceScrollPanel.Controls.AddRange([mInterfaceHeaderCluster, mInterfaceColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.CSharp].Controls.Add(mHighlightCSharpScrollPanel);
             AddColorCluster(mCSharpColorClusters, "Unknown", SyntaxColorSwatchUsage.Unknown);
@@ -634,10 +634,11 @@ All text appears in the default foreground color."
             AddColorCluster(mCSharpColorClusters, "Preprocessor Directive", SyntaxColorSwatchUsage.PreprocessorDirective);
             AddColorCluster(mCSharpColorClusters, "Operator", SyntaxColorSwatchUsage.Operator);
             AddColorCluster(mCSharpColorClusters, "Punctuation", SyntaxColorSwatchUsage.Punctuation);
-            mCSharpColorsContainer = new ClusterContainer(mHighlightCSharpScrollPanel, mCSharpColorClusters,
-               ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-               Name = "CSharpColorsClusterContainer"
-            };
+            mCSharpColorsContainer =
+               new ClusterContainer(mHighlightCSharpScrollPanel, mCSharpColorClusters,
+                  ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+                  Name = "CSharpColorsClusterContainer"
+               };
             mHighlightCSharpScrollPanel.Controls.AddRange([mCSharpHeaderCluster, mCSharpColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.C].Controls.Add(mHighlightCScrollPanel);
             AddColorCluster(mCColorClusters, "Unknown", SyntaxColorSwatchUsage.Unknown);
