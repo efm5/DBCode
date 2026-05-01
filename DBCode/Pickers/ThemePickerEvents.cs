@@ -24,7 +24,7 @@
             if (theme != null)
                mCurrentTheme = theme.Clone();
             CloseThemePickerPanel();
-            mForm.ApplyThemeToMainForm();
+            mForm.ApplyTheme();
          }
       }
    }

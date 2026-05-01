@@ -154,14 +154,14 @@
       public static bool mFirstGray = true, mFirstLaunch = true, mForceActivation = true,
          mIsTargetingEnabled = false, mPreMinimalControlBox = true, mReturnToTop = true, mFirstTheme = true,
          mFirstColorPicker = true, mFirstFontPicker = true;
-      public static double mOpacity;
       public static float mFontWidthAdjustment = 0.5f;
       public static FontUsage mFontUsage = FontUsage.Text;
       public static MainForm? mForm = null;
       public static HighlighterEngine? mHighlighterEngine = null;
       public static Icon[] mIcons = new Icon[4];
       public static ILayoutable? mActiveLayoutable = null;
-      public static int mThemeHighlightTabPageIndex = 0, mThemePrimaryTabPageIndex = 0, mThemeTargetingTabIndexIndex = 0;
+      public static int mThemeHighlightTabPageIndex = 0, mThemePrimaryTabPageIndex = 0,
+         mThemeTargetingTabIndexIndex = 0;
       public static IntPtr mTargetWindow = IntPtr.Zero;
       public static readonly IntPtr mInsertAfterWindow = new IntPtr(0);
       public static LanguageKind mCurrentLanguage = LanguageKind.CSharp;
@@ -174,11 +174,6 @@
       public static GetString? mGetStringPanel = null;
       public static readonly PropertyInfo[] mPredefinedColors =
          typeof(Color).GetProperties(BindingFlags.Public | BindingFlags.Static);
-      public static Rectangle mPreThemeBounds = new Rectangle(50, 50, 800, 600),
-         mPreThemePickerBounds = new Rectangle(50, 50, 800, 600),
-         mPrePickerBounds = new Rectangle(50, 50, 800, 600),
-         mPreGetStringBounds = new Rectangle(50, 50, 800, 600),
-         mThemeBounds, mColorPickerBounds, mFontPickerBounds, mThemePickerBounds;
       public static RichTextBox? mRichTextBox = null;
 #pragma warning disable CS0649
       public static Size mMonitorSize, mResolution;

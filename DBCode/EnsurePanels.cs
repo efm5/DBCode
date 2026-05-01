@@ -2,133 +2,135 @@
    public sealed partial class MainForm : Form {
       public void EnsureThemePanel(ThemeUsage pThemeUsage) {
          ThrowIfNull(mForm, nameof(mForm));
-         mPreThemeBounds = Bounds;
-         mOpacity = mForm.Opacity;
-         mForm.Opacity = 0;
+         ThrowIfNull(mThemePanel, nameof(mThemePanel));
+         mUiState.FormBounds = mForm.Bounds;
+         SuspendClientSizeChanged();
+         if (mFirstTheme) {
+            mForm.Size = mThemePanel.WantedSize();
+            CenterFormOnMonitor(mForm);
+            EnsureWindowFitsMonitor(mForm, false);
+            mFirstTheme = false;
+         }
+         else
+            mForm.Bounds = mUiState.ThemeBounds;
          if (mThemePanel == null)
             mThemePanel = new ThemePanel(pThemeUsage);
+         ResumeClientSizeChanged();
          ShowThemePanel(pThemeUsage);
       }
 
       public void ShowThemePanel(ThemeUsage pThemeUsage) {
-         ThrowIfNull(mThemePanel, nameof(mThemePanel));
          ThrowIfNull(mForm, nameof(mForm));
-         if (pThemeUsage == ThemeUsage.Design) {
-            ControlBox = false;
-            if (Controls.Contains(mMenuStrip))
-               Controls.Remove(mMenuStrip);
-            if (Controls.Contains(mRichTextBox))
-               Controls.Remove(mRichTextBox);
-            if (Controls.Contains(mMainBottomPanel))
-               Controls.Remove(mMainBottomPanel);
-            if (!Controls.Contains(mThemePanel))
-               Controls.Add(mThemePanel);
-            mThemePanel.LayoutControls();
-            if (mFirstTheme) {
-               mForm.Size = mThemePanel.WantedSize();
-               CenterFormOnMonitor(mForm);
-               mFirstTheme = false;
-            }
-            else
-               Bounds = new Rectangle(mUiState.mThemeLocation, mUiState.mThemeSize);
-            EnsureWindowFitsMonitor(mForm, false);
-            mThemePanel.Visible = true;
-            mThemePanel.BringToFront();
-            mThemePanel.Show();
+         ThrowIfNull(mThemePanel, nameof(mThemePanel));
+         ThrowIfNull(mMainPanel, nameof(mMainPanel));
+         ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
+         ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
+         double savedOpacity = mForm.Opacity;
+         mForm.Opacity = 0;
+         mForm.ControlBox = false;
+         if (mForm.Controls.Contains(mMainPanel)) {
+            mMainPanel.Visible = false;
+            mMainPanel.SendToBack();
+            mForm.Controls.Remove(mMainPanel);
          }
-         else {
-            TimedMessage("ShowThemePanel(ThemeUsage) edit is not working.", "Not Yet IMPLEMENTED");
-         }
-         mForm.Opacity = mOpacity;
+         mThemePanel.SetThemeUsage(pThemeUsage);
+         mForm.Controls.Add(mThemePanel);
+         EnsureWindowFitsMonitor(mForm, false);
+         mThemePanel.ApplyTheme(mCurrentTheme);
+         mThemePanel.LayoutControls();
+         mThemePanel.BringToFront();
+         mThemePanel.Visible = true;
+         mThemePanel.Show();
+         mForm.Opacity = savedOpacity;
       }
 
       public void RestoreFromThemePanel() {
          ThrowIfNull(mForm, nameof(mForm));
          ThrowIfNull(mThemePanel, nameof(mThemePanel));
-         bool dirtyTheme = false;
-
-         mForm.SuspendLayout();
-         if (!mFirstTheme)
-            mThemeBounds = mForm.Bounds;
-         mUiState.mThemeLocation = Location;
-         mUiState.mThemeSize = Size;
-         mForm.ControlBox = true;
-         dirtyTheme = mThemePanel.ThemeIsDirty();
+         ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
+         ThrowIfNull(mMainPanel, nameof(mMainPanel));
+         ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
+         double savedOpacity = mForm.Opacity;
+         mForm.Opacity = 0;
+         mUiState.mThemeLocation = mForm.Location;
+         mUiState.mThemeSize = mForm.Size;
+         bool dirtyTheme = mThemePanel.ThemeIsDirty();
          mThemePanel.Visible = false;
          mThemePanel.SendToBack();
-         if (mForm.Controls.Contains(mThemePanel))
-            mForm.Controls.Remove(mThemePanel);
-         mForm.Bounds = mPreThemeBounds;
-         if (!mForm.Controls.Contains(mRichTextBox))
-            mForm.Controls.Add(mRichTextBox);
-         if (!mForm.Controls.Contains(mMainBottomPanel))
-            mForm.Controls.Add(mMainBottomPanel);
-         if (mCurrentViewMode == ViewMode.Features && !mForm.Controls.Contains(mMenuStrip))
-            mForm.Controls.Add(mMenuStrip);
-         mRichTextBox?.Visible = true;
-         mMainBottomPanel?.Visible = true;
-         if (mCurrentViewMode == ViewMode.Features)
-            mMenuStrip?.Visible = true;
+         mForm.Controls.Remove(mThemePanel);
+         SuspendClientSizeChanged();
+         mForm.Bounds = mUiState.FormBounds;
+         ResumeClientSizeChanged();
+         mForm.Controls.Add(mMainPanel);
+         mForm.ApplyTheme();
          if (dirtyTheme)
             LayoutControls();
-         mForm.ResumeLayout(true);
+         mMainBottomPanel.LayoutControls();
+         mMainPanel.BringToFront();
+         mMainPanel.Visible = true;
+         mMainPanel.Show();
+         mForm.ControlBox = true;
+         mForm.Opacity = savedOpacity;
       }
 
       public void EnsureThemePickerPanel() {
-         mPreThemePickerBounds = Bounds;
-         Bounds = mThemePickerBounds;
-         Bounds = new Rectangle(mUiState.mThemePickerLocation, mUiState.mThemePickerSize);
-         mThemePickerBounds = Bounds;
+         ThrowIfNull(mForm, nameof(mForm));
+         mUiState.FormBounds = mForm.Bounds;
+         mForm.SuspendClientSizeChanged();
+         mForm.Bounds = mUiState.ThemePickerBounds;
          mThemePickerPanel = new ThemePickerPanel();
+         mForm.ResumeClientSizeChanged();
          ShowThemePickerPanel();
       }
 
       public void ShowThemePickerPanel() {
+         ThrowIfNull(mForm, nameof(mForm));
          ThrowIfNull(mThemePickerPanel, nameof(mThemePickerPanel));
-         ControlBox = false;
-         if (Controls.Contains(mMenuStrip))
-            Controls.Remove(mMenuStrip);
-         if (Controls.Contains(mRichTextBox))
-            Controls.Remove(mRichTextBox);
-         if (Controls.Contains(mMainBottomPanel))
-            Controls.Remove(mMainBottomPanel);
-         Controls.Add(mThemePickerPanel);
-         PerformLayout();
+         ThrowIfNull(mMainPanel, nameof(mMainPanel));
+         double savedOpacity = mForm.Opacity;
+         mForm.Opacity = 0;
+         mForm.ControlBox = false;
+         if (mForm.Controls.Contains(mMainPanel)) {
+            mMainPanel.Visible = false;
+            mMainPanel.SendToBack();
+            mForm.Controls.Remove(mMainPanel);
+         }
+         mForm.Controls.Add(mThemePickerPanel);
+         mThemePickerPanel.ApplyTheme();
          mThemePickerPanel.LayoutPanel();
          mThemePickerPanel.mClusterContainer!.LayoutClusters();
-         mThemePickerPanel.Visible = true;
          mThemePickerPanel.BringToFront();
+         mThemePickerPanel.Visible = true;
          mThemePickerPanel.Show();
+         mForm.Opacity = savedOpacity;
       }
 
       public void RestoreFromThemePickerPanel() {
          ThrowIfNull(mForm, nameof(mForm));
+         ThrowIfNull(mMainPanel, nameof(mMainPanel));
          ThrowIfNull(mThemePickerPanel, nameof(mThemePickerPanel));
-         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
          ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
-         ThrowIfNull(mMenuStrip, nameof(mMenuStrip));
-         mForm.SuspendLayout();
-         mThemePickerBounds = mForm.Bounds;
-         //mUiState.mThemePickerLocation = Location;
-         //mUiState.mThemePickerSize = Size;
-         mForm.ControlBox = true;
+         double savedOpacity = mForm.Opacity;
+         mForm.Opacity = 0;
+         mUiState.ThemePickerBounds = mForm.Bounds;
+         mThemePickerPanel.Visible = false;
+         mThemePickerPanel.SendToBack();
          mForm.Controls.Remove(mThemePickerPanel);
          mThemePickerPanel.Dispose();
          mThemePickerPanel = null;
-         mForm.Bounds = mPreThemePickerBounds;
-         if (!mForm.Controls.Contains(mRichTextBox))
-            mForm.Controls.Add(mRichTextBox);
-         if (!mForm.Controls.Contains(mMainBottomPanel))
-            mForm.Controls.Add(mMainBottomPanel);
-         if (mCurrentViewMode == ViewMode.Features && !mForm.Controls.Contains(mMenuStrip))
-            mForm.Controls.Add(mMenuStrip);
-         mRichTextBox.Visible = true;
-         mMainBottomPanel.Visible = true;
-         if (mCurrentViewMode == ViewMode.Features)
-            mMenuStrip.Visible = true;
+         SuspendClientSizeChanged();
+         mForm.Bounds = mUiState.FormBounds;
+         ResumeClientSizeChanged();
+         mForm.Controls.Add(mMainPanel);
+         mForm.ApplyTheme();
+         mMainBottomPanel.LayoutControls();
+         mMainPanel.BringToFront();
+         mMainPanel.Visible = true;
+         mMainPanel.Show();
+         mForm.ControlBox = true;
          mForm.Activate();
-         mRichTextBox.Focus();
-         mForm.ResumeLayout(true);
+         mMainPanel.Focus();
+         mForm.Opacity = savedOpacity;
       }
    }
 }

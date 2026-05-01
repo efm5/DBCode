@@ -79,7 +79,7 @@ namespace DBCode {
          ThrowIfNull(mForm, nameof(mForm));
          foreach (Control control in mForm.Controls.OfType<Control>())
             control.Enabled = false;
-         mPreGetStringBounds = mForm.Bounds;
+         mUiState.FormBounds = mForm.Bounds;
          mGetStringPanel = new GetString(pTitle, pPrompt, pInitialValue) {
             OnClose = pCallback
          };
@@ -105,7 +105,7 @@ namespace DBCode {
             mForm.Controls.Remove(mGetStringPanel);
          mGetStringPanel.Dispose();
          mGetStringPanel = null;
-         mForm.Bounds = mPreGetStringBounds;
+         mForm.Bounds = mUiState.FormBounds;
          foreach (Control control in mForm.Controls.OfType<Control>())
             control.Enabled = true;
          if (mHasControlBox)

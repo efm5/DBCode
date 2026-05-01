@@ -273,6 +273,7 @@ All text appears in the default foreground color."
            mHighlightMarkdownScrollPanel, mHighlightPythonScrollPanel, mIncludeScrollPanel, mExcludeScrollPanel;
          private readonly List<Panel?> mAllScrollPanels = [];
          private Theme mTemporaryTheme;
+         private ThemeUsage mThemeUsage;
 
          public ThemePanel(ThemeUsage pThemeUsage) {
             ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
@@ -280,6 +281,7 @@ All text appears in the default foreground color."
             SuspendLayout();
             string temporaryName = TemporaryThemePrefix + DateTime.UtcNow.Ticks.ToString(CultureInfo.InvariantCulture);
 
+            mThemeUsage = pThemeUsage;
             Dock = DockStyle.Fill;
             if (mCurrentTheme.mIsBuiltIn)
                temporaryName += " CLONED FROM " + mCurrentTheme.mName;
@@ -897,6 +899,11 @@ All text appears in the default foreground color."
             BeginInvoke(new Action(() => { LayoutControls(); }));
          }
 
+         public void SetThemeUsage(ThemeUsage pThemeUsage) {
+            mThemeUsage = pThemeUsage;
+         }
+
+
          public Size WantedSize() {
             int maxWidth = 0, maxHeight = 0, pageWidth, pageHeight, wantedWidth, wantedHeight;
 
@@ -959,7 +966,7 @@ All text appears in the default foreground color."
             for (int i = 0; i < mIncludeExcludeTabControl.TabPages.Count; i++)
                mIncludeExcludeTabControl.SelectedIndex = i;
             mIncludeExcludeTabControl.SelectedIndex = savedIndex;
-            ApplyThemeToPanel(mTemporaryTheme);
+            ApplyTheme(mTemporaryTheme);
             LayoutClustersAndContainers();
             SizePanel(mExamplesContainer, mIndent, false);
             mExamplesContainer.Height += mEmHalf;
@@ -1059,7 +1066,7 @@ All text appears in the default foreground color."
             }
          }
 
-         public void ApplyThemeToPanel(Theme pTheme) {
+         public void ApplyTheme(Theme pTheme) {
             Theme clonedTheme = pTheme.Clone();
             mTemporaryTheme.Dispose();
             mTemporaryTheme = clonedTheme;
@@ -1199,13 +1206,16 @@ All text appears in the default foreground color."
          }
 
          public void EnsureColorPickerPanel(Theme pTheme, ColorUsage pUsage, Color pInitialColor) {
-            mPrePickerBounds = Bounds;
+            ThrowIfNull(mForm, nameof(mForm));
+            mUiState.FormBounds = Bounds;
             if (mColorPickerPanel == null)
                mColorPickerPanel = new ColorPickerPanel(pTheme, pUsage, pInitialColor);
             else
                mColorPickerPanel.LayoutControls();
+            mForm.SuspendClientSizeChanged();
             if (!mFirstColorPicker)
-               Bounds = mColorPickerBounds;
+               Bounds = mUiState.mColorPickerBounds;
+            mForm.ResumeClientSizeChanged();
             ShowColorPickerPanel();
          }
 
@@ -1213,7 +1223,6 @@ All text appears in the default foreground color."
             ThrowIfNull(mColorPickerPanel, nameof(mColorPickerPanel));
             ThrowIfNull(mForm, nameof(mForm));
             ThrowIfNull(mThemePanel, nameof(mThemePanel));
-
             if (mForm.Controls.Contains(mThemePanel))
                mForm.Controls.Remove(mThemePanel);
             if (!mForm.Controls.Contains(mColorPickerPanel))
@@ -1231,14 +1240,18 @@ All text appears in the default foreground color."
                int maxHeight = (int)(screenBounds.Height * 0.9);
                int width = Math.Min(requiredSize.Width, maxWidth);
                int height = Math.Min(requiredSize.Height, maxHeight);
+               mForm.SuspendClientSizeChanged();
                mForm.ClientSize = new Size(width, height);
                Point center = ScreenCenterPrimary();
                mForm.Location = new Point(center.X - (width / 2), center.Y - (height / 2));
                EnsureWindowFitsMonitor(mForm, false);
+               mForm.ResumeClientSizeChanged();
                mFirstColorPicker = false;
             }
             else {
+               mForm.SuspendClientSizeChanged();
                EnsureWindowFitsMonitor(mForm, false);
+               mForm.ResumeClientSizeChanged();
             }
          }
 
@@ -1246,18 +1259,19 @@ All text appears in the default foreground color."
             ThrowIfNull(mForm, nameof(mForm));
             ThrowIfNull(mColorPickerPanel, nameof(mColorPickerPanel));
             ThrowIfNull(mThemePanel, nameof(mThemePanel));
-
             mColorPickerPanel.Visible = false;
             mColorPickerPanel.SendToBack();
             if (mForm.Controls.Contains(mColorPickerPanel))
                mForm.Controls.Remove(mColorPickerPanel);
-            mColorPickerBounds = mForm.Bounds;
-            mForm.Bounds = mPrePickerBounds;
+            mUiState.mColorPickerBounds = mForm.Bounds;
+            mForm.SuspendClientSizeChanged();
+            mForm.Bounds = mUiState.FormBounds;
+            mForm.ResumeClientSizeChanged();
             if (!mForm.Controls.Contains(mThemePanel))
                mForm.Controls.Add(mThemePanel);
             if (mRepaint) {
                mRepaint = false;
-               mThemePanel.ApplyThemeToPanel(mThemePanel.mTemporaryTheme);
+               mThemePanel.ApplyTheme(mThemePanel.mTemporaryTheme);
                if (mThemePanel.mPrimaryTabControl.SelectedIndex == (int)PrimaryTabPageUsage.Examples)
                   mThemePanel.HighlightAllExampleBoxes();
                mThemePanel.Invalidate(true);
@@ -1265,13 +1279,16 @@ All text appears in the default foreground color."
          }
 
          public void EnsureFontPickerPanel(Theme pTheme, FontUsage pUsage, Font pInitialFont) {
-            mPrePickerBounds = Bounds;
+            ThrowIfNull(mForm, nameof(mForm));
+            mUiState.FormBounds = Bounds;
             if (mFontPickerPanel == null)
                mFontPickerPanel = new FontPickerPanel(pTheme, pUsage, pInitialFont);
             else
                mFontPickerPanel.LayoutControls();
+            mForm.SuspendClientSizeChanged();
             if (!mFirstFontPicker)
-               Bounds = mFontPickerBounds;
+               Bounds = mUiState.mFontPickerBounds;
+            mForm.ResumeClientSizeChanged();
             ShowFontPickerPanel();
          }
 
@@ -1279,7 +1296,6 @@ All text appears in the default foreground color."
             ThrowIfNull(mFontPickerPanel, nameof(mFontPickerPanel));
             ThrowIfNull(mForm, nameof(mForm));
             ThrowIfNull(mThemePanel, nameof(mThemePanel));
-
             if (mForm.Controls.Contains(mThemePanel))
                mForm.Controls.Remove(mThemePanel);
             if (!mForm.Controls.Contains(mFontPickerPanel))
@@ -1297,14 +1313,18 @@ All text appears in the default foreground color."
                int maxHeight = (int)(screenBounds.Height * 0.9);
                int width = Math.Min(requiredSize.Width, maxWidth);
                int height = Math.Min(requiredSize.Height, maxHeight);
+               mForm.SuspendClientSizeChanged();
                mForm.ClientSize = new Size(width, height);
                Point center = ScreenCenterPrimary();
                mForm.Location = new Point(center.X - (width / 2), center.Y - (height / 2));
                EnsureWindowFitsMonitor(mForm, false);
+               mForm.ResumeClientSizeChanged();
                mFirstFontPicker = false;
             }
             else {
+               mForm.SuspendClientSizeChanged();
                EnsureWindowFitsMonitor(mForm, false);
+               mForm.ResumeClientSizeChanged();
             }
          }
 
@@ -1312,19 +1332,20 @@ All text appears in the default foreground color."
             ThrowIfNull(mForm, nameof(mForm));
             ThrowIfNull(mFontPickerPanel, nameof(mFontPickerPanel));
             ThrowIfNull(mThemePanel, nameof(mThemePanel));
-
             mFontPickerPanel.Visible = false;
             mFontPickerPanel.SendToBack();
             if (mForm.Controls.Contains(mFontPickerPanel))
                mForm.Controls.Remove(mFontPickerPanel);
-            mFontPickerBounds = mForm.Bounds;
-            mForm.Bounds = mPrePickerBounds;
+            mUiState.mFontPickerBounds = mForm.Bounds;
+            mForm.SuspendClientSizeChanged();
+            mForm.Bounds = mUiState.FormBounds;
+            mForm.ResumeClientSizeChanged();
             if (!mForm.Controls.Contains(mThemePanel))
                mForm.Controls.Add(mThemePanel);
             if (mRepaint) {
                mRepaint = false;
                if (pTheme != null)
-                  mThemePanel.ApplyThemeToPanel(pTheme);
+                  mThemePanel.ApplyTheme(pTheme);
                if (mThemePanel.mPrimaryTabControl.SelectedIndex == (int)PrimaryTabPageUsage.Examples)
                   mThemePanel.HighlightAllExampleBoxes();
                mThemePanel.Invalidate(true);
@@ -1334,7 +1355,6 @@ All text appears in the default foreground color."
          private void CloseThemePanel() {
             ThrowIfNull(mForm, nameof(mForm));
             mFirstTheme = false;
-            mThemeBounds = mForm.Bounds;
             mForm.RestoreFromThemePanel();
          }
 

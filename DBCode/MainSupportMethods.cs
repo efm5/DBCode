@@ -1,5 +1,13 @@
 ﻿namespace DBCode {
    public sealed partial class MainForm : Form {
+      public void SuspendClientSizeChanged() {
+         ClientSizeChanged -= OnClientSizeChanged;
+      }
+
+      public void ResumeClientSizeChanged() {
+         ClientSizeChanged += OnClientSizeChanged;
+      }
+
       public static void DisposeFontIfOwned(Font? pFont) {
          if (pFont != null && !pFont.IsSystemFont)
             pFont.Dispose();
@@ -71,29 +79,39 @@
       }
 
       public void LayoutControls() {
-         ApplyThemeToMainForm();
+         ThrowIfNull(mVersionLabel, nameof(mVersionLabel));
+         ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
+         ApplyTheme();
          RehighlightText();
+         mMainBottomPanel.LayoutControls();
       }
 
-      internal void ApplyThemeToMainForm() {
-         mRichTextBox!.TextChanged -= OnEditorTextChanged;
+      internal void ApplyTheme() {
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
+         ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
+         ThrowIfNull(mCurrentLanguageIsTSMI, nameof(mCurrentLanguageIsTSMI));
+         ThrowIfNull(mForm, nameof(mForm));
+         ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
+         ThrowIfNull(mMenuStrip, nameof(mMenuStrip));
+         ThrowIfNull(mHighlighterEngine, nameof(mHighlighterEngine));
+         mRichTextBox.TextChanged -= OnEditorTextChanged;
          Theme theme = mCurrentTheme!;
-         mCurrentLanguageIsTSMI!.Text = mCurrently + theme.mName;
+         mCurrentLanguageIsTSMI.Text = mCurrently + theme.mName;
          mForm!.BackColor = theme.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
          mRichTextBox.BackColor = theme.mInterfaceColors[(int)ColorUsage.TextBox];
          mRichTextBox.ForeColor = theme.mInterfaceColors[(int)ColorUsage.TextBoxFont];
-         mMenuStrip!.BackColor = theme.mInterfaceColors[(int)ColorUsage.MenuBackground];
+         mMenuStrip.BackColor = theme.mInterfaceColors[(int)ColorUsage.MenuBackground];
          foreach (ToolStripMenuItem toolStripMenuItem in mMenuStrip.Items.OfType<ToolStripMenuItem>()) {
             PaintMenuItem(toolStripMenuItem, theme);
             foreach (ToolStripMenuItem subItem in toolStripMenuItem.DropDownItems.OfType<ToolStripMenuItem>())
                PaintMenuItemsRecursive(subItem, theme);
          }
-         mMainBottomPanel!.BackColor = theme.mInterfaceColors[(int)ColorUsage.StatusBackground];
-         mMainBottomPanel!.SetFontAndColor();
+         mMainBottomPanel.BackColor = theme.mInterfaceColors[(int)ColorUsage.StatusBackground];
+         mMainBottomPanel.SetFontAndColor();
          LayoutMainBottomPanel();
          mMainBottomPanel.Invalidate(true);
-         mHighlighterEngine!.HighlightNow();
-         mRichTextBox!.TextChanged += OnEditorTextChanged;
+         mHighlighterEngine.HighlightNow();
+         mRichTextBox.TextChanged += OnEditorTextChanged;
          ResumeLayout(true);
       }
 
@@ -357,12 +375,10 @@
       }
 
       private void LayoutMainBottomPanel() {
-         mMainBottomPanel!.LayoutControls();
-         mRichTextBox!.Top = mMenuStrip!.Bottom;
-         mRichTextBox.Left = 0;
-         mRichTextBox.Width = ClientSize.Width;
-         mRichTextBox.Height = ClientSize.Height - mMainBottomPanel.Height - mMenuStrip.Height;
-         mMainBottomPanel.Top = mRichTextBox!.Bottom;
+         ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
+         ThrowIfNull(mMenuStrip, nameof(mMenuStrip));
+         mMainBottomPanel.LayoutControls();
       }
    }
 }

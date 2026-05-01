@@ -24,7 +24,7 @@
             ThrowIfNull(mThemePickerBottomPanel, nameof(mThemePickerBottomPanel));
             SuspendLayout();
             mThemePickerBottomPanel.SuspendLayout();
-            ApplyThemeToPanel();
+            ApplyTheme();
             mClusterContainer.Dock = DockStyle.Fill;
             mThemePickerBottomPanel.LayoutControls();
             mThemePickerBottomPanel.ResumeLayout(true);
@@ -63,7 +63,7 @@
             mClusterContainer.Controls.Add(cluster);
          }
 
-         public void ApplyThemeToPanel() {
+         public void ApplyTheme() {
             ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
             ThrowIfNull(mButtonBaseClusters, nameof(mButtonBaseClusters));
             ThrowIfNull(mThemePickerBottomPanel, nameof(mThemePickerBottomPanel));

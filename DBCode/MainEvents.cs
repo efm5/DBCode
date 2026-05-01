@@ -21,21 +21,15 @@
          UpdateOpacityMenuChecks(savedOpacity);
          EnsureWindowFitsMonitor(this, true);
          ApplyViewMode(ViewMode.Features);
-      }
-
-      private void MainForm_Shown(object? pSender, EventArgs pEventArgs) {
          UpdateTargetingStatusLabel();
-         mVersionLabel?.Top = (mMainBottomPanel!.Height - mVersionLabel.Height) / 2;
+         mActiveLayoutable?.LayoutControls();
+         Opacity = mUiState.mFormOpacity;
+         ClientSizeChanged += OnClientSizeChanged;
       }
 
       private void MainForm_FormClosing(object? pSender, FormClosingEventArgs pEventArgs) {
          ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
-         mUiState.mFormSize = Size;
-         mUiState.mFormLocation = Location;
-         mUiState.mThemeSize = mThemeBounds.Size;
-         mUiState.mThemeLocation = mThemeBounds.Location;
-         mUiState.mThemePickerSize = mThemePickerBounds.Size;
-         mUiState.mThemePickerLocation = mThemePickerBounds.Location;
+         mUiState.FormBounds = Bounds;
          mUiState.mFormOpacity = Opacity;
          mUiState.mThemePrimaryTabPageIndex = mThemePrimaryTabPageIndex;
          mUiState.mThemeTargetingTabIndexIndex = mThemeTargetingTabIndexIndex;
@@ -44,10 +38,6 @@
          mUiState.mCurrentThemeName = mCurrentTheme.mName;
 
          mUiState.WriteToSettings();
-         if (!mFirstTheme) {
-            Settings.Default.ThemeLocation = mThemeBounds.Location;
-            Settings.Default.ThemeSize = mThemeBounds.Size;
-         }
          Settings.Default.Save();
          mThemePanel?.Dispose();
          mMainBottomPanel?.Dispose();
@@ -56,8 +46,7 @@
          }
       }
 
-      protected override void OnClientSizeChanged(EventArgs pEventArgs) {
-         base.OnClientSizeChanged(pEventArgs);
+      internal static void OnClientSizeChanged(object? pSender, EventArgs pEventArgs) {
          mActiveLayoutable?.LayoutControls();
       }
       #endregion
