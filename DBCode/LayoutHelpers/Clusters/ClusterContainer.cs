@@ -98,7 +98,7 @@ namespace DBCode {
                }
             }
             finally {
-               ResumeLayout(false); // false = don't trigger another layout pass
+               ResumeLayout(false);
             }
          }
 
@@ -212,107 +212,6 @@ namespace DBCode {
                      index++;
                   }
                   y += cellHeight;
-               }
-            }
-            finally {
-               ResumeLayout(false);
-            }
-         }
-
-         //TODO: These ArrangeControls methods are Obsolete and should be removed. 
-         public void ArrangeControlsInRows(int pSpacing = 0) {
-            SuspendLayout();
-            try {
-               int y = 0;
-               foreach (Control control in Controls) {
-                  control.Location = new Point(0, y);
-                  y += control.Height + pSpacing;
-               }
-            }
-            finally {
-               ResumeLayout(false);
-            }
-         }
-
-         public void ArrangeControlsInColumns(int pSpacing = 0) {
-            SuspendLayout();
-            try {
-               int x = 0;
-               foreach (Control control in Controls) {
-                  control.Location = new Point(x, 0);
-                  x += control.Width + pSpacing;
-               }
-            }
-            finally {
-               ResumeLayout(false);
-            }
-         }
-
-         public void ArrangeControlsInGrid(int pColumns, int pRows, int pSpacing = 0) {
-            if (pColumns <= 0)
-               throw new ArgumentException("Number of columns must be greater than zero.", nameof(pColumns));
-            if (pRows <= 0)
-               throw new ArgumentException("Number of rows must be greater than zero.", nameof(pRows));
-            SuspendLayout();
-            try {
-               int controlCount = Controls.Count;
-               int requiredRows = (int)Math.Ceiling((double)controlCount / pColumns);
-               if (requiredRows > pRows)
-                  pRows = requiredRows;
-               int left = 0, top = 0, columnIndex = 0, rowIndex = 0;
-               List<int> columnWidths = [];
-               List<int> rowHeights = [];
-               for (int i = 0; i < pColumns; i++)
-                  columnWidths.Add(0);
-               for (int i = 0; i < pRows; i++)
-                  rowHeights.Add(0);
-               foreach (Control control in Controls) {
-                  if (columnIndex >= pColumns) {
-                     columnIndex = 0;
-                     rowIndex++;
-                  }
-                  if (control.Width > columnWidths[columnIndex])
-                     columnWidths[columnIndex] = control.Width;
-                  if (control.Height > rowHeights[rowIndex])
-                     rowHeights[rowIndex] = control.Height;
-                  columnIndex++;
-               }
-               columnIndex = 0;
-               rowIndex = 0;
-               left = 0;
-               top = 0;
-               foreach (Control control in Controls) {
-                  if (columnIndex >= pColumns) {
-                     columnIndex = 0;
-                     rowIndex++;
-                     left = 0;
-                     top += rowHeights[rowIndex - 1] + pSpacing;
-                  }
-                  control.Location = new Point(left, top);
-                  left += columnWidths[columnIndex] + pSpacing;
-                  columnIndex++;
-               }
-            }
-            finally {
-               ResumeLayout(false);
-            }
-         }
-
-         public void ArrangeControlsFlow(int pSpacing = 0) {
-            SuspendLayout();
-            try {
-               List<Control> rowList = [];
-               int tooWide = mPanelParent.ClientSize.Width, top = 0, left = mIndent;
-               for (int i = 0; i < Controls.Count; i++) {
-                  Controls[i].Location = new Point(left, top);
-                  left = Controls[i].Right + pSpacing;
-                  if (left > tooWide) {
-                     top = Bottommost(rowList)!.Bottom + mEmHalf;
-                     rowList.Clear();
-                     Controls[i].Location = new Point(mIndent, top);
-                     left = Controls[i].Right + pSpacing;
-                  }
-                  rowList.Add(Controls[i]);
                }
             }
             finally {

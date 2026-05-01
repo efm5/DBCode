@@ -1,5 +1,6 @@
 ﻿namespace DBCode {
    internal sealed class UiState {
+      // ───── Persisted geometry (read/written via Settings) ─────
       internal Size mFormSize;
       internal Point mFormLocation;
       internal Size mThemeSize;
@@ -12,6 +13,23 @@
       internal int mThemeHighlightTabPageIndex;
       internal LanguageKind mLanguageKind;
       internal string mCurrentThemeName;
+      internal Rectangle FormBounds {
+         get => new Rectangle(mFormLocation, mFormSize);
+         set { mFormLocation = value.Location; mFormSize = value.Size; }
+      }
+      internal Rectangle ThemeBounds {
+         get => new Rectangle(mThemeLocation, mThemeSize);
+         set { mThemeLocation = value.Location; mThemeSize = value.Size; }
+      }
+      internal Rectangle ThemePickerBounds {
+         get => new Rectangle(mThemePickerLocation, mThemePickerSize);
+         set { mThemePickerLocation = value.Location; mThemePickerSize = value.Size; }
+      }
+      // ───── Session-only geometry (not persisted) ─────
+      internal Rectangle mPickerBounds = new Rectangle(50, 50, 800, 600);
+      internal Rectangle mGetStringBounds = new Rectangle(50, 50, 200, 300);
+      internal Rectangle mColorPickerBounds;
+      internal Rectangle mFontPickerBounds;
 
       public UiState() {
          mFormSize = new Size(400, 300);

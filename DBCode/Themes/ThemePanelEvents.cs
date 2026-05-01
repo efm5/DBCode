@@ -3,6 +3,19 @@
 namespace DBCode {
    namespace Themes {
       internal sealed partial class ThemePanel : Panel {
+         protected override void OnHandleCreated(EventArgs pEventArgs) {
+            base.OnHandleCreated(pEventArgs);
+            SuspendLayout();
+            mThemeBottomPanel.mCancelButton!.Click += CancelButton_Click;
+            mThemeBottomPanel.mHelpButton!.Click += MainForm.Help_Click;
+            mApplyButton.Click += ApplyButton_Click;
+            mNewButton.Click += NewButton_Click;
+            mCloneButton.Click += CloneButton_Click;
+            Controls.AddRange([mPrimaryTabControl, mThemeBottomPanel, mThemesHeaderCluster]);
+            ResumeLayout(false);
+            BeginInvoke(new Action(() => { LayoutControls(); }));
+         }
+
          private void PrimaryTabControl_DrawItem(object? pSender, DrawItemEventArgs pArgs) {
             DrawTabControlItem(mPrimaryTabControl, pArgs);
          }
@@ -10,7 +23,6 @@ namespace DBCode {
          private void IncludeExcludeTabControl_DrawItem(object? pSender, DrawItemEventArgs pArgs) {
             DrawTabControlItem(mIncludeExcludeTabControl, pArgs);
          }
-
 
          private void HighlightTabControl_DrawItem(object? pSender, DrawItemEventArgs pArgs) {
             DrawTabControlItem(mHighlightTabControl, pArgs);
@@ -23,7 +35,7 @@ namespace DBCode {
          }
 
          private void IncludeExcludeTabControl_SelectedIndexChanged(object? pSender, EventArgs pArgs) {
-            mUiState.mThemeHighlightTabPageIndex = mHighlightTabControl.SelectedIndex;
+            mUiState.mThemeTargetingTabIndexIndex = mIncludeExcludeTabControl.SelectedIndex;
          }
 
          private void HighlightTabControl_SelectedIndexChanged(object? pSender, EventArgs pArgs) {
@@ -87,7 +99,6 @@ namespace DBCode {
 
          private void OnFontButtonClicked(object? pSender, EventArgs pArgs) {
             Button? button = pSender as Button;
-
             if (button?.Tag is not FontUsage usage)
                return;
             EnsureFontPickerPanel(mTemporaryTheme, usage, mTemporaryTheme.mFonts[(int)usage]);

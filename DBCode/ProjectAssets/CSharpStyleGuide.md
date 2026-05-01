@@ -69,6 +69,13 @@ All generated code must follow these rules without exception.
 • Fields of the same type are declared in a single comma‑separated statement when reasonable.
 • Reference‑type fields are explicitly initialized to null unless otherwise specified.
 
+1.7 Local Variables and Loop Variables
+• Plain camelCase — no prefix.
+• Keep names short but meaningful: index, control, token, line.
+• Single-level loops may use i as a counter.
+• Once loops nest, abandon i/j/k entirely and use full camelCase
+  names that make each level's purpose unambiguous.
+
 ===========================================
 2. COMMENTING, FORMATTING AND LAYOUT RULES
 ===========================================

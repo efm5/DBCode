@@ -72,6 +72,9 @@
                control.Left = rightEdge - control.Width;
                rightEdge = control.Left - mEm;
             }
+            int centerY = Height / 2;
+            foreach (Control control in Controls)
+               control.Top = centerY - (control.Height / 2);
          }
 
          internal void SetFontAndColor() {
