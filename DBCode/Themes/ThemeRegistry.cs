@@ -1,22 +1,27 @@
 ﻿namespace DBCode.Themes {
    public static class ThemeRegistry {
       public static void Initialize() {
+         ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
          AddBuiltIns();
          List<Theme> loaded = ThemeManager.LoadThemes();
          AddUserThemes(loaded);
          List<Theme> validated = ValidateThemes(mThemes);
          mThemes = validated;
-         mPreviousThemeName = SelectThemeName(mThemes);
+         mUsingThemeName = SelectThemeName(mThemes);
+         if (SetCurrentThemeName(mUsingThemeName)) {
+            mCurrentTheme.Dispose();
+            mCurrentTheme = GetCurrentThemeClone();
+         }
       }
 
       public static void Reload() {
          Initialize();
       }
 
-      public static bool SetCurrentTheme(string pName) {
+      public static bool SetCurrentThemeName(string pName) {
          foreach (Theme theme in mThemes) {
             if (String.Equals(theme.mName, pName, StringComparison.OrdinalIgnoreCase)) {
-               mPreviousThemeName = theme.mName;
+               mUsingThemeName = theme.mName;
                return true;
             }
          }
@@ -38,7 +43,7 @@
 
       public static Theme GetCurrentThemeClone() {
          foreach (Theme theme in mThemes) {
-            if (String.Equals(theme.mName, mPreviousThemeName, StringComparison.OrdinalIgnoreCase))
+            if (String.Equals(theme.mName, mUsingThemeName, StringComparison.OrdinalIgnoreCase))
                return theme.Clone();
          }
          return ThemeDefaults.DefaultLight;
@@ -81,7 +86,7 @@
 
       private static string SelectThemeName(List<Theme> pThemes) {
          foreach (Theme theme in pThemes) {
-            if (String.Equals(theme.mName, mPreviousThemeName, StringComparison.OrdinalIgnoreCase))
+            if (String.Equals(theme.mName, mUsingThemeName, StringComparison.OrdinalIgnoreCase))
                return theme.mName;
          }
          if (pThemes.Count > 0)

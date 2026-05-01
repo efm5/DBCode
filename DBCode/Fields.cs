@@ -148,10 +148,11 @@
          mAnchorBottomLeftRight = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
          mAnchorBottomRight = AnchorStyles.Bottom | AnchorStyles.Right,
          mAnchorTopLeft = AnchorStyles.Top | AnchorStyles.Left,
-         mAnchorTopLeftBottomRight = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right,
+         mAnchorTopLeftBottomRight =
+         AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right,
          mAnchorTopRight = AnchorStyles.Top | AnchorStyles.Right;
-      public static bool mFirstGray = true, mFirstLaunch = true, mForceActivation = true, mIsTargetingEnabled = false,
-         mPreMinimalControlBox = true, mReturnToTop = true, mFirstTheme = true, mFirstThemePicker = true,
+      public static bool mFirstGray = true, mFirstLaunch = true, mForceActivation = true,
+         mIsTargetingEnabled = false, mPreMinimalControlBox = true, mReturnToTop = true, mFirstTheme = true,
          mFirstColorPicker = true, mFirstFontPicker = true;
       public static double mOpacity;
       public static float mFontWidthAdjustment = 0.5f;
@@ -159,11 +160,13 @@
       public static MainForm? mForm = null;
       public static HighlighterEngine? mHighlighterEngine = null;
       public static Icon[] mIcons = new Icon[4];
-      public static int mThemeHighlightTabPageIndex = 0, mThemePrimaryTabPageIndex = 0;
+      public static ILayoutable? mActiveLayoutable = null;
+      public static int mThemeHighlightTabPageIndex = 0, mThemePrimaryTabPageIndex = 0, mThemeTargetingTabIndexIndex = 0;
       public static IntPtr mTargetWindow = IntPtr.Zero;
       public static readonly IntPtr mInsertAfterWindow = new IntPtr(0);
       public static LanguageKind mCurrentLanguage = LanguageKind.CSharp;
       public static MenuStrip? mMenuStrip = null;
+      public static Panel? mMainPanel = null;
       public static ThemePanel? mThemePanel = null;
       public static ColorPickerPanel? mColorPickerPanel = null;
       public static FontPickerPanel? mFontPickerPanel = null;
@@ -171,16 +174,17 @@
       public static GetString? mGetStringPanel = null;
       public static readonly PropertyInfo[] mPredefinedColors =
          typeof(Color).GetProperties(BindingFlags.Public | BindingFlags.Static);
-      public static Rectangle mPreThemeBounds = new Rectangle(50, 50, 800, 600), mThemeBounds,
-         mPreThemePickerBounds = new Rectangle(50, 50, 800, 600), mThemePickerBounds,
-         mPrePickerBounds = new Rectangle(50, 50, 800, 600), mColorPickerBounds, mFontPickerBounds,
-         mPreGetStringBounds = new Rectangle(50, 50, 800, 600);
+      public static Rectangle mPreThemeBounds = new Rectangle(50, 50, 800, 600),
+         mPreThemePickerBounds = new Rectangle(50, 50, 800, 600),
+         mPrePickerBounds = new Rectangle(50, 50, 800, 600),
+         mPreGetStringBounds = new Rectangle(50, 50, 800, 600),
+         mThemeBounds, mColorPickerBounds, mFontPickerBounds, mThemePickerBounds;
       public static RichTextBox? mRichTextBox = null;
 #pragma warning disable CS0649
       public static Size mMonitorSize, mResolution;
 #pragma warning restore CS0649
       public static string mPreMinimalText = string.Empty, mTargetWindowName = "Under construction",
-         mVersionString = "0.0.0.0", mPreviousThemeName = string.Empty;
+         mVersionString = "0.0.0.0", mUsingThemeName = string.Empty;
       public static readonly string mAppFolder = AppDomain.CurrentDomain.BaseDirectory,
         mMyDocumentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\",
         mDataFolder = mMyDocumentsFolder + @"DBCode_Data\", mHelpFolder = mAppFolder + @"Help\", mCurrently = "Currently:  ";

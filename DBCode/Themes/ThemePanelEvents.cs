@@ -68,7 +68,7 @@ namespace DBCode {
             }
             Theme newTheme = mTemporaryTheme.Clone(pResult);
             AddTheme(newTheme);
-            SetCurrentTheme(pResult);
+            SetCurrentThemeName(pResult);
             mCurrentTheme = newTheme;
             mThemeIsDirty = true;
             CloseThemePanel();

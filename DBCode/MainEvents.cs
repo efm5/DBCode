@@ -5,9 +5,10 @@
          Size savedSize = mUiState.mFormSize;
          Point savedLocation = mUiState.mFormLocation;
          double savedOpacity = mUiState.mFormOpacity;
-         mThemePrimaryTabPageIndex = mUiState.mThemePrimaryTabPageIndex;
-         mThemeHighlightTabPageIndex = mUiState.mThemeHighlightTabPageIndex;
 
+         mThemePrimaryTabPageIndex = mUiState.mThemePrimaryTabPageIndex;
+         mThemeTargetingTabIndexIndex = mUiState.mThemeTargetingTabIndexIndex;
+         mThemeHighlightTabPageIndex = mUiState.mThemeHighlightTabPageIndex;
          if (!savedSize.IsEmpty)
             Size = savedSize;
          if (!savedLocation.IsEmpty) {
@@ -16,7 +17,6 @@
          }
          if (savedOpacity < 0.0 || savedOpacity > 1.0)
             savedOpacity = 1.0;
-
          Opacity = savedOpacity;
          UpdateOpacityMenuChecks(savedOpacity);
          EnsureWindowFitsMonitor(this, true);
@@ -24,17 +24,25 @@
       }
 
       private void MainForm_Shown(object? pSender, EventArgs pEventArgs) {
-         //LayoutBottomPanel();
          UpdateTargetingStatusLabel();
          mVersionLabel?.Top = (mMainBottomPanel!.Height - mVersionLabel.Height) / 2;
       }
 
       private void MainForm_FormClosing(object? pSender, FormClosingEventArgs pEventArgs) {
-         mUiState.mFormOpacity = Opacity;
+         ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
          mUiState.mFormSize = Size;
          mUiState.mFormLocation = Location;
+         mUiState.mThemeSize = mThemeBounds.Size;
+         mUiState.mThemeLocation = mThemeBounds.Location;
+         mUiState.mThemePickerSize = mThemePickerBounds.Size;
+         mUiState.mThemePickerLocation = mThemePickerBounds.Location;
+         mUiState.mFormOpacity = Opacity;
          mUiState.mThemePrimaryTabPageIndex = mThemePrimaryTabPageIndex;
+         mUiState.mThemeTargetingTabIndexIndex = mThemeTargetingTabIndexIndex;
          mUiState.mThemeHighlightTabPageIndex = mThemeHighlightTabPageIndex;
+         mUiState.mLanguageKind = mCurrentLanguage;
+         mUiState.mCurrentThemeName = mCurrentTheme.mName;
+
          mUiState.WriteToSettings();
          if (!mFirstTheme) {
             Settings.Default.ThemeLocation = mThemeBounds.Location;
@@ -50,8 +58,7 @@
 
       protected override void OnClientSizeChanged(EventArgs pEventArgs) {
          base.OnClientSizeChanged(pEventArgs);
-         if (mMainBottomPanel != null && mRichTextBox != null && mMenuStrip != null)
-            LayoutMainBottomPanel();
+         mActiveLayoutable?.LayoutControls();
       }
       #endregion
 
@@ -104,7 +111,6 @@
             return;
          if (!double.TryParse(tagObject.ToString(), out opacityValue))
             return;
-
          Opacity = opacityValue;
          UpdateOpacityMenuChecks(opacityValue);
       }

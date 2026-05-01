@@ -50,6 +50,8 @@
          mForm.SuspendLayout();
          if (!mFirstTheme)
             mThemeBounds = mForm.Bounds;
+         mUiState.mThemeLocation = Location;
+         mUiState.mThemeSize = Size;
          mForm.ControlBox = true;
          dirtyTheme = mThemePanel.ThemeIsDirty();
          mThemePanel.Visible = false;
@@ -74,13 +76,10 @@
 
       public void EnsureThemePickerPanel() {
          mPreThemePickerBounds = Bounds;
+         Bounds = mThemePickerBounds;
          Bounds = new Rectangle(mUiState.mThemePickerLocation, mUiState.mThemePickerSize);
-         if (mThemePickerPanel == null) {
-            ThrowIfNull(mForm, nameof(mForm));
-            mThemePickerPanel = new ThemePickerPanel();
-         }
-         if (!mFirstThemePicker)
-            Bounds = mThemePickerBounds;
+         mThemePickerBounds = Bounds;
+         mThemePickerPanel = new ThemePickerPanel();
          ShowThemePickerPanel();
       }
 
@@ -93,10 +92,10 @@
             Controls.Remove(mRichTextBox);
          if (Controls.Contains(mMainBottomPanel))
             Controls.Remove(mMainBottomPanel);
-         if (!Controls.Contains(mThemePickerPanel))
-            Controls.Add(mThemePickerPanel);
-         mThemePickerPanel.PerformLayout();
-         mThemePickerPanel.Dock = DockStyle.Fill;
+         Controls.Add(mThemePickerPanel);
+         PerformLayout();
+         mThemePickerPanel.LayoutPanel();
+         mThemePickerPanel.mClusterContainer!.LayoutClusters();
          mThemePickerPanel.Visible = true;
          mThemePickerPanel.BringToFront();
          mThemePickerPanel.Show();
@@ -109,11 +108,11 @@
          ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
          ThrowIfNull(mMenuStrip, nameof(mMenuStrip));
          mForm.SuspendLayout();
+         mThemePickerBounds = mForm.Bounds;
+         //mUiState.mThemePickerLocation = Location;
+         //mUiState.mThemePickerSize = Size;
          mForm.ControlBox = true;
-         mThemePickerPanel.Visible = false;
-         mThemePickerPanel.SendToBack();
-         if (mForm.Controls.Contains(mThemePickerPanel))
-            mForm.Controls.Remove(mThemePickerPanel);
+         mForm.Controls.Remove(mThemePickerPanel);
          mThemePickerPanel.Dispose();
          mThemePickerPanel = null;
          mForm.Bounds = mPreThemePickerBounds;

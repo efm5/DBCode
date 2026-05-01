@@ -14,6 +14,7 @@ namespace DBCode {
             mExamplesClusters = [];
          private readonly List<List<BaseCluster>> mAllClusters = [];
          public static bool mRepaint = false;
+         //public static BottomPanel mThemeBottomPanel;//DEBUG efm5 2026 04 30 eventually implement
          private readonly Button mApplyButton, mCancelButton, mCloneButton, mHelpButton, mNewButton;
          private ClusterContainer mExamplesContainer, mFontsContainer, mInterfaceColorsContainer, mCSharpColorsContainer,
             mCColorsContainer, mCppColorsContainer, mBasicColorsContainer, mFSharpColorsContainer, mHTMLColorsContainer,
@@ -859,6 +860,12 @@ All text appears in the default foreground color."
             mPythonColorsContainer = new ClusterContainer(mHighlightPythonScrollPanel, mPythonColorClusters, ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
                Name = "PythonColorsClusterContainer"
             };
+            //DEBUG efm5 2026 04 30 implement Eventually
+            //mThemeBottomPanel = new BottomPanel {
+            //   Name = "ThemeBottomPanel",
+            //   TabIndex = mTabIndex++
+            //};
+            //mActiveLayoutable = mThemeBottomPanel;
             mHighlightPythonScrollPanel.Controls.AddRange([mPythonHeaderCluster, mPythonColorsContainer]);
             mPrimaryTabControl.TabPages[(int)PrimaryTabPageUsage.Interface].Controls.Add(mPrimaryScrollPanel);
             mPrimaryTabControl.TabPages[(int)PrimaryTabPageUsage.Color].Controls.Add(mHighlightTabControl);

@@ -3,7 +3,7 @@
       public MainForm() {
          mForm = this;
          InitializeUIPart1();
-         MinimumSize = new Size(400, 200);
+         MinimumSize = new Size(300, 150);
          Assembly assembly = Assembly.GetExecutingAssembly();
          FileVersionInfo? fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
          if (fileVersionInfo == null)
@@ -26,6 +26,7 @@
       }
 
       private void MakeNews() {
+         ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
          mMenuStrip = new MenuStrip();
          mTargetingMenuItem = new ToolStripMenuItem();
          mVisibilityMenuItem = new ToolStripMenuItem();
@@ -62,19 +63,25 @@
          mMarkdownTSMI = new ToolStripMenuItem();
          mPythonTSMI = new ToolStripMenuItem();
          mCurrentLanguageIsTSMI = new ToolStripMenuItem();
+         mMainPanel = new Panel() {
+            Name = "mainPanel",
+            AutoScroll = true,
+            Dock = DockStyle.Fill,
+            TabIndex = mTabIndex++,
+            BackColor = mCurrentTheme.mInterfaceColors[(int)ColorUsage.InterfaceBackground]
+         };
          mRichTextBox = new RichTextBox();
          mSendAllButton = new Button();
          mPasteSelectedButton = new Button();
          mTargetingLabel = new Label();
          mVersionLabel = new Label();
          mRevertButton = new Button();
-         mMainBottomPanel = new BottomPanel(mCurrentTheme!, "E&xit");
+         mMainBottomPanel = new BottomPanel(mCurrentTheme, "E&xit");
       }
 
       private void InitializeUIPart1() {
          mUiState = new UiState();
          mFirstLaunch = Settings.Default.FirstLaunch;
-         mThemeBounds = new Rectangle(Settings.Default.ThemeLocation, Settings.Default.ThemeSize);
          mUiState.ReadFromSettings();
          if (mFirstLaunch) {
             PerformFirstLaunchInitialization();
@@ -82,11 +89,13 @@
          }
          ThemeRegistry.Initialize(); // must precede MakeNews so mCurrentTheme and mThemes are ready
          MakeNews();
+         ThrowIfNull(mMainPanel, nameof(mMainPanel));
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
          LoadEmbeddedIcons();
          InitializeUIPart2();
          InitializeUIPart3();
          SuspendLayout();
-         //DEBUG efm5 2026 04 2 many of these need tab index – TabIndex = mTabIndex++;
+         Controls.Add(mMainPanel);
          StartPosition = FormStartPosition.Manual;
          ClientSize = new Size(800, 800);
          MinimumSize = new Size(400, 300);
@@ -138,8 +147,8 @@
          Load += MainForm_Load;
          Shown += MainForm_Shown;
          FormClosing += MainForm_FormClosing;
-         mHighlighterEngine = new HighlighterEngine(mRichTextBox!, mCurrentLanguage);
-         mRichTextBox!.TextChanged += OnEditorTextChanged;
+         mHighlighterEngine = new HighlighterEngine(mRichTextBox, mCurrentLanguage);
+         mRichTextBox.TextChanged += OnEditorTextChanged;
          InitializeIcon();
          CheckLanguage();
          AdjustForThemeFont(mCurrentTheme!.mFonts[(int)FontUsage.Interface]);
@@ -255,21 +264,29 @@
       }
 
       private void InitializeUIPart3() {
-         mRichTextBox!.Multiline = true;
+         ThrowIfNull(mMainPanel, nameof(mMainPanel));
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
+         ThrowIfNull(mSendAllButton, nameof(mSendAllButton));
+         ThrowIfNull(mPasteSelectedButton, nameof(mPasteSelectedButton));
+         ThrowIfNull(mTargetingLabel, nameof(mTargetingLabel));
+         ThrowIfNull(mVersionLabel, nameof(mVersionLabel));
+         ThrowIfNull(mRevertButton, nameof(mRevertButton));
+         ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
+         mRichTextBox.Multiline = true;
          mRichTextBox.ScrollBars = RichTextBoxScrollBars.Both;
          mRichTextBox.AcceptsTab = true;
          mRichTextBox.WordWrap = false;
          mRichTextBox.Anchor = mAnchorTopLeftBottomRight;
          mRichTextBox.Name = "mainTextBox";
          mRichTextBox.TabIndex = mTabIndex++;
-         mSendAllButton!.Text = "&Send All";
+         mSendAllButton.Text = "&Send All";
          mSendAllButton.Name = "sendAllButton";
          mSendAllButton.TabIndex = mTabIndex++;
          mSendAllButton.AutoSize = true;
          mSendAllButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
          mSendAllButton.Tag = PasteMode.SendAll;
          mSendAllButton.Click += TransMove_Click;
-         mPasteSelectedButton!.Text = "&Paste Selected";
+         mPasteSelectedButton.Text = "&Paste Selected";
          mPasteSelectedButton.Name = "pasteSelectedButton";
          mPasteSelectedButton.TabIndex = mTabIndex++;
          mPasteSelectedButton.AutoSize = true;
@@ -281,25 +298,26 @@
          mTargetingLabel.ImageAlign = ContentAlignment.MiddleLeft;
          mTargetingLabel.TextAlign = ContentAlignment.MiddleRight;
          mTargetingLabel.TabIndex = mTabIndex++;
-         mVersionLabel!.Name = "versionLabel";
+         mVersionLabel.Name = "versionLabel";
          mVersionLabel.Text = "v: " + mVersionString;
          mVersionLabel.AutoSize = true;
          mVersionLabel.TextAlign = ContentAlignment.MiddleLeft;
          mVersionLabel.TabIndex = mTabIndex++;
-         mRevertButton!.Text = "&Revert";
+         mRevertButton.Text = "&Revert";
          mRevertButton.Name = "revertButton";
          mRevertButton.TabIndex = mTabIndex++;
          mRevertButton.AutoSize = true;
          mRevertButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
          mRevertButton.Tag = PasteMode.SendAll;
          mRevertButton.Click += RevertButton_Click;
-         mMainBottomPanel!.AddLeftControl(mSendAllButton);
+         mMainBottomPanel.AddLeftControl(mSendAllButton);
          mMainBottomPanel.AddLeftControl(mPasteSelectedButton);
          mMainBottomPanel.AddLeftControl(mTargetingLabel); // must be last — stretches to fill
          mMainBottomPanel.AddRightControl(mVersionLabel);  // added first = leftmost of right group
          mMainBottomPanel.AddRightControl(mRevertButton);
          mMainBottomPanel.mCancelButton!.Click += ExitButton_Click;
-         Controls.AddRange([mRichTextBox!, mMainBottomPanel!, mMenuStrip!]);
+         mMainPanel.Controls.AddRange([mRichTextBox!, mMainBottomPanel!, mMenuStrip!]);
+         mActiveLayoutable = mMainBottomPanel;
       }
    }
 }

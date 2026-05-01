@@ -1,6 +1,6 @@
 ﻿namespace DBCode {
    internal static partial class LayoutHelpers {
-      internal sealed class BottomPanel : Panel {
+      internal sealed class BottomPanel : Panel, ILayoutable {
          private readonly List<Control> mLeftControls = [];
          private readonly List<Control> mRightControls = [];
          internal Button? mHelpButton = null, mCancelButton = null;
@@ -47,7 +47,7 @@
             return pControl;
          }
 
-         internal void LayoutControls() {
+         public void LayoutControls() {
             Control? parent = Parent;
             if (parent == null)
                return;
