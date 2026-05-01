@@ -13,6 +13,7 @@
       internal int mThemeHighlightTabPageIndex;
       internal LanguageKind mLanguageKind;
       internal string mCurrentThemeName;
+      internal bool mFirstTheme;
       internal Rectangle FormBounds {
          get => new Rectangle(mFormLocation, mFormSize);
          set { mFormLocation = value.Location; mFormSize = value.Size; }
@@ -44,6 +45,7 @@
          mThemeHighlightTabPageIndex = 0;
          mLanguageKind = LanguageKind.CSharp;
          mCurrentThemeName = string.Empty;
+         mFirstTheme = true;
       }
 
       public void ReadFromSettings() {
@@ -60,6 +62,7 @@
          mThemePickerLocation = Settings.Default.ThemePickerLocation;
          mCurrentLanguage = (LanguageKind)Settings.Default.CurrentLanguage;
          mCurrentThemeName = Settings.Default.CurrentThemeName;
+         mFirstTheme = Settings.Default.FirstTheme;
       }
 
       public void WriteToSettings() {
@@ -75,6 +78,7 @@
          Settings.Default.ThemeHighlightTabPageIndex = mThemeHighlightTabPageIndex;
          Settings.Default.CurrentLanguage = (int)mCurrentLanguage;
          Settings.Default.CurrentThemeName = mCurrentThemeName;
+         Settings.Default.FirstTheme = mFirstTheme;
       }
    }
 }

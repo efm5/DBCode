@@ -285,9 +285,24 @@ All text appears in the default foreground color."
             AutoScroll = true;
             AutoSize = false;
             BackColor = Color.Transparent;
-            mApplyButton = new Button();
-            mNewButton = new Button();
-            mCloneButton = new Button();
+            mApplyButton = new Button {
+               Name = "ApplyButton",
+               Text = "&Apply",
+               AutoSize = true,
+               AutoSizeMode = AutoSizeMode.GrowAndShrink
+            };
+            mNewButton = new Button {
+               Name = "NewButton",
+               Text = "&New",
+               AutoSize = true,
+               AutoSizeMode = AutoSizeMode.GrowAndShrink
+            };
+            mCloneButton = new Button {
+               Name = "CloneButton",
+               Text = "C&lone",
+               AutoSize = true,
+               AutoSizeMode = AutoSizeMode.GrowAndShrink
+            };
             mThemesHeaderCluster = new HeaderLabelCluster(mTemporaryTheme,
                $"Current Theme's Name: \u201c{mCurrentTheme.mName}\u201d", HeaderLabelSize.Normal);
             mTargetingHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "Targeting", HeaderLabelSize.Small);
@@ -351,9 +366,6 @@ All text appears in the default foreground color."
                mIncludeDataGridView.Rows.Add("");
                mExcludeDataGridView.Rows.Add("");
             }
-            mApplyButton.Text = "&Apply";
-            mNewButton.Text = "&New";
-            mCloneButton.Text = "C&lone";
             mThemeBottomPanel = new BottomPanel(mTemporaryTheme, "&Cancel") {
                Name = $"ThemeBottomPanel{mTabIndex}",
                TabIndex = mTabIndex++
@@ -575,7 +587,7 @@ All text appears in the default foreground color."
             mExampleGroupBox.Controls.AddRange([mExampleButton, mExampleCheckBox, mExampleRichTextBox, mExampleRadioButton]);
             mExampleStatusLabel = new ToolStripStatusLabel {
                Name = "ExampleStatusLabel",
-               Text = "Status: Ready",
+               Text = "Bottom Panel Example",
                Spring = true
             };
             mExampleHostButton = new Button {
