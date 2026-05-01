@@ -5,7 +5,7 @@ namespace DBCode {
       internal sealed class ColorSwatch : Panel {
          private ColorSwatchUsage mColorSwatchUsage = (ColorSwatchUsage)(-1);
          private ColorPickerSwatchUsage mPickerUsage = (ColorPickerSwatchUsage)(-1);
-         private SyntaxColorSwatchUsage mSyntaxColorSwatchUsage = (SyntaxColorSwatchUsage)(-1);
+         private TokenKind mTokenKind = (TokenKind)(-1);
          private Color mSwatchColor = Color.Black;
          private Size mSwatchSize = new Size(24, 24);
          public event ColorSwatchClickedHandler? ColorSwatchClicked;
@@ -40,8 +40,8 @@ namespace DBCode {
             MouseClick += OnMouseClick;
          }
 
-         public ColorSwatch(SyntaxColorSwatchUsage pUsage, Color pInitialColor, int pSize) {
-            mSyntaxColorSwatchUsage = pUsage;
+         public ColorSwatch(TokenKind pTokenKind, Color pInitialColor, int pSize) {
+            mTokenKind = pTokenKind;
             mSwatchColor = pInitialColor;
             if (pSize < 8)
                mSwatchSize = GetSwatchSize();
@@ -74,8 +74,8 @@ namespace DBCode {
                ColorSwatchClicked?.Invoke(this, mColorSwatchUsage);
             else if (mPickerUsage != (ColorPickerSwatchUsage)(-1))
                PickerSwatchClicked?.Invoke(this, mPickerUsage);
-            else if (mSyntaxColorSwatchUsage != (SyntaxColorSwatchUsage)(-1))
-               SyntaxSwatchClicked?.Invoke(this, mSyntaxColorSwatchUsage);
+            else if (mTokenKind != (TokenKind)(-1))
+               SyntaxSwatchClicked?.Invoke(this, mTokenKind);
          }
 
          protected override void OnPaint(PaintEventArgs pArgs) {

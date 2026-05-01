@@ -1,26 +1,26 @@
 ﻿namespace DBCode.Syntax {
    internal enum TokenKind {
-      [DisplayText("Unknown")]
+      [DisplayText("Unknown Token Color")]
       Unknown,
-      [DisplayText("Whitespace")]
+      [DisplayText("Whitespace Token Color")]
       Whitespace,
-      [DisplayText("Identifier")]
+      [DisplayText("Identifier Token Color")]
       Identifier,
-      [DisplayText("Keyword")]
+      [DisplayText("Keyword Token Color")]
       Keyword,
-      [DisplayText("Number")]
+      [DisplayText("Number Token Color")]
       Number,
-      [DisplayText("String")]
+      [DisplayText("String Literal Token Color")]
       StringLiteral,
-      [DisplayText("Character")]
+      [DisplayText("Character Literal Token Color")]
       CharLiteral,
-      [DisplayText("Comment")]
+      [DisplayText("Comment Token Color")]
       Comment,
-      [DisplayText("Processor Directive")]
+      [DisplayText("Preprocessor Directive Token Color")]
       PreprocessorDirective,
-      [DisplayText("Operator")]
+      [DisplayText("Operator Token Color")]
       Operator,
-      [DisplayText("Punctuation")]
+      [DisplayText("Punctuation Token Color")]
       Punctuation
    }
 }

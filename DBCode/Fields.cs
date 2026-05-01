@@ -1,4 +1,5 @@
-﻿namespace DBCode {
+﻿//File: Fields.cs
+namespace DBCode {
    #region enumerations
    public enum ViewMode { Features, Minimal }
 
@@ -76,31 +77,6 @@
       Green,
       Blue,
       Demo
-   }
-
-   public enum SyntaxColorSwatchUsage {
-      [DisplayText("Unknown Token Color")]
-      Unknown,
-      [DisplayText("Whitespace Token Color")]
-      Whitespace,
-      [DisplayText("Identifier Token Color")]
-      Identifier,
-      [DisplayText("Keyword Token Color")]
-      Keyword,
-      [DisplayText("Number Token Color")]
-      Number,
-      [DisplayText("String Literal Token Color")]
-      StringLiteral,
-      [DisplayText("Character Literal Token Color")]
-      CharLiteral,
-      [DisplayText("Comment Token Color")]
-      Comment,
-      [DisplayText("Preprocessor Directive Token Color")]
-      PreprocessorDirective,
-      [DisplayText("Operator Token Color")]
-      Operator,
-      [DisplayText("Punctuation Token Color")]
-      Punctuation
    }
 
    public enum ColorRole : int {
@@ -225,10 +201,10 @@
          "SP Quick Panel", "SPQuickPanel", "SP Search", "SPSearch", "svchost", "SystemSettings", "TextInputHost",
          "Windows Explorer", "XboxApp" ],
          mIDEs = [
-            //efm5 these are case insensitive; Uses Contains() – “Visual Studio” matches “Visual Studio Code”
+            //efm5 these are case insensitive; Uses Contains() – "Visual Studio" matches "Visual Studio Code"
             //Appropriate target Windows to paste into
             "Arduino", "Eclipse", "Emacs", "IntelliJ", "NetBeans", "Particle", "PSPad", "Visual Studio", "vim", "Xcode"  ];
-      public static readonly string mUnicodeSampleString = "Unicode test: ÀÑÇ ÿ ɱ ǵ ʰ ā̋ ȇ ō̱ ╭╯ 🜁";
+      public static readonly string mUnicodeSampleString = "Unicode test: ÀÑÇ ÿ ɱ ǵ ʰ ā̋ ȇ ō̱ ╭╯ 🜁";
       public static List<Theme> mThemes = [];//efm5 This line and the next must be before any code that uses mThemes – Such as the next line
       public static Theme? mCurrentTheme = ThemeBuiltIns.CreateDarkTheme(false);
       public static readonly ToolStripSeparator toolStripSeparator1 = new ToolStripSeparator();
@@ -252,3 +228,4 @@
    }
    #endregion
 }
+

@@ -6,7 +6,7 @@
          private Label mLabel;
          private ColorSwatchUsage mColorUsage = (ColorSwatchUsage)(-1);
          private ColorPickerSwatchUsage mColorPickerUsage = (ColorPickerSwatchUsage)(-1);
-         private SyntaxColorSwatchUsage mSyntaxColorUsage = (SyntaxColorSwatchUsage)(-1);
+         private TokenKind mTokenKind = (TokenKind)(-1);
 
          public event ColorSwatchClickedHandler? SwatchClicked;
          public event ColorPickerSwatchClickedHandler? PickerSwatchClicked;
@@ -76,9 +76,9 @@
          }
 
          public LabeledButtonColorSwatchCluster(Theme pTheme, string pLabelText, string pButtonText,
-            SyntaxColorSwatchUsage pUsage, LabelPosition pLabelPosition, Color pInitialColor, Color? pBackgroundColor = null)
+            TokenKind pTokenKind, LabelPosition pLabelPosition, Color pInitialColor, Color? pBackgroundColor = null)
             : base(pTheme, pBackgroundColor) {
-            mSyntaxColorUsage = pUsage;
+            mTokenKind = pTokenKind;
             mLabelPosition = pLabelPosition;
             mLabel = new Label() {
                TabIndex = TAB_INDEX_IGNORED,
@@ -98,10 +98,10 @@
                AutoSizeMode = AutoSizeMode.GrowAndShrink,
                Font = CreateNewFont(),
                ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
-               Tag = pUsage
+               Tag = pTokenKind
             };
             mButton.Click += Button_Click;
-            mSwatch = new ColorSwatch(pUsage, pInitialColor, -1);
+            mSwatch = new ColorSwatch(pTokenKind, pInitialColor, -1);
             mSwatch.SyntaxSwatchClicked += Swatch_Click;
             Controls.AddRange([mLabel, mButton, mSwatch]);
             LayoutControls();
@@ -121,8 +121,8 @@
                SwatchClicked?.Invoke(this, mColorUsage);
             else if (mColorPickerUsage != (ColorPickerSwatchUsage)(-1))
                PickerSwatchClicked?.Invoke(this, mColorPickerUsage);
-            else if (mSyntaxColorUsage != (SyntaxColorSwatchUsage)(-1))
-               SyntaxSwatchClicked?.Invoke(this, mSyntaxColorUsage);
+            else if (mTokenKind != (TokenKind)(-1))
+               SyntaxSwatchClicked?.Invoke(this, mTokenKind);
          }
 
          private void Swatch_Click(object? pSender, ColorSwatchUsage pUsage) {
@@ -133,8 +133,8 @@
             PickerSwatchClicked?.Invoke(this, pUsage);
          }
 
-         private void Swatch_Click(object? pSender, SyntaxColorSwatchUsage pUsage) {
-            SyntaxSwatchClicked?.Invoke(this, pUsage);
+         private void Swatch_Click(object? pSender, TokenKind pTokenKind) {
+            SyntaxSwatchClicked?.Invoke(this, pTokenKind);
          }
 
          internal override void LayoutCluster() {

@@ -11,6 +11,7 @@ namespace DBCode {
             mApplyButton.Click += ApplyButton_Click;
             mNewButton.Click += NewButton_Click;
             mCloneButton.Click += CloneButton_Click;
+            mExampleScrollPanel!.ClientSizeChanged += ExampleScrollPanel_ClientSizeChanged;
             Controls.AddRange([mPrimaryTabControl, mThemeBottomPanel, mThemesHeaderCluster]);
             ResumeLayout(false);
             BeginInvoke(new Action(() => { LayoutControls(); }));
@@ -49,6 +50,10 @@ namespace DBCode {
             box.TextChanged -= OnExampleTextChanged;
             HighlightExampleBox(box, language);
             box.TextChanged += OnExampleTextChanged;
+         }
+
+         private void ExampleScrollPanel_ClientSizeChanged(object? pSender, EventArgs pArgs) {
+            SizeExamplesContainer();
          }
 
          private void NewButton_Click(object? pSender, EventArgs pArgs) {
@@ -95,6 +100,13 @@ namespace DBCode {
             if (swatch == null)
                return;
             EnsureColorPickerPanel(mTemporaryTheme, (ColorSwatchUsage)pUsage, swatch.GetColor());
+         }
+
+         private void OnSyntaxColorSwatchClicked(object? pSender, TokenKind pTokenKind) {
+            LabeledButtonColorSwatchCluster? swatch = pSender as LabeledButtonColorSwatchCluster;
+            if (swatch == null)
+               return;
+            // efm5 TODO: wire to color picker for syntax colors
          }
 
          private void OnFontButtonClicked(object? pSender, EventArgs pArgs) {

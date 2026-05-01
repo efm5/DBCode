@@ -526,15 +526,16 @@ All text appears in the default foreground color."
             AddFontCluster(mFontsClusters, $"The Status Strip Font: {font}", "Status Strip", FontUsage.Status, LabelPosition.Right);
             font = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Text].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Text].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Text].Style}";
             AddFontCluster(mFontsClusters, $"The Textbox Font: {font}", "Text Box", FontUsage.Text, LabelPosition.Right);
-            mFontsContainer =
-               new ClusterContainer(mPrimaryScrollPanel, mFontsClusters, ClusterLayoutMode.FixedRows, 0, 0, 0, 4) {
-                  Name = "FontsClusterContainer"
-               };
-            mPrimaryScrollPanel.Controls.AddRange(mFontsContainer.mClusters.Cast<Control>().ToArray());
+            mFontsContainer = new ClusterContainer(mPrimaryScrollPanel, mFontsClusters, ClusterLayoutMode.FixedRows, 0, 0, 0, 4) {
+               Name = "FontsClusterContainer"
+            };
+            mPrimaryScrollPanel.Controls.AddRange(mFontsContainer.mClusters.Cast<Control>().ToArray());//DEBUG efm5 2026 04 28 this may be a problem
+#pragma warning disable IDE0017
             mExamplesContainer = new ClusterContainer(mExampleScrollPanel, mExamplesClusters, ClusterLayoutMode.FlowLayout) {
-               AutoSize = false,
                Name = "ExamplesClusterContainer"
             };
+            mExamplesContainer.AutoSize = false;
+#pragma warning restore IDE0017
             mExampleMenuStrip = new MenuStrip() { Name = "ExampleMenuStrip" };
             mExampleTSMI = new ToolStripMenuItem { Name = "ExampleTSMI", Text = "Example &Menu" };
             mExampleTSMISubItem = new ToolStripMenuItem { Name = "ExampleTSMISubItem", Text = "Example &Item" };
@@ -616,246 +617,244 @@ All text appears in the default foreground color."
             AddColorCluster(mInterfaceColorClusters, "Tab Header Selected Font", ColorSwatchUsage.TabHeaderSelectedFont);
             AddColorCluster(mInterfaceColorClusters, "Tab Header Unselected Background", ColorSwatchUsage.TabHeaderUnselectedBackground);
             AddColorCluster(mInterfaceColorClusters, "Tab Header Selected Background", ColorSwatchUsage.TabHeaderSelectedBackground);
-            mInterfaceColorsContainer =
-               new ClusterContainer(mHighlightInterfaceScrollPanel, mInterfaceColorClusters,
-                  ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-                  Name = "InterfaceColorsClusterContainer"
-               };
+            mInterfaceColorsContainer = new ClusterContainer(mHighlightInterfaceScrollPanel, mInterfaceColorClusters,
+               ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               Name = "InterfaceColorsClusterContainer"
+            };
             mHighlightInterfaceScrollPanel.Controls.AddRange([mInterfaceHeaderCluster, mInterfaceColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.CSharp].Controls.Add(mHighlightCSharpScrollPanel);
-            AddColorCluster(mCSharpColorClusters, "Unknown", SyntaxColorSwatchUsage.Unknown);
-            AddColorCluster(mCSharpColorClusters, "Whitespace", SyntaxColorSwatchUsage.Whitespace);
-            AddColorCluster(mCSharpColorClusters, "Identifier", SyntaxColorSwatchUsage.Identifier);
-            AddColorCluster(mCSharpColorClusters, "Keyword", SyntaxColorSwatchUsage.Keyword);
-            AddColorCluster(mCSharpColorClusters, "Number", SyntaxColorSwatchUsage.Number);
-            AddColorCluster(mCSharpColorClusters, "String Literal", SyntaxColorSwatchUsage.StringLiteral);
-            AddColorCluster(mCSharpColorClusters, "Character Literal", SyntaxColorSwatchUsage.CharLiteral);
-            AddColorCluster(mCSharpColorClusters, "Comment", SyntaxColorSwatchUsage.Comment);
-            AddColorCluster(mCSharpColorClusters, "Preprocessor Directive", SyntaxColorSwatchUsage.PreprocessorDirective);
-            AddColorCluster(mCSharpColorClusters, "Operator", SyntaxColorSwatchUsage.Operator);
-            AddColorCluster(mCSharpColorClusters, "Punctuation", SyntaxColorSwatchUsage.Punctuation);
-            mCSharpColorsContainer =
-               new ClusterContainer(mHighlightCSharpScrollPanel, mCSharpColorClusters,
-                  ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
-                  Name = "CSharpColorsClusterContainer"
-               };
+            AddColorCluster(mCSharpColorClusters, "Unknown", TokenKind.Unknown, LanguageKind.CSharp);
+            AddColorCluster(mCSharpColorClusters, "Whitespace", TokenKind.Whitespace, LanguageKind.CSharp);
+            AddColorCluster(mCSharpColorClusters, "Identifier", TokenKind.Identifier, LanguageKind.CSharp);
+            AddColorCluster(mCSharpColorClusters, "Keyword", TokenKind.Keyword, LanguageKind.CSharp);
+            AddColorCluster(mCSharpColorClusters, "Number", TokenKind.Number, LanguageKind.CSharp);
+            AddColorCluster(mCSharpColorClusters, "String Literal", TokenKind.StringLiteral, LanguageKind.CSharp);
+            AddColorCluster(mCSharpColorClusters, "Character Literal", TokenKind.CharLiteral, LanguageKind.CSharp);
+            AddColorCluster(mCSharpColorClusters, "Comment", TokenKind.Comment, LanguageKind.CSharp);
+            AddColorCluster(mCSharpColorClusters, "Preprocessor Directive", TokenKind.PreprocessorDirective, LanguageKind.CSharp);
+            AddColorCluster(mCSharpColorClusters, "Operator", TokenKind.Operator, LanguageKind.CSharp);
+            AddColorCluster(mCSharpColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.CSharp);
+            mCSharpColorsContainer = new ClusterContainer(mHighlightCSharpScrollPanel, mCSharpColorClusters,
+               ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               Name = "CSharpColorsClusterContainer"
+            };
             mHighlightCSharpScrollPanel.Controls.AddRange([mCSharpHeaderCluster, mCSharpColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.C].Controls.Add(mHighlightCScrollPanel);
-            AddColorCluster(mCColorClusters, "Unknown", SyntaxColorSwatchUsage.Unknown);
-            AddColorCluster(mCColorClusters, "Whitespace", SyntaxColorSwatchUsage.Whitespace);
-            AddColorCluster(mCColorClusters, "Identifier", SyntaxColorSwatchUsage.Identifier);
-            AddColorCluster(mCColorClusters, "Keyword", SyntaxColorSwatchUsage.Keyword);
-            AddColorCluster(mCColorClusters, "Number", SyntaxColorSwatchUsage.Number);
-            AddColorCluster(mCColorClusters, "String Literal", SyntaxColorSwatchUsage.StringLiteral);
-            AddColorCluster(mCColorClusters, "Character Literal", SyntaxColorSwatchUsage.CharLiteral);
-            AddColorCluster(mCColorClusters, "Comment", SyntaxColorSwatchUsage.Comment);
-            AddColorCluster(mCColorClusters, "Preprocessor Directive", SyntaxColorSwatchUsage.PreprocessorDirective);
-            AddColorCluster(mCColorClusters, "Operator", SyntaxColorSwatchUsage.Operator);
-            AddColorCluster(mCColorClusters, "Punctuation", SyntaxColorSwatchUsage.Punctuation);
+            AddColorCluster(mCColorClusters, "Unknown", TokenKind.Unknown, LanguageKind.C);
+            AddColorCluster(mCColorClusters, "Whitespace", TokenKind.Whitespace, LanguageKind.C);
+            AddColorCluster(mCColorClusters, "Identifier", TokenKind.Identifier, LanguageKind.C);
+            AddColorCluster(mCColorClusters, "Keyword", TokenKind.Keyword, LanguageKind.C);
+            AddColorCluster(mCColorClusters, "Number", TokenKind.Number, LanguageKind.C);
+            AddColorCluster(mCColorClusters, "String Literal", TokenKind.StringLiteral, LanguageKind.C);
+            AddColorCluster(mCColorClusters, "Character Literal", TokenKind.CharLiteral, LanguageKind.C);
+            AddColorCluster(mCColorClusters, "Comment", TokenKind.Comment, LanguageKind.C);
+            AddColorCluster(mCColorClusters, "Preprocessor Directive", TokenKind.PreprocessorDirective, LanguageKind.C);
+            AddColorCluster(mCColorClusters, "Operator", TokenKind.Operator, LanguageKind.C);
+            AddColorCluster(mCColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.C);
             mCColorsContainer = new ClusterContainer(mHighlightCScrollPanel, mCColorClusters,
                ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
                Name = "CColorsClusterContainer"
             };
             mHighlightCScrollPanel.Controls.AddRange([mCHeaderCluster, mCColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Cpp].Controls.Add(mHighlightCppScrollPanel);
-            AddColorCluster(mCppColorClusters, "Unknown", SyntaxColorSwatchUsage.Unknown);
-            AddColorCluster(mCppColorClusters, "Whitespace", SyntaxColorSwatchUsage.Whitespace);
-            AddColorCluster(mCppColorClusters, "Identifier", SyntaxColorSwatchUsage.Identifier);
-            AddColorCluster(mCppColorClusters, "Keyword", SyntaxColorSwatchUsage.Keyword);
-            AddColorCluster(mCppColorClusters, "Number", SyntaxColorSwatchUsage.Number);
-            AddColorCluster(mCppColorClusters, "String Literal", SyntaxColorSwatchUsage.StringLiteral);
-            AddColorCluster(mCppColorClusters, "Character Literal", SyntaxColorSwatchUsage.CharLiteral);
-            AddColorCluster(mCppColorClusters, "Comment", SyntaxColorSwatchUsage.Comment);
-            AddColorCluster(mCppColorClusters, "Preprocessor Directive", SyntaxColorSwatchUsage.PreprocessorDirective);
-            AddColorCluster(mCppColorClusters, "Operator", SyntaxColorSwatchUsage.Operator);
-            AddColorCluster(mCppColorClusters, "Punctuation", SyntaxColorSwatchUsage.Punctuation);
+            AddColorCluster(mCppColorClusters, "Unknown", TokenKind.Unknown, LanguageKind.Cpp);
+            AddColorCluster(mCppColorClusters, "Whitespace", TokenKind.Whitespace, LanguageKind.Cpp);
+            AddColorCluster(mCppColorClusters, "Identifier", TokenKind.Identifier, LanguageKind.Cpp);
+            AddColorCluster(mCppColorClusters, "Keyword", TokenKind.Keyword, LanguageKind.Cpp);
+            AddColorCluster(mCppColorClusters, "Number", TokenKind.Number, LanguageKind.Cpp);
+            AddColorCluster(mCppColorClusters, "String Literal", TokenKind.StringLiteral, LanguageKind.Cpp);
+            AddColorCluster(mCppColorClusters, "Character Literal", TokenKind.CharLiteral, LanguageKind.Cpp);
+            AddColorCluster(mCppColorClusters, "Comment", TokenKind.Comment, LanguageKind.Cpp);
+            AddColorCluster(mCppColorClusters, "Preprocessor Directive", TokenKind.PreprocessorDirective, LanguageKind.Cpp);
+            AddColorCluster(mCppColorClusters, "Operator", TokenKind.Operator, LanguageKind.Cpp);
+            AddColorCluster(mCppColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.Cpp);
             mCppColorsContainer = new ClusterContainer(mHighlightCppScrollPanel, mCppColorClusters,
                ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
                Name = "CppColorsClusterContainer"
             };
             mHighlightCppScrollPanel.Controls.AddRange([mCppHeaderCluster, mCppColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Basic].Controls.Add(mHighlightBasicScrollPanel);
-            AddColorCluster(mBasicColorClusters, "Unknown", SyntaxColorSwatchUsage.Unknown);
-            AddColorCluster(mBasicColorClusters, "Whitespace", SyntaxColorSwatchUsage.Whitespace);
-            AddColorCluster(mBasicColorClusters, "Identifier", SyntaxColorSwatchUsage.Identifier);
-            AddColorCluster(mBasicColorClusters, "Keyword", SyntaxColorSwatchUsage.Keyword);
-            AddColorCluster(mBasicColorClusters, "Number", SyntaxColorSwatchUsage.Number);
-            AddColorCluster(mBasicColorClusters, "String Literal", SyntaxColorSwatchUsage.StringLiteral);
-            AddColorCluster(mBasicColorClusters, "Character Literal", SyntaxColorSwatchUsage.CharLiteral);
-            AddColorCluster(mBasicColorClusters, "Comment", SyntaxColorSwatchUsage.Comment);
-            AddColorCluster(mBasicColorClusters, "Preprocessor Directive", SyntaxColorSwatchUsage.PreprocessorDirective);
-            AddColorCluster(mBasicColorClusters, "Operator", SyntaxColorSwatchUsage.Operator);
-            AddColorCluster(mBasicColorClusters, "Punctuation", SyntaxColorSwatchUsage.Punctuation);
+            AddColorCluster(mBasicColorClusters, "Unknown", TokenKind.Unknown, LanguageKind.Basic);
+            AddColorCluster(mBasicColorClusters, "Whitespace", TokenKind.Whitespace, LanguageKind.Basic);
+            AddColorCluster(mBasicColorClusters, "Identifier", TokenKind.Identifier, LanguageKind.Basic);
+            AddColorCluster(mBasicColorClusters, "Keyword", TokenKind.Keyword, LanguageKind.Basic);
+            AddColorCluster(mBasicColorClusters, "Number", TokenKind.Number, LanguageKind.Basic);
+            AddColorCluster(mBasicColorClusters, "String Literal", TokenKind.StringLiteral, LanguageKind.Basic);
+            AddColorCluster(mBasicColorClusters, "Character Literal", TokenKind.CharLiteral, LanguageKind.Basic);
+            AddColorCluster(mBasicColorClusters, "Comment", TokenKind.Comment, LanguageKind.Basic);
+            AddColorCluster(mBasicColorClusters, "Preprocessor Directive", TokenKind.PreprocessorDirective, LanguageKind.Basic);
+            AddColorCluster(mBasicColorClusters, "Operator", TokenKind.Operator, LanguageKind.Basic);
+            AddColorCluster(mBasicColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.Basic);
             mBasicColorsContainer = new ClusterContainer(mHighlightBasicScrollPanel, mBasicColorClusters,
                ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
                Name = "BasicColorsClusterContainer"
             };
             mHighlightBasicScrollPanel.Controls.AddRange([mBasicHeaderCluster, mBasicColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.FSharp].Controls.Add(mHighlightFSharpScrollPanel);
-            AddColorCluster(mFSharpColorClusters, "Unknown", SyntaxColorSwatchUsage.Unknown);
-            AddColorCluster(mFSharpColorClusters, "Whitespace", SyntaxColorSwatchUsage.Whitespace);
-            AddColorCluster(mFSharpColorClusters, "Identifier", SyntaxColorSwatchUsage.Identifier);
-            AddColorCluster(mFSharpColorClusters, "Keyword", SyntaxColorSwatchUsage.Keyword);
-            AddColorCluster(mFSharpColorClusters, "Number", SyntaxColorSwatchUsage.Number);
-            AddColorCluster(mFSharpColorClusters, "String Literal", SyntaxColorSwatchUsage.StringLiteral);
-            AddColorCluster(mFSharpColorClusters, "Character Literal", SyntaxColorSwatchUsage.CharLiteral);
-            AddColorCluster(mFSharpColorClusters, "Comment", SyntaxColorSwatchUsage.Comment);
-            AddColorCluster(mFSharpColorClusters, "Preprocessor Directive", SyntaxColorSwatchUsage.PreprocessorDirective);
-            AddColorCluster(mFSharpColorClusters, "Operator", SyntaxColorSwatchUsage.Operator);
-            AddColorCluster(mFSharpColorClusters, "Punctuation", SyntaxColorSwatchUsage.Punctuation);
+            AddColorCluster(mFSharpColorClusters, "Unknown", TokenKind.Unknown, LanguageKind.FSharp);
+            AddColorCluster(mFSharpColorClusters, "Whitespace", TokenKind.Whitespace, LanguageKind.FSharp);
+            AddColorCluster(mFSharpColorClusters, "Identifier", TokenKind.Identifier, LanguageKind.FSharp);
+            AddColorCluster(mFSharpColorClusters, "Keyword", TokenKind.Keyword, LanguageKind.FSharp);
+            AddColorCluster(mFSharpColorClusters, "Number", TokenKind.Number, LanguageKind.FSharp);
+            AddColorCluster(mFSharpColorClusters, "String Literal", TokenKind.StringLiteral, LanguageKind.FSharp);
+            AddColorCluster(mFSharpColorClusters, "Character Literal", TokenKind.CharLiteral, LanguageKind.FSharp);
+            AddColorCluster(mFSharpColorClusters, "Comment", TokenKind.Comment, LanguageKind.FSharp);
+            AddColorCluster(mFSharpColorClusters, "Preprocessor Directive", TokenKind.PreprocessorDirective, LanguageKind.FSharp);
+            AddColorCluster(mFSharpColorClusters, "Operator", TokenKind.Operator, LanguageKind.FSharp);
+            AddColorCluster(mFSharpColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.FSharp);
             mFSharpColorsContainer = new ClusterContainer(mHighlightFSharpScrollPanel, mFSharpColorClusters,
                ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
                Name = "FSharpColorsClusterContainer"
             };
             mHighlightFSharpScrollPanel.Controls.AddRange([mFSharpHeaderCluster, mFSharpColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.HTML].Controls.Add(mHighlightHTMLScrollPanel);
-            AddColorCluster(mHTMLColorClusters, "Unknown", SyntaxColorSwatchUsage.Unknown);
-            AddColorCluster(mHTMLColorClusters, "Whitespace", SyntaxColorSwatchUsage.Whitespace);
-            AddColorCluster(mHTMLColorClusters, "Identifier", SyntaxColorSwatchUsage.Identifier);
-            AddColorCluster(mHTMLColorClusters, "Keyword", SyntaxColorSwatchUsage.Keyword);
-            AddColorCluster(mHTMLColorClusters, "Number", SyntaxColorSwatchUsage.Number);
-            AddColorCluster(mHTMLColorClusters, "String Literal", SyntaxColorSwatchUsage.StringLiteral);
-            AddColorCluster(mHTMLColorClusters, "Character Literal", SyntaxColorSwatchUsage.CharLiteral);
-            AddColorCluster(mHTMLColorClusters, "Comment", SyntaxColorSwatchUsage.Comment);
-            AddColorCluster(mHTMLColorClusters, "Preprocessor Directive", SyntaxColorSwatchUsage.PreprocessorDirective);
-            AddColorCluster(mHTMLColorClusters, "Operator", SyntaxColorSwatchUsage.Operator);
-            AddColorCluster(mHTMLColorClusters, "Punctuation", SyntaxColorSwatchUsage.Punctuation);
+            AddColorCluster(mHTMLColorClusters, "Unknown", TokenKind.Unknown, LanguageKind.Html);
+            AddColorCluster(mHTMLColorClusters, "Whitespace", TokenKind.Whitespace, LanguageKind.Html);
+            AddColorCluster(mHTMLColorClusters, "Identifier", TokenKind.Identifier, LanguageKind.Html);
+            AddColorCluster(mHTMLColorClusters, "Keyword", TokenKind.Keyword, LanguageKind.Html);
+            AddColorCluster(mHTMLColorClusters, "Number", TokenKind.Number, LanguageKind.Html);
+            AddColorCluster(mHTMLColorClusters, "String Literal", TokenKind.StringLiteral, LanguageKind.Html);
+            AddColorCluster(mHTMLColorClusters, "Character Literal", TokenKind.CharLiteral, LanguageKind.Html);
+            AddColorCluster(mHTMLColorClusters, "Comment", TokenKind.Comment, LanguageKind.Html);
+            AddColorCluster(mHTMLColorClusters, "Preprocessor Directive", TokenKind.PreprocessorDirective, LanguageKind.Html);
+            AddColorCluster(mHTMLColorClusters, "Operator", TokenKind.Operator, LanguageKind.Html);
+            AddColorCluster(mHTMLColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.Html);
             mHTMLColorsContainer = new ClusterContainer(mHighlightHTMLScrollPanel, mHTMLColorClusters,
                ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
                Name = "HTMLColorsClusterContainer"
             };
             mHighlightHTMLScrollPanel.Controls.AddRange([mHTMLHeaderCluster, mHTMLColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.CSS].Controls.Add(mHighlightCSSScrollPanel);
-            AddColorCluster(mCSSColorClusters, "Unknown", SyntaxColorSwatchUsage.Unknown);
-            AddColorCluster(mCSSColorClusters, "Whitespace", SyntaxColorSwatchUsage.Whitespace);
-            AddColorCluster(mCSSColorClusters, "Identifier", SyntaxColorSwatchUsage.Identifier);
-            AddColorCluster(mCSSColorClusters, "Keyword", SyntaxColorSwatchUsage.Keyword);
-            AddColorCluster(mCSSColorClusters, "Number", SyntaxColorSwatchUsage.Number);
-            AddColorCluster(mCSSColorClusters, "String Literal", SyntaxColorSwatchUsage.StringLiteral);
-            AddColorCluster(mCSSColorClusters, "Character Literal", SyntaxColorSwatchUsage.CharLiteral);
-            AddColorCluster(mCSSColorClusters, "Comment", SyntaxColorSwatchUsage.Comment);
-            AddColorCluster(mCSSColorClusters, "Preprocessor Directive", SyntaxColorSwatchUsage.PreprocessorDirective);
-            AddColorCluster(mCSSColorClusters, "Operator", SyntaxColorSwatchUsage.Operator);
-            AddColorCluster(mCSSColorClusters, "Punctuation", SyntaxColorSwatchUsage.Punctuation);
+            AddColorCluster(mCSSColorClusters, "Unknown", TokenKind.Unknown, LanguageKind.Css);
+            AddColorCluster(mCSSColorClusters, "Whitespace", TokenKind.Whitespace, LanguageKind.Css);
+            AddColorCluster(mCSSColorClusters, "Identifier", TokenKind.Identifier, LanguageKind.Css);
+            AddColorCluster(mCSSColorClusters, "Keyword", TokenKind.Keyword, LanguageKind.Css);
+            AddColorCluster(mCSSColorClusters, "Number", TokenKind.Number, LanguageKind.Css);
+            AddColorCluster(mCSSColorClusters, "String Literal", TokenKind.StringLiteral, LanguageKind.Css);
+            AddColorCluster(mCSSColorClusters, "Character Literal", TokenKind.CharLiteral, LanguageKind.Css);
+            AddColorCluster(mCSSColorClusters, "Comment", TokenKind.Comment, LanguageKind.Css);
+            AddColorCluster(mCSSColorClusters, "Preprocessor Directive", TokenKind.PreprocessorDirective, LanguageKind.Css);
+            AddColorCluster(mCSSColorClusters, "Operator", TokenKind.Operator, LanguageKind.Css);
+            AddColorCluster(mCSSColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.Css);
             mCSSColorsContainer = new ClusterContainer(mHighlightCSSScrollPanel, mCSSColorClusters,
                ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
                Name = "CSSColorsClusterContainer"
             };
             mHighlightCSSScrollPanel.Controls.AddRange([mCSSHeaderCluster, mCSSColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.XML].Controls.Add(mHighlightXMLScrollPanel);
-            AddColorCluster(mXMLColorClusters, "Unknown", SyntaxColorSwatchUsage.Unknown);
-            AddColorCluster(mXMLColorClusters, "Whitespace", SyntaxColorSwatchUsage.Whitespace);
-            AddColorCluster(mXMLColorClusters, "Identifier", SyntaxColorSwatchUsage.Identifier);
-            AddColorCluster(mXMLColorClusters, "Keyword", SyntaxColorSwatchUsage.Keyword);
-            AddColorCluster(mXMLColorClusters, "Number", SyntaxColorSwatchUsage.Number);
-            AddColorCluster(mXMLColorClusters, "String Literal", SyntaxColorSwatchUsage.StringLiteral);
-            AddColorCluster(mXMLColorClusters, "Character Literal", SyntaxColorSwatchUsage.CharLiteral);
-            AddColorCluster(mXMLColorClusters, "Comment", SyntaxColorSwatchUsage.Comment);
-            AddColorCluster(mXMLColorClusters, "Preprocessor Directive", SyntaxColorSwatchUsage.PreprocessorDirective);
-            AddColorCluster(mXMLColorClusters, "Operator", SyntaxColorSwatchUsage.Operator);
-            AddColorCluster(mXMLColorClusters, "Punctuation", SyntaxColorSwatchUsage.Punctuation);
+            AddColorCluster(mXMLColorClusters, "Unknown", TokenKind.Unknown, LanguageKind.Xml);
+            AddColorCluster(mXMLColorClusters, "Whitespace", TokenKind.Whitespace, LanguageKind.Xml);
+            AddColorCluster(mXMLColorClusters, "Identifier", TokenKind.Identifier, LanguageKind.Xml);
+            AddColorCluster(mXMLColorClusters, "Keyword", TokenKind.Keyword, LanguageKind.Xml);
+            AddColorCluster(mXMLColorClusters, "Number", TokenKind.Number, LanguageKind.Xml);
+            AddColorCluster(mXMLColorClusters, "String Literal", TokenKind.StringLiteral, LanguageKind.Xml);
+            AddColorCluster(mXMLColorClusters, "Character Literal", TokenKind.CharLiteral, LanguageKind.Xml);
+            AddColorCluster(mXMLColorClusters, "Comment", TokenKind.Comment, LanguageKind.Xml);
+            AddColorCluster(mXMLColorClusters, "Preprocessor Directive", TokenKind.PreprocessorDirective, LanguageKind.Xml);
+            AddColorCluster(mXMLColorClusters, "Operator", TokenKind.Operator, LanguageKind.Xml);
+            AddColorCluster(mXMLColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.Xml);
             mXMLColorsContainer = new ClusterContainer(mHighlightXMLScrollPanel, mXMLColorClusters,
                ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
                Name = "XMLColorsClusterContainer"
             };
             mHighlightXMLScrollPanel.Controls.AddRange([mXMLHeaderCluster, mXMLColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.JSON].Controls.Add(mHighlightJSONScrollPanel);
-            AddColorCluster(mJSONColorClusters, "Unknown", SyntaxColorSwatchUsage.Unknown);
-            AddColorCluster(mJSONColorClusters, "Whitespace", SyntaxColorSwatchUsage.Whitespace);
-            AddColorCluster(mJSONColorClusters, "Identifier", SyntaxColorSwatchUsage.Identifier);
-            AddColorCluster(mJSONColorClusters, "Keyword", SyntaxColorSwatchUsage.Keyword);
-            AddColorCluster(mJSONColorClusters, "Number", SyntaxColorSwatchUsage.Number);
-            AddColorCluster(mJSONColorClusters, "String Literal", SyntaxColorSwatchUsage.StringLiteral);
-            AddColorCluster(mJSONColorClusters, "Character Literal", SyntaxColorSwatchUsage.CharLiteral);
-            AddColorCluster(mJSONColorClusters, "Comment", SyntaxColorSwatchUsage.Comment);
-            AddColorCluster(mJSONColorClusters, "Preprocessor Directive", SyntaxColorSwatchUsage.PreprocessorDirective);
-            AddColorCluster(mJSONColorClusters, "Operator", SyntaxColorSwatchUsage.Operator);
-            AddColorCluster(mJSONColorClusters, "Punctuation", SyntaxColorSwatchUsage.Punctuation);
+            AddColorCluster(mJSONColorClusters, "Unknown", TokenKind.Unknown, LanguageKind.Json);
+            AddColorCluster(mJSONColorClusters, "Whitespace", TokenKind.Whitespace, LanguageKind.Json);
+            AddColorCluster(mJSONColorClusters, "Identifier", TokenKind.Identifier, LanguageKind.Json);
+            AddColorCluster(mJSONColorClusters, "Keyword", TokenKind.Keyword, LanguageKind.Json);
+            AddColorCluster(mJSONColorClusters, "Number", TokenKind.Number, LanguageKind.Json);
+            AddColorCluster(mJSONColorClusters, "String Literal", TokenKind.StringLiteral, LanguageKind.Json);
+            AddColorCluster(mJSONColorClusters, "Character Literal", TokenKind.CharLiteral, LanguageKind.Json);
+            AddColorCluster(mJSONColorClusters, "Comment", TokenKind.Comment, LanguageKind.Json);
+            AddColorCluster(mJSONColorClusters, "Preprocessor Directive", TokenKind.PreprocessorDirective, LanguageKind.Json);
+            AddColorCluster(mJSONColorClusters, "Operator", TokenKind.Operator, LanguageKind.Json);
+            AddColorCluster(mJSONColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.Json);
             mJSONColorsContainer = new ClusterContainer(mHighlightJSONScrollPanel, mJSONColorClusters,
                ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
                Name = "JSONColorsClusterContainer"
             };
             mHighlightJSONScrollPanel.Controls.AddRange([mJSONHeaderCluster, mJSONColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.PowerShell].Controls.Add(mHighlightPowerShellScrollPanel);
-            AddColorCluster(mPowerShellColorClusters, "Unknown", SyntaxColorSwatchUsage.Unknown);
-            AddColorCluster(mPowerShellColorClusters, "Whitespace", SyntaxColorSwatchUsage.Whitespace);
-            AddColorCluster(mPowerShellColorClusters, "Identifier", SyntaxColorSwatchUsage.Identifier);
-            AddColorCluster(mPowerShellColorClusters, "Keyword", SyntaxColorSwatchUsage.Keyword);
-            AddColorCluster(mPowerShellColorClusters, "Number", SyntaxColorSwatchUsage.Number);
-            AddColorCluster(mPowerShellColorClusters, "String Literal", SyntaxColorSwatchUsage.StringLiteral);
-            AddColorCluster(mPowerShellColorClusters, "Character Literal", SyntaxColorSwatchUsage.CharLiteral);
-            AddColorCluster(mPowerShellColorClusters, "Comment", SyntaxColorSwatchUsage.Comment);
-            AddColorCluster(mPowerShellColorClusters, "Preprocessor Directive", SyntaxColorSwatchUsage.PreprocessorDirective);
-            AddColorCluster(mPowerShellColorClusters, "Operator", SyntaxColorSwatchUsage.Operator);
-            AddColorCluster(mPowerShellColorClusters, "Punctuation", SyntaxColorSwatchUsage.Punctuation);
+            AddColorCluster(mPowerShellColorClusters, "Unknown", TokenKind.Unknown, LanguageKind.PowerShell);
+            AddColorCluster(mPowerShellColorClusters, "Whitespace", TokenKind.Whitespace, LanguageKind.PowerShell);
+            AddColorCluster(mPowerShellColorClusters, "Identifier", TokenKind.Identifier, LanguageKind.PowerShell);
+            AddColorCluster(mPowerShellColorClusters, "Keyword", TokenKind.Keyword, LanguageKind.PowerShell);
+            AddColorCluster(mPowerShellColorClusters, "Number", TokenKind.Number, LanguageKind.PowerShell);
+            AddColorCluster(mPowerShellColorClusters, "String Literal", TokenKind.StringLiteral, LanguageKind.PowerShell);
+            AddColorCluster(mPowerShellColorClusters, "Character Literal", TokenKind.CharLiteral, LanguageKind.PowerShell);
+            AddColorCluster(mPowerShellColorClusters, "Comment", TokenKind.Comment, LanguageKind.PowerShell);
+            AddColorCluster(mPowerShellColorClusters, "Preprocessor Directive", TokenKind.PreprocessorDirective, LanguageKind.PowerShell);
+            AddColorCluster(mPowerShellColorClusters, "Operator", TokenKind.Operator, LanguageKind.PowerShell);
+            AddColorCluster(mPowerShellColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.PowerShell);
             mPowerShellColorsContainer = new ClusterContainer(mHighlightPowerShellScrollPanel, mPowerShellColorClusters,
                ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
                Name = "PowerShellColorsClusterContainer"
             };
             mHighlightPowerShellScrollPanel.Controls.AddRange([mPowerShellHeaderCluster, mPowerShellColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Batch].Controls.Add(mHighlightBatchScrollPanel);
-            AddColorCluster(mBatchColorClusters, "Unknown", SyntaxColorSwatchUsage.Unknown);
-            AddColorCluster(mBatchColorClusters, "Whitespace", SyntaxColorSwatchUsage.Whitespace);
-            AddColorCluster(mBatchColorClusters, "Identifier", SyntaxColorSwatchUsage.Identifier);
-            AddColorCluster(mBatchColorClusters, "Keyword", SyntaxColorSwatchUsage.Keyword);
-            AddColorCluster(mBatchColorClusters, "Number", SyntaxColorSwatchUsage.Number);
-            AddColorCluster(mBatchColorClusters, "String Literal", SyntaxColorSwatchUsage.StringLiteral);
-            AddColorCluster(mBatchColorClusters, "Character Literal", SyntaxColorSwatchUsage.CharLiteral);
-            AddColorCluster(mBatchColorClusters, "Comment", SyntaxColorSwatchUsage.Comment);
-            AddColorCluster(mBatchColorClusters, "Preprocessor Directive", SyntaxColorSwatchUsage.PreprocessorDirective);
-            AddColorCluster(mBatchColorClusters, "Operator", SyntaxColorSwatchUsage.Operator);
-            AddColorCluster(mBatchColorClusters, "Punctuation", SyntaxColorSwatchUsage.Punctuation);
+            AddColorCluster(mBatchColorClusters, "Unknown", TokenKind.Unknown, LanguageKind.Batch);
+            AddColorCluster(mBatchColorClusters, "Whitespace", TokenKind.Whitespace, LanguageKind.Batch);
+            AddColorCluster(mBatchColorClusters, "Identifier", TokenKind.Identifier, LanguageKind.Batch);
+            AddColorCluster(mBatchColorClusters, "Keyword", TokenKind.Keyword, LanguageKind.Batch);
+            AddColorCluster(mBatchColorClusters, "Number", TokenKind.Number, LanguageKind.Batch);
+            AddColorCluster(mBatchColorClusters, "String Literal", TokenKind.StringLiteral, LanguageKind.Batch);
+            AddColorCluster(mBatchColorClusters, "Character Literal", TokenKind.CharLiteral, LanguageKind.Batch);
+            AddColorCluster(mBatchColorClusters, "Comment", TokenKind.Comment, LanguageKind.Batch);
+            AddColorCluster(mBatchColorClusters, "Preprocessor Directive", TokenKind.PreprocessorDirective, LanguageKind.Batch);
+            AddColorCluster(mBatchColorClusters, "Operator", TokenKind.Operator, LanguageKind.Batch);
+            AddColorCluster(mBatchColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.Batch);
             mBatchColorsContainer = new ClusterContainer(mHighlightBatchScrollPanel, mBatchColorClusters,
                ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
                Name = "BatchColorsClusterContainer"
             };
             mHighlightBatchScrollPanel.Controls.AddRange([mBatchHeaderCluster, mBatchColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.SQL].Controls.Add(mHighlightSQLScrollPanel);
-            AddColorCluster(mSQLColorClusters, "Unknown", SyntaxColorSwatchUsage.Unknown);
-            AddColorCluster(mSQLColorClusters, "Whitespace", SyntaxColorSwatchUsage.Whitespace);
-            AddColorCluster(mSQLColorClusters, "Identifier", SyntaxColorSwatchUsage.Identifier);
-            AddColorCluster(mSQLColorClusters, "Keyword", SyntaxColorSwatchUsage.Keyword);
-            AddColorCluster(mSQLColorClusters, "Number", SyntaxColorSwatchUsage.Number);
-            AddColorCluster(mSQLColorClusters, "String Literal", SyntaxColorSwatchUsage.StringLiteral);
-            AddColorCluster(mSQLColorClusters, "Character Literal", SyntaxColorSwatchUsage.CharLiteral);
-            AddColorCluster(mSQLColorClusters, "Comment", SyntaxColorSwatchUsage.Comment);
-            AddColorCluster(mSQLColorClusters, "Preprocessor Directive", SyntaxColorSwatchUsage.PreprocessorDirective);
-            AddColorCluster(mSQLColorClusters, "Operator", SyntaxColorSwatchUsage.Operator);
-            AddColorCluster(mSQLColorClusters, "Punctuation", SyntaxColorSwatchUsage.Punctuation);
+            AddColorCluster(mSQLColorClusters, "Unknown", TokenKind.Unknown, LanguageKind.Sql);
+            AddColorCluster(mSQLColorClusters, "Whitespace", TokenKind.Whitespace, LanguageKind.Sql);
+            AddColorCluster(mSQLColorClusters, "Identifier", TokenKind.Identifier, LanguageKind.Sql);
+            AddColorCluster(mSQLColorClusters, "Keyword", TokenKind.Keyword, LanguageKind.Sql);
+            AddColorCluster(mSQLColorClusters, "Number", TokenKind.Number, LanguageKind.Sql);
+            AddColorCluster(mSQLColorClusters, "String Literal", TokenKind.StringLiteral, LanguageKind.Sql);
+            AddColorCluster(mSQLColorClusters, "Character Literal", TokenKind.CharLiteral, LanguageKind.Sql);
+            AddColorCluster(mSQLColorClusters, "Comment", TokenKind.Comment, LanguageKind.Sql);
+            AddColorCluster(mSQLColorClusters, "Preprocessor Directive", TokenKind.PreprocessorDirective, LanguageKind.Sql);
+            AddColorCluster(mSQLColorClusters, "Operator", TokenKind.Operator, LanguageKind.Sql);
+            AddColorCluster(mSQLColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.Sql);
             mSQLColorsContainer = new ClusterContainer(mHighlightSQLScrollPanel, mSQLColorClusters,
                ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
                Name = "SQLColorsClusterContainer"
             };
             mHighlightSQLScrollPanel.Controls.AddRange([mSQLHeaderCluster, mSQLColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Markdown].Controls.Add(mHighlightMarkdownScrollPanel);
-            AddColorCluster(mMarkdownColorClusters, "Unknown", SyntaxColorSwatchUsage.Unknown);
-            AddColorCluster(mMarkdownColorClusters, "Whitespace", SyntaxColorSwatchUsage.Whitespace);
-            AddColorCluster(mMarkdownColorClusters, "Identifier", SyntaxColorSwatchUsage.Identifier);
-            AddColorCluster(mMarkdownColorClusters, "Keyword", SyntaxColorSwatchUsage.Keyword);
-            AddColorCluster(mMarkdownColorClusters, "Number", SyntaxColorSwatchUsage.Number);
-            AddColorCluster(mMarkdownColorClusters, "String Literal", SyntaxColorSwatchUsage.StringLiteral);
-            AddColorCluster(mMarkdownColorClusters, "Character Literal", SyntaxColorSwatchUsage.CharLiteral);
-            AddColorCluster(mMarkdownColorClusters, "Comment", SyntaxColorSwatchUsage.Comment);
-            AddColorCluster(mMarkdownColorClusters, "Preprocessor Directive", SyntaxColorSwatchUsage.PreprocessorDirective);
-            AddColorCluster(mMarkdownColorClusters, "Operator", SyntaxColorSwatchUsage.Operator);
-            AddColorCluster(mMarkdownColorClusters, "Punctuation", SyntaxColorSwatchUsage.Punctuation);
+            AddColorCluster(mMarkdownColorClusters, "Unknown", TokenKind.Unknown, LanguageKind.Markdown);
+            AddColorCluster(mMarkdownColorClusters, "Whitespace", TokenKind.Whitespace, LanguageKind.Markdown);
+            AddColorCluster(mMarkdownColorClusters, "Identifier", TokenKind.Identifier, LanguageKind.Markdown);
+            AddColorCluster(mMarkdownColorClusters, "Keyword", TokenKind.Keyword, LanguageKind.Markdown);
+            AddColorCluster(mMarkdownColorClusters, "Number", TokenKind.Number, LanguageKind.Markdown);
+            AddColorCluster(mMarkdownColorClusters, "String Literal", TokenKind.StringLiteral, LanguageKind.Markdown);
+            AddColorCluster(mMarkdownColorClusters, "Character Literal", TokenKind.CharLiteral, LanguageKind.Markdown);
+            AddColorCluster(mMarkdownColorClusters, "Comment", TokenKind.Comment, LanguageKind.Markdown);
+            AddColorCluster(mMarkdownColorClusters, "Preprocessor Directive", TokenKind.PreprocessorDirective, LanguageKind.Markdown);
+            AddColorCluster(mMarkdownColorClusters, "Operator", TokenKind.Operator, LanguageKind.Markdown);
+            AddColorCluster(mMarkdownColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.Markdown);
             mMarkdownColorsContainer = new ClusterContainer(mHighlightMarkdownScrollPanel, mMarkdownColorClusters,
                ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
                Name = "MarkdownColorsClusterContainer"
             };
             mHighlightMarkdownScrollPanel.Controls.AddRange([mMarkdownHeaderCluster, mMarkdownColorsContainer]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Python].Controls.Add(mHighlightPythonScrollPanel);
-            AddColorCluster(mPythonColorClusters, "Unknown", SyntaxColorSwatchUsage.Unknown);
-            AddColorCluster(mPythonColorClusters, "Whitespace", SyntaxColorSwatchUsage.Whitespace);
-            AddColorCluster(mPythonColorClusters, "Identifier", SyntaxColorSwatchUsage.Identifier);
-            AddColorCluster(mPythonColorClusters, "Keyword", SyntaxColorSwatchUsage.Keyword);
-            AddColorCluster(mPythonColorClusters, "Number", SyntaxColorSwatchUsage.Number);
-            AddColorCluster(mPythonColorClusters, "String Literal", SyntaxColorSwatchUsage.StringLiteral);
-            AddColorCluster(mPythonColorClusters, "Character Literal", SyntaxColorSwatchUsage.CharLiteral);
-            AddColorCluster(mPythonColorClusters, "Comment", SyntaxColorSwatchUsage.Comment);
-            AddColorCluster(mPythonColorClusters, "Preprocessor Directive", SyntaxColorSwatchUsage.PreprocessorDirective);
-            AddColorCluster(mPythonColorClusters, "Operator", SyntaxColorSwatchUsage.Operator);
-            AddColorCluster(mPythonColorClusters, "Punctuation", SyntaxColorSwatchUsage.Punctuation);
+            AddColorCluster(mPythonColorClusters, "Unknown", TokenKind.Unknown, LanguageKind.Python);
+            AddColorCluster(mPythonColorClusters, "Whitespace", TokenKind.Whitespace, LanguageKind.Python);
+            AddColorCluster(mPythonColorClusters, "Identifier", TokenKind.Identifier, LanguageKind.Python);
+            AddColorCluster(mPythonColorClusters, "Keyword", TokenKind.Keyword, LanguageKind.Python);
+            AddColorCluster(mPythonColorClusters, "Number", TokenKind.Number, LanguageKind.Python);
+            AddColorCluster(mPythonColorClusters, "String Literal", TokenKind.StringLiteral, LanguageKind.Python);
+            AddColorCluster(mPythonColorClusters, "Character Literal", TokenKind.CharLiteral, LanguageKind.Python);
+            AddColorCluster(mPythonColorClusters, "Comment", TokenKind.Comment, LanguageKind.Python);
+            AddColorCluster(mPythonColorClusters, "Preprocessor Directive", TokenKind.PreprocessorDirective, LanguageKind.Python);
+            AddColorCluster(mPythonColorClusters, "Operator", TokenKind.Operator, LanguageKind.Python);
+            AddColorCluster(mPythonColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.Python);
             mPythonColorsContainer = new ClusterContainer(mHighlightPythonScrollPanel, mPythonColorClusters,
                ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
                Name = "PythonColorsClusterContainer"

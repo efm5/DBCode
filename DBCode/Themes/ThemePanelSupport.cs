@@ -60,11 +60,17 @@
             mIncludeExcludeTabControl.SelectedIndex = savedIndex;
             ApplyTheme(mTemporaryTheme);
             LayoutClustersAndContainers();
+            SizeExamplesContainer();
+            mThemeBottomPanel.LayoutControls();
+            ResumeLayout(true);
+         }
+
+         private void SizeExamplesContainer() {
+            mExamplesContainer.Width = mExampleScrollPanel!.ClientSize.Width - mRightPad;
+            mExamplesContainer.LayoutClusters();
             SizePanel(mExamplesContainer, mIndent, false);
             mExamplesContainer.Height += mEmHalf;
             mExamplesContainer.Location = new Point(mIndent, mExampleStatusStrip.Bottom + mEmHalf);
-            mThemeBottomPanel.LayoutControls();
-            ResumeLayout(true);
          }
 
          private void LayoutClustersAndContainers() {
@@ -243,23 +249,23 @@
             pClusters.Add(cluster);
          }
 
-         private void AddColorCluster(List<BaseCluster> pClusters, string pLabel, SyntaxColorSwatchUsage pUsage,
-            LabelPosition pLabelPosition = LabelPosition.Left) {
-            Color color = mTemporaryTheme.mInterfaceColors[(int)pUsage];
+         private void AddColorCluster(List<BaseCluster> pClusters, string pLabel, TokenKind pTokenKind,
+            LanguageKind pLanguage, LabelPosition pLabelPosition = LabelPosition.Left) {
+            Color color = mTemporaryTheme.mHighlightColors[(int)pLanguage][(int)pTokenKind];
             LabeledButtonColorSwatchCluster cluster = new LabeledButtonColorSwatchCluster(mTemporaryTheme, pLabel,
-               ToDescription(pUsage), pUsage, pLabelPosition, color);
-            cluster.SwatchClicked += OnColorSwatchClicked;
+               ToDescription(pTokenKind), pTokenKind, pLabelPosition, color);
+            cluster.SyntaxSwatchClicked += OnSyntaxColorSwatchClicked;
             pClusters.Add(cluster);
          }
 
-         private List<LabeledButtonColorSwatchCluster> CreateColorSwatchUsageClusters() {
+         private List<LabeledButtonColorSwatchCluster> CreateColorUsageClusters() {
             List<LabeledButtonColorSwatchCluster> clusters = [];
             foreach (ColorSwatchUsage usage in Enum.GetValues<ColorSwatchUsage>()) {
                string labelText = ToDescription(usage);
                string buttonText = ColorSwatchUsageButtonNames.Names[usage];
                Color initialColor = mTemporaryTheme.mInterfaceColors[(int)usage];
                LabeledButtonColorSwatchCluster cluster = new LabeledButtonColorSwatchCluster(mTemporaryTheme, labelText,
-                  buttonText, (ColorSwatchUsage)usage, LabelPosition.Left, initialColor, null);
+                  buttonText, usage, LabelPosition.Left, initialColor, null);
                cluster.SwatchClicked += OnColorSwatchClicked;
                clusters.Add(cluster);
             }
@@ -452,6 +458,8 @@
                mPrimaryTabControl.SelectedIndexChanged -= PrimaryTabControl_SelectedIndexChanged;
                mIncludeExcludeTabControl.SelectedIndexChanged -= IncludeExcludeTabControl_SelectedIndexChanged;
                mHighlightTabControl.SelectedIndexChanged -= HighlightTabControl_SelectedIndexChanged;
+               if (mExampleScrollPanel != null)
+                  mExampleScrollPanel.ClientSizeChanged -= ExampleScrollPanel_ClientSizeChanged;
                mTemporaryTheme?.Dispose();
                // mApplyButton, mNewButton, mCloneButton disposed by mThemeBottomPanel.Dispose
                // mHelpButton, mCancelButton owned and disposed by mThemeBottomPanel
