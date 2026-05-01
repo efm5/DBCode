@@ -2,9 +2,10 @@
    public sealed partial class MainForm : Form {
       public void EnsureThemePanel(ThemeUsage pThemeUsage) {
          ThrowIfNull(mForm, nameof(mForm));
-         ThrowIfNull(mThemePanel, nameof(mThemePanel));
          mUiState.FormBounds = mForm.Bounds;
          SuspendClientSizeChanged();
+         if (mThemePanel == null)
+            mThemePanel = new ThemePanel(pThemeUsage);
          if (mFirstTheme) {
             mForm.Size = mThemePanel.WantedSize();
             CenterFormOnMonitor(mForm);
@@ -13,8 +14,6 @@
          }
          else
             mForm.Bounds = mUiState.ThemeBounds;
-         if (mThemePanel == null)
-            mThemePanel = new ThemePanel(pThemeUsage);
          ResumeClientSizeChanged();
          ShowThemePanel(pThemeUsage);
       }

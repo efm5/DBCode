@@ -43,8 +43,8 @@
          ThemeTag? tag = pControl.Tag as ThemeTag;
          ThrowIfNull(tag, nameof(tag));
          Font font = pTheme.mFonts[(int)tag.mFontUsage];
-         Color foreColor = pTheme.mInterfaceColors[(int)tag.mForeColorUsage];
-         Color backColor = pTheme.mInterfaceColors[(int)tag.mBackColorUsage];
+         Color foreColor = pTheme.mInterfaceColors[(int)tag.mForeColorSwatchUsage];
+         Color backColor = pTheme.mInterfaceColors[(int)tag.mBackColorSwatchUsage];
 
          pControl.Font = font;
          pControl.ForeColor = foreColor;
@@ -79,8 +79,8 @@
          ThemeTag? tag = pItem.Tag as ThemeTag;
          ThrowIfNull(tag, nameof(tag));
          Font font = pTheme.mFonts[(int)tag.mFontUsage];
-         Color foreColor = pTheme.mInterfaceColors[(int)tag.mForeColorUsage];
-         Color backColor = pTheme.mInterfaceColors[(int)tag.mBackColorUsage];
+         Color foreColor = pTheme.mInterfaceColors[(int)tag.mForeColorSwatchUsage];
+         Color backColor = pTheme.mInterfaceColors[(int)tag.mBackColorSwatchUsage];
 
          pItem.Font = font;
          pItem.ForeColor = foreColor;
@@ -95,8 +95,8 @@
          ThemeTag? tag = pItem.Tag as ThemeTag;
          ThrowIfNull(tag, nameof(tag));
          Font font = pTheme.mFonts[(int)tag.mFontUsage];
-         Color foreColor = pTheme.mInterfaceColors[(int)tag.mForeColorUsage];
-         Color backColor = pTheme.mInterfaceColors[(int)tag.mBackColorUsage];
+         Color foreColor = pTheme.mInterfaceColors[(int)tag.mForeColorSwatchUsage];
+         Color backColor = pTheme.mInterfaceColors[(int)tag.mBackColorSwatchUsage];
 
          pItem.Font = font;
          pItem.ForeColor = foreColor;

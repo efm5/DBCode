@@ -37,7 +37,7 @@
       Text
    }
 
-   public enum ColorUsage : int {
+   public enum ColorSwatchUsage {
       [DisplayText("Panel Background Color")]
       PanelBackground,
       [DisplayText("GroupBox Background Color")]
@@ -70,7 +70,40 @@
       TabHeaderUnselectedFont
    }
 
-   internal enum ColorRole : int {
+   public enum ColorPickerSwatchUsage {
+      Gray,
+      Red,
+      Green,
+      Blue,
+      Demo
+   }
+
+   public enum SyntaxColorSwatchUsage {
+      [DisplayText("Unknown Token Color")]
+      Unknown,
+      [DisplayText("Whitespace Token Color")]
+      Whitespace,
+      [DisplayText("Identifier Token Color")]
+      Identifier,
+      [DisplayText("Keyword Token Color")]
+      Keyword,
+      [DisplayText("Number Token Color")]
+      Number,
+      [DisplayText("String Literal Token Color")]
+      StringLiteral,
+      [DisplayText("Character Literal Token Color")]
+      CharLiteral,
+      [DisplayText("Comment Token Color")]
+      Comment,
+      [DisplayText("Preprocessor Directive Token Color")]
+      PreprocessorDirective,
+      [DisplayText("Operator Token Color")]
+      Operator,
+      [DisplayText("Punctuation Token Color")]
+      Punctuation
+   }
+
+   public enum ColorRole : int {
       [DisplayText("Unknown Color")]
       Unknown,
       [DisplayText("Whitespace Color")]

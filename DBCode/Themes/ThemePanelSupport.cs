@@ -100,15 +100,15 @@
          }
 
          private void ApplyThemeToControlTree(Control pParent) {
-            Color color = mTemporaryTheme.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
+            Color color = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground];
             foreach (Control control in pParent.Controls) {
                if (control is BaseCluster cluster && cluster.mSkipTheme) {
                   ApplyThemeToControlTree(control);
                   continue;
                }
-               control.ForeColor = mTemporaryTheme.mInterfaceColors[(int)ColorUsage.InterfaceFont];
+               control.ForeColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont];
                if (control is not BaseCluster && control is not TabControl && control is not TabPage) {
-                  control.BackColor = mTemporaryTheme.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
+                  control.BackColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground];
                   control.Font = CreateNewFont(mTemporaryTheme.mFonts[(int)FontUsage.Interface]);
                }
                if (control is BaseCluster baseCluster) {
@@ -117,23 +117,23 @@
                }
                if (control is GroupBox groupBox) {
                   groupBox.Font = CreateNewBoldFont();
-                  groupBox.BackColor = mTemporaryTheme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground];
-                  groupBox.ForeColor = mTemporaryTheme.mInterfaceColors[(int)ColorUsage.GroupBoxFont];
+                  groupBox.BackColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground];
+                  groupBox.ForeColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxFont];
                }
                if (control is MenuStrip menuStrip) {
-                  menuStrip.BackColor = mTemporaryTheme.mInterfaceColors[(int)ColorUsage.MenuBackground];
+                  menuStrip.BackColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.MenuBackground];
                   foreach (ToolStripItem item in menuStrip.Items)
                      if (item is ToolStripMenuItem tsmi)
                         PaintMenuItemsRecursive(tsmi, mTemporaryTheme);
                }
                if (control is StatusStrip statusStrip)
-                  ApplyThemeToToolStrip(statusStrip, FontUsage.Status, ColorUsage.StatusFont, ColorUsage.StatusBackground);
+                  ApplyThemeToToolStrip(statusStrip, FontUsage.Status, ColorSwatchUsage.StatusFont, ColorSwatchUsage.StatusBackground);
                ApplyThemeToControlTree(control);
             }
          }
 
-         private void ApplyThemeToToolStrip(ToolStrip pToolStrip, FontUsage pFontUsage, ColorUsage pForeUsage,
-            ColorUsage pBackUsage) {
+         private void ApplyThemeToToolStrip(ToolStrip pToolStrip, FontUsage pFontUsage, ColorSwatchUsage pForeUsage,
+            ColorSwatchUsage pBackUsage) {
             pToolStrip.BackColor = mTemporaryTheme.mInterfaceColors[(int)pBackUsage];
             pToolStrip.ForeColor = mTemporaryTheme.mInterfaceColors[(int)pForeUsage];
             pToolStrip.Font = CreateNewFont(mTemporaryTheme.mFonts[(int)pFontUsage]);
@@ -157,10 +157,10 @@
             mTemporaryTheme.Dispose();
             mTemporaryTheme = clonedTheme;
             Theme theme = clonedTheme;
-            BackColor = theme.mInterfaceColors[(int)ColorUsage.PanelBackground];
-            mPrimaryTabControl.SetStripBackColor(theme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground]);
+            BackColor = theme.mInterfaceColors[(int)ColorSwatchUsage.PanelBackground];
+            mPrimaryTabControl.SetStripBackColor(theme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground]);
             mPrimaryTabControl.ResetStripBackgroundPainted();
-            mHighlightTabControl.SetStripBackColor(theme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground]);
+            mHighlightTabControl.SetStripBackColor(theme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground]);
             mHighlightTabControl.ResetStripBackgroundPainted();
             ApplyThemeToControlTree(mPrimaryTabControl);
             ApplyThemeToControlTree(mHighlightTabControl);
@@ -188,7 +188,7 @@
             pBox.SuspendLayout();
             try {
                pBox.Select(0, pBox.TextLength);
-               pBox.SelectionColor = mTemporaryTheme.mInterfaceColors[(int)ColorUsage.TextBoxFont];
+               pBox.SelectionColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.TextBoxFont];
                highlighter.ApplyHighlighting(pBox, tokens, mTemporaryTheme);
                pBox.Select(selectionStart, selectionLength);
             }
@@ -243,11 +243,20 @@
             pClusters.Add(cluster);
          }
 
-         private List<LabeledButtonColorSwatchCluster> CreateColorUsageClusters() {
+         private void AddColorCluster(List<BaseCluster> pClusters, string pLabel, SyntaxColorSwatchUsage pUsage,
+            LabelPosition pLabelPosition = LabelPosition.Left) {
+            Color color = mTemporaryTheme.mInterfaceColors[(int)pUsage];
+            LabeledButtonColorSwatchCluster cluster = new LabeledButtonColorSwatchCluster(mTemporaryTheme, pLabel,
+               ToDescription(pUsage), pUsage, pLabelPosition, color);
+            cluster.SwatchClicked += OnColorSwatchClicked;
+            pClusters.Add(cluster);
+         }
+
+         private List<LabeledButtonColorSwatchCluster> CreateColorSwatchUsageClusters() {
             List<LabeledButtonColorSwatchCluster> clusters = [];
-            foreach (ColorUsage usage in Enum.GetValues<ColorUsage>()) {
+            foreach (ColorSwatchUsage usage in Enum.GetValues<ColorSwatchUsage>()) {
                string labelText = ToDescription(usage);
-               string buttonText = ColorUsageButtonNames.Names[usage];
+               string buttonText = ColorSwatchUsageButtonNames.Names[usage];
                Color initialColor = mTemporaryTheme.mInterfaceColors[(int)usage];
                LabeledButtonColorSwatchCluster cluster = new LabeledButtonColorSwatchCluster(mTemporaryTheme, labelText,
                   buttonText, (ColorSwatchUsage)usage, LabelPosition.Left, initialColor, null);
@@ -262,10 +271,10 @@
             TabPage page = pTabControl.TabPages[pArgs.Index];
             Rectangle rect = pTabControl.GetTabRect(pArgs.Index);
             bool selected = pTabControl.SelectedIndex == pArgs.Index;
-            Color back = selected ? theme.mInterfaceColors[(int)ColorUsage.TabHeaderSelectedBackground]
-                                  : theme.mInterfaceColors[(int)ColorUsage.TabHeaderUnselectedBackground];
-            Color fore = selected ? theme.mInterfaceColors[(int)ColorUsage.TabHeaderSelectedFont]
-                                  : theme.mInterfaceColors[(int)ColorUsage.TabHeaderUnselectedFont];
+            Color back = selected ? theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderSelectedBackground]
+                                  : theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderUnselectedBackground];
+            Color fore = selected ? theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderSelectedFont]
+                                  : theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderUnselectedFont];
             Font font = selected ? CreateNewBoldFont() : CreateNewFont();
             using (SolidBrush brush = new SolidBrush(back))
                pArgs.Graphics.FillRectangle(brush, rect);
@@ -277,7 +286,7 @@
             return mThemeIsDirty;
          }
 
-         public void EnsureColorPickerPanel(Theme pTheme, ColorUsage pUsage, Color pInitialColor) {
+         public void EnsureColorPickerPanel(Theme pTheme, ColorSwatchUsage pUsage, Color pInitialColor) {
             ThrowIfNull(mForm, nameof(mForm));
             mUiState.FormBounds = Bounds;
             if (mColorPickerPanel == null)

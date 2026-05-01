@@ -69,7 +69,7 @@
             AutoScroll = true,
             Dock = DockStyle.Fill,
             TabIndex = mTabIndex++,
-            BackColor = mCurrentTheme.mInterfaceColors[(int)ColorUsage.InterfaceBackground]
+            BackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground]
          };
          mRichTextBox = new RichTextBox();
          mSendAllButton = new Button();

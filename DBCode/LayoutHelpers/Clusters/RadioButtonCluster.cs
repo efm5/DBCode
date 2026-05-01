@@ -16,7 +16,7 @@ namespace DBCode {
                Text = pLabelText,
                AutoSize = true,
                Font = CreateNewFont(),
-               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont],
+               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
                BackColor = pBackgroundColor ?? Color.Transparent
             };
             Controls.Add(mLabel);
@@ -29,7 +29,7 @@ namespace DBCode {
                   Text = labelName,
                   AutoSize = true,
                   Font = CreateNewFont(),
-                  ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont],
+                  ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
                   BackColor = pBackgroundColor ?? Color.Transparent
                };
                if ((pInitiallyChecked > -1) && (pInitiallyChecked < pRadioButtonNames.Count)) {

@@ -4,13 +4,15 @@
          private Button mButton;
          private ColorSwatch mSwatch;
          private Label mLabel;
-         private ColorSwatchUsage mUsage;
+         private ColorSwatchUsage mColorUsage = (ColorSwatchUsage)(-1);
+         private ColorPickerSwatchUsage mColorPickerUsage = (ColorPickerSwatchUsage)(-1);
+         private SyntaxColorSwatchUsage mSyntaxColorUsage = (SyntaxColorSwatchUsage)(-1);
 
          public event ColorSwatchClickedHandler? SwatchClicked;
 
          public LabeledButtonColorSwatchCluster(Theme pTheme, string pLabelText, string pButtonText, ColorSwatchUsage pUsage,
             LabelPosition pLabelPosition, Color pInitialColor, Color? pBackgroundColor = null) : base(pTheme, pBackgroundColor) {
-            mUsage = pUsage;
+            mColorUsage = pUsage;
             mLabelPosition = pLabelPosition;
             mLabel = new Label() {
                TabIndex = TAB_INDEX_IGNORED,
@@ -19,7 +21,7 @@
                AutoSize = true,
                TextAlign = ContentAlignment.MiddleCenter,
                Font = CreateNewFont(),
-               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont],
+               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
                BackColor = pBackgroundColor ?? Color.Transparent
             };
             mButton = new Button() {
@@ -29,7 +31,71 @@
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink,
                Font = CreateNewFont(),
-               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont],
+               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+               Tag = pUsage
+            };
+            mButton.Click += Button_Click;
+            mSwatch = new ColorSwatch(pUsage, pInitialColor, -1);
+            mSwatch.SwatchClicked += Swatch_Click;
+            Controls.AddRange([mLabel, mButton, mSwatch]);
+            LayoutControls();
+         }
+
+         public LabeledButtonColorSwatchCluster(Theme pTheme, string pLabelText, string pButtonText,
+            ColorPickerSwatchUsage pUsage, LabelPosition pLabelPosition, Color pInitialColor, Color? pBackgroundColor = null)
+            : base(pTheme, pBackgroundColor) {
+            mColorPickerUsage = pUsage;
+            mLabelPosition = pLabelPosition;
+            mLabel = new Label() {
+               TabIndex = TAB_INDEX_IGNORED,
+               Name = $"LabeledButtonColorSwatchCluster{nameof(mLabel)}{mTabIndex++}",
+               Text = pLabelText,
+               AutoSize = true,
+               TextAlign = ContentAlignment.MiddleCenter,
+               Font = CreateNewFont(),
+               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+               BackColor = pBackgroundColor ?? Color.Transparent
+            };
+            mButton = new Button() {
+               TabIndex = mTabIndex,
+               Name = $"LabeledButtonColorSwatchCluster{nameof(mButton)}{mTabIndex++}",
+               Text = pButtonText,
+               AutoSize = true,
+               AutoSizeMode = AutoSizeMode.GrowAndShrink,
+               Font = CreateNewFont(),
+               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+               Tag = pUsage
+            };
+            mButton.Click += Button_Click;
+            mSwatch = new ColorSwatch(pUsage, pInitialColor, -1);
+            mSwatch.SwatchClicked += Swatch_Click;
+            Controls.AddRange([mLabel, mButton, mSwatch]);
+            LayoutControls();
+         }
+
+         public LabeledButtonColorSwatchCluster(Theme pTheme, string pLabelText, string pButtonText,
+            SyntaxColorSwatchUsage pUsage, LabelPosition pLabelPosition, Color pInitialColor, Color? pBackgroundColor = null)
+            : base(pTheme, pBackgroundColor) {
+            mSyntaxColorUsage = pUsage;
+            mLabelPosition = pLabelPosition;
+            mLabel = new Label() {
+               TabIndex = TAB_INDEX_IGNORED,
+               Name = $"LabeledButtonColorSwatchCluster{nameof(mLabel)}{mTabIndex++}",
+               Text = pLabelText,
+               AutoSize = true,
+               TextAlign = ContentAlignment.MiddleCenter,
+               Font = CreateNewFont(),
+               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+               BackColor = pBackgroundColor ?? Color.Transparent
+            };
+            mButton = new Button() {
+               TabIndex = mTabIndex,
+               Name = $"LabeledButtonColorSwatchCluster{nameof(mButton)}{mTabIndex++}",
+               Text = pButtonText,
+               AutoSize = true,
+               AutoSizeMode = AutoSizeMode.GrowAndShrink,
+               Font = CreateNewFont(),
+               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
                Tag = pUsage
             };
             mButton.Click += Button_Click;
@@ -49,7 +115,7 @@
          }
 
          private void Button_Click(object? pSender, EventArgs pArgs) {
-            SwatchClicked?.Invoke(this, mUsage);
+            SwatchClicked?.Invoke(this, mColorUsage);
          }
 
          private void Swatch_Click(object? pSender, ColorSwatchUsage pUsage) {

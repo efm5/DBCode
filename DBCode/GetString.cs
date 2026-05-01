@@ -149,7 +149,7 @@ namespace DBCode {
          Theme theme = mCurrentTheme!;
          Theme.ThemeInterfaceThings(theme, out Font interfaceFont, out Color interfaceForeColor,
             out Color interfaceBackColor);
-         mInnerPanel.BackColor = theme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground];
+         mInnerPanel.BackColor = theme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground];
          MainForm.DisposeFontIfOwned(mPromptLabel.Font);
          mPromptLabel.Font = CreateNewFont(interfaceFont);
          mPromptLabel.ForeColor = interfaceForeColor;

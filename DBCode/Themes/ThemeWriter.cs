@@ -39,7 +39,7 @@ namespace DBCode.Themes {
             Font font = pTheme.mFonts[(int)usage];
             fonts[usage.ToString()] = new FontConverter().ConvertToString(font) ?? "";
          }
-         foreach (ColorUsage usage in Enum.GetValues<ColorUsage>()) {
+         foreach (ColorSwatchUsage usage in Enum.GetValues<ColorSwatchUsage>()) {
             Color color = pTheme.mInterfaceColors[(int)usage];
             colors[usage.ToString()] = ColorToString(color);
          }

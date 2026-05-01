@@ -16,7 +16,7 @@ namespace DBCode {
                Font = CreateNewTitleFont(pSizeMultiplier),
                TextAlign = ContentAlignment.MiddleCenter,
                BackColor = pBackgroundColor ?? Color.Transparent,
-               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorUsage.InterfaceFont]
+               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont]
             };
             Controls.Add(mLabel);
             AutoSize = true;

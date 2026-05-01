@@ -1,6 +1,4 @@
-﻿using DBCode.Themes;
-
-namespace DBCode {
+﻿namespace DBCode {
    internal static partial class LayoutHelpers {
 
       internal sealed class LabeledColorSwatchCluster : BaseCluster {
@@ -18,7 +16,7 @@ namespace DBCode {
                TextAlign = ContentAlignment.MiddleCenter,
                Font = CreateNewFont()
             };
-            mSwatch = new ColorSwatch(ColorSwatchUsage.Demo, pInitialColor, 50);
+            mSwatch = new ColorSwatch(ColorPickerSwatchUsage.Demo, pInitialColor, 50);
             mSwatch.SetSize(mEm3);
             Controls.AddRange([mLabel, mSwatch]);
             LayoutControls();

@@ -3,13 +3,43 @@ using static DBCode.LayoutHelpers.ColorSwatchHelpers;
 namespace DBCode {
    internal static partial class LayoutHelpers {
       internal sealed class ColorSwatch : Panel {
-         private ColorSwatchUsage mUsage = ColorSwatchUsage.PanelBackground;
+         private ColorSwatchUsage mColorSwatchUsage = (ColorSwatchUsage)(-1);
+         private ColorPickerSwatchUsage mPickerUsage = (ColorPickerSwatchUsage)(-1);
+         private SyntaxColorSwatchUsage mSyntaxColorSwatchUsage = (SyntaxColorSwatchUsage)(-1);
          private Color mSwatchColor = Color.Black;
          private Size mSwatchSize = new Size(24, 24);
          public event ColorSwatchClickedHandler? SwatchClicked;
 
          public ColorSwatch(ColorSwatchUsage pUsage, Color pInitialColor, int pSize) {
-            mUsage = pUsage;
+            mColorSwatchUsage = pUsage;
+            mSwatchColor = pInitialColor;
+            if (pSize < 8)
+               mSwatchSize = GetSwatchSize();
+            else
+               mSwatchSize = new Size(pSize, pSize);
+            Size = mSwatchSize;
+            BackColor = Color.Transparent;
+            TabIndex = mTabIndex;
+            Name = "ColorSwatch" + mTabIndex++;
+            MouseClick += OnMouseClick;
+         }
+
+         public ColorSwatch(ColorPickerSwatchUsage pUsage, Color pInitialColor, int pSize) {
+            mPickerUsage = pUsage;
+            mSwatchColor = pInitialColor;
+            if (pSize < 8)
+               mSwatchSize = GetSwatchSize();
+            else
+               mSwatchSize = new Size(pSize, pSize);
+            Size = mSwatchSize;
+            BackColor = Color.Transparent;
+            TabIndex = mTabIndex;
+            Name = "ColorSwatch" + mTabIndex++;
+            MouseClick += OnMouseClick;
+         }
+
+         public ColorSwatch(SyntaxColorSwatchUsage pUsage, Color pInitialColor, int pSize) {
+            mSyntaxColorSwatchUsage = pUsage;
             mSwatchColor = pInitialColor;
             if (pSize < 8)
                mSwatchSize = GetSwatchSize();
@@ -38,7 +68,12 @@ namespace DBCode {
          private void OnMouseClick(object? pSender, MouseEventArgs pArgs) {
             if (pArgs.Button != MouseButtons.Left)
                return;
-            SwatchClicked?.Invoke(this, mUsage);
+            if (mColorSwatchUsage != (ColorSwatchUsage)(-1))
+               SwatchClicked?.Invoke(this, mColorSwatchUsage);
+            else if (mPickerUsage != (ColorPickerSwatchUsage)(-1))
+               SwatchClicked?.Invoke(this, mPickerUsage);
+            else if (mSyntaxColorSwatchUsage != (SyntaxColorSwatchUsage)(-1))
+               SwatchClicked?.Invoke(this, mSyntaxColorSwatchUsage);
          }
 
          protected override void OnPaint(PaintEventArgs pArgs) {

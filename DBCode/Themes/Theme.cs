@@ -13,7 +13,7 @@ namespace DBCode.Themes {
          mName = pName;
          mIsBuiltIn = pIsBuiltIn;
          mFonts = new Font[Enum.GetValues<FontUsage>().Length];
-         mInterfaceColors = new Color[Enum.GetValues<ColorUsage>().Length];
+         mInterfaceColors = new Color[Enum.GetValues<ColorSwatchUsage>().Length];
          mHighlightColors = new Color[Enum.GetValues<LanguageKind>().Length][];
          for (int i = 0; i < mHighlightColors.Length; i++)
             mHighlightColors[i] = new Color[Enum.GetValues<TokenKind>().Length];
@@ -21,21 +21,21 @@ namespace DBCode.Themes {
          mFonts[(int)FontUsage.Interface] = CreateNewFont();
          mFonts[(int)FontUsage.Menu] = CreateNewFont();
          mFonts[(int)FontUsage.Status] = CreateNewFont();
-         mInterfaceColors[(int)ColorUsage.PanelBackground] = Color.Black;
-         mInterfaceColors[(int)ColorUsage.TextBox] = Color.Black;
-         mInterfaceColors[(int)ColorUsage.TextBoxFont] = Color.LightGoldenrodYellow;
-         mInterfaceColors[(int)ColorUsage.MenuBackground] = Color.Black;
-         mInterfaceColors[(int)ColorUsage.MenuFont] = Color.LightGoldenrodYellow;
-         mInterfaceColors[(int)ColorUsage.InterfaceBackground] = Color.Black;
-         mInterfaceColors[(int)ColorUsage.InterfaceFont] = Color.LightGoldenrodYellow;
-         mInterfaceColors[(int)ColorUsage.StatusBackground] = Color.DarkBlue;
-         mInterfaceColors[(int)ColorUsage.StatusFont] = Color.LightGoldenrodYellow;
-         mInterfaceColors[(int)ColorUsage.GroupBoxBackground] = Color.DarkGray;
-         mInterfaceColors[(int)ColorUsage.GroupBoxFont] = Color.Goldenrod;
-         mInterfaceColors[(int)ColorUsage.TabHeaderUnselectedFont] = Color.Yellow;
-         mInterfaceColors[(int)ColorUsage.TabHeaderSelectedFont] = Color.Blue;
-         mInterfaceColors[(int)ColorUsage.TabHeaderUnselectedBackground] = Color.DarkGray;
-         mInterfaceColors[(int)ColorUsage.TabHeaderSelectedBackground] = Color.Goldenrod;
+         mInterfaceColors[(int)ColorSwatchUsage.PanelBackground] = Color.Black;
+         mInterfaceColors[(int)ColorSwatchUsage.TextBox] = Color.Black;
+         mInterfaceColors[(int)ColorSwatchUsage.TextBoxFont] = Color.LightGoldenrodYellow;
+         mInterfaceColors[(int)ColorSwatchUsage.MenuBackground] = Color.Black;
+         mInterfaceColors[(int)ColorSwatchUsage.MenuFont] = Color.LightGoldenrodYellow;
+         mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground] = Color.Black;
+         mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont] = Color.LightGoldenrodYellow;
+         mInterfaceColors[(int)ColorSwatchUsage.StatusBackground] = Color.DarkBlue;
+         mInterfaceColors[(int)ColorSwatchUsage.StatusFont] = Color.LightGoldenrodYellow;
+         mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground] = Color.DarkGray;
+         mInterfaceColors[(int)ColorSwatchUsage.GroupBoxFont] = Color.Goldenrod;
+         mInterfaceColors[(int)ColorSwatchUsage.TabHeaderUnselectedFont] = Color.Yellow;
+         mInterfaceColors[(int)ColorSwatchUsage.TabHeaderSelectedFont] = Color.Blue;
+         mInterfaceColors[(int)ColorSwatchUsage.TabHeaderUnselectedBackground] = Color.DarkGray;
+         mInterfaceColors[(int)ColorSwatchUsage.TabHeaderSelectedBackground] = Color.Goldenrod;
       }
 
       public Theme Clone() {
@@ -75,40 +75,40 @@ namespace DBCode.Themes {
       public static void ThemeInterfaceThings(Theme pTheme, out Font pOutFont, out Color pOutForeColor,
          out Color pOutBackColor) {
          pOutFont = pTheme.mFonts[(int)FontUsage.Interface];
-         pOutForeColor = pTheme.mInterfaceColors[(int)ColorUsage.InterfaceFont];
-         pOutBackColor = pTheme.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
+         pOutForeColor = pTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont];
+         pOutBackColor = pTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground];
       }
 
       public static void ThemeMenuThings(Theme pTheme, out Font pOutFont, out Color pOutForeColor,
          out Color pOutBackColor) {
          pOutFont = pTheme.mFonts[(int)FontUsage.Menu];
-         pOutForeColor = pTheme.mInterfaceColors[(int)ColorUsage.MenuFont];
-         pOutBackColor = pTheme.mInterfaceColors[(int)ColorUsage.MenuBackground];
+         pOutForeColor = pTheme.mInterfaceColors[(int)ColorSwatchUsage.MenuFont];
+         pOutBackColor = pTheme.mInterfaceColors[(int)ColorSwatchUsage.MenuBackground];
       }
 
       public static void ThemeStatusThings(Theme pTheme, out Font pOutFont, out Color pOutForeColor,
          out Color pOutBackColor) {
          pOutFont = pTheme.mFonts[(int)FontUsage.Status];
-         pOutForeColor = pTheme.mInterfaceColors[(int)ColorUsage.StatusFont];
-         pOutBackColor = pTheme.mInterfaceColors[(int)ColorUsage.StatusBackground];
+         pOutForeColor = pTheme.mInterfaceColors[(int)ColorSwatchUsage.StatusFont];
+         pOutBackColor = pTheme.mInterfaceColors[(int)ColorSwatchUsage.StatusBackground];
       }
 
       public static void ThemeTextBoxThings(Theme pTheme, out Font pOutFont, out Color pOutForeColor,
          out Color pOutBackColor) {
          pOutFont = pTheme.mFonts[(int)FontUsage.Text];
-         pOutForeColor = pTheme.mInterfaceColors[(int)ColorUsage.TextBoxFont];
-         pOutBackColor = pTheme.mInterfaceColors[(int)ColorUsage.TextBox];
+         pOutForeColor = pTheme.mInterfaceColors[(int)ColorSwatchUsage.TextBoxFont];
+         pOutBackColor = pTheme.mInterfaceColors[(int)ColorSwatchUsage.TextBox];
       }
 
       public static void ThemeAllThings(Theme pTheme, out Font pOutFont, out Color pOutForeColor, out Color pOutBackColor,
           out Color pOutGroupBoxBackgroundColor, out Color pOutStatusBackgroundColor, out Color pOutStatusForeColor,
            out Font pOutStatusFont) {
          pOutFont = pTheme.mFonts[(int)FontUsage.Interface];
-         pOutForeColor = pTheme.mInterfaceColors[(int)ColorUsage.InterfaceFont];
-         pOutBackColor = pTheme.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
-         pOutGroupBoxBackgroundColor = pTheme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground];
-         pOutStatusBackgroundColor = pTheme.mInterfaceColors[(int)ColorUsage.StatusBackground];
-         pOutStatusForeColor = pTheme.mInterfaceColors[(int)ColorUsage.StatusFont];
+         pOutForeColor = pTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont];
+         pOutBackColor = pTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground];
+         pOutGroupBoxBackgroundColor = pTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground];
+         pOutStatusBackgroundColor = pTheme.mInterfaceColors[(int)ColorSwatchUsage.StatusBackground];
+         pOutStatusForeColor = pTheme.mInterfaceColors[(int)ColorSwatchUsage.StatusFont];
          pOutStatusFont = pTheme.mFonts[(int)FontUsage.Status];
       }
 

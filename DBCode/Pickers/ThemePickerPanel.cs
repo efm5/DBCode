@@ -67,7 +67,7 @@
             ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
             ThrowIfNull(mButtonBaseClusters, nameof(mButtonBaseClusters));
             ThrowIfNull(mThemePickerBottomPanel, nameof(mThemePickerBottomPanel));
-            BackColor = mCurrentTheme.mInterfaceColors[(int)ColorUsage.PanelBackground];
+            BackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.PanelBackground];
             foreach (BaseCluster cluster in mButtonBaseClusters)
                cluster.SetFontAndColor();
             mThemePickerBottomPanel.SetFontAndColor();

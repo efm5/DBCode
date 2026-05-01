@@ -94,7 +94,7 @@ namespace DBCode {
             LabeledButtonColorSwatchCluster? swatch = pSender as LabeledButtonColorSwatchCluster;
             if (swatch == null)
                return;
-            EnsureColorPickerPanel(mTemporaryTheme, (ColorUsage)pUsage, swatch.GetColor());
+            EnsureColorPickerPanel(mTemporaryTheme, (ColorSwatchUsage)pUsage, swatch.GetColor());
          }
 
          private void OnFontButtonClicked(object? pSender, EventArgs pArgs) {

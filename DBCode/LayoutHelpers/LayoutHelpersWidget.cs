@@ -232,18 +232,18 @@ namespace DBCode {
 
       internal static void PaintMenuItem(ToolStripMenuItem pTSMI, Themes.Theme pTheme) {
          pTSMI.Font = CreateMenuFont();
-         pTSMI.ForeColor = pTheme.mInterfaceColors[(int)ColorUsage.MenuFont];
-         pTSMI.BackColor = pTheme.mInterfaceColors[(int)ColorUsage.MenuBackground];
+         pTSMI.ForeColor = pTheme.mInterfaceColors[(int)ColorSwatchUsage.MenuFont];
+         pTSMI.BackColor = pTheme.mInterfaceColors[(int)ColorSwatchUsage.MenuBackground];
       }
 
       internal static void PaintMenuItemsRecursive(ToolStripMenuItem pTSMI, Themes.Theme pTheme) {
          pTSMI.Font = CreateMenuFont();
-         pTSMI.ForeColor = pTheme.mInterfaceColors[(int)ColorUsage.MenuFont];
-         pTSMI.BackColor = pTheme.mInterfaceColors[(int)ColorUsage.MenuBackground];
+         pTSMI.ForeColor = pTheme.mInterfaceColors[(int)ColorSwatchUsage.MenuFont];
+         pTSMI.BackColor = pTheme.mInterfaceColors[(int)ColorSwatchUsage.MenuBackground];
          foreach (ToolStripMenuItem tsmi in pTSMI.DropDownItems.OfType<ToolStripMenuItem>()) {
             tsmi.Font = CreateMenuFont();
-            tsmi.ForeColor = pTheme.mInterfaceColors[(int)ColorUsage.MenuFont];
-            tsmi.BackColor = pTheme.mInterfaceColors[(int)ColorUsage.MenuBackground];
+            tsmi.ForeColor = pTheme.mInterfaceColors[(int)ColorSwatchUsage.MenuFont];
+            tsmi.BackColor = pTheme.mInterfaceColors[(int)ColorSwatchUsage.MenuBackground];
             if (tsmi.DropDownItems.Count > 0)
                PaintMenuItemsRecursive(tsmi, pTheme);
          }

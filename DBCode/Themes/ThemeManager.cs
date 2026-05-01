@@ -53,7 +53,7 @@ namespace DBCode.Themes {
          }
 
          JsonElement colors = root.GetProperty("Colors");
-         foreach (ColorUsage usage in Enum.GetValues<ColorUsage>()) {
+         foreach (ColorSwatchUsage usage in Enum.GetValues<ColorSwatchUsage>()) {
             string key = usage.ToString();
             if (!colors.TryGetProperty(key, out JsonElement colorElement))
                throw new Exception($"Theme '{name}' is missing color '{key}'.");

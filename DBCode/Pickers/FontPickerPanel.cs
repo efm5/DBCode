@@ -30,9 +30,9 @@ namespace DBCode {
          private void InitializeUI() {
             if (mTheme == null)
                return;
-            Color interfaceBackground = mTheme.mInterfaceColors[(int)ColorUsage.InterfaceBackground],
-               interfaceFont = mTheme.mInterfaceColors[(int)ColorUsage.InterfaceFont],
-               groupBoxBackground = mTheme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground];
+            Color interfaceBackground = mTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground],
+               interfaceFont = mTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+               groupBoxBackground = mTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground];
             Font interfaceTextFont = mTheme.mFonts[(int)FontUsage.Interface];
 
             mTitleLabel = new TwoLineHeaderLabelCluster(mTheme, "Select A Font",
@@ -473,11 +473,11 @@ namespace DBCode {
          }
 
          private void SetFontsAndColors() {
-            Color backColor = mTheme!.mInterfaceColors[(int)ColorUsage.InterfaceBackground],
-               foreColor = mTheme.mInterfaceColors[(int)ColorUsage.InterfaceFont],
-               groupBoxBackgroundColor = mTheme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground],
-               statusBackground = mTheme.mInterfaceColors[(int)ColorUsage.StatusBackground],
-               statusForeColor = mTheme.mInterfaceColors[(int)ColorUsage.StatusFont];
+            Color backColor = mTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground],
+               foreColor = mTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+               groupBoxBackgroundColor = mTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground],
+               statusBackground = mTheme.mInterfaceColors[(int)ColorSwatchUsage.StatusBackground],
+               statusForeColor = mTheme.mInterfaceColors[(int)ColorSwatchUsage.StatusFont];
             Font interfaceFont = mTheme.mFonts[(int)FontUsage.Interface],
                statusFont = mTheme.mFonts[(int)FontUsage.Status];
 

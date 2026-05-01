@@ -49,7 +49,7 @@
       }
 
       private static void ValidateColors(Theme pTheme, List<string> pIssues) {
-         foreach (ColorUsage usage in Enum.GetValues<ColorUsage>()) {
+         foreach (ColorSwatchUsage usage in Enum.GetValues<ColorSwatchUsage>()) {
             Color color = pTheme.mInterfaceColors[(int)usage];
 
             if (color.IsEmpty)

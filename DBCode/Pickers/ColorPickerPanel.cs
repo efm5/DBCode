@@ -6,7 +6,7 @@ namespace DBCode {
          private CheckBox? mUseGrayscaleCheckBox, mUseNamedCheckBox;
          private Color mInitialColor;
          private ColorSwatch? mBlueSwatch, mGraySwatch, mGreenSwatch, mRedSwatch;
-         private ColorUsage mColorUsage;
+         private ColorSwatchUsage mColorSwatchUsage;
          private ComboBox? mNamedColorsComboBox;
          private GroupBox? mCustomColorGroupBox, mNamedColorsGroupBox;
          private TwoLineHeaderLabelCluster? mTitleLabel;
@@ -19,9 +19,9 @@ namespace DBCode {
          private ToolStripStatusLabel? mSpringLabel;
          private TrackBar? mBlueSlider, mGraySlider, mGreenSlider, mRedSlider;
 
-         public ColorPickerPanel(Theme pTheme, ColorUsage pColorUsage, Color pInitialColor) {
+         public ColorPickerPanel(Theme pTheme, ColorSwatchUsage pColorSwatchUsage, Color pInitialColor) {
             mInitialColor = pInitialColor;
-            mColorUsage = pColorUsage;
+            mColorSwatchUsage = pColorSwatchUsage;
             mTheme = pTheme;
             InitializeUI();
             LayoutControls();
@@ -31,13 +31,13 @@ namespace DBCode {
          private void InitializeUI() {
             if (mTheme == null)
                return;
-            Color interfaceBackground = mTheme.mInterfaceColors[(int)ColorUsage.InterfaceBackground],
-               interfaceFont = mTheme.mInterfaceColors[(int)ColorUsage.InterfaceFont],
-               groupBoxBackground = mTheme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground];
+            Color interfaceBackground = mTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground],
+               interfaceFont = mTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+               groupBoxBackground = mTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground];
             Font interfaceTextFont = mTheme.mFonts[(int)FontUsage.Interface];
 
             mTitleLabel = new TwoLineHeaderLabelCluster(mTheme, "Select A Color",
-               $"Use this color for {ToDescription((ColorUsage)mColorUsage)}");
+               $"Use this color for {ToDescription((ColorSwatchUsage)mColorSwatchUsage)}");
             mScrollPanel = new Panel {
                Name = $"ColorPickerScrollPanel{mTabIndex++}",
                TabIndex = TAB_INDEX_IGNORED,
@@ -127,7 +127,7 @@ namespace DBCode {
                TickFrequency = 16,
                Width = 200
             };
-            mGraySwatch = new ColorSwatch(ColorSwatchUsage.Gray, GrayFromInitialColor(), -1);
+            mGraySwatch = new ColorSwatch(ColorPickerSwatchUsage.Gray, GrayFromInitialColor(), -1);
             FlattenButton(mGrayPrefixButton, groupBoxBackground);
             // Red row
             mRedPrefixButton = new Button {
@@ -156,7 +156,7 @@ namespace DBCode {
                TickFrequency = 16,
                Width = 200
             };
-            mRedSwatch = new ColorSwatch(ColorSwatchUsage.Red, RedFromInitialColor(), -1);
+            mRedSwatch = new ColorSwatch(ColorPickerSwatchUsage.Red, RedFromInitialColor(), -1);
             FlattenButton(mRedPrefixButton, groupBoxBackground);
             // Green row
             mGreenPrefixButton = new Button {
@@ -185,7 +185,7 @@ namespace DBCode {
                TickFrequency = 16,
                Width = 200
             };
-            mGreenSwatch = new ColorSwatch(ColorSwatchUsage.Green, GreenFromInitialColor(), -1);
+            mGreenSwatch = new ColorSwatch(ColorPickerSwatchUsage.Green, GreenFromInitialColor(), -1);
             FlattenButton(mGreenPrefixButton, groupBoxBackground);
             // Blue row
             mBluePrefixButton = new Button {
@@ -214,7 +214,7 @@ namespace DBCode {
                TickFrequency = 16,
                Width = 200
             };
-            mBlueSwatch = new ColorSwatch(ColorSwatchUsage.Blue, BlueFromInitialColor(), -1);
+            mBlueSwatch = new ColorSwatch(ColorPickerSwatchUsage.Blue, BlueFromInitialColor(), -1);
             FlattenButton(mBluePrefixButton, groupBoxBackground);
             mCustomColorGroupBox.Controls.AddRange([mUseGrayscaleCheckBox, mGrayPrefixButton, mGrayUpDown, mGraySlider, mGraySwatch, mRedPrefixButton, mRedUpDown, mRedSlider, mRedSwatch, mGreenPrefixButton, mGreenUpDown, mGreenSlider, mGreenSwatch, mBluePrefixButton, mBlueUpDown, mBlueSlider, mBlueSwatch]);
             mDemoSwatch = new LabeledColorSwatchCluster(mTheme, "Example:", LabelPosition.Left, mInitialColor);
@@ -529,11 +529,11 @@ namespace DBCode {
          }
 
          private void SetFontsAndColors() {
-            Color backColor = mTheme!.mInterfaceColors[(int)ColorUsage.InterfaceBackground],
-               foreColor = mTheme.mInterfaceColors[(int)ColorUsage.InterfaceFont],
-               groupBoxBackgroundColor = mTheme.mInterfaceColors[(int)ColorUsage.GroupBoxBackground],
-               statusBackground = mTheme.mInterfaceColors[(int)ColorUsage.StatusBackground],
-               statusForeColor = mTheme.mInterfaceColors[(int)ColorUsage.StatusFont];
+            Color backColor = mTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground],
+               foreColor = mTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+               groupBoxBackgroundColor = mTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground],
+               statusBackground = mTheme.mInterfaceColors[(int)ColorSwatchUsage.StatusBackground],
+               statusForeColor = mTheme.mInterfaceColors[(int)ColorSwatchUsage.StatusFont];
             Font interfaceFont = mTheme.mFonts[(int)FontUsage.Interface],
                statusFont = mTheme.mFonts[(int)FontUsage.Status];
 

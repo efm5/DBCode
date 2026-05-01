@@ -97,16 +97,16 @@
          mRichTextBox.TextChanged -= OnEditorTextChanged;
          Theme theme = mCurrentTheme!;
          mCurrentLanguageIsTSMI.Text = mCurrently + theme.mName;
-         mForm!.BackColor = theme.mInterfaceColors[(int)ColorUsage.InterfaceBackground];
-         mRichTextBox.BackColor = theme.mInterfaceColors[(int)ColorUsage.TextBox];
-         mRichTextBox.ForeColor = theme.mInterfaceColors[(int)ColorUsage.TextBoxFont];
-         mMenuStrip.BackColor = theme.mInterfaceColors[(int)ColorUsage.MenuBackground];
+         mForm!.BackColor = theme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground];
+         mRichTextBox.BackColor = theme.mInterfaceColors[(int)ColorSwatchUsage.TextBox];
+         mRichTextBox.ForeColor = theme.mInterfaceColors[(int)ColorSwatchUsage.TextBoxFont];
+         mMenuStrip.BackColor = theme.mInterfaceColors[(int)ColorSwatchUsage.MenuBackground];
          foreach (ToolStripMenuItem toolStripMenuItem in mMenuStrip.Items.OfType<ToolStripMenuItem>()) {
             PaintMenuItem(toolStripMenuItem, theme);
             foreach (ToolStripMenuItem subItem in toolStripMenuItem.DropDownItems.OfType<ToolStripMenuItem>())
                PaintMenuItemsRecursive(subItem, theme);
          }
-         mMainBottomPanel.BackColor = theme.mInterfaceColors[(int)ColorUsage.StatusBackground];
+         mMainBottomPanel.BackColor = theme.mInterfaceColors[(int)ColorSwatchUsage.StatusBackground];
          mMainBottomPanel.SetFontAndColor();
          LayoutMainBottomPanel();
          mMainBottomPanel.Invalidate(true);

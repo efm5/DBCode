@@ -209,7 +209,7 @@ namespace DBCode {
                ThemePanel.mRepaint = false;
             else
                ThemePanel.mRepaint = true;
-            mTheme.mInterfaceColors[(int)mColorUsage] = mDemoSwatch.BackColor;
+            mTheme.mInterfaceColors[(int)mColorSwatchUsage] = mDemoSwatch.BackColor;
             ThemePanel.RestoreFromColorPickerPanel();
          }
 
