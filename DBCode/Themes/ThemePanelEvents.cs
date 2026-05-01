@@ -14,7 +14,6 @@ namespace DBCode {
             mExampleScrollPanel!.ClientSizeChanged += ExampleScrollPanel_ClientSizeChanged;
             Controls.AddRange([mPrimaryTabControl, mThemeBottomPanel, mThemesHeaderCluster]);
             ResumeLayout(false);
-            BeginInvoke(new Action(() => { LayoutControls(); }));
          }
 
          private void PrimaryTabControl_DrawItem(object? pSender, DrawItemEventArgs pArgs) {

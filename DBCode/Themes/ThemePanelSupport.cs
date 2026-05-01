@@ -1,6 +1,6 @@
 ﻿namespace DBCode {
    namespace Themes {
-      internal sealed partial class ThemePanel : Panel {//New file today
+      internal sealed partial class ThemePanel : Panel {
          public void SetThemeUsage(ThemeUsage pThemeUsage) {
             mThemeUsage = pThemeUsage;
          }
@@ -60,8 +60,14 @@
             mIncludeExcludeTabControl.SelectedIndex = savedIndex;
             ApplyTheme(mTemporaryTheme);
             LayoutClustersAndContainers();
-            SizeExamplesContainer();
+            SizePanel(mExamplesContainer, mIndent, false);
+            mExamplesContainer.Height += mEmHalf;
+            mExamplesContainer.Location = new Point(mIndent, mExampleStatusStrip.Bottom + mEmHalf);
             mThemeBottomPanel.LayoutControls();
+            mPrimaryTabControl.Location = new Point(mIndent, mThemesHeaderCluster.Bottom + mEmHalf);
+            mPrimaryTabControl.Width = ClientSize.Width - (2 * mIndent);
+            mPrimaryTabControl.Height = ClientSize.Height - (mThemeBottomPanel.Height + mThemesHeaderCluster.Height + mEm);
+            mPrimaryTabControl.Anchor = mAnchorTopLeftBottomRight;
             ResumeLayout(true);
          }
 
@@ -441,7 +447,6 @@
 
          private void CloseThemePanel() {
             ThrowIfNull(mForm, nameof(mForm));
-            mFirstTheme = false;
             mForm.RestoreFromThemePanel();
          }
 

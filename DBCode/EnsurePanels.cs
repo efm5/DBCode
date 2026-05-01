@@ -6,11 +6,11 @@
          SuspendClientSizeChanged();
          if (mThemePanel == null)
             mThemePanel = new ThemePanel(pThemeUsage);
-         if (mFirstTheme) {
+         if (mUiState.mFirstTheme) {
             mForm.Size = mThemePanel.WantedSize();
             CenterFormOnMonitor(mForm);
             EnsureWindowFitsMonitor(mForm, false);
-            mFirstTheme = false;
+            mUiState.mFirstTheme = false;
          }
          else
             mForm.Bounds = mUiState.ThemeBounds;

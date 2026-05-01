@@ -161,7 +161,7 @@ namespace DBCode {
          AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right,
          mAnchorTopRight = AnchorStyles.Top | AnchorStyles.Right;
       public static bool mFirstGray = true, mFirstLaunch = true, mForceActivation = true,
-         mIsTargetingEnabled = false, mPreMinimalControlBox = true, mReturnToTop = true, mFirstTheme = true,
+         mIsTargetingEnabled = false, mPreMinimalControlBox = true, mReturnToTop = true,
          mFirstColorPicker = true, mFirstFontPicker = true;
       public static float mFontWidthAdjustment = 0.5f;
       public static FontUsage mFontUsage = FontUsage.Text;
