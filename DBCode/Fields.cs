@@ -1,5 +1,4 @@
-﻿//File: Fields.cs
-namespace DBCode {
+﻿namespace DBCode {
    #region enumerations
    public enum ViewMode { Features, Minimal }
 

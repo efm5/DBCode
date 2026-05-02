@@ -60,10 +60,13 @@
             mIncludeExcludeTabControl.SelectedIndex = savedIndex;
             ApplyTheme(mTemporaryTheme);
             LayoutClustersAndContainers();
-            SizePanel(mExamplesContainer, mIndent, false);
-            mExamplesContainer.Height += mEmHalf;
-            mExamplesContainer.Location = new Point(mIndent, mExampleStatusStrip.Bottom + mEmHalf);
             mThemeBottomPanel.LayoutControls();
+            mExampleBottomPanel.LayoutControls();
+            SizeExamplesContainer();
+            mExamplesContainer.Height += mEmHalf;
+            mExampleGroupBox.Location = new Point(mIndent, mExampleMenuStrip.Bottom + mEmHalf);
+            mExampleBottomPanel.Location = new Point(mIndent, mExampleGroupBox.Bottom + mEmHalf);
+            mExamplesContainer.Location = new Point(mIndent, mExampleBottomPanel.Bottom + mEmHalf);
             mPrimaryTabControl.Location = new Point(mIndent, mThemesHeaderCluster.Bottom + mEmHalf);
             mPrimaryTabControl.Width = ClientSize.Width - (2 * mIndent);
             mPrimaryTabControl.Height = ClientSize.Height - (mThemeBottomPanel.Height + mThemesHeaderCluster.Height + mEm);
@@ -76,7 +79,6 @@
             mExamplesContainer.LayoutClusters();
             SizePanel(mExamplesContainer, mIndent, false);
             mExamplesContainer.Height += mEmHalf;
-            mExamplesContainer.Location = new Point(mIndent, mExampleStatusStrip.Bottom + mEmHalf);
          }
 
          private void LayoutClustersAndContainers() {
@@ -88,12 +90,11 @@
             x += mExampleButton.Width + mEm;
             mExampleCheckBox.Location = new Point(x, y + (tallest - mExampleCheckBox.Height) / 2);
             x += mExampleCheckBox.Width + mEm;
+            SizeTextBoxToFitString(out SizeF pOSize, mExampleRichTextBox);
+            mExampleRichTextBox.Size = LayoutHelpers.SizeFromSizeF(pOSize);
             mExampleRichTextBox.Location = new Point(x, y);
             x += mExampleRichTextBox.Width + mEm;
             mExampleRadioButton.Location = new Point(x, y + (tallest - mExampleRadioButton.Height) / 2);
-            x += mExampleRadioButton.Width + mEm;
-            SizeTextBoxToFitString(out SizeF pOSize, mExampleRichTextBox);
-            mExampleRichTextBox.Size = LayoutHelpers.SizeFromSizeF(pOSize);
             SizeGroupBox(mExampleGroupBox);
             foreach (List<BaseCluster> clusterBases in mAllClusters.OfType<List<BaseCluster>>()) {
                foreach (BaseCluster cluster in clusterBases.OfType<BaseCluster>()) {
@@ -177,6 +178,7 @@
             ApplyThemeToControlTree(mPrimaryTabControl);
             ApplyThemeToControlTree(mHighlightTabControl);
             mThemeBottomPanel.SetFontAndColor();
+            mExampleBottomPanel.SetFontAndColor();
             mPrimaryTabControl.Invalidate(true);
             mHighlightTabControl.Invalidate(true);
          }
@@ -469,6 +471,7 @@
                // mApplyButton, mNewButton, mCloneButton disposed by mThemeBottomPanel.Dispose
                // mHelpButton, mCancelButton owned and disposed by mThemeBottomPanel
                mThemeBottomPanel?.Dispose();
+               mExampleBottomPanel?.Dispose(); // also disposes mBottomExampleButton via AddLeftControl
                mHighlightTabControl?.Dispose();
                mIncludeExcludeTabControl?.Dispose();
                mPrimaryTabControl?.Dispose();
@@ -495,8 +498,6 @@
                mMarkdownHeaderCluster?.Dispose();
                mPythonHeaderCluster?.Dispose();
                mExampleMenuStrip?.Dispose();
-               mExampleStatusStrip?.Dispose();
-               mExampleStatusButtonHost?.Dispose();
                mExampleGroupBox?.Dispose();
                foreach (Panel? panel in mAllScrollPanels)
                   panel?.Dispose();

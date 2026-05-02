@@ -27,12 +27,10 @@ namespace DBCode {
             mCHeaderCluster, mCppHeaderCluster, mBasicHeaderCluster, mFSharpHeaderCluster, mHTMLHeaderCluster,
             mCSSHeaderCluster, mXMLHeaderCluster, mJSONHeaderCluster, mPowerShellHeaderCluster, mBatchHeaderCluster,
             mSQLHeaderCluster, mMarkdownHeaderCluster, mPythonHeaderCluster, mExamplesHeaderCluster;
-         private readonly Button mExampleButton, mExampleHostButton;
+         private readonly Button mExampleButton, mBottomExampleButton;
          private readonly MenuStrip mExampleMenuStrip;
          private readonly ToolStripMenuItem mExampleTSMI, mExampleTSMISubItem;
-         private readonly ToolStripControlHost mExampleStatusButtonHost;
-         private readonly ToolStripStatusLabel mExampleStatusLabel;
-         private readonly StatusStrip mExampleStatusStrip;
+         private readonly BottomPanel mExampleBottomPanel;
          private readonly GroupBox mExampleGroupBox;
          private readonly CheckBox mExampleCheckBox;
          private readonly RichTextBox mExampleRichTextBox;
@@ -287,18 +285,21 @@ All text appears in the default foreground color."
             BackColor = Color.Transparent;
             mApplyButton = new Button {
                Name = "ApplyButton",
+               TabIndex = mTabIndex++,
                Text = "&Apply",
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink
             };
             mNewButton = new Button {
                Name = "NewButton",
+               TabIndex = mTabIndex++,
                Text = "&New",
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink
             };
             mCloneButton = new Button {
                Name = "CloneButton",
+               TabIndex = mTabIndex++,
                Text = "C&lone",
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink
@@ -539,7 +540,8 @@ All text appears in the default foreground color."
             font = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Text].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Text].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Text].Style}";
             AddFontCluster(mFontsClusters, $"The Textbox Font: {font}", "Text Box", FontUsage.Text, LabelPosition.Right);
             mFontsContainer = new ClusterContainer(mPrimaryScrollPanel, mFontsClusters, ClusterLayoutMode.FixedRows, 0, 0, 0, 4) {
-               Name = "FontsClusterContainer"
+               Name = "FontsClusterContainer",
+               TabIndex = mTabIndex++
             };
             mPrimaryScrollPanel.Controls.AddRange(mFontsContainer.mClusters.Cast<Control>().ToArray());//DEBUG efm5 2026 04 28 this may be a problem
 #pragma warning disable IDE0017
@@ -556,23 +558,25 @@ All text appears in the default foreground color."
             mExampleMenuStrip.Dock = DockStyle.Top;
             mExampleGroupBox = new GroupBox {
                Name = "ExampleGroupBox",
-               Text = "Example Group",
-               AutoSize = false,
-               Dock = DockStyle.Top
+               TabIndex = mTabIndex++,
+               Text = "Example Group"
             };
             mExampleButton = new Button {
                Name = "ExampleButton",
-               Text = "&Button",
+               TabIndex = mTabIndex++,
+               Text = "Button",
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink
             };
             mExampleCheckBox = new CheckBox {
                Name = "ExampleCheckBox",
+               TabIndex = mTabIndex++,
                Text = "Option",
                AutoSize = true
             };
             mExampleRichTextBox = new RichTextBox {
                Name = "ExampleRichTextBox",
+               TabIndex = mTabIndex++,
                Text = mUnicodeSampleString,
                Multiline = true,
                ScrollBars = RichTextBoxScrollBars.Both,
@@ -581,33 +585,25 @@ All text appears in the default foreground color."
             };
             mExampleRadioButton = new RadioButton {
                Name = "ExampleRadioButton",
-               Text = "Testing",
+               TabIndex = mTabIndex++,
+               Text = "Radio Button",
                AutoSize = true
             };
             mExampleGroupBox.Controls.AddRange([mExampleButton, mExampleCheckBox, mExampleRichTextBox, mExampleRadioButton]);
-            mExampleStatusLabel = new ToolStripStatusLabel {
-               Name = "ExampleStatusLabel",
-               Text = "Bottom Panel Example",
-               Spring = true
-            };
-            mExampleHostButton = new Button {
-               Name = "ExampleHostButton",
-               Text = "&Host",
+            mBottomExampleButton = new Button {
+               Name = "BottomExampleButton",
+               Text = "Example Button",
                AutoSize = true,
-               AutoSizeMode = AutoSizeMode.GrowAndShrink,
-               Location = new Point(1, 1)
+               AutoSizeMode = AutoSizeMode.GrowAndShrink
             };
-            mExampleStatusButtonHost = new ToolStripControlHost(mExampleHostButton) {
-               Name = "ExampleStatusButtonHost"
+            mExampleBottomPanel = new BottomPanel(mTemporaryTheme) {
+               Name = "ExampleBottomPanel",
+               TabIndex = mTabIndex++
             };
-            mExampleStatusStrip = new StatusStrip {
-               Name = "ExampleStatusStrip",
-               SizingGrip = false,
-               AutoSize = true,
-               Dock = DockStyle.Top
-            };
-            mExampleStatusStrip.Items.AddRange([mExampleStatusButtonHost, mExampleStatusLabel]);
-            mExampleScrollPanel.Controls.AddRange([mExamplesContainer, mExampleStatusStrip,
+            mExampleBottomPanel.mHelpButton!.Text = "NO Help";
+            mExampleBottomPanel.mCancelButton!.Text = "UN Canceled";
+            mExampleBottomPanel.AddLeftControl(mBottomExampleButton);
+            mExampleScrollPanel.Controls.AddRange([mExamplesContainer, mExampleBottomPanel,
                mExampleGroupBox, mExampleMenuStrip, mExamplesHeaderCluster]);
             mIncludeExcludeTabControl.TabPages[(int)TargetingTabPageUsage.Include].Controls.Add(mIncludeScrollPanel);
             mIncludeScrollPanel.Controls.AddRange([mIncludeDataGridView, mIncludeHeaderCluster]);

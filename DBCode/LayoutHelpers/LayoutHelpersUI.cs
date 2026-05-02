@@ -195,8 +195,10 @@ namespace DBCode {
          int menuCount = 0;
          SizeF stringSize = new SizeF(0, 0);
          using (Graphics graphics = pGroupBox.CreateGraphics()) {
-            if (!string.IsNullOrEmpty(pGroupBox.Text))
-               stringSize = graphics.MeasureString("M" + pGroupBox.Text, pGroupBox.Font);
+            if (string.IsNullOrEmpty(pGroupBox.Text))
+               stringSize = graphics.MeasureString(mUnicodeSampleString, pGroupBox.Font);
+            else
+               stringSize = graphics.MeasureString(mUnicodeSampleString + pGroupBox.Text, pGroupBox.Font);
          }
          foreach (Control control in pGroupBox.Controls) {
             if (control is MenuStrip strip) {
