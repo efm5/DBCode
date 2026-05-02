@@ -1,6 +1,6 @@
 namespace DBCode {
    namespace Themes {
-      public sealed partial class ColorPickerPanel : Panel {
+      public sealed partial class ColorPickerPanel : Panel {//DEBUG efm5 2026 05 1 junk
          private Button? mBluePrefixButton, mCancelButton, mGrayPrefixButton, mGreenPrefixButton, mHelpButton,
             mNamedColorPrefixButton, mOkButton, mRedPrefixButton;
          private CheckBox? mUseGrayscaleCheckBox, mUseNamedCheckBox;
