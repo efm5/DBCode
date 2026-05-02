@@ -202,6 +202,11 @@ namespace DBCode {
          #endregion
 
          #region Button Event Handlers
+         protected override void OnHandleCreated(EventArgs pEventArgs) {
+            base.OnHandleCreated(pEventArgs);
+            mColorPickerBottomPanel.LayoutControls();
+         }
+
          private void OkButton_Click(object? pSender, EventArgs pEventArguments) {
             if (mTheme == null || mDemoSwatch == null)
                return;

@@ -595,10 +595,12 @@ All text appears in the default foreground color."
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink
             };
+#pragma warning disable IDE0017
             mExampleBottomPanel = new BottomPanel(mTemporaryTheme) {
                Name = "ExampleBottomPanel",
                TabIndex = mTabIndex++
             };
+#pragma warning restore IDE0017
             mExampleBottomPanel.Anchor = mAnchorTopLeft;
             mExampleBottomPanel.mHelpButton!.Text = "NO Help";
             mExampleBottomPanel.mCancelButton!.Text = "UN Canceled";

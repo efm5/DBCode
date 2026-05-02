@@ -29,8 +29,8 @@
       // ───── Session-only geometry (not persisted) ─────
       internal Rectangle mPickerBounds = new Rectangle(50, 50, 800, 600);
       internal Rectangle mGetStringBounds = new Rectangle(50, 50, 200, 300);
-      internal Rectangle mColorPickerBounds;
-      internal Rectangle mFontPickerBounds;
+      internal Rectangle mColorPickerBounds = new Rectangle(50, 50, 450, 550);
+      internal Rectangle mFontPickerBounds = new Rectangle(50, 50, 400, 400);
 
       public UiState() {
          mFormSize = new Size(400, 300);

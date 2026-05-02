@@ -1,6 +1,11 @@
 namespace DBCode {
    namespace Themes {
       public sealed partial class FontPickerPanel : Panel {
+         protected override void OnHandleCreated(EventArgs pEventArgs) {
+            base.OnHandleCreated(pEventArgs);
+            Dock = DockStyle.Fill;
+         }
+
          private void FamilyPrefixButton_Click(object? pSender, EventArgs pEventArguments) {
             TextBoxSelectAll(mFontFamilyNameTextBox!);
          }

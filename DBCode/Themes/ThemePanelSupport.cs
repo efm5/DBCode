@@ -304,15 +304,17 @@
 
          public void EnsureColorPickerPanel(Theme pTheme, ColorSwatchUsage pUsage, Color pInitialColor) {
             ThrowIfNull(mForm, nameof(mForm));
-            mUiState.FormBounds = Bounds;
+            mUiState.ThemeBounds = mForm.Bounds;
             if (mColorPickerPanel == null)
                mColorPickerPanel = new ColorPickerPanel(pTheme, pUsage, pInitialColor);
             else
                mColorPickerPanel.LayoutControls();
             mForm.SuspendClientSizeChanged();
-            if (!mFirstColorPicker)
-               Bounds = mUiState.mColorPickerBounds;
-            mForm.ResumeClientSizeChanged();
+            if (mFirstColorPicker) {
+               mForm.SuspendClientSizeChanged();
+               mForm.Bounds = mUiState.mColorPickerBounds;
+               mForm.ResumeClientSizeChanged();
+            }
             ShowColorPickerPanel();
          }
 
@@ -324,20 +326,20 @@
                mForm.Controls.Remove(mThemePanel);
             if (!mForm.Controls.Contains(mColorPickerPanel))
                mForm.Controls.Add(mColorPickerPanel);
-            mColorPickerPanel.PerformLayout();
+            mActiveLayoutable = mColorPickerPanel.mColorPickerBottomPanel;
             mColorPickerPanel.Dock = DockStyle.Fill;
             mColorPickerPanel.Visible = true;
             mColorPickerPanel.BringToFront();
             mColorPickerPanel.Show();
             if (mFirstColorPicker) {
-               mForm.PerformLayout();
+               mForm.SuspendClientSizeChanged();
+               mColorPickerPanel.PerformLayout();
                Size requiredSize = mColorPickerPanel.GetRequiredSize();
                Rectangle screenBounds = ScreenBoundsPrimary();
                int maxWidth = (int)(screenBounds.Width * 0.9);
                int maxHeight = (int)(screenBounds.Height * 0.9);
                int width = Math.Min(requiredSize.Width, maxWidth);
                int height = Math.Min(requiredSize.Height, maxHeight);
-               mForm.SuspendClientSizeChanged();
                mForm.ClientSize = new Size(width, height);
                mActiveLayoutable = mColorPickerPanel.mColorPickerBottomPanel;
                Point center = ScreenCenterPrimary();
@@ -348,7 +350,10 @@
             }
             else {
                mForm.SuspendClientSizeChanged();
+               mUiState.ThemeBounds = mForm.Bounds;
+               mForm.Bounds = mUiState.mColorPickerBounds;
                EnsureWindowFitsMonitor(mForm, false);
+               mColorPickerPanel.LayoutControls();
                mForm.ResumeClientSizeChanged();
             }
          }
@@ -363,7 +368,7 @@
                mForm.Controls.Remove(mColorPickerPanel);
             mUiState.mColorPickerBounds = mForm.Bounds;
             mForm.SuspendClientSizeChanged();
-            mForm.Bounds = mUiState.FormBounds;
+            mForm.Bounds = mUiState.ThemeBounds;
             mActiveLayoutable = mThemePanel.mThemeBottomPanel;
             mForm.ResumeClientSizeChanged();
             if (!mForm.Controls.Contains(mThemePanel))
@@ -379,15 +384,16 @@
 
          public void EnsureFontPickerPanel(Theme pTheme, FontUsage pUsage, Font pInitialFont) {
             ThrowIfNull(mForm, nameof(mForm));
-            mUiState.FormBounds = Bounds;
+            mUiState.ThemeBounds = mForm.Bounds;
             if (mFontPickerPanel == null)
                mFontPickerPanel = new FontPickerPanel(pTheme, pUsage, pInitialFont);
             else
                mFontPickerPanel.LayoutControls();
-            mForm.SuspendClientSizeChanged();
-            if (!mFirstFontPicker)
-               Bounds = mUiState.mFontPickerBounds;
-            mForm.ResumeClientSizeChanged();
+            if (mFirstFontPicker) {
+               mForm.SuspendClientSizeChanged();
+               mForm.Bounds = mUiState.mFontPickerBounds;
+               mForm.ResumeClientSizeChanged();
+            }
             ShowFontPickerPanel();
          }
 
@@ -399,31 +405,34 @@
                mForm.Controls.Remove(mThemePanel);
             if (!mForm.Controls.Contains(mFontPickerPanel))
                mForm.Controls.Add(mFontPickerPanel);
-            mFontPickerPanel.PerformLayout();
+            mActiveLayoutable = mFontPickerPanel.mFontPickerBottomPanel;
             mFontPickerPanel.Dock = DockStyle.Fill;
             mFontPickerPanel.Visible = true;
             mFontPickerPanel.BringToFront();
             mFontPickerPanel.Show();
             if (mFirstFontPicker) {
-               mForm.PerformLayout();
+               mForm.SuspendClientSizeChanged();
+               mFontPickerPanel.LayoutControls();       // layout first so GetRequiredSize measures real positions
                Size requiredSize = mFontPickerPanel.GetRequiredSize();
                Rectangle screenBounds = ScreenBoundsPrimary();
                int maxWidth = (int)(screenBounds.Width * 0.9);
                int maxHeight = (int)(screenBounds.Height * 0.9);
                int width = Math.Min(requiredSize.Width, maxWidth);
                int height = Math.Min(requiredSize.Height, maxHeight);
-               mForm.SuspendClientSizeChanged();
                mForm.ClientSize = new Size(width, height);
-               mActiveLayoutable = mFontPickerPanel.mFontPickerBottomPanel;
                Point center = ScreenCenterPrimary();
                mForm.Location = new Point(center.X - (width / 2), center.Y - (height / 2));
                EnsureWindowFitsMonitor(mForm, false);
+               mFontPickerPanel.LayoutControls();       // layout again now that form has correct size
                mForm.ResumeClientSizeChanged();
                mFirstFontPicker = false;
             }
             else {
                mForm.SuspendClientSizeChanged();
+               mUiState.ThemeBounds = mForm.Bounds;
+               mForm.Bounds = mUiState.mFontPickerBounds;
                EnsureWindowFitsMonitor(mForm, false);
+               mFontPickerPanel.LayoutControls();
                mForm.ResumeClientSizeChanged();
             }
          }
@@ -438,7 +447,7 @@
                mForm.Controls.Remove(mFontPickerPanel);
             mUiState.mFontPickerBounds = mForm.Bounds;
             mForm.SuspendClientSizeChanged();
-            mForm.Bounds = mUiState.FormBounds;
+            mForm.Bounds = mUiState.ThemeBounds;
             mActiveLayoutable = mThemePanel.mThemeBottomPanel;
             mForm.ResumeClientSizeChanged();
             if (!mForm.Controls.Contains(mThemePanel))

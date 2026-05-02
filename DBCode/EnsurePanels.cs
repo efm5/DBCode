@@ -6,14 +6,7 @@
          SuspendClientSizeChanged();
          if (mThemePanel == null)
             mThemePanel = new ThemePanel(pThemeUsage);
-         if (mUiState.mFirstTheme) {
-            mForm.Size = mThemePanel.WantedSize();
-            CenterFormOnMonitor(mForm);
-            EnsureWindowFitsMonitor(mForm, false);
-            mUiState.mFirstTheme = false;
-         }
-         else
-            mForm.Bounds = mUiState.ThemeBounds;
+         mForm.Bounds = mUiState.ThemeBounds;
          ResumeClientSizeChanged();
          ShowThemePanel(pThemeUsage);
       }
@@ -79,8 +72,8 @@
          ThrowIfNull(mForm, nameof(mForm));
          mUiState.FormBounds = mForm.Bounds;
          mForm.SuspendClientSizeChanged();
-         mForm.Bounds = mUiState.ThemePickerBounds;
          mThemePickerPanel = new ThemePickerPanel();
+         mForm.Bounds = mUiState.ThemePickerBounds;
          mForm.ResumeClientSizeChanged();
          ShowThemePickerPanel();
       }

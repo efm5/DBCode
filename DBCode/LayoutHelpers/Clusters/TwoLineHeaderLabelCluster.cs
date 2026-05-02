@@ -1,6 +1,4 @@
-﻿using DBCode.Themes;
-
-namespace DBCode {
+﻿namespace DBCode {
    internal static partial class LayoutHelpers {
       internal class TwoLineHeaderLabelCluster : BaseCluster {
          internal Label mTopLabel, mBottomLabel;
@@ -53,7 +51,7 @@ namespace DBCode {
                   x = 0;
                mTopLabel.Left = x;
                mTopLabel.Top = mEm;
-               mBottomLabel.Left = mEm;
+               mBottomLabel.Left = mIndent;
                mBottomLabel.Top = mTopLabel.Bottom + mEm;
                Height = mBottomLabel.Bottom + mEm;
                mTopLabel.Invalidate();
