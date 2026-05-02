@@ -60,8 +60,19 @@
             mIncludeExcludeTabControl.SelectedIndex = savedIndex;
             ApplyTheme(mTemporaryTheme);
             LayoutClustersAndContainers();
-            SizeExamplesContainer();
             mThemeBottomPanel.LayoutControls();
+            mExampleBottomPanel.LayoutControls();
+            SizeExamplesContainer();
+            mExamplesContainer.Height += mEmHalf;
+            mExampleGroupBox.Location = new Point(mIndent, mExampleMenuStrip.Bottom + mEmHalf);
+            mExampleBottomPanel.Location = new Point(mIndent, mExampleGroupBox.Bottom + mEmHalf);
+            mExamplesContainer.Location = new Point(mIndent, mExampleBottomPanel.Bottom + mEmHalf);
+            string clip = $"mExampleMenuStrip Bounds {mExampleMenuStrip.Bounds}; mExampleGroupBox Bounds {mExampleGroupBox.Bounds}; mExampleBottomPanel Bounds {mExampleBottomPanel.Bounds}; mExamplesContainer Bounds {mExamplesContainer.Bounds}";
+            Clipboard.SetText(clip);//DEBUG efm5 2026 05 1 testing
+            mPrimaryTabControl.Location = new Point(mIndent, mThemesHeaderCluster.Bottom + mEmHalf);
+            mPrimaryTabControl.Width = ClientSize.Width - (2 * mIndent);
+            mPrimaryTabControl.Height = ClientSize.Height - (mThemeBottomPanel.Height + mThemesHeaderCluster.Height + mEm);
+            mPrimaryTabControl.Anchor = mAnchorTopLeftBottomRight;
             ResumeLayout(true);
          }
 
