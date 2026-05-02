@@ -2,7 +2,7 @@
    namespace Themes {
       internal sealed partial class ThemePickerPanel : Panel {
          private readonly HeaderLabelCluster? mTitleLabel;
-         private readonly BottomPanel? mThemePickerBottomPanel;
+         internal readonly BottomPanel? mThemePickerBottomPanel;
          internal ClusterContainer? mClusterContainer;
          private List<BaseCluster>? mButtonBaseClusters;
          private bool mLayoutReady = false;
@@ -16,7 +16,6 @@
                mLayoutReadyGuard = () => mLayoutReady
             };
             mThemePickerBottomPanel = new BottomPanel(mCurrentTheme);
-            mActiveLayoutable = mThemePickerBottomPanel;
          }
 
          public void LayoutPanel() {

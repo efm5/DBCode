@@ -37,6 +37,7 @@
          EnsureWindowFitsMonitor(mForm, false);
          mThemePanel.ApplyTheme(mCurrentTheme);
          mThemePanel.LayoutControls();
+         mActiveLayoutable = mThemePanel.mThemeBottomPanel;
          mThemePanel.BringToFront();
          mThemePanel.Visible = true;
          mThemePanel.Show();
@@ -70,6 +71,8 @@
          mMainPanel.Show();
          mForm.ControlBox = true;
          mForm.Opacity = savedOpacity;
+         mActiveLayoutable = mMainBottomPanel;
+         mMainBottomPanel.LayoutControls();
       }
 
       public void EnsureThemePickerPanel() {
@@ -86,6 +89,7 @@
          ThrowIfNull(mForm, nameof(mForm));
          ThrowIfNull(mThemePickerPanel, nameof(mThemePickerPanel));
          ThrowIfNull(mMainPanel, nameof(mMainPanel));
+         ThrowIfNull(mThemePickerPanel.mClusterContainer, nameof(mThemePickerPanel.mClusterContainer));
          double savedOpacity = mForm.Opacity;
          mForm.Opacity = 0;
          mForm.ControlBox = false;
@@ -97,7 +101,8 @@
          mForm.Controls.Add(mThemePickerPanel);
          mThemePickerPanel.ApplyTheme();
          mThemePickerPanel.LayoutPanel();
-         mThemePickerPanel.mClusterContainer!.LayoutClusters();
+         mThemePickerPanel.mClusterContainer.LayoutClusters();
+         mActiveLayoutable = mThemePickerPanel.mThemePickerBottomPanel;
          mThemePickerPanel.BringToFront();
          mThemePickerPanel.Visible = true;
          mThemePickerPanel.Show();
@@ -130,6 +135,8 @@
          mForm.Activate();
          mMainPanel.Focus();
          mForm.Opacity = savedOpacity;
+         mActiveLayoutable = mMainBottomPanel;
+         mMainBottomPanel.LayoutControls();
       }
    }
 }

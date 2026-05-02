@@ -12,6 +12,7 @@ namespace DBCode {
          private GroupBox? mFontStyleGroupBox;
          private Label? mFontDescriptionLabel;
          private Panel? mFontSizePanel, mPickFontPanel, mScrollPanel;
+         internal BottomPanel? mFontPickerBottomPanel;
          private StatusStrip? mStatusStrip;
          private TextBox? mFontFamilyNameTextBox, mFontSizeTextBox;
          private ToolStripControlHost? mCancelHost, mFontDescriptionHost, mHelpHost, mOkHost;

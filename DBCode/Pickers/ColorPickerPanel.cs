@@ -13,6 +13,7 @@ namespace DBCode {
          private LabeledColorSwatchCluster? mDemoSwatch;
          private NumericUpDown? mBlueUpDown, mGrayUpDown, mGreenUpDown, mRedUpDown;
          private Panel? mScrollPanel;
+         internal BottomPanel? mColorPickerBottomPanel;
          private StatusStrip? mStatusStrip;
          private Theme? mTheme;
          private ToolStripControlHost? mCancelHost, mHelpHost, mOkHost;

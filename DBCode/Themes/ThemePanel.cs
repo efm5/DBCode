@@ -15,7 +15,7 @@ namespace DBCode {
          private readonly List<List<BaseCluster>> mAllClusters = [];
          public static bool mRepaint = false;
          private readonly Button mApplyButton, mNewButton, mCloneButton;
-         private readonly BottomPanel mThemeBottomPanel;
+         internal readonly BottomPanel mThemeBottomPanel;
          private ClusterContainer mExamplesContainer, mFontsContainer, mInterfaceColorsContainer, mCSharpColorsContainer,
             mCColorsContainer, mCppColorsContainer, mBasicColorsContainer, mFSharpColorsContainer, mHTMLColorsContainer,
             mCSSColorsContainer, mXMLColorsContainer, mJSONColorsContainer, mPowerShellColorsContainer,
@@ -374,7 +374,6 @@ All text appears in the default foreground color."
             mThemeBottomPanel.AddLeftControl(mNewButton);
             mThemeBottomPanel.AddLeftControl(mCloneButton);
             mThemeBottomPanel.AddRightControl(mApplyButton);
-            mActiveLayoutable = mThemeBottomPanel;
             mPrimaryTabControl = new VariableWidthTabControl();
             mPrimaryTabControl.TabPages.AddRange([new TabPage("Fonts"), new TabPage("Colors"),
                new TabPage("Targeting"), new TabPage("Examples")]);
@@ -600,6 +599,7 @@ All text appears in the default foreground color."
                Name = "ExampleBottomPanel",
                TabIndex = mTabIndex++
             };
+            mExampleBottomPanel.Anchor = mAnchorTopLeft;
             mExampleBottomPanel.mHelpButton!.Text = "NO Help";
             mExampleBottomPanel.mCancelButton!.Text = "UN Canceled";
             mExampleBottomPanel.AddLeftControl(mBottomExampleButton);
