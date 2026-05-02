@@ -283,27 +283,9 @@ All text appears in the default foreground color."
             AutoScroll = true;
             AutoSize = false;
             BackColor = Color.Transparent;
-            mApplyButton = new Button {
-               Name = "ApplyButton",
-               TabIndex = mTabIndex++,
-               Text = "&Apply",
-               AutoSize = true,
-               AutoSizeMode = AutoSizeMode.GrowAndShrink
-            };
-            mNewButton = new Button {
-               Name = "NewButton",
-               TabIndex = mTabIndex++,
-               Text = "&New",
-               AutoSize = true,
-               AutoSizeMode = AutoSizeMode.GrowAndShrink
-            };
-            mCloneButton = new Button {
-               Name = "CloneButton",
-               TabIndex = mTabIndex++,
-               Text = "C&lone",
-               AutoSize = true,
-               AutoSizeMode = AutoSizeMode.GrowAndShrink
-            };
+            mApplyButton = new Button();
+            mNewButton = new Button();
+            mCloneButton = new Button();
             mThemesHeaderCluster = new HeaderLabelCluster(mTemporaryTheme,
                $"Current Theme's Name: \u201c{mCurrentTheme.mName}\u201d", HeaderLabelSize.Normal);
             mTargetingHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "Targeting", HeaderLabelSize.Small);
@@ -589,9 +571,14 @@ All text appears in the default foreground color."
                AutoSize = true
             };
             mExampleGroupBox.Controls.AddRange([mExampleButton, mExampleCheckBox, mExampleRichTextBox, mExampleRadioButton]);
-            mBottomExampleButton = new Button {
-               Name = "BottomExampleButton",
-               Text = "Example Button",
+            mExampleStatusLabel = new ToolStripStatusLabel {
+               Name = "ExampleStatusLabel",
+               Text = "Status: Ready",
+               Spring = true
+            };
+            mExampleHostButton = new Button {
+               Name = "ExampleHostButton",
+               Text = "&Host",
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink
             };
