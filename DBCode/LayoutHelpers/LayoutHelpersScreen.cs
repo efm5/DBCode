@@ -48,10 +48,10 @@ namespace DBCode {
       }
 
       internal static Rectangle GetTaskbarBounds() {
-         NativeMathMethods.APPBARDATA data = new NativeMathMethods.APPBARDATA {
-            cbSize = Marshal.SizeOf<NativeMathMethods.APPBARDATA>()
+         LayoutHelpersNativeMethods.APPBARDATA data = new LayoutHelpersNativeMethods.APPBARDATA {
+            cbSize = Marshal.SizeOf<LayoutHelpersNativeMethods.APPBARDATA>()
          };
-         uint result = NativeMathMethods.SHAppBarMessage(NativeMathMethods.ABM_GETTASKBARPOS, ref data);
+         uint result = LayoutHelpersNativeMethods.SHAppBarMessage(LayoutHelpersNativeMethods.ABM_GETTASKBARPOS, ref data);
          if (result != 0) {
             int width = data.rc.Right - data.rc.Left;
             int height = data.rc.Bottom - data.rc.Top;

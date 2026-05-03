@@ -1,5 +1,39 @@
 namespace DBCode {
    internal static partial class LayoutHelpers {
+      // ── Dominant tone sampling ─────────────────────────────────────────────────────────────
+
+      /// <summary>
+      /// Samples a uniform grid of pixels across pControl's client area and returns the
+      /// dominant ColorTones value by majority vote. Designed for sampling the Form's
+      /// ScrollablePanel (which is always DockStyle.Fill) to determine the effective
+      /// background tone in its current visual state (enabled or disabled).
+      /// </summary>
+      internal static ColorTones SampleDominantTone(Control pControl) {
+         const int GridSize = 8;   // 8×8 = 64 samples; adjust here only if needed
+         Rectangle bounds = pControl.RectangleToScreen(pControl.ClientRectangle);
+         int[] counts = new int[Enum.GetValues<ColorTones>().Length];
+         using Graphics graphics = Graphics.FromHwnd(pControl.Handle);
+         IntPtr hdc = graphics.GetHdc();
+         try {
+            for (int row = 0; row < GridSize; row++) {
+               for (int col = 0; col < GridSize; col++) {
+                  int x = bounds.Left + (col * bounds.Width) / (GridSize - 1);
+                  int y = bounds.Top + (row * bounds.Height) / (GridSize - 1);
+                  uint colorRef = LayoutHelpersNativeMethods.GetPixel(hdc, x, y);
+                  Color color = Color.FromArgb(
+                     (int)(colorRef & 0xFF),
+                     (int)((colorRef >> 8) & 0xFF),
+                     (int)((colorRef >> 16) & 0xFF));
+                  counts[(int)ColorTone.GetTone(color)]++;
+               }
+            }
+         }
+         finally {
+            graphics.ReleaseHdc(hdc);
+         }
+         return (ColorTones)Array.IndexOf(counts, counts.Max());
+      }
+
       internal static class ColorTone {
          private const float ALPHA_IGNORE_THRESHOLD = 16f / 255f;
          private const float DARK_MAX = 0.18f;

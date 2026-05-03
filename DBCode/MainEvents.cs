@@ -25,8 +25,7 @@
          mActiveLayoutable?.LayoutControls();
          Opacity = mUiState.mFormOpacity;
          ClientSizeChanged += OnClientSizeChanged;
-         GetString.Show("GetString Test", "Please enter any string to test the GetString harness:",
-            string.Empty, TestGetStringCallback);
+         GetString.Show("GetString Test", "Please enter any string to test the GetString harness:", string.Empty, TestGetStringCallback);
       }
 
       private void TestGetStringCallback(string? pResult, bool pWasCancelled) {

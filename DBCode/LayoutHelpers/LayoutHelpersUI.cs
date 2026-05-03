@@ -10,7 +10,7 @@ namespace DBCode {
          }
       }
 
-      internal static void ToCenterOrNot(Form pForm, bool pControlBox = true) {
+      internal static void ToCenterOrNot(Form pForm) {
          bool centerHorizontal = true, centerVertical = true;
          Screen currentMonitor = Screen.FromControl(pForm),
 #pragma warning disable CS8600
