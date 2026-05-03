@@ -45,6 +45,30 @@ namespace DBCode {
          CenterControlVertically(pContainer, pChildControl);
       }
 
+      internal static void CenterDialog(Form? pForm, Panel? pPanel) {
+         if (pForm == null)
+            return;
+         if (pPanel == null)
+            return;
+         Size clientSize = pForm.ClientSize;
+         if (pPanel.Width > clientSize.Width)
+            pForm.Width += pPanel.Width - clientSize.Width;
+         if (pPanel.Height > clientSize.Height)
+            pForm.Height += pPanel.Height - clientSize.Height;
+         EnsureWindowFitsMonitor(pForm);
+         clientSize = pForm.ClientSize; // refresh after any monitor-driven adjustments
+         const int margin = 1;
+         if (pPanel.Width > clientSize.Width - (margin * 2))
+            pPanel.Width = clientSize.Width - (margin * 2);
+         if (pPanel.Height > clientSize.Height - (margin * 2))
+            pPanel.Height = clientSize.Height - (margin * 2);
+         pPanel.Left = (clientSize.Width - pPanel.Width) / 2;
+         pPanel.Top = (clientSize.Height - pPanel.Height) / 2;
+         pPanel.BringToFront();
+         pPanel.Show();
+         pPanel.Refresh();
+      }
+
       internal static void CenterDialog(Form? pForm, Panel? pPanel, Control? pBorderPanel) {
          if (pForm == null)
             return;

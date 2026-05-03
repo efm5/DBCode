@@ -188,7 +188,7 @@ namespace DBCode {
             mFontPickerBottomPanel = new BottomPanel(mTheme, "&Cancel") {
                Name = $"FontPickerBottomPanel{mTabIndex++}"
             };
-            mFontPickerBottomPanel.mHelpButton.Tag = new HelpTag(HelpContext.FontPicker);
+            mFontPickerBottomPanel.mHelpButton!.Tag = new HelpTag(HelpContext.FontPicker);
             mFontPickerBottomPanel.mHelpButton.Click += HelpButton_Click;
             mFontPickerBottomPanel.AddLeftControl(mFontDescriptionLabel);
             mOkButton = new Button {

@@ -21,7 +21,6 @@ namespace DBCode {
             mInitialColor = pInitialColor;
             mColorSwatchUsage = pColorSwatchUsage;
             mTheme = pTheme;
-
             Color interfaceBackground = mTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground],
                interfaceFont = mTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
                groupBoxBackground = mTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground];
@@ -33,7 +32,7 @@ namespace DBCode {
                TabIndex = TAB_INDEX_IGNORED,
                AutoScroll = true,
                BackColor = interfaceBackground,
-               Dock = DockStyle.Fill
+               Anchor = mAnchorTopLeftBottomRight
             };
             mNamedColorsGroupBox = new GroupBox {
                Name = $"NamedColorsGroupBox{mTabIndex++}",
@@ -226,8 +225,7 @@ namespace DBCode {
             mColorPickerBottomPanel.mCancelButton!.Click += CancelButton_Click;
             BackColor = interfaceBackground;
             mScrollPanel.Controls.AddRange([mNamedColorsGroupBox, mCustomColorGroupBox]);
-            Controls.AddRange([mScrollPanel, mTitleLabel, mColorPickerBottomPanel]);
-            LayoutControls();
+            Controls.AddRange([mScrollPanel, mColorPickerBottomPanel, mTitleLabel]);
             AttachEventHandlers();
          }
 
@@ -267,11 +265,12 @@ namespace DBCode {
             mBlueSwatch.Location = new Point(mBlueSlider.Right + mEm, mBlueSlider.Top);
             mDemoSwatch.Location = new Point(mEm3, mBlueSlider.Bottom + mEm2);
             SizeGroupBox(mCustomColorGroupBox);
-            Width = Math.Max(mNamedColorsGroupBox.Right, mCustomColorGroupBox.Right) + mEm +
-               SystemInformation.VerticalScrollBarWidth;
-            Height = mCustomColorGroupBox.Bottom + mColorPickerBottomPanel.Height + mEm +
-               SystemInformation.HorizontalScrollBarHeight;
-            AttachEventHandlers();
+            mScrollPanel.Location = new Point(1, mTitleLabel.Bottom);
+            mScrollPanel.Size = new Size(ClientSize.Width - 2,
+               ClientSize.Height - mTitleLabel.Height - mColorPickerBottomPanel.Height);
+            mColorPickerBottomPanel.Top = mScrollPanel.Bottom;
+            mColorPickerBottomPanel.LayoutControls();
+            RestoreColorPickerHandlers();
          }
 
          internal Size GetRequiredSize() {
@@ -314,6 +313,23 @@ namespace DBCode {
             mGreenSlider.ValueChanged -= GreenSlider_ValueChanged;
             mBlueUpDown.ValueChanged -= BlueUpDown_ValueChanged;
             mBlueSlider.ValueChanged -= BlueSlider_ValueChanged;
+         }
+
+         private void RestoreColorPickerHandlers() {
+            mUseNamedCheckBox.CheckedChanged += UseNamedCheckBox_CheckedChanged;
+            mNamedColorPrefixButton.Click += NamedColorPrefixButton_Click;
+            mNamedColorsComboBox.SelectedValueChanged += NamedColorsComboBox_SelectedValueChanged;
+            mNamedColorsComboBox.KeyUp += NamedColorsComboBox_KeyUp;
+            mNamedColorsComboBox.Leave += NamedColorsComboBox_Leave;
+            mUseGrayscaleCheckBox.CheckedChanged += UseGrayscaleCheckBox_CheckedChanged;
+            mGrayUpDown.ValueChanged += GrayUpDown_ValueChanged;
+            mGraySlider.ValueChanged += GraySlider_ValueChanged;
+            mRedUpDown.ValueChanged += RedUpDown_ValueChanged;
+            mRedSlider.ValueChanged += RedSlider_ValueChanged;
+            mGreenUpDown.ValueChanged += GreenUpDown_ValueChanged;
+            mGreenSlider.ValueChanged += GreenSlider_ValueChanged;
+            mBlueUpDown.ValueChanged += BlueUpDown_ValueChanged;
+            mBlueSlider.ValueChanged += BlueSlider_ValueChanged;
          }
 
          private void SetColorValues(Color pColor) {

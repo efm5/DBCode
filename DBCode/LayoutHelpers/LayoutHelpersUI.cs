@@ -18,7 +18,7 @@ namespace DBCode {
 #pragma warning restore CS8600
          int ninetyHorizontal = (int)Math.Floor(currentMonitor.WorkingArea.Width * 0.9f),
            ninetyVertical = (int)Math.Floor(currentMonitor.WorkingArea.Height * 0.9f);
-         EnsureWindowFitsMonitor(pForm, pControlBox);
+         EnsureWindowFitsMonitor(pForm);
          if (pForm.Width > ninetyHorizontal)
             centerHorizontal = false;
          if (pForm.Height > ninetyVertical)

@@ -64,10 +64,9 @@
          mMarkdownTSMI = new ToolStripMenuItem();
          mPythonTSMI = new ToolStripMenuItem();
          mCurrentLanguageIsTSMI = new ToolStripMenuItem();
-         mMainPanel = new Panel() {
+         mScrollableMainPanel = new ScrollablePanel() {
             Name = "mainPanel",
             AutoScroll = true,
-            Dock = DockStyle.Fill,
             TabIndex = mTabIndex++,
             BackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground]
          };
@@ -90,7 +89,7 @@
          }
          ThemeRegistry.Initialize(); // must precede MakeNews so mCurrentTheme and mThemes are ready
          MakeNews();
-         ThrowIfNull(mMainPanel, nameof(mMainPanel));
+         ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
          ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
          ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
          ThrowIfNull(mMenuStrip, nameof(mMenuStrip));
@@ -110,7 +109,7 @@
          InitializeUIPart2();
          InitializeUIPart3();
          SuspendLayout();
-         Controls.Add(mMainPanel);
+         Controls.Add(mScrollableMainPanel);
          StartPosition = FormStartPosition.Manual;
          ClientSize = new Size(800, 800);
          MinimumSize = new Size(400, 300);
@@ -280,7 +279,7 @@
       }
 
       private void InitializeUIPart3() {
-         ThrowIfNull(mMainPanel, nameof(mMainPanel));
+         ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
          ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
          ThrowIfNull(mSendAllButton, nameof(mSendAllButton));
          ThrowIfNull(mPasteSelectedButton, nameof(mPasteSelectedButton));
@@ -332,7 +331,7 @@
          mMainBottomPanel.AddRightControl(mVersionLabel);  // added first = leftmost of right group
          mMainBottomPanel.AddRightControl(mRevertButton);
          mMainBottomPanel.mCancelButton!.Click += ExitButton_Click;
-         mMainPanel.Controls.AddRange([mRichTextBox!, mMainBottomPanel!, mMenuStrip!]);
+         mScrollableMainPanel.Controls.AddRange([mRichTextBox!, mMainBottomPanel!, mMenuStrip!]);
          mActiveLayoutable = mMainBottomPanel;
       }
    }

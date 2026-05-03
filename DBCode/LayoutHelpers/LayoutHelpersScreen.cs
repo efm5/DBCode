@@ -94,34 +94,28 @@ namespace DBCode {
          return new Rectangle(left, top, widthFallback, heightFallback);
       }
 
-      internal static bool EnsureWindowFitsMonitor(Form? pForm, bool pControlBox = true) {
+      internal static bool EnsureWindowFitsMonitor(Form? pForm) {
          if (pForm == null)
             return false;
          Screen formScreen = Screen.FromControl(pForm);
          Rectangle workingArea = formScreen.WorkingArea;
          Size size = pForm.Size;
-         int controlBoxSpace = pControlBox ? 4 : 1;
+         int controlBoxSpace = pForm.ControlBox ? 4 : 1; // derived from Form state; no longer a parameter
          bool changed = false;
          const int margin = 10;
-
-         // Measure title bar width requirement using system caption font
          SizeF titleSize;
          using (Graphics graphics = pForm.CreateGraphics()) {
             titleSize = graphics.MeasureString(pForm.Text, SystemFonts.CaptionFont!);
          }
-         // Calculate minimum width: title text (with 86% layout factor) + control box buttons + margins
          int wantedTitleWidth = (int)((titleSize.Width * 0.86f) +
             (SystemInformation.CaptionButtonSize.Width * controlBoxSpace) + (margin * 2));
-         // Clamp wanted title width to screen bounds first
          int maxAllowedWidth = workingArea.Width - margin;
          if (wantedTitleWidth > maxAllowedWidth)
             wantedTitleWidth = maxAllowedWidth;
-         // Ensure minimum width for title bar
          if (size.Width < wantedTitleWidth) {
             size.Width = wantedTitleWidth;
             changed = true;
          }
-         // Ensure window doesn't exceed screen bounds
          if (size.Width > maxAllowedWidth) {
             size.Width = maxAllowedWidth;
             changed = true;
@@ -131,29 +125,23 @@ namespace DBCode {
             size.Height = maxAllowedHeight;
             changed = true;
          }
-         // Apply size changes
          if (changed)
             pForm.Size = size;
-         // Adjust position if window extends beyond screen edges
          int x = pForm.Left;
          int y = pForm.Top;
          bool positionChanged = false;
-         // Check left edge
          if (pForm.Left < workingArea.Left) {
             x = workingArea.Left + (margin / 2);
             positionChanged = true;
          }
-         // Check right edge
          else if (pForm.Right > workingArea.Right) {
             x = workingArea.Right - size.Width - (margin / 2);
             positionChanged = true;
          }
-         // Check top edge
          if (pForm.Top < workingArea.Top) {
             y = workingArea.Top + (margin / 2);
             positionChanged = true;
          }
-         // Check bottom edge
          else if (pForm.Bottom > workingArea.Bottom) {
             y = workingArea.Bottom - size.Height - (margin / 2);
             positionChanged = true;
@@ -162,18 +150,13 @@ namespace DBCode {
             pForm.Location = new Point(x, y);
             changed = true;
          }
-         // Recovery for completely off-screen windows
          if (IsOffScreen(pForm)) {
             pForm.Location = new Point(workingArea.Left + (margin / 2), workingArea.Top + (margin / 2));
             changed = true;
          }
-         // Recovery for partially hidden windows (bottom-right corner off-screen)
          if (IsPartiallyHidden(pForm)) {
-            // Only reposition if position adjustments above didn't already handle it
-            if (!positionChanged) {
+            if (!positionChanged)
                pForm.Location = new Point(workingArea.Left + (margin / 2), workingArea.Top + (margin / 2));
-            }
-            // Re-clamp size if needed
             if (pForm.Width > maxAllowedWidth) {
                pForm.Width = maxAllowedWidth;
                changed = true;

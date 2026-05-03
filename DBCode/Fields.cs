@@ -1,5 +1,7 @@
 ﻿namespace DBCode {
    #region enumerations
+   public enum ColorTones { Ignore, Dark, MediumDark, MediumLight, Light }
+
    public enum ViewMode { Features, Minimal }
 
    public enum PasteMode { SendAll, PasteSelected }
@@ -174,7 +176,7 @@
       public static readonly IntPtr mInsertAfterWindow = new IntPtr(0);
       public static LanguageKind mCurrentLanguage = LanguageKind.CSharp;
       public static MenuStrip? mMenuStrip = null;
-      public static Panel? mMainPanel = null;
+      public static ScrollablePanel? mScrollableMainPanel = null;
       public static ThemePanel? mThemePanel = null;
       public static ColorPickerPanel? mColorPickerPanel = null;
       public static FontPickerPanel? mFontPickerPanel = null;

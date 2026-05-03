@@ -1,8 +1,21 @@
 using System.Collections.ObjectModel;
-using DBCode.Themes;
 
 namespace DBCode {
    internal static partial class LayoutHelpers {
+      internal readonly struct FloatRange {
+         internal float Min { get; }
+         internal float Max { get; }
+
+         internal FloatRange(float pMin, float pMax) {
+            Min = pMin;
+            Max = pMax;
+         }
+
+         internal bool Contains(float pValue) {
+            return pValue >= Min && pValue <= Max;
+         }
+      }
+
       internal static Size SizeFromSizeF(SizeF pSizeF) {
          return new Size((int)Math.Ceiling(pSizeF.Width), (int)Math.Ceiling(pSizeF.Height));
       }
@@ -516,6 +529,43 @@ namespace DBCode {
             if (currentControl == null)
                currentControl = nextControl;
             else if (nextControl.Right > currentControl.Right)
+               currentControl = nextControl;
+         }
+         return currentControl;
+      }
+
+      internal static Control? BiggestControl(List<Control>? pControls) {
+         if (pControls == null || pControls.Count == 0)
+            return null;
+         Control currentControl = pControls[0], nextControl = pControls[0];
+         for (int index = 1; index < pControls.Count; index++) {
+            nextControl = pControls[index];
+            if ((nextControl.Width * nextControl.Height) > (currentControl.Width * currentControl.Height))
+               currentControl = nextControl;
+         }
+         return currentControl;
+      }
+
+      internal static Control? BiggestControl(Collection<Control>? pControls) {
+         if (pControls == null || pControls.Count == 0)
+            return null;
+         Control currentControl = pControls[0], nextControl = pControls[0];
+         for (int index = 1; index < pControls.Count; index++) {
+            nextControl = pControls[index];
+            if ((nextControl.Width * nextControl.Height) > (currentControl.Width * currentControl.Height))
+               currentControl = nextControl;
+         }
+         return currentControl;
+      }
+
+      internal static Control? BiggestControl(IEnumerable<Control>? pControls) {
+         if (pControls == null)
+            return null;
+         Control? currentControl = null;
+         foreach (Control nextControl in pControls) {
+            if (currentControl == null)
+               currentControl = nextControl;
+            else if ((nextControl.Width * nextControl.Height) > (currentControl.Width * currentControl.Height))
                currentControl = nextControl;
          }
          return currentControl;

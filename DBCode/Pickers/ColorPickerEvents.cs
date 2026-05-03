@@ -1,6 +1,11 @@
 namespace DBCode {
    namespace Themes {
       public sealed partial class ColorPickerPanel : Panel {
+         protected override void OnHandleCreated(EventArgs pEventArgs) {
+            base.OnHandleCreated(pEventArgs);
+            Dock = DockStyle.Fill;   // panel fills the form, not the scroll panel
+         }
+
          #region Named Color Event Handlers
          private void UseNamedCheckBox_CheckedChanged(object? pSender, EventArgs pEventArguments) {
             if (mUseNamedCheckBox == null)
@@ -202,11 +207,6 @@ namespace DBCode {
          #endregion
 
          #region Button Event Handlers
-         protected override void OnHandleCreated(EventArgs pEventArgs) {
-            base.OnHandleCreated(pEventArgs);
-            mColorPickerBottomPanel.LayoutControls();
-         }
-
          private void OkButton_Click(object? pSender, EventArgs pEventArguments) {
             if (mTheme == null || mDemoSwatch == null)
                return;

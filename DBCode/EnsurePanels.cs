@@ -14,20 +14,20 @@
       public void ShowThemePanel(ThemeUsage pThemeUsage) {
          ThrowIfNull(mForm, nameof(mForm));
          ThrowIfNull(mThemePanel, nameof(mThemePanel));
-         ThrowIfNull(mMainPanel, nameof(mMainPanel));
+         ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
          ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
          ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
          double savedOpacity = mForm.Opacity;
          mForm.Opacity = 0;
          mForm.ControlBox = false;
-         if (mForm.Controls.Contains(mMainPanel)) {
-            mMainPanel.Visible = false;
-            mMainPanel.SendToBack();
-            mForm.Controls.Remove(mMainPanel);
+         if (mForm.Controls.Contains(mScrollableMainPanel)) {
+            mScrollableMainPanel.Visible = false;
+            mScrollableMainPanel.SendToBack();
+            mForm.Controls.Remove(mScrollableMainPanel);
          }
          mThemePanel.SetThemeUsage(pThemeUsage);
          mForm.Controls.Add(mThemePanel);
-         EnsureWindowFitsMonitor(mForm, false);
+         EnsureWindowFitsMonitor(mForm);
          mThemePanel.ApplyTheme(mCurrentTheme);
          mThemePanel.LayoutControls();
          mActiveLayoutable = mThemePanel.mThemeBottomPanel;
@@ -41,7 +41,7 @@
          ThrowIfNull(mForm, nameof(mForm));
          ThrowIfNull(mThemePanel, nameof(mThemePanel));
          ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
-         ThrowIfNull(mMainPanel, nameof(mMainPanel));
+         ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
          ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
          double savedOpacity = mForm.Opacity;
          mForm.Opacity = 0;
@@ -54,14 +54,14 @@
          SuspendClientSizeChanged();
          mForm.Bounds = mUiState.FormBounds;
          ResumeClientSizeChanged();
-         mForm.Controls.Add(mMainPanel);
+         mForm.Controls.Add(mScrollableMainPanel);
          mForm.ApplyTheme();
          if (dirtyTheme)
             LayoutControls();
          mMainBottomPanel.LayoutControls();
-         mMainPanel.BringToFront();
-         mMainPanel.Visible = true;
-         mMainPanel.Show();
+         mScrollableMainPanel.BringToFront();
+         mScrollableMainPanel.Visible = true;
+         mScrollableMainPanel.Show();
          mForm.ControlBox = true;
          mForm.Opacity = savedOpacity;
          mActiveLayoutable = mMainBottomPanel;
@@ -81,15 +81,15 @@
       public void ShowThemePickerPanel() {
          ThrowIfNull(mForm, nameof(mForm));
          ThrowIfNull(mThemePickerPanel, nameof(mThemePickerPanel));
-         ThrowIfNull(mMainPanel, nameof(mMainPanel));
+         ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
          ThrowIfNull(mThemePickerPanel.mClusterContainer, nameof(mThemePickerPanel.mClusterContainer));
          double savedOpacity = mForm.Opacity;
          mForm.Opacity = 0;
          mForm.ControlBox = false;
-         if (mForm.Controls.Contains(mMainPanel)) {
-            mMainPanel.Visible = false;
-            mMainPanel.SendToBack();
-            mForm.Controls.Remove(mMainPanel);
+         if (mForm.Controls.Contains(mScrollableMainPanel)) {
+            mScrollableMainPanel.Visible = false;
+            mScrollableMainPanel.SendToBack();
+            mForm.Controls.Remove(mScrollableMainPanel);
          }
          mForm.Controls.Add(mThemePickerPanel);
          mThemePickerPanel.ApplyTheme();
@@ -104,7 +104,7 @@
 
       public void RestoreFromThemePickerPanel() {
          ThrowIfNull(mForm, nameof(mForm));
-         ThrowIfNull(mMainPanel, nameof(mMainPanel));
+         ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
          ThrowIfNull(mThemePickerPanel, nameof(mThemePickerPanel));
          ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
          double savedOpacity = mForm.Opacity;
@@ -118,15 +118,15 @@
          SuspendClientSizeChanged();
          mForm.Bounds = mUiState.FormBounds;
          ResumeClientSizeChanged();
-         mForm.Controls.Add(mMainPanel);
+         mForm.Controls.Add(mScrollableMainPanel);
          mForm.ApplyTheme();
          mMainBottomPanel.LayoutControls();
-         mMainPanel.BringToFront();
-         mMainPanel.Visible = true;
-         mMainPanel.Show();
+         mScrollableMainPanel.BringToFront();
+         mScrollableMainPanel.Visible = true;
+         mScrollableMainPanel.Show();
          mForm.ControlBox = true;
          mForm.Activate();
-         mMainPanel.Focus();
+         mScrollableMainPanel.Focus();
          mForm.Opacity = savedOpacity;
          mActiveLayoutable = mMainBottomPanel;
          mMainBottomPanel.LayoutControls();

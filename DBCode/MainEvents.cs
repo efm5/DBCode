@@ -19,12 +19,21 @@
             savedOpacity = 1.0;
          Opacity = savedOpacity;
          UpdateOpacityMenuChecks(savedOpacity);
-         EnsureWindowFitsMonitor(this, true);
+         EnsureWindowFitsMonitor(this);
          ApplyViewMode(ViewMode.Features);
          UpdateTargetingStatusLabel();
          mActiveLayoutable?.LayoutControls();
          Opacity = mUiState.mFormOpacity;
          ClientSizeChanged += OnClientSizeChanged;
+         GetString.Show("GetString Test", "Please enter any string to test the GetString harness:",
+            string.Empty, TestGetStringCallback);
+      }
+
+      private void TestGetStringCallback(string? pResult, bool pWasCancelled) {
+         GetString.Restore();
+         if (pWasCancelled || pResult is null)
+            return;
+         TimedMessage(pResult, "GetString Test Result");
       }
 
       private void MainForm_FormClosing(object? pSender, FormClosingEventArgs pEventArgs) {

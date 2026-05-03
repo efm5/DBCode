@@ -1,6 +1,7 @@
 namespace DBCode {
    internal sealed class GetString : Panel {
-      private static bool mHasControlBox;
+      private bool mHasControlBox; // instance field; captured before dispose in Restore()
+      private static bool mPanelAutoScroll; // always stored in Show(), always restored in Restore()
       private readonly BottomPanel mGetStringBottomPanel;
       private readonly Button mOKButton;
       private readonly HeaderLabelCluster mTitleCluster;
@@ -10,7 +11,7 @@ namespace DBCode {
       private readonly TextBox mInputTextBox;
 
       public string? ResultValue => WasCancelled ? null : mInputTextBox.Text;
-      public bool WasCancelled { get; private set; }
+      public bool WasCancelled { get; private set; } = false;
 
       [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
       public Action<string?, bool>? OnClose { get; set; }
@@ -20,7 +21,7 @@ namespace DBCode {
          ThrowIfNull(pPrompt, nameof(pPrompt));
          ThrowIfNull(mForm, nameof(mForm));
          ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
-
+         Panel mBorderPanel = this; // alias for clarity; this is the outermost decorative ring
          mHasControlBox = mForm.ControlBox;
          if (mHasControlBox)
             mForm.ControlBox = false;
@@ -28,15 +29,13 @@ namespace DBCode {
          mOuterPanel = new Panel {
             Name = $"GetString_OuterPanel{mTabIndex}",
             TabIndex = mTabIndex++,
-            Location = new Point(mEmFifth, mEmFifth),
-            BackColor = Color.White
+            Location = new Point(mEmFifth, mEmFifth)
          };
          mInnerPanel = new Panel {
             Name = $"GetString_InnerPanel{mTabIndex}",
             TabIndex = mTabIndex++,
             Location = new Point(mEmFifth, mEmFifth),
-            BackColor = Color.Black,
-            AutoScroll = true
+            AutoScroll = false
          };
          mTitleCluster = new HeaderLabelCluster(mCurrentTheme, pTitle, HeaderLabelSize.Normal);
          mPromptLabel = new Label {
@@ -71,15 +70,19 @@ namespace DBCode {
          mInputTextBox.KeyDown += InputTextBox_KeyDown;
          mInnerPanel.Controls.AddRange([mGetStringBottomPanel, mInputTextBox, mPromptLabel, mTitleCluster]);
          mOuterPanel.Controls.Add(mInnerPanel);
-         Controls.Add(mOuterPanel);
+         mBorderPanel.Controls.Add(mOuterPanel);
          LayoutClusters();
       }
 
       public static void Show(string pTitle, string pPrompt, string pInitialValue, Action<string?, bool> pCallback) {
          ThrowIfNull(mForm, nameof(mForm));
-         foreach (Control control in mForm.Controls.OfType<Control>())
-            control.Enabled = false;
+         // Invariant: Form must have exactly one direct child and it must be a ScrollablePanel.
+         if (mForm.Controls.Count != 1 || mForm.Controls[0] is not ScrollablePanel scrollablePanel)
+            throw new InvalidOperationException(
+               "GetString.Show: Form must have exactly one direct child control and it must be a ScrollablePanel.");
+         scrollablePanel.Enabled = false;
          mUiState.FormBounds = mForm.Bounds;
+         mPanelAutoScroll = scrollablePanel.AutoScroll; // always store regardless of whether resize occurs
          mGetStringPanel = new GetString(pTitle, pPrompt, pInitialValue) {
             OnClose = pCallback
          };
@@ -87,8 +90,7 @@ namespace DBCode {
          mForm.Controls.Add(mGetStringPanel);
          mGetStringPanel.PerformLayout();
          mForm.ResumeLayout(true);
-         CenterControl(mForm, mGetStringPanel);
-         EnsureWindowFitsMonitor(mForm, false);
+         CenterDialog(mForm, mGetStringPanel); // handles resize, EnsureWindowFitsMonitor, and centering
          mGetStringPanel.Visible = true;
          mGetStringPanel.BringToFront();
          mGetStringPanel.Show();
@@ -98,6 +100,11 @@ namespace DBCode {
       public static void Restore() {
          ThrowIfNull(mForm, nameof(mForm));
          ThrowIfNull(mGetStringPanel, nameof(mGetStringPanel));
+         // OfType<ScrollablePanel> naturally excludes mGetStringPanel (which derives from Panel, not ScrollablePanel).
+         if (mForm.Controls.OfType<ScrollablePanel>().FirstOrDefault() is not ScrollablePanel scrollablePanel)
+            throw new InvalidOperationException(
+               "GetString.Restore: Cannot locate the ScrollablePanel to re-enable.");
+         bool hadControlBox = mGetStringPanel.mHasControlBox; // capture before dispose
          mForm.SuspendLayout();
          mGetStringPanel.Visible = false;
          mGetStringPanel.SendToBack();
@@ -105,12 +112,14 @@ namespace DBCode {
             mForm.Controls.Remove(mGetStringPanel);
          mGetStringPanel.Dispose();
          mGetStringPanel = null;
-         mForm.Bounds = mUiState.FormBounds;
-         foreach (Control control in mForm.Controls.OfType<Control>())
-            control.Enabled = true;
-         if (mHasControlBox)
+         if (mForm.Size != mUiState.FormBounds.Size) // only restore if Show() enlarged the Form
+            mForm.Bounds = mUiState.FormBounds;
+         scrollablePanel.AutoScroll = mPanelAutoScroll; // always restore regardless of whether it was changed
+         scrollablePanel.Enabled = true;
+         if (hadControlBox)
             mForm.ControlBox = true;
          mForm.ResumeLayout(true);
+         mActiveLayoutable?.LayoutControls(); // defensive: ensures layout reflects restored bounds
       }
 
       private void LayoutClusters() {
@@ -132,23 +141,29 @@ namespace DBCode {
          wantedWidth = Math.Max(wantedWidth, mInputTextBox.Width);
          wantedWidth = Math.Max(wantedWidth, mGetStringBottomPanel.NeededWidth);
          mTitleCluster.LayoutCluster();
-         mGetStringBottomPanel.LayoutControls();// efm5 this is needed to get the correct sizes after the font is applied
+         mGetStringBottomPanel.LayoutControls(); // needed to get correct sizes after font is applied
          mInnerPanel.Size = new Size(wantedWidth + mEm, mTitleCluster.Height + mPromptLabel.Height +
             mInputTextBox.Height + mGetStringBottomPanel.Height);
-         mGetStringBottomPanel.LayoutControls();// efm5 this is needed to recalculate the needed width after the inner panel is sized
+         mGetStringBottomPanel.LayoutControls(); // needed to recalculate needed width after inner panel is sized
          mOuterPanel.Size =
             new Size(mInnerPanel.Width + (mEmFifth * 2), mInnerPanel.Height + (mEmFifth * 2));
          Size = new Size(mOuterPanel.Width + (mEmFifth * 2), mOuterPanel.Height + (mEmFifth * 2));
-         Width += SystemInformation.VerticalScrollBarWidth;
-         Height += SystemInformation.HorizontalScrollBarHeight;
          mInnerPanel.ResumeLayout(true);
          ResumeLayout(true);
       }
 
       private void ApplyTheme() {
+         ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
          Theme theme = mCurrentTheme!;
          Theme.ThemeInterfaceThings(theme, out Font interfaceFont, out Color interfaceForeColor,
             out Color interfaceBackColor);
+         Control? biggest = BiggestControl(mForm!.Controls[0].Controls.OfType<Control>());
+         Color referenceColor = biggest?.BackColor ??
+            theme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground];
+         ColorTones tone = ColorTone.GetTone(referenceColor);
+         bool isDarkBackground = tone == ColorTones.Dark || tone == ColorTones.MediumDark;
+         BackColor = isDarkBackground ? Color.White : Color.Black;            // mBorderPanel: outermost ring
+         mOuterPanel.BackColor = isDarkBackground ? Color.Black : Color.White; // middle contrasting ring
          mInnerPanel.BackColor = theme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground];
          MainForm.DisposeFontIfOwned(mPromptLabel.Font);
          mPromptLabel.Font = CreateNewFont(interfaceFont);
