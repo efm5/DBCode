@@ -164,6 +164,7 @@
       public static bool mFirstGray = true, mFirstLaunch = true, mForceActivation = true,
          mIsTargetingEnabled = false, mPreMinimalControlBox = true, mReturnToTop = true,
          mFirstColorPicker = true, mFirstFontPicker = true;
+      public static List<Control>? mBottomPanelExcluded = null;
       public static float mFontWidthAdjustment = 0.5f;
       public static FontUsage mFontUsage = FontUsage.Text;
       public static MainForm? mForm = null;

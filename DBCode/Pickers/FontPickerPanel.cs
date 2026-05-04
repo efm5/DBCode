@@ -10,14 +10,15 @@ namespace DBCode {
             mUnderlineStyleCheckBox;
          private ComboBox mFontFamilyComboBox, mFontSizeComboBox;
          private GroupBox mFontStyleGroupBox;
-         private Label mFontDescriptionLabel;
+         internal Label mFontDescriptionLabel;
          private Panel mFontSizePanel, mPickFontPanel, mScrollPanel;
          internal BottomPanel mFontPickerBottomPanel;
          private TextBox mFontFamilyNameTextBox, mFontSizeTextBox;
          private TwoLineHeaderLabelCluster mTitleLabel;
+         internal double mOriginalOpacity;
 
          public FontPickerPanel(Theme pTheme, FontUsage pFontUsage, Font pInitialFont) {
-            mInitialFont = pInitialFont;
+            mInitialFont = CreateNewFont(pInitialFont);
             mFontUsage = pFontUsage;
             mTheme = pTheme;
             ThrowIfNull(mTheme, nameof(mTheme));
@@ -212,15 +213,8 @@ namespace DBCode {
             ThrowIfNull(mTheme, nameof(mTheme));
             ThrowIfNull(mInitialFont, nameof(mInitialFont));
             ThrowIfNull(mForm, nameof(mForm));
-            Point location = mForm.Location;
-            mForm.Location = new Point(int.MinValue, int.MinValue);
-            mForm.Visible = false;
-            mForm.Hide();
-            double opacity = mForm.Opacity;
-            mForm.Opacity = 0;
             RemoveEventHandlers();
             SetFontsAndColors();
-            UpdateFontDescription();
             mTitleLabel.LayoutCluster();
             mFontFamilyNameTextBox.Text = mInitialFont.Name;
             int familyIndex = 0;
@@ -264,6 +258,7 @@ namespace DBCode {
                if ((style & FontStyle.Strikeout) == FontStyle.Strikeout)
                   mStrikethroughStyleCheckBox.Checked = true;
             }
+            UpdateFontDescription();
             mScrollPanel.Location = new Point(1, mTitleLabel.Bottom);
             mFamilyPrefixButton.Top = mEm;
             mFamilyPrefixButton.Left = mIndent;
@@ -321,15 +316,28 @@ namespace DBCode {
                mFontSizeDropDownPrefixButton.Width)));
             mFontSizePanel.Width = max + mEm2;
             mFontSizePanel.Height = mFontSizeComboBox.Bottom + mEm;
+            Size requiredSize = GetRequiredSize(); // measure before scroll panel is sized
+            Rectangle primaryArea = Screen.PrimaryScreen!.WorkingArea;
+            int width = Math.Min(requiredSize.Width, (int)(primaryArea.Width * 0.9));
+            int height = Math.Min(requiredSize.Height, (int)(primaryArea.Height * 0.9));
             mScrollPanel.Size = new Size(ClientSize.Width - 2,
                ClientSize.Height - mTitleLabel.Height - mFontPickerBottomPanel.Height);
             mFontPickerBottomPanel.Top = mScrollPanel.Bottom;
             mFontPickerBottomPanel.LayoutControls();
             RestoreFontPickerHandlers();
-            mForm.Opacity = opacity;
-            mForm.Show();
-            mForm.Visible = true;
-            mForm.Location = location;
+            // BeginInvoke: first visible frame is fully laid-out form at correct position and opacity.
+            mForm.BeginInvoke(() => {
+               if (mFirstFontPicker) {
+                  mForm.ClientSize = new Size(width, height);
+                  CenterFormOnMonitor(mForm, Screen.PrimaryScreen);
+                  EnsureWindowFitsMonitor(mForm);
+                  mUiState.mFontPickerBounds = mForm.Bounds;
+                  mFirstFontPicker = false;
+               }
+               else
+                  mForm.Bounds = mUiState.mFontPickerBounds;
+               mForm.Opacity = mOriginalOpacity;
+            });
          }
 
          internal Size GetRequiredSize() {
@@ -413,8 +421,7 @@ namespace DBCode {
             FontStyle style = GetFontStyle();
             string styleText = style.ToString();
             try {
-               mWorkingFont = new Font(familyName, fontSize, style);
-               mFontDescriptionLabel.Font = mWorkingFont;
+               mFontDescriptionLabel.Font = new Font(familyName, fontSize, style);
                mFontDescriptionLabel.Text = $"Selected font: {familyName}; {fontSize}pt; {styleText}";
             }
             catch {
@@ -433,52 +440,55 @@ namespace DBCode {
             mScrollPanel.BackColor = backColor;
             mPickFontPanel.BackColor = backColor;
             mFontSizePanel.BackColor = backColor;
-            mFamilyPrefixButton.Font = interfaceFont;
+            mFamilyPrefixButton.Font = CreateNewFont(interfaceFont);
             mFamilyPrefixButton.ForeColor = foreColor;
             mFamilyPrefixButton.BackColor = backColor;
             FlattenButton(mFamilyPrefixButton, backColor);
-            mFontDropDownPrefixButton.Font = interfaceFont;
+            mFontDropDownPrefixButton.Font = CreateNewFont(interfaceFont);
             mFontDropDownPrefixButton.ForeColor = foreColor;
             mFontDropDownPrefixButton.BackColor = backColor;
             FlattenButton(mFontDropDownPrefixButton, backColor);
-            mFontSizeDropDownPrefixButton.Font = interfaceFont;
+            mFontSizeDropDownPrefixButton.Font = CreateNewFont(interfaceFont);
             mFontSizeDropDownPrefixButton.ForeColor = foreColor;
             mFontSizeDropDownPrefixButton.BackColor = backColor;
             FlattenButton(mFontSizeDropDownPrefixButton, backColor);
-            mFontSizePrefixButton.Font = interfaceFont;
+            mFontSizePrefixButton.Font = CreateNewFont(interfaceFont);
             mFontSizePrefixButton.ForeColor = foreColor;
             mFontSizePrefixButton.BackColor = backColor;
             FlattenButton(mFontSizePrefixButton, backColor);
-            mBoldStyleCheckBox.Font = interfaceFont;
+            mBoldStyleCheckBox.Font = CreateNewFont(interfaceFont);
             mBoldStyleCheckBox.ForeColor = foreColor;
             mBoldStyleCheckBox.BackColor = Color.Transparent;
-            mItalicsStyleCheckBox.Font = interfaceFont;
+            mItalicsStyleCheckBox.Font = CreateNewFont(interfaceFont);
             mItalicsStyleCheckBox.ForeColor = foreColor;
             mItalicsStyleCheckBox.BackColor = Color.Transparent;
-            mNormalStyleCheckBox.Font = interfaceFont;
+            mNormalStyleCheckBox.Font = CreateNewFont(interfaceFont);
             mNormalStyleCheckBox.ForeColor = foreColor;
             mNormalStyleCheckBox.BackColor = Color.Transparent;
-            mStrikethroughStyleCheckBox.Font = interfaceFont;
+            mStrikethroughStyleCheckBox.Font = CreateNewFont(interfaceFont);
             mStrikethroughStyleCheckBox.ForeColor = foreColor;
             mStrikethroughStyleCheckBox.BackColor = Color.Transparent;
-            mUnderlineStyleCheckBox.Font = interfaceFont;
+            mUnderlineStyleCheckBox.Font = CreateNewFont(interfaceFont);
             mUnderlineStyleCheckBox.ForeColor = foreColor;
             mUnderlineStyleCheckBox.BackColor = Color.Transparent;
-            mFontFamilyComboBox.Font = interfaceFont;
+            mFontFamilyComboBox.Font = CreateNewFont(interfaceFont);
             mFontFamilyComboBox.ForeColor = foreColor;
             mFontFamilyComboBox.BackColor = backColor;
-            mFontSizeComboBox.Font = interfaceFont;
+            mFontSizeComboBox.Font = CreateNewFont(interfaceFont);
             mFontSizeComboBox.ForeColor = foreColor;
             mFontSizeComboBox.BackColor = backColor;
             mFontStyleGroupBox.Font = CreateNewBoldFont(interfaceFont);
             mFontStyleGroupBox.ForeColor = foreColor;
             mFontStyleGroupBox.BackColor = groupBoxBackgroundColor;
-            mFontFamilyNameTextBox.Font = interfaceFont;
+            mFontFamilyNameTextBox.Font = CreateNewFont(interfaceFont);
             mFontFamilyNameTextBox.ForeColor = foreColor;
             mFontFamilyNameTextBox.BackColor = backColor;
-            mFontSizeTextBox.Font = interfaceFont;
+            mFontSizeTextBox.Font = CreateNewFont(interfaceFont);
             mFontSizeTextBox.ForeColor = foreColor;
             mFontSizeTextBox.BackColor = backColor;
+            mFontDescriptionLabel.Font = CreateNewFont(interfaceFont);
+            mFontDescriptionLabel.ForeColor = mTheme.mInterfaceColors[(int)ColorSwatchUsage.StatusFont];
+            mFontDescriptionLabel.BackColor = mTheme.mInterfaceColors[(int)ColorSwatchUsage.StatusBackground];
             mFontPickerBottomPanel.SetFontAndColor();
             mTitleLabel.SetFontAndColor();
          }

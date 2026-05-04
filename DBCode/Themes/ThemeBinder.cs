@@ -42,11 +42,10 @@
       private static void ApplyThemeInternal(Control pControl, Theme pTheme) {
          ThemeTag? tag = pControl.Tag as ThemeTag;
          ThrowIfNull(tag, nameof(tag));
-         Font font = pTheme.mFonts[(int)tag.mFontUsage];
          Color foreColor = pTheme.mInterfaceColors[(int)tag.mForeColorSwatchUsage];
          Color backColor = pTheme.mInterfaceColors[(int)tag.mBackColorSwatchUsage];
 
-         pControl.Font = font;
+         pControl.Font = CreateNewFont(pTheme.mFonts[(int)tag.mFontUsage]);
          pControl.ForeColor = foreColor;
          if (tag.mAllowTransparent && backColor == Color.Transparent)
             pControl.BackColor = Color.Transparent;
@@ -78,11 +77,10 @@
       private static void ApplyMenuItem(ToolStripMenuItem pItem, Theme pTheme, List<Control>? pExclusions) {
          ThemeTag? tag = pItem.Tag as ThemeTag;
          ThrowIfNull(tag, nameof(tag));
-         Font font = pTheme.mFonts[(int)tag.mFontUsage];
          Color foreColor = pTheme.mInterfaceColors[(int)tag.mForeColorSwatchUsage];
          Color backColor = pTheme.mInterfaceColors[(int)tag.mBackColorSwatchUsage];
 
-         pItem.Font = font;
+         pItem.Font = CreateNewFont(pTheme.mFonts[(int)tag.mFontUsage]);
          pItem.ForeColor = foreColor;
          pItem.BackColor = backColor;
          foreach (ToolStripItem child in pItem.DropDownItems) {
@@ -94,11 +92,10 @@
       private static void ApplyToolStripItem(ToolStripItem pItem, Theme pTheme) {
          ThemeTag? tag = pItem.Tag as ThemeTag;
          ThrowIfNull(tag, nameof(tag));
-         Font font = pTheme.mFonts[(int)tag.mFontUsage];
          Color foreColor = pTheme.mInterfaceColors[(int)tag.mForeColorSwatchUsage];
          Color backColor = pTheme.mInterfaceColors[(int)tag.mBackColorSwatchUsage];
 
-         pItem.Font = font;
+         pItem.Font = CreateNewFont(pTheme.mFonts[(int)tag.mFontUsage]);
          pItem.ForeColor = foreColor;
          pItem.BackColor = backColor;
       }

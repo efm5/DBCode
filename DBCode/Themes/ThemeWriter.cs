@@ -23,9 +23,9 @@ namespace DBCode.Themes {
       }
 
       [System.Diagnostics.CodeAnalysis.SuppressMessage(
-   "Performance",
-   "CA1869:Avoid creating a new 'JsonSerializerOptions' instance for every serialization operation",
-   Justification = "Theme serialization is a cold path; options object creation is negligible and clearer here.")]
+         "Performance",
+         "CA1869:Avoid creating a new 'JsonSerializerOptions' instance for every serialization operation",
+         Justification = "Theme serialization is a cold path; options object creation is negligible and clearer here.")]
       private static string BuildJson(Theme pTheme) {
          Dictionary<string, object> root = new Dictionary<string, object> {
             ["Name"] = pTheme.mName,
@@ -35,10 +35,8 @@ namespace DBCode.Themes {
          Dictionary<string, string> colors = [];
          Dictionary<string, Dictionary<string, string>> highlightColors = [];
 
-         foreach (FontUsage usage in Enum.GetValues<FontUsage>()) {
-            Font font = pTheme.mFonts[(int)usage];
-            fonts[usage.ToString()] = new FontConverter().ConvertToString(font) ?? "";
-         }
+         foreach (FontUsage usage in Enum.GetValues<FontUsage>())
+            fonts[usage.ToString()] = new FontConverter().ConvertToString(pTheme.mFonts[(int)usage]) ?? "";
          foreach (ColorSwatchUsage usage in Enum.GetValues<ColorSwatchUsage>()) {
             Color color = pTheme.mInterfaceColors[(int)usage];
             colors[usage.ToString()] = ColorToString(color);

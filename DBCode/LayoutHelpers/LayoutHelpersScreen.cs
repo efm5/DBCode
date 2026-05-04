@@ -200,6 +200,15 @@ namespace DBCode {
          pForm.Top = workingArea.Y + (workingArea.Height - pForm.Height) / 2;
       }
 
+      internal static void CenterFormOnMonitor(Form? pForm, Screen? pScreen) {
+         if (pForm == null)
+            return;
+         Screen screen = pScreen ?? Screen.FromControl(pForm);
+         Rectangle workingArea = screen.WorkingArea;
+         pForm.Left = workingArea.X + (workingArea.Width - pForm.Width) / 2;
+         pForm.Top = workingArea.Y + (workingArea.Height - pForm.Height) / 2;
+      }
+
       internal static void GetDPI(Screen pScreen, DPIType pDpiType, out uint pODpiX, out uint pODpiY) {
          POINT location = new POINT(pScreen.Bounds.Left + 1, pScreen.Bounds.Top + 1);
          nint monitor = MonitorFromPoint(location, 2);

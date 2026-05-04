@@ -232,7 +232,6 @@
 
          public void UpdateFontLabels(FontUsage pUsage) {
             string fontDescription = string.Empty;
-            Font font = mTemporaryTheme.mFonts[(int)pUsage];
             switch (pUsage) {
                case FontUsage.Interface:
                   fontDescription = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Interface].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Interface].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Interface].Style}";
@@ -384,16 +383,16 @@
 
          public void EnsureFontPickerPanel(Theme pTheme, FontUsage pUsage, Font pInitialFont) {
             ThrowIfNull(mForm, nameof(mForm));
+            Font testFont = new Font("Broadway", 25f, pInitialFont.Style);
+            Theme theme = pTheme.Clone();
+            theme.mFonts[(int)pUsage] = testFont;
             mUiState.ThemeBounds = mForm.Bounds;
             if (mFontPickerPanel == null)
-               mFontPickerPanel = new FontPickerPanel(pTheme, pUsage, pInitialFont);
+               mFontPickerPanel = new FontPickerPanel(theme, pUsage, testFont);
+            //mFontPickerPanel = new FontPickerPanel(pTheme, pUsage, pInitialFont);
             else
                mFontPickerPanel.LayoutControls();
-            if (mFirstFontPicker) {
-               mForm.SuspendClientSizeChanged();
-               mForm.Bounds = mUiState.mFontPickerBounds;
-               mForm.ResumeClientSizeChanged();
-            }
+            mBottomPanelExcluded = new List<Control>([mFontPickerPanel.mFontDescriptionLabel]);
             ShowFontPickerPanel();
          }
 
@@ -404,43 +403,23 @@
             if (mForm.Controls.Contains(mThemePanel))
                mForm.Controls.Remove(mThemePanel);
             if (!mForm.Controls.Contains(mFontPickerPanel))
-               mForm.Controls.Add(mFontPickerPanel);
+               mForm.Controls.Add(mFontPickerPanel); // triggers OnHandleCreated → LayoutControls on first add
             mActiveLayoutable = mFontPickerPanel.mFontPickerBottomPanel;
             mFontPickerPanel.Dock = DockStyle.Fill;
             mFontPickerPanel.Visible = true;
             mFontPickerPanel.BringToFront();
             mFontPickerPanel.Show();
-            if (mFirstFontPicker) {
-               mForm.SuspendClientSizeChanged();
-               mFontPickerPanel.LayoutControls();       // layout first so GetRequiredSize measures real positions
-               Size requiredSize = mFontPickerPanel.GetRequiredSize();
-               Rectangle screenBounds = ScreenBoundsPrimary();
-               int maxWidth = (int)(screenBounds.Width * 0.9);
-               int maxHeight = (int)(screenBounds.Height * 0.9);
-               int width = Math.Min(requiredSize.Width, maxWidth);
-               int height = Math.Min(requiredSize.Height, maxHeight);
-               mForm.ClientSize = new Size(width, height);
-               Point center = ScreenCenterPrimary();
-               mForm.Location = new Point(center.X - (width / 2), center.Y - (height / 2));
-               EnsureWindowFitsMonitor(mForm);
-               mFontPickerPanel.LayoutControls();       // layout again now that form has correct size
-               mForm.ResumeClientSizeChanged();
-               mFirstFontPicker = false;
-            }
-            else {
-               mForm.SuspendClientSizeChanged();
-               mUiState.ThemeBounds = mForm.Bounds;
-               mForm.Bounds = mUiState.mFontPickerBounds;
-               EnsureWindowFitsMonitor(mForm);
-               mFontPickerPanel.LayoutControls();
-               mForm.ResumeClientSizeChanged();
-            }
+            // LayoutControls() is NOT called here — OnHandleCreated owns first-time layout,
+            // and subsequent calls go through LayoutControls() directly when needed.
          }
 
          public static void RestoreFromFontPickerPanel(Theme? pTheme = null) {
             ThrowIfNull(mForm, nameof(mForm));
             ThrowIfNull(mFontPickerPanel, nameof(mFontPickerPanel));
             ThrowIfNull(mThemePanel, nameof(mThemePanel));
+            ThrowIfNull(mBottomPanelExcluded, nameof(mBottomPanelExcluded));
+            mBottomPanelExcluded.Clear();
+            mBottomPanelExcluded = null;
             mFontPickerPanel.Visible = false;
             mFontPickerPanel.SendToBack();
             if (mForm.Controls.Contains(mFontPickerPanel))
@@ -460,6 +439,7 @@
                   mThemePanel.HighlightAllExampleBoxes();
                mThemePanel.Invalidate(true);
             }
+            mForm.Opacity = mFontPickerPanel.mOriginalOpacity;
          }
 
          private void CloseThemePanel() {

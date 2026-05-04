@@ -4,6 +4,13 @@ namespace DBCode {
          protected override void OnHandleCreated(EventArgs pEventArgs) {
             base.OnHandleCreated(pEventArgs);
             Dock = DockStyle.Fill;
+            // Suppress the form before any layout paint occurs.
+            // Opacity=0 must be set before LayoutControls() triggers any WM_PAINT.
+            // We do NOT restore here — LayoutControls() owns the restore via BeginInvoke.
+            ThrowIfNull(mForm, nameof(mForm));
+            mOriginalOpacity = mForm.Opacity;
+            mForm.Opacity = 0;
+            mForm.Location = new Point(-32000, -32000); // clamped-safe off-screen, not int.MinValue
             LayoutControls();
             PerformLayout();
          }

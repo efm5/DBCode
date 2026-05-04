@@ -88,12 +88,16 @@
             mCancelButton.ForeColor = poForeColor;
             mCancelButton.BackColor = poBackColor;
             foreach (Control control in mLeftControls) {
+               if (mBottomPanelExcluded != null && mBottomPanelExcluded.Contains(control))
+                  continue;
                MainForm.DisposeFontIfOwned(control.Font);
                control.Font = CreateNewFont(poFont);
                control.ForeColor = poForeColor;
                control.BackColor = poBackColor;
             }
             foreach (Control control in mRightControls) {
+               if (mBottomPanelExcluded != null && mBottomPanelExcluded.Contains(control))
+                  continue;
                MainForm.DisposeFontIfOwned(control.Font);
                control.Font = CreateNewFont(poFont);
                control.ForeColor = poForeColor;

@@ -3,7 +3,13 @@ namespace DBCode {
       internal sealed partial class ColorPickerPanel : ScrollablePanel {
          protected override void OnHandleCreated(EventArgs pEventArgs) {
             base.OnHandleCreated(pEventArgs);
-            Dock = DockStyle.Fill;   // panel fills the form, not the scroll panel
+            Dock = DockStyle.Fill;
+            // Suppress the form before any layout paint occurs.
+            // Opacity=0 must be set before LayoutControls() triggers any WM_PAINT.
+            // We do NOT restore here — LayoutControls() owns the restore via BeginInvoke.
+            ThrowIfNull(mForm, nameof(mForm));
+            mForm.Opacity = 0;
+            mForm.Location = new Point(-32000, -32000); // clamped-safe off-screen, not int.MinValue
             LayoutControls();
             PerformLayout();
          }
