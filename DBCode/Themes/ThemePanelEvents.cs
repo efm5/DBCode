@@ -2,7 +2,7 @@
 
 namespace DBCode {
    namespace Themes {
-      internal sealed partial class ThemePanel : Panel {
+      internal sealed partial class ThemePanel : ScrollablePanel {
          protected override void OnHandleCreated(EventArgs pEventArgs) {
             base.OnHandleCreated(pEventArgs);
             SuspendLayout();

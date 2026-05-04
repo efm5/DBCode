@@ -25,15 +25,15 @@
          mActiveLayoutable?.LayoutControls();
          Opacity = mUiState.mFormOpacity;
          ClientSizeChanged += OnClientSizeChanged;
-         GetString.Show("GetString Test", "Please enter any string to test the GetString harness:", string.Empty, TestGetStringCallback);
+         //GetString.Show("GetString Test", "Please enter any string to test the GetString harness:", string.Empty, TestGetStringCallback);
       }
 
-      private void TestGetStringCallback(string? pResult, bool pWasCancelled) {
-         GetString.Restore();
-         if (pWasCancelled || pResult is null)
-            return;
-         TimedMessage(pResult, "GetString Test Result");
-      }
+      //private void TestGetStringCallback(string? pResult, bool pWasCancelled) {
+      //   GetString.Restore();
+      //   if (pWasCancelled || pResult is null)
+      //      return;
+      //   TimedMessage(pResult, "GetString Test Result");
+      //}
 
       private void MainForm_FormClosing(object? pSender, FormClosingEventArgs pEventArgs) {
          ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));

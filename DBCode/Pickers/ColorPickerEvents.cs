@@ -1,9 +1,11 @@
 namespace DBCode {
    namespace Themes {
-      public sealed partial class ColorPickerPanel : Panel {
+      internal sealed partial class ColorPickerPanel : ScrollablePanel {
          protected override void OnHandleCreated(EventArgs pEventArgs) {
             base.OnHandleCreated(pEventArgs);
             Dock = DockStyle.Fill;   // panel fills the form, not the scroll panel
+            LayoutControls();
+            PerformLayout();
          }
 
          #region Named Color Event Handlers

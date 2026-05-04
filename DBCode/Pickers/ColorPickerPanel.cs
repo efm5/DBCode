@@ -1,6 +1,6 @@
 namespace DBCode {
    namespace Themes {
-      public sealed partial class ColorPickerPanel : Panel {
+      internal sealed partial class ColorPickerPanel : ScrollablePanel {
          private Button mBluePrefixButton, mGrayPrefixButton, mGreenPrefixButton,
             mNamedColorPrefixButton, mRedPrefixButton;
          private CheckBox mUseGrayscaleCheckBox, mUseNamedCheckBox;
@@ -233,8 +233,13 @@ namespace DBCode {
             ThrowIfNull(mTitleLabel, nameof(mTitleLabel));
             ThrowIfNull(mNamedColorsGroupBox, nameof(mNamedColorsGroupBox));
             ThrowIfNull(mCustomColorGroupBox, nameof(mCustomColorGroupBox));
+            ThrowIfNull(mForm, nameof(mForm));
+            double opacity = mForm.Opacity;
+            mForm.Opacity = 0;
+            RemoveEventHandlers();
             RemoveEventHandlers();
             SetFontsAndColors();
+            mTitleLabel.LayoutCluster();
             mNamedColorsGroupBox.Location = new Point(mEm, mEm);
             mUseNamedCheckBox.Location = GetGroupBoxFirstLineOffset(mNamedColorsGroupBox);
             mNamedColorPrefixButton.Location = new Point(mEm, mUseNamedCheckBox.Bottom + mEm);
@@ -271,6 +276,7 @@ namespace DBCode {
             mColorPickerBottomPanel.Top = mScrollPanel.Bottom;
             mColorPickerBottomPanel.LayoutControls();
             RestoreColorPickerHandlers();
+            mForm.Opacity = opacity;
          }
 
          internal Size GetRequiredSize() {

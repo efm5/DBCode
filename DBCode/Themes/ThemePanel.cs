@@ -2,7 +2,7 @@ using System.Globalization;
 
 namespace DBCode {
    namespace Themes {
-      internal sealed partial class ThemePanel : Panel {
+      internal sealed partial class ThemePanel : ScrollablePanel {
          private const string TemporaryThemePrefix = "\u26A0 TEMPORARY THEME \u26A0 ";
          private List<BaseCluster> mFontsClusters = [], mInterfaceColorClusters = [],
             mCSharpColorClusters = [], mCColorClusters = [], mCppColorClusters = [],

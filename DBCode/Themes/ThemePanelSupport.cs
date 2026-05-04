@@ -1,6 +1,6 @@
 ﻿namespace DBCode {
    namespace Themes {
-      internal sealed partial class ThemePanel : Panel {
+      internal sealed partial class ThemePanel : ScrollablePanel {
          public void SetThemeUsage(ThemeUsage pThemeUsage) {
             mThemeUsage = pThemeUsage;
          }

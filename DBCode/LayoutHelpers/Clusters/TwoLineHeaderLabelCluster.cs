@@ -25,6 +25,10 @@
                TextAlign = ContentAlignment.MiddleLeft
             };
             Controls.AddRange([mTopLabel, mBottomLabel]);
+            SetFontAndColor();
+            LayoutCluster();
+            AutoSize = true;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
             Dock = DockStyle.Top;
          }
 
@@ -44,9 +48,9 @@
          }
 
          internal override void LayoutCluster() {
-            SetFontAndColor();
-            if ((mTopLabel != null) && (mBottomLabel != null)) {
-               int x = (Width - mTopLabel.Width) / 2;
+            if ((Parent != null) && (mTopLabel != null) && (mBottomLabel != null)) {
+               SetFontAndColor();
+               int x = (ClientSize.Width - mTopLabel.Width) / 2;
                if (x < 0)
                   x = 0;
                mTopLabel.Left = x;
@@ -56,6 +60,8 @@
                Height = mBottomLabel.Bottom + mEm;
                mTopLabel.Invalidate();
                mBottomLabel.Invalidate();
+               mTopLabel.Refresh();
+               mBottomLabel.Refresh();
             }
          }
       }

@@ -1,9 +1,11 @@
 namespace DBCode {
    namespace Themes {
-      public sealed partial class FontPickerPanel : Panel {
+      internal sealed partial class FontPickerPanel : ScrollablePanel {
          protected override void OnHandleCreated(EventArgs pEventArgs) {
             base.OnHandleCreated(pEventArgs);
             Dock = DockStyle.Fill;
+            LayoutControls();
+            PerformLayout();
          }
 
          private void FamilyPrefixButton_Click(object? pSender, EventArgs pEventArguments) {

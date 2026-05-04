@@ -1,6 +1,6 @@
 ﻿namespace DBCode {
    namespace Themes {
-      internal sealed partial class ThemePickerPanel : Panel {
+      internal sealed partial class ThemePickerPanel : ScrollablePanel {
          private readonly HeaderLabelCluster? mTitleLabel;
          internal readonly BottomPanel? mThemePickerBottomPanel;
          internal ClusterContainer? mClusterContainer;

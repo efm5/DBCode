@@ -1,6 +1,6 @@
 namespace DBCode {
    namespace Themes {
-      public sealed partial class FontPickerPanel : Panel {
+      internal sealed partial class FontPickerPanel : ScrollablePanel {
          private static Font? mInitialFont, mWorkingFont;
          private static FontUsage mFontUsage;
          private static Theme? mTheme;
@@ -25,6 +25,7 @@ namespace DBCode {
                interfaceFont = mTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
                groupBoxBackground = mTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground];
             Font interfaceTextFont = mTheme.mFonts[(int)FontUsage.Interface];
+
             mTitleLabel = new TwoLineHeaderLabelCluster(mTheme, "Select A Font",
                $"Use this font for {ToDescription((FontUsage)mFontUsage)}");
             mScrollPanel = new Panel {
@@ -210,9 +211,17 @@ namespace DBCode {
          public void LayoutControls() {
             ThrowIfNull(mTheme, nameof(mTheme));
             ThrowIfNull(mInitialFont, nameof(mInitialFont));
+            ThrowIfNull(mForm, nameof(mForm));
+            Point location = mForm.Location;
+            mForm.Location = new Point(int.MinValue, int.MinValue);
+            mForm.Visible = false;
+            mForm.Hide();
+            double opacity = mForm.Opacity;
+            mForm.Opacity = 0;
             RemoveEventHandlers();
             SetFontsAndColors();
             UpdateFontDescription();
+            mTitleLabel.LayoutCluster();
             mFontFamilyNameTextBox.Text = mInitialFont.Name;
             int familyIndex = 0;
             for (int i = 0; i < mFontFamilyComboBox.Items.Count; i++) {
@@ -317,6 +326,10 @@ namespace DBCode {
             mFontPickerBottomPanel.Top = mScrollPanel.Bottom;
             mFontPickerBottomPanel.LayoutControls();
             RestoreFontPickerHandlers();
+            mForm.Opacity = opacity;
+            mForm.Show();
+            mForm.Visible = true;
+            mForm.Location = location;
          }
 
          internal Size GetRequiredSize() {

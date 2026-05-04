@@ -60,6 +60,7 @@ All generated code must follow these rules without exception.
 • When a member of a class precede the name with “m”.
   Example:
     private static int mCount;
+
 1.6 Field Declaration Rules (Strict)
 • Fields are grouped strictly by type.
 • All fields of the same type appear together.
@@ -75,6 +76,15 @@ All generated code must follow these rules without exception.
 • Single-level loops may use i as a counter.
 • Once loops nest, abandon i/j/k entirely and use full camelCase
   names that make each level's purpose unambiguous.
+
+1.8 Static Fields
+Static fields that serve as class-wide shared state use sCamelCase. This mirrors the instance 
+field mCamelCase convention but signals static lifetime. No underscores. 
+No Hungarian notation beyond the prefix.
+Example: private static bool sIsCntrolKeyDown = false;
+Note: In DBCode, the preferred pattern is to eliminate static shared state entirely by moving 
+it into a dedicated fields class with instance fields using mCamelCase. 
+The s prefix is retained in CurlyPad, EasyPad and other applications for historical continuity.
 
 ===========================================
 2. COMMENTING, FORMATTING AND LAYOUT RULES
