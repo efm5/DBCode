@@ -129,20 +129,21 @@
                   baseCluster.LayoutCluster();
                   baseCluster.LayoutCluster();
                }
-               if (control is GroupBox groupBox) {
+               else if (control is GroupBox groupBox) {
                   groupBox.Font = CreateNewBoldFont();
                   groupBox.BackColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground];
                   groupBox.ForeColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxFont];
                }
-               if (control is MenuStrip menuStrip) {
+               else if (control is MenuStrip menuStrip) {
                   menuStrip.BackColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.MenuBackground];
                   foreach (ToolStripItem item in menuStrip.Items)
                      if (item is ToolStripMenuItem tsmi)
                         PaintMenuItemsRecursive(tsmi, mTemporaryTheme);
                }
-               if (control is StatusStrip statusStrip)
+               else if (control is StatusStrip statusStrip)
                   ApplyThemeToToolStrip(statusStrip, FontUsage.Status, ColorSwatchUsage.StatusFont, ColorSwatchUsage.StatusBackground);
-               ApplyThemeToControlTree(control);
+               if (control is not BaseCluster) // let the cluster own its children entirely
+                  ApplyThemeToControlTree(control);
             }
          }
 
@@ -172,10 +173,12 @@
             mTemporaryTheme = clonedTheme;
             foreach (List<BaseCluster> clusterList in mAllClusters) {
                foreach (BaseCluster cluster in clusterList) {
-                  cluster.mTheme.Dispose(); // dispose the GDI fonts in the previous cluster-owned clone
-                  cluster.mTheme = clonedTheme.Clone(); // each cluster owns an independent copy
+                  cluster.mTheme.Dispose();
+                  cluster.mTheme = clonedTheme.Clone();
                }
             }
+            foreach (FontUsage fontUsage in Enum.GetValues<FontUsage>())
+               UpdateFontLabels(fontUsage);
             BackColor = clonedTheme.mInterfaceColors[(int)ColorSwatchUsage.PanelBackground];
             mPrimaryTabControl.SetStripBackColor(clonedTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground]);
             mPrimaryTabControl.ResetStripBackgroundPainted();
@@ -371,6 +374,9 @@
                mColorPickerPanel.LayoutControls();
                mForm.ResumeClientSizeChanged();
             }
+            mForm.BeginInvoke(() => {
+               mForm.Opacity = mColorPickerPanel.mOriginalOpacity;
+            });
          }
 
          public static void RestoreFromColorPickerPanel() {

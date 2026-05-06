@@ -90,6 +90,7 @@
 
          public void UpdateLabel(string pNewText) {
             mLabel.Text = pNewText;
+            mLabel.Refresh();
          }
 
          protected override void Dispose(bool pDisposing) {

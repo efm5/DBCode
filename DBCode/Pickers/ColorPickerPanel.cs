@@ -16,6 +16,8 @@ namespace DBCode {
          internal BottomPanel mColorPickerBottomPanel;
          private Theme mTheme;
          private TrackBar mBlueSlider, mGraySlider, mGreenSlider, mRedSlider;
+         internal double mOriginalOpacity;
+
 
          public ColorPickerPanel(Theme pTheme, ColorSwatchUsage pColorSwatchUsage, Color pInitialColor) {
             mInitialColor = pInitialColor;

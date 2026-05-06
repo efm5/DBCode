@@ -85,9 +85,10 @@ namespace DBCode {
             Theme newTheme = mTemporaryTheme.Clone(pResult);
             AddTheme(newTheme);
             SetCurrentThemeName(pResult);
+            mCurrentTheme?.Dispose(); // release GDI fonts from the previous current theme
             mCurrentTheme = newTheme;
             mThemeIsDirty = true;
-            CloseThemePanel();
+            CloseThemePanel(); // RestoreFromThemePanel → mForm.ApplyTheme() picks up mCurrentTheme
          }
 
          private void CancelButton_Click(object? pSender, EventArgs pArgs) {

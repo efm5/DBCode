@@ -1,6 +1,6 @@
 namespace DBCode {
    namespace Themes {
-      internal sealed partial class FontPickerPanel : ScrollablePanel {
+      internal sealed partial class FontPickerPanel : Panel {
          private static Font? mInitialFont, mWorkingFont;
          private static FontUsage mFontUsage;
          private static Theme? mTheme;
@@ -27,15 +27,13 @@ namespace DBCode {
                interfaceFont = mTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
                groupBoxBackground = mTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground];
             Font interfaceTextFont = mTheme.mFonts[(int)FontUsage.Interface];
-
             mTitleLabel = new TwoLineHeaderLabelCluster(mTheme, "Select A Font",
                $"Use this font for {ToDescription((FontUsage)mFontUsage)}");
             mScrollPanel = new Panel {
                Name = $"FontPickerScrollPanel{mTabIndex++}",
                TabIndex = TAB_INDEX_IGNORED,
                AutoScroll = true,
-               BackColor = interfaceBackground,
-               Anchor = mAnchorTopLeftBottomRight
+               BackColor = interfaceBackground
             };
             mPickFontPanel = new Panel {
                Name = $"PickFontPanel{mTabIndex++}",
@@ -80,7 +78,8 @@ namespace DBCode {
             mFontFamilyComboBox.Items.AddRange(fontNames.ToArray());
             FlattenButton(mFamilyPrefixButton, interfaceBackground);
             FlattenButton(mFontDropDownPrefixButton, interfaceBackground);
-            mPickFontPanel.Controls.AddRange([mFamilyPrefixButton, mFontFamilyNameTextBox, mFontDropDownPrefixButton, mFontFamilyComboBox]);
+            mPickFontPanel.Controls.AddRange([mFamilyPrefixButton, mFontFamilyNameTextBox,
+               mFontDropDownPrefixButton, mFontFamilyComboBox]);
             mFontStyleGroupBox = new GroupBox {
                Name = $"FontStyleGroupBox{mTabIndex++}",
                TabIndex = TAB_INDEX_IGNORED,
@@ -177,8 +176,8 @@ namespace DBCode {
                mFontSizeComboBox.Items.Add(size.ToString());
             FlattenButton(mFontSizePrefixButton, groupBoxBackground);
             FlattenButton(mFontSizeDropDownPrefixButton, groupBoxBackground);
-            mFontSizePanel.Controls.AddRange([mFontSizePrefixButton, mFontSizeTextBox, mFontSizeDropDownPrefixButton,
-               mFontSizeComboBox]);
+            mFontSizePanel.Controls.AddRange([mFontSizePrefixButton, mFontSizeTextBox,
+               mFontSizeDropDownPrefixButton, mFontSizeComboBox]);
             mFontDescriptionLabel = new Label {
                Name = $"FontDescriptionLabel{mTabIndex++}",
                TabIndex = TAB_INDEX_IGNORED,
@@ -193,7 +192,6 @@ namespace DBCode {
             };
             mFontPickerBottomPanel.mHelpButton!.Tag = new HelpTag(HelpContext.FontPicker);
             mFontPickerBottomPanel.mHelpButton.Click += HelpButton_Click;
-            mFontPickerBottomPanel.AddLeftControl(mFontDescriptionLabel);
             mOkButton = new Button {
                Name = $"FontPickerOkButton{mTabIndex}",
                TabIndex = mTabIndex++,
@@ -204,8 +202,9 @@ namespace DBCode {
             mFontPickerBottomPanel.AddRightControl(mOkButton);
             mFontPickerBottomPanel.mCancelButton!.Click += CancelButton_Click;
             mOkButton.Click += OkButton_Click;
+            mScrollPanel.Controls.AddRange([mPickFontPanel, mFontStyleGroupBox, mFontSizePanel,
+               mFontDescriptionLabel]);
             Controls.AddRange([mScrollPanel, mFontPickerBottomPanel, mTitleLabel]);
-            mScrollPanel.Controls.AddRange([mPickFontPanel, mFontStyleGroupBox, mFontSizePanel]);
             BackColor = interfaceBackground;
             AttachEventHandlers();
          }
@@ -215,6 +214,7 @@ namespace DBCode {
             ThrowIfNull(mInitialFont, nameof(mInitialFont));
             ThrowIfNull(mForm, nameof(mForm));
             RemoveEventHandlers();
+            mScrollPanel.Anchor = mAnchorTopLeft;
             SetFontsAndColors();
             mTitleLabel.LayoutCluster();
             mFontFamilyNameTextBox.Text = mInitialFont.Name;
@@ -259,13 +259,11 @@ namespace DBCode {
                if ((style & FontStyle.Strikeout) == FontStyle.Strikeout)
                   mStrikethroughStyleCheckBox.Checked = true;
             }
-            UpdateFontDescription();
-            mScrollPanel.Location = new Point(1, mTitleLabel.Bottom);
             mFamilyPrefixButton.Top = mEm;
             mFamilyPrefixButton.Left = mIndent;
             mFontFamilyNameTextBox.Left = mFamilyPrefixButton.Right + mEm;
-            mFontFamilyNameTextBox.Top = mFamilyPrefixButton.Top + ((mFamilyPrefixButton.Height -
-               mFontFamilyNameTextBox.Height) / 2);
+            mFontFamilyNameTextBox.Top = mFamilyPrefixButton.Top +
+               ((mFamilyPrefixButton.Height - mFontFamilyNameTextBox.Height) / 2);
             int textBoxWidth = 200;
             using (Graphics g = CreateGraphics()) {
                SizeF size = g.MeasureString(mInitialFont.Name, mFontFamilyNameTextBox.Font);
@@ -275,11 +273,10 @@ namespace DBCode {
             mFontDropDownPrefixButton.Top = mFamilyPrefixButton.Bottom + mEm;
             mFontDropDownPrefixButton.Left = mIndent;
             mFontFamilyComboBox.Left = mFontDropDownPrefixButton.Right + mEm;
-            mFontFamilyComboBox.Top = mFontDropDownPrefixButton.Top + ((mFontDropDownPrefixButton.Height -
-               mFontFamilyComboBox.Height) / 2);
+            mFontFamilyComboBox.Top = mFontDropDownPrefixButton.Top +
+               ((mFontDropDownPrefixButton.Height - mFontFamilyComboBox.Height) / 2);
             mFontFamilyComboBox.Width = textBoxWidth;
-            mPickFontPanel.Width = mFontFamilyComboBox.Right + mEm;
-            mPickFontPanel.Height = mFontFamilyComboBox.Bottom + mEm;
+            SizePanel(mFontSizePanel);
             mPickFontPanel.Top = mEm;
             mPickFontPanel.Left = mIndent;
             mFontStyleGroupBox.Left = mPickFontPanel.Right + mEm;
@@ -294,12 +291,8 @@ namespace DBCode {
             mUnderlineStyleCheckBox.Top = mItalicsStyleCheckBox.Bottom;
             mStrikethroughStyleCheckBox.Left = mIndent;
             mStrikethroughStyleCheckBox.Top = mUnderlineStyleCheckBox.Bottom;
-            int maxCheckBoxWidth = Math.Max(mNormalStyleCheckBox.Width,
-               Math.Max(mBoldStyleCheckBox.Width,
-               Math.Max(mItalicsStyleCheckBox.Width,
-               Math.Max(mUnderlineStyleCheckBox.Width, mStrikethroughStyleCheckBox.Width))));
-            mFontStyleGroupBox.Width = maxCheckBoxWidth + mEm2;
-            mFontStyleGroupBox.Height = mStrikethroughStyleCheckBox.Bottom + mEm2;
+            SizeGroupBox(mFontStyleGroupBox);
+            SizePanel(mFontSizePanel);
             mFontSizePanel.Left = mFontStyleGroupBox.Right + mEm;
             mFontSizePanel.Top = mFontStyleGroupBox.Top;
             mFontSizePrefixButton.Top = 0;
@@ -312,21 +305,18 @@ namespace DBCode {
             mFontSizeComboBox.Left = mIndent;
             mFontSizeComboBox.Top = mFontSizeDropDownPrefixButton.Bottom;
             mFontSizeComboBox.Width = 60;
-            int max = Math.Max(mFontSizeTextBox.Width,
-               Math.Max(mFontSizeComboBox.Width, Math.Max(mFontSizePrefixButton.Width,
-               mFontSizeDropDownPrefixButton.Width)));
-            mFontSizePanel.Width = max + mEm2;
-            mFontSizePanel.Height = mFontSizeComboBox.Bottom + mEm;
-            Size requiredSize = GetRequiredSize(); // measure before scroll panel is sized
-            Rectangle primaryArea = Screen.PrimaryScreen!.WorkingArea;
-            int width = Math.Min(requiredSize.Width, (int)(primaryArea.Width * 0.9));
-            int height = Math.Min(requiredSize.Height, (int)(primaryArea.Height * 0.9));
-            mScrollPanel.Size = new Size(ClientSize.Width - 2,
-               ClientSize.Height - mTitleLabel.Height - mFontPickerBottomPanel.Height);
+            mFontDescriptionLabel.Left = mEmHalf;
+            mFontDescriptionLabel.Top = Math.Max(mFontStyleGroupBox.Bottom, mFontSizePanel.Bottom);
+            UpdateFontDescription();
+            SizePanel(mScrollPanel);
+            mScrollPanel.Location = new Point(1, mTitleLabel.Bottom);
             mFontPickerBottomPanel.Top = mScrollPanel.Bottom;
             mFontPickerBottomPanel.LayoutControls();
+            Size wantedSize = GetRequiredSize();
+            Rectangle primaryArea = Screen.PrimaryScreen!.WorkingArea;
+            int width = Math.Min(wantedSize.Width, (int)(primaryArea.Width * 0.9));
+            int height = Math.Min(wantedSize.Height, (int)(primaryArea.Height * 0.9));
             RestoreFontPickerHandlers();
-            // BeginInvoke: first visible frame is fully laid-out form at correct position and opacity.
             mForm.BeginInvoke(() => {
                if (mFirstFontPicker) {
                   mForm.ClientSize = new Size(width, height);
@@ -338,17 +328,14 @@ namespace DBCode {
                else
                   mForm.Bounds = mUiState.mFontPickerBounds;
                mForm.Opacity = mOriginalOpacity;
+               mScrollPanel.Anchor = mAnchorTopLeftBottomRight;
             });
          }
 
          internal Size GetRequiredSize() {
-            int contentWidth = 0, contentHeight = 0;
-            contentWidth = mFontSizePanel.Right + (mEm * 2);
-            contentHeight = Math.Max(mPickFontPanel.Bottom, Math.Max(mFontStyleGroupBox.Bottom,
-               mFontSizePanel.Bottom)) + (mEm * 2);
-            int totalWidth = contentWidth + SystemInformation.VerticalScrollBarWidth + (mEm * 2);
-            int totalHeight = mTitleLabel.Height + contentHeight + mFontPickerBottomPanel.Height + (mEm * 2);
-            return new Size(totalWidth, totalHeight);
+            return new Size(mFontSizePanel.Right + mEm + SystemInformation.VerticalScrollBarWidth,
+               mTitleLabel.Height + mScrollPanel.Height + mFontPickerBottomPanel.Height +
+               SystemInformation.HorizontalScrollBarHeight);
          }
 
          private void AttachEventHandlers() {
@@ -428,7 +415,7 @@ namespace DBCode {
             catch {
                mFontDescriptionLabel.Text = $"Selected font: {familyName}; {fontSize}pt; {styleText} (unavailable)";
             }
-            mFontPickerBottomPanel.LayoutControls();
+            mFontDescriptionLabel.Refresh();
          }
 
          private void SetFontsAndColors() {
@@ -488,14 +475,18 @@ namespace DBCode {
             mFontSizeTextBox.ForeColor = foreColor;
             mFontSizeTextBox.BackColor = backColor;
             mFontDescriptionLabel.Font = CreateNewFont(interfaceFont);
-            mFontDescriptionLabel.ForeColor = mTheme.mInterfaceColors[(int)ColorSwatchUsage.StatusFont];
-            mFontDescriptionLabel.BackColor = mTheme.mInterfaceColors[(int)ColorSwatchUsage.StatusBackground];
+            mFontDescriptionLabel.ForeColor = foreColor;
+            mFontDescriptionLabel.BackColor = Color.Transparent;
             mFontPickerBottomPanel.SetFontAndColor();
             mTitleLabel.SetFontAndColor();
          }
 
          protected override void Dispose(bool pDisposing) {
             if (pDisposing) {
+               if (mTheme != null) {
+                  mTheme.Dispose();
+                  mTheme = null;
+               }
                RemoveEventHandlers();
                mFamilyPrefixButton.Click -= FamilyPrefixButton_Click;
                mFontDropDownPrefixButton.Click -= FontDropDownPrefixButton_Click;

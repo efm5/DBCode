@@ -1,6 +1,6 @@
 namespace DBCode {
    namespace Themes {
-      internal sealed partial class FontPickerPanel : ScrollablePanel {
+      internal sealed partial class FontPickerPanel : Panel {
          protected override void OnHandleCreated(EventArgs pEventArgs) {
             base.OnHandleCreated(pEventArgs);
             Dock = DockStyle.Fill;
@@ -197,7 +197,6 @@ namespace DBCode {
             ThrowIfNull(mFontFamilyNameTextBox, nameof(mFontFamilyNameTextBox));
             ThrowIfNull(mFontFamilyComboBox, nameof(mFontFamilyComboBox));
             ThrowIfNull(mWorkingFont, nameof(mWorkingFont));
-
             if (!int.TryParse(mFontSizeTextBox.Text, out int size) || size < 1 || size > 999) {
                TimedMessage("The font size must be a number between 1 and 999.", "Invalid Font Size");
                TextBoxSelectAll(mFontSizeTextBox);
@@ -220,19 +219,13 @@ namespace DBCode {
             FontStyle style = GetFontStyle();
             try {
                Font newFont = new Font(familyName, size, style);
-
                mTheme.mFonts[(int)mFontUsage] = newFont;
-               if (mWorkingFont.Equals(mInitialFont))
-                  ThemePanel.mRepaint = false;
-               else
-                  ThemePanel.mRepaint = true;
-               RecalculateAssociatedOffsets(newFont);
-               mThemePanel.UpdateFontLabels(mFontUsage);
                ThemePanel.mRepaint = true;
-               ThemePanel.RestoreFromFontPickerPanel();
+               RecalculateAssociatedOffsets(newFont);
+               ThemePanel.RestoreFromFontPickerPanel(mTheme);
             }
-            catch (Exception ex) {
-               TimedMessage($"Could not create font: {ex.Message}", "Font Creation Error");
+            catch (Exception pException) {
+               TimedMessage($"Could not create font: {pException.Message}", "Font Creation Error");
             }
          }
 

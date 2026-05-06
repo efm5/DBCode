@@ -268,7 +268,8 @@ All text appears in the default foreground color."
            mHighlightPowerShellScrollPanel, mHighlightBatchScrollPanel, mHighlightSQLScrollPanel,
            mHighlightMarkdownScrollPanel, mHighlightPythonScrollPanel, mIncludeScrollPanel, mExcludeScrollPanel;
          private readonly List<Panel?> mAllScrollPanels = [];
-         private Theme mTemporaryTheme;
+         public Theme mTemporaryTheme;
+         //private Theme mTemporaryTheme;//DEBUG efm5 2026 05 5 testing
          private ThemeUsage mThemeUsage;
 
          public ThemePanel(ThemeUsage pThemeUsage) {
@@ -279,7 +280,7 @@ All text appears in the default foreground color."
             mThemeUsage = pThemeUsage;
             Dock = DockStyle.Fill;
             if (mCurrentTheme.mIsBuiltIn)
-               temporaryName += " CLONED FROM " + mCurrentTheme.mName;
+               temporaryName += " CLONED FROM: " + mCurrentTheme.mName;
             mTemporaryTheme = mCurrentTheme.Clone(temporaryName);
             AutoScroll = true;
             AutoSize = false;

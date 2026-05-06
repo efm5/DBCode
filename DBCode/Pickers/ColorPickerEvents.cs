@@ -4,12 +4,10 @@ namespace DBCode {
          protected override void OnHandleCreated(EventArgs pEventArgs) {
             base.OnHandleCreated(pEventArgs);
             Dock = DockStyle.Fill;
-            // Suppress the form before any layout paint occurs.
-            // Opacity=0 must be set before LayoutControls() triggers any WM_PAINT.
-            // We do NOT restore here — LayoutControls() owns the restore via BeginInvoke.
             ThrowIfNull(mForm, nameof(mForm));
+            mOriginalOpacity = mForm.Opacity;
             mForm.Opacity = 0;
-            mForm.Location = new Point(-32000, -32000); // clamped-safe off-screen, not int.MinValue
+            mForm.Location = new Point(-32000, -32000);
             LayoutControls();
             PerformLayout();
          }
@@ -19,7 +17,6 @@ namespace DBCode {
             if (mUseNamedCheckBox == null)
                return;
             bool useNamed = mUseNamedCheckBox.Checked;
-
             if (mNamedColorPrefixButton != null)
                mNamedColorPrefixButton.Enabled = useNamed;
             if (mNamedColorsComboBox != null)
@@ -45,18 +42,15 @@ namespace DBCode {
             if (mNamedColorsComboBox == null)
                return;
             string? colorName = mNamedColorsComboBox.Text.Replace(" ", string.Empty);
-
-            if (IsKnownColor(colorName, out Color color)) {
+            if (IsKnownColor(colorName, out Color color))
                SetColorValues(color);
-            }
          }
 
          private void NamedColorsComboBox_KeyUp(object? pSender, KeyEventArgs pE) {
             if (pE.KeyCode == Keys.Enter && mNamedColorsComboBox != null) {
                string? colorName = mNamedColorsComboBox.Text.Replace(" ", string.Empty);
-               if (IsKnownColor(colorName, out Color color)) {
+               if (IsKnownColor(colorName, out Color color))
                   SetColorValues(color);
-               }
             }
          }
 
@@ -64,7 +58,6 @@ namespace DBCode {
             if (mNamedColorsComboBox == null)
                return;
             string? colorName = mNamedColorsComboBox.Text.Replace(" ", string.Empty);
-
             if (!IsKnownColor(colorName, out Color color)) {
                mNamedColorsComboBox.SelectedIndex = -1;
                mNamedColorsComboBox.Text = string.Empty;
@@ -77,7 +70,6 @@ namespace DBCode {
             if (mUseGrayscaleCheckBox == null)
                return;
             bool useGray = mUseGrayscaleCheckBox.Checked;
-
             RemoveEventHandlers();
             if (mGrayPrefixButton != null)
                mGrayPrefixButton.Enabled = useGray;
@@ -113,7 +105,6 @@ namespace DBCode {
             if (mGrayUpDown == null || mGraySlider == null)
                return;
             int value = (int)mGrayUpDown.Value;
-
             if (mGraySlider.Value != value) {
                RemoveEventHandlers();
                mGraySlider.Value = value;
@@ -126,7 +117,6 @@ namespace DBCode {
             if (mGraySlider == null || mGrayUpDown == null)
                return;
             int value = mGraySlider.Value;
-
             if (mGrayUpDown.Value != value) {
                RemoveEventHandlers();
                mGrayUpDown.Value = value;
@@ -139,7 +129,6 @@ namespace DBCode {
             if (mRedUpDown == null || mRedSlider == null)
                return;
             int value = (int)mRedUpDown.Value;
-
             if (mRedSlider.Value != value) {
                RemoveEventHandlers();
                mRedSlider.Value = value;
@@ -152,7 +141,6 @@ namespace DBCode {
             if (mRedSlider == null || mRedUpDown == null)
                return;
             int value = mRedSlider.Value;
-
             if (mRedUpDown.Value != value) {
                RemoveEventHandlers();
                mRedUpDown.Value = value;
@@ -165,7 +153,6 @@ namespace DBCode {
             if (mGreenUpDown == null || mGreenSlider == null)
                return;
             int value = (int)mGreenUpDown.Value;
-
             if (mGreenSlider.Value != value) {
                RemoveEventHandlers();
                mGreenSlider.Value = value;
@@ -178,7 +165,6 @@ namespace DBCode {
             if (mGreenSlider == null || mGreenUpDown == null)
                return;
             int value = mGreenSlider.Value;
-
             if (mGreenUpDown.Value != value) {
                RemoveEventHandlers();
                mGreenUpDown.Value = value;
@@ -191,7 +177,6 @@ namespace DBCode {
             if (mBlueUpDown == null || mBlueSlider == null)
                return;
             int value = (int)mBlueUpDown.Value;
-
             if (mBlueSlider.Value != value) {
                RemoveEventHandlers();
                mBlueSlider.Value = value;
@@ -204,7 +189,6 @@ namespace DBCode {
             if (mBlueSlider == null || mBlueUpDown == null)
                return;
             int value = mBlueSlider.Value;
-
             if (mBlueUpDown.Value != value) {
                RemoveEventHandlers();
                mBlueUpDown.Value = value;
@@ -218,7 +202,7 @@ namespace DBCode {
          private void OkButton_Click(object? pSender, EventArgs pEventArguments) {
             if (mTheme == null || mDemoSwatch == null)
                return;
-            if (mDemoSwatch!.GetColor() == mInitialColor)
+            if (mDemoSwatch.GetColor() == mInitialColor)
                ThemePanel.mRepaint = false;
             else
                ThemePanel.mRepaint = true;
