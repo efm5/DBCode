@@ -68,7 +68,7 @@
             mExampleBottomPanel.Location = new Point(mIndent, mExampleGroupBox.Bottom + mEmHalf);
             mExamplesContainer.Location = new Point(mIndent, mExampleBottomPanel.Bottom + mEmHalf);
             string clip = $"mExampleMenuStrip Bounds {mExampleMenuStrip.Bounds}; mExampleGroupBox Bounds {mExampleGroupBox.Bounds}; mExampleBottomPanel Bounds {mExampleBottomPanel.Bounds}; mExamplesContainer Bounds {mExamplesContainer.Bounds}";
-            Clipboard.SetText(clip);//DEBUG efm5 2026 05 1 testing
+            Clipboard.SetText(clip); //DEBUG efm5 2026 05 1 testing
             mPrimaryTabControl.Location = new Point(mIndent, mThemesHeaderCluster.Bottom + mEmHalf);
             mPrimaryTabControl.Width = ClientSize.Width - (2 * mIndent);
             mPrimaryTabControl.Height = ClientSize.Height - (mThemeBottomPanel.Height + mThemesHeaderCluster.Height + mEm);
@@ -109,13 +109,12 @@
                   $"Expected parent of ClusterContainer {clusterContainer.Name} to be a Panel.");
                if (parent.Controls.Count > 1)
                   parent.Controls[1].Top = parent.Controls[0].Bottom + mEm;
-               clusterContainer.LayoutClusters(); // ClusterLayoutMode set at construction handles dispatch
+               clusterContainer.LayoutClusters();
                clusterContainer.Invalidate();
             }
          }
 
          private void ApplyThemeToControlTree(Control pParent) {
-            Color color = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground];
             foreach (Control control in pParent.Controls) {
                if (control is BaseCluster cluster && cluster.mSkipTheme) {
                   ApplyThemeToControlTree(control);
@@ -171,11 +170,16 @@
             Theme clonedTheme = pTheme.Clone();
             mTemporaryTheme.Dispose();
             mTemporaryTheme = clonedTheme;
-            Theme theme = clonedTheme;
-            BackColor = theme.mInterfaceColors[(int)ColorSwatchUsage.PanelBackground];
-            mPrimaryTabControl.SetStripBackColor(theme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground]);
+            foreach (List<BaseCluster> clusterList in mAllClusters) {
+               foreach (BaseCluster cluster in clusterList) {
+                  cluster.mTheme.Dispose(); // dispose the GDI fonts in the previous cluster-owned clone
+                  cluster.mTheme = clonedTheme.Clone(); // each cluster owns an independent copy
+               }
+            }
+            BackColor = clonedTheme.mInterfaceColors[(int)ColorSwatchUsage.PanelBackground];
+            mPrimaryTabControl.SetStripBackColor(clonedTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground]);
             mPrimaryTabControl.ResetStripBackgroundPainted();
-            mHighlightTabControl.SetStripBackColor(theme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground]);
+            mHighlightTabControl.SetStripBackColor(clonedTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground]);
             mHighlightTabControl.ResetStripBackgroundPainted();
             ApplyThemeToControlTree(mPrimaryTabControl);
             ApplyThemeToControlTree(mHighlightTabControl);
@@ -218,15 +222,15 @@
                HighlightExampleBox(mExampleRichTextBoxs[i], (LanguageKind)i);
          }
 
-         private void AddFontCluster(List<BaseCluster> pClusters, string pLabelText, string pButtonText, FontUsage pUsage,
-            LabelPosition pLabelPosition = LabelPosition.Right) {
-            LabeledButtonTextBoxCluster cluster = new LabeledButtonTextBoxCluster(mTemporaryTheme, pLabelText, pButtonText,
-               pLabelPosition) {
+         private void AddFontCluster(List<BaseCluster> pClusters, string pLabelText, string pButtonText,
+            FontUsage pUsage, LabelPosition pLabelPosition = LabelPosition.Right) {
+            LabeledButtonTextBoxCluster cluster = new LabeledButtonTextBoxCluster(mTemporaryTheme, pLabelText,
+               pButtonText, pLabelPosition) {
                Tag = pUsage
             };
             cluster.mButton.Tag = pUsage;
             cluster.LayoutCluster();
-            cluster.mButton.Click += OnFontButtonClicked;
+            cluster.FontButtonClicked += OnFontButtonClicked;
             pClusters.Add(cluster);
          }
 
@@ -234,16 +238,24 @@
             string fontDescription = string.Empty;
             switch (pUsage) {
                case FontUsage.Interface:
-                  fontDescription = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Interface].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Interface].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Interface].Style}";
+                  fontDescription = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Interface].FontFamily.Name}, " +
+                     $"Size: {mTemporaryTheme.mFonts[(int)FontUsage.Interface].Size} " +
+                     $"Style: {mTemporaryTheme.mFonts[(int)FontUsage.Interface].Style}";
                   break;
                case FontUsage.Menu:
-                  fontDescription = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Menu].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Menu].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Menu].Style}";
+                  fontDescription = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Menu].FontFamily.Name}, " +
+                     $"Size: {mTemporaryTheme.mFonts[(int)FontUsage.Menu].Size} " +
+                     $"Style: {mTemporaryTheme.mFonts[(int)FontUsage.Menu].Style}";
                   break;
                case FontUsage.Status:
-                  fontDescription = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Status].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Status].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Status].Style}";
+                  fontDescription = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Status].FontFamily.Name}, " +
+                     $"Size: {mTemporaryTheme.mFonts[(int)FontUsage.Status].Size} " +
+                     $"Style: {mTemporaryTheme.mFonts[(int)FontUsage.Status].Style}";
                   break;
                case FontUsage.Text:
-                  fontDescription = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Text].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Text].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Text].Style}";
+                  fontDescription = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Text].FontFamily.Name}, " +
+                     $"Size: {mTemporaryTheme.mFonts[(int)FontUsage.Text].Size} " +
+                     $"Style: {mTemporaryTheme.mFonts[(int)FontUsage.Text].Style}";
                   break;
             }
             ((LabeledButtonTextBoxCluster)mFontsClusters[(int)pUsage]).UpdateLabel(fontDescription);
@@ -254,16 +266,19 @@
             Color color = mTemporaryTheme.mInterfaceColors[(int)pUsage];
             LabeledButtonColorSwatchCluster cluster = new LabeledButtonColorSwatchCluster(mTemporaryTheme, pLabel,
                ToDescription(pUsage), pUsage, pLabelPosition, color);
+            cluster.Tag = pUsage;
             cluster.SwatchClicked += OnColorSwatchClicked;
             pClusters.Add(cluster);
          }
 
-         private void AddColorCluster(List<BaseCluster> pClusters, string pLabel, TokenKind pTokenKind,
-            LanguageKind pLanguage, LabelPosition pLabelPosition = LabelPosition.Left) {
+         private void AddColorCluster(List<BaseCluster> pClusters, string pLabel, TokenKind pTokenKind, LanguageKind pLanguage,
+            LabelPosition pLabelPosition = LabelPosition.Left) {
             Color color = mTemporaryTheme.mHighlightColors[(int)pLanguage][(int)pTokenKind];
             LabeledButtonColorSwatchCluster cluster = new LabeledButtonColorSwatchCluster(mTemporaryTheme, pLabel,
                ToDescription(pTokenKind), pTokenKind, pLabelPosition, color);
-            cluster.SyntaxSwatchClicked += OnSyntaxColorSwatchClicked;
+            cluster.Tag = pTokenKind;
+            cluster.SwatchClicked += OnSyntaxColorSwatchClicked;
+            mSyntaxColorClusters.Add(cluster); // tracked separately for clean unsubscribe
             pClusters.Add(cluster);
          }
 
@@ -273,8 +288,9 @@
                string labelText = ToDescription(usage);
                string buttonText = ColorSwatchUsageButtonNames.Names[usage];
                Color initialColor = mTemporaryTheme.mInterfaceColors[(int)usage];
-               LabeledButtonColorSwatchCluster cluster = new LabeledButtonColorSwatchCluster(mTemporaryTheme, labelText,
-                  buttonText, usage, LabelPosition.Left, initialColor, null);
+               LabeledButtonColorSwatchCluster cluster = new LabeledButtonColorSwatchCluster(mTemporaryTheme,
+                  labelText, buttonText, usage, LabelPosition.Left, initialColor, null);
+               cluster.Tag = usage;
                cluster.SwatchClicked += OnColorSwatchClicked;
                clusters.Add(cluster);
             }
@@ -332,7 +348,7 @@
             mColorPickerPanel.Show();
             if (mFirstColorPicker) {
                mForm.SuspendClientSizeChanged();
-               mColorPickerPanel.LayoutControls();          // layout first so GetRequiredSize measures real positions
+               mColorPickerPanel.LayoutControls();
                Size requiredSize = mColorPickerPanel.GetRequiredSize();
                Rectangle screenBounds = ScreenBoundsPrimary();
                int maxWidth = (int)(screenBounds.Width * 0.9);
@@ -343,7 +359,7 @@
                Point center = ScreenCenterPrimary();
                mForm.Location = new Point(center.X - (width / 2), center.Y - (height / 2));
                EnsureWindowFitsMonitor(mForm);
-               mColorPickerPanel.LayoutControls();          // layout again now that form has correct size
+               mColorPickerPanel.LayoutControls();
                mForm.ResumeClientSizeChanged();
                mFirstColorPicker = false;
             }
@@ -383,13 +399,10 @@
 
          public void EnsureFontPickerPanel(Theme pTheme, FontUsage pUsage, Font pInitialFont) {
             ThrowIfNull(mForm, nameof(mForm));
-            Font testFont = new Font("Broadway", 25f, pInitialFont.Style);
             Theme theme = pTheme.Clone();
-            theme.mFonts[(int)pUsage] = testFont;
             mUiState.ThemeBounds = mForm.Bounds;
             if (mFontPickerPanel == null)
-               mFontPickerPanel = new FontPickerPanel(theme, pUsage, testFont);
-            //mFontPickerPanel = new FontPickerPanel(pTheme, pUsage, pInitialFont);
+               mFontPickerPanel = new FontPickerPanel(theme, pUsage, pInitialFont);
             else
                mFontPickerPanel.LayoutControls();
             mBottomPanelExcluded = new List<Control>([mFontPickerPanel.mFontDescriptionLabel]);
@@ -403,14 +416,12 @@
             if (mForm.Controls.Contains(mThemePanel))
                mForm.Controls.Remove(mThemePanel);
             if (!mForm.Controls.Contains(mFontPickerPanel))
-               mForm.Controls.Add(mFontPickerPanel); // triggers OnHandleCreated → LayoutControls on first add
+               mForm.Controls.Add(mFontPickerPanel);
             mActiveLayoutable = mFontPickerPanel.mFontPickerBottomPanel;
             mFontPickerPanel.Dock = DockStyle.Fill;
             mFontPickerPanel.Visible = true;
             mFontPickerPanel.BringToFront();
             mFontPickerPanel.Show();
-            // LayoutControls() is NOT called here — OnHandleCreated owns first-time layout,
-            // and subsequent calls go through LayoutControls() directly when needed.
          }
 
          public static void RestoreFromFontPickerPanel(Theme? pTheme = null) {
@@ -462,11 +473,21 @@
                mHighlightTabControl.SelectedIndexChanged -= HighlightTabControl_SelectedIndexChanged;
                if (mExampleScrollPanel != null)
                   mExampleScrollPanel.ClientSizeChanged -= ExampleScrollPanel_ClientSizeChanged;
+               foreach (List<BaseCluster> clusterList in mAllClusters) {
+                  foreach (BaseCluster cluster in clusterList) {
+                     if (cluster is LabeledButtonColorSwatchCluster colorCluster) {
+                        if (mSyntaxColorClusters.Contains(colorCluster))
+                           colorCluster.SwatchClicked -= OnSyntaxColorSwatchClicked;
+                        else
+                           colorCluster.SwatchClicked -= OnColorSwatchClicked;
+                     }
+                     else if (cluster is LabeledButtonTextBoxCluster textBoxCluster)
+                        textBoxCluster.FontButtonClicked -= OnFontButtonClicked;
+                  }
+               }
                mTemporaryTheme?.Dispose();
-               // mApplyButton, mNewButton, mCloneButton disposed by mThemeBottomPanel.Dispose
-               // mHelpButton, mCancelButton owned and disposed by mThemeBottomPanel
                mThemeBottomPanel?.Dispose();
-               mExampleBottomPanel?.Dispose(); // also disposes mBottomExampleButton via AddLeftControl
+               mExampleBottomPanel?.Dispose();
                mHighlightTabControl?.Dispose();
                mIncludeExcludeTabControl?.Dispose();
                mPrimaryTabControl?.Dispose();

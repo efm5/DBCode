@@ -19,6 +19,7 @@ namespace DBCode {
 
          public FontPickerPanel(Theme pTheme, FontUsage pFontUsage, Font pInitialFont) {
             mInitialFont = CreateNewFont(pInitialFont);
+            mWorkingFont = CreateNewFont(pInitialFont);
             mFontUsage = pFontUsage;
             mTheme = pTheme;
             ThrowIfNull(mTheme, nameof(mTheme));
@@ -491,12 +492,6 @@ namespace DBCode {
             mFontDescriptionLabel.BackColor = mTheme.mInterfaceColors[(int)ColorSwatchUsage.StatusBackground];
             mFontPickerBottomPanel.SetFontAndColor();
             mTitleLabel.SetFontAndColor();
-         }
-
-         public bool FontHasChanged() {
-            if (mWorkingFont!.Equals(mInitialFont))
-               return false;
-            return true;
          }
 
          protected override void Dispose(bool pDisposing) {

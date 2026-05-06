@@ -1,5 +1,3 @@
-using DBCode.Themes;
-
 namespace DBCode {
    internal static partial class LayoutHelpers {
 
@@ -10,13 +8,13 @@ namespace DBCode {
          public Theme mTheme;
 
          protected BaseCluster(Theme pTheme, Color? pBackgroundColor) {
-            mTheme = pTheme;
+            mTheme = pTheme.Clone(); // each cluster owns an independent clone from construction
             BackColor = pBackgroundColor ?? Color.Transparent;
             TabStop = false;
             TabIndex = TAB_INDEX_IGNORED;
             Name = $"BaseCluster{mNextClusterId}";
             mNextClusterId++;
-            AutoSize = true;//DEBUG efm5 2026 04 25 testing
+            AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
          }
 
@@ -143,6 +141,7 @@ namespace DBCode {
 
          protected override void Dispose(bool pDisposing) {
             if (pDisposing) {
+               mTheme.Dispose(); // dispose the cluster-owned clone
                foreach (Control control in Controls)
                   control.Dispose();
                Controls.Clear();

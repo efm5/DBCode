@@ -94,25 +94,22 @@ namespace DBCode {
             CloseThemePanel();
          }
 
-         private void OnColorSwatchClicked(object? pSender, ColorSwatchUsage pUsage) {
-            LabeledButtonColorSwatchCluster? swatch = pSender as LabeledButtonColorSwatchCluster;
-            if (swatch == null)
-               return;
-            EnsureColorPickerPanel(mTemporaryTheme, (ColorSwatchUsage)pUsage, swatch.GetColor());
+         private void OnColorSwatchClicked(LabeledButtonColorSwatchCluster pSender) {
+            if (pSender.Tag is not ColorSwatchUsage usage)
+               ThrowBadCode($"Tag was not a ColorSwatchUsage in {nameof(OnColorSwatchClicked)}.");
+            else
+               EnsureColorPickerPanel(mTemporaryTheme, usage, pSender.GetColor());
          }
 
-         private void OnSyntaxColorSwatchClicked(object? pSender, TokenKind pTokenKind) {
-            LabeledButtonColorSwatchCluster? swatch = pSender as LabeledButtonColorSwatchCluster;
-            if (swatch == null)
-               return;
+         private void OnSyntaxColorSwatchClicked(LabeledButtonColorSwatchCluster pSender) {
             // efm5 TODO: wire to color picker for syntax colors
          }
 
-         private void OnFontButtonClicked(object? pSender, EventArgs pArgs) {
-            Button? button = pSender as Button;
-            if (button?.Tag is not FontUsage usage)
-               return;
-            EnsureFontPickerPanel(mTemporaryTheme, usage, mTemporaryTheme.mFonts[(int)usage]);
+         private void OnFontButtonClicked(LabeledButtonTextBoxCluster pSender) {
+            if (pSender.Tag is not FontUsage usage)
+               ThrowBadCode($"Tag was not a FontUsage in {nameof(OnFontButtonClicked)}.");
+            else
+               EnsureFontPickerPanel(mTemporaryTheme, usage, mTemporaryTheme.mFonts[(int)usage]);
          }
       }
    }

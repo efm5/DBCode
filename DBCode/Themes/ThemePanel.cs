@@ -13,6 +13,7 @@ namespace DBCode {
             mMarkdownColorClusters = [], mPythonColorClusters = [],
             mExamplesClusters = [];
          private readonly List<List<BaseCluster>> mAllClusters = [];
+         private readonly List<LabeledButtonColorSwatchCluster> mSyntaxColorClusters = [];
          public static bool mRepaint = false;
          private readonly Button mApplyButton, mNewButton, mCloneButton;
          internal readonly BottomPanel mThemeBottomPanel;
