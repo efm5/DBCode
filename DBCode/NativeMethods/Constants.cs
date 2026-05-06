@@ -4,6 +4,10 @@ namespace DBCode {
 #pragma warning disable IDE1006
 #pragma warning disable SYSLIB1054
       internal static partial class NativeMethods {
+         internal static int MakeLParam(int pLow, int pHigh) {
+            return (pHigh << 16) | (pLow & 0xFFFF);
+         }
+
          #region Constants
          // EM_  (Edit Control)
          public const int EM_LINESCROLL = 0x00B6;
@@ -54,6 +58,9 @@ namespace DBCode {
          public const uint SWP_NOACTIVATE = 0x00000010,
                            SWP_NOMOVE = 0x00000002,
                            SWP_NOSIZE = 0x00000001;
+         // TCM_   (SendMessage Flags)
+         public const int TCM_SETITEMSIZE = 0x1329;
+         public const int TCM_SETPADDING = 0x132B;
          // TIMED_MESSAGEBOX_FLAGS  (Composite Flags)
          public const uint TIMED_MESSAGEBOX_FLAGS =
             0x00000000 | 0x00010000 | 0x00001000 | 0x00000030;

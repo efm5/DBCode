@@ -15,6 +15,34 @@
             mAllowStripPainting = true;
          }
 
+         public void RecalculateItemSize(Font pFont) {
+            if (TabCount == 0 || !IsHandleCreated)
+               return;
+            FontFamily family = pFont.FontFamily;
+            float emHeight = family.GetEmHeight(pFont.Style);
+            float ascent = family.GetCellAscent(pFont.Style);
+            float descent = family.GetCellDescent(pFont.Style);
+            float cellHeight = pFont.Size * (ascent + descent) / emHeight;
+            int tabHeight = (int)Math.Ceiling(cellHeight) + 12;
+            SendMessage(Handle, TCM_SETPADDING, 0, MakeLParam(20, 0));
+            ItemSize = new Size(ItemSize.Width, tabHeight);
+            TabHeaderWidths.Clear();
+            for (int i = 0; i < TabCount; i++)
+               TabHeaderWidths.Add(GetTabRect(i).Width);
+            ResetStripBackgroundPainted();
+            Invalidate();
+         }
+
+         protected override void OnHandleCreated(EventArgs pEventArgs) {
+            base.OnHandleCreated(pEventArgs);
+            RecalculateItemSize(Font ?? SystemFonts.DefaultFont);
+         }
+
+         protected override void OnFontChanged(EventArgs pEventArgs) {
+            base.OnFontChanged(pEventArgs);
+            RecalculateItemSize(Font ?? SystemFonts.DefaultFont);
+         }
+
          protected override void OnSelectedIndexChanged(EventArgs pEventArgs) {
             mAllowStripPainting = false;
             base.OnSelectedIndexChanged(pEventArgs);
@@ -22,8 +50,6 @@
 
          protected override void WndProc(ref Message pMessage) {
             base.WndProc(ref pMessage);
-
-            // WM_PAINT = 0x000F - Paint strip AFTER base processes the message
             if (pMessage.Msg == 0x000F && mAllowStripPainting && !mStripBackgroundPainted && TabCount > 0 && DrawMode == TabDrawMode.OwnerDrawFixed) {
                using (Graphics g = CreateGraphics()) {
                   Rectangle displayRect = DisplayRectangle;
@@ -32,8 +58,6 @@
                   g.FillRectangle(brush, stripRect);
                }
                mStripBackgroundPainted = true;
-
-               // Invalidate the tab header rectangles so they repaint on top of our strip background
                for (int i = 0; i < TabCount; i++) {
                   Rectangle tabRect = GetTabRect(i);
                   Invalidate(tabRect);
@@ -50,7 +74,9 @@
          }
 
          private int HitTestTabHeaders(Point pMouseLocation) {
-            int currentOffset = 0;
+            if (TabCount == 0)
+               return -1;
+            int currentOffset = GetTabRect(0).X; // account for native left margin
             int tabHeaderTop = GetTabRect(0).Y;
             for (int index = 0; index < TabHeaderWidths.Count; index++) {
                int width = TabHeaderWidths[index];

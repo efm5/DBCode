@@ -67,8 +67,6 @@
             mExampleGroupBox.Location = new Point(mIndent, mExampleMenuStrip.Bottom + mEmHalf);
             mExampleBottomPanel.Location = new Point(mIndent, mExampleGroupBox.Bottom + mEmHalf);
             mExamplesContainer.Location = new Point(mIndent, mExampleBottomPanel.Bottom + mEmHalf);
-            string clip = $"mExampleMenuStrip Bounds {mExampleMenuStrip.Bounds}; mExampleGroupBox Bounds {mExampleGroupBox.Bounds}; mExampleBottomPanel Bounds {mExampleBottomPanel.Bounds}; mExamplesContainer Bounds {mExamplesContainer.Bounds}";
-            Clipboard.SetText(clip); //DEBUG efm5 2026 05 1 testing
             mPrimaryTabControl.Location = new Point(mIndent, mThemesHeaderCluster.Bottom + mEmHalf);
             mPrimaryTabControl.Width = ClientSize.Width - (2 * mIndent);
             mPrimaryTabControl.Height = ClientSize.Height - (mThemeBottomPanel.Height + mThemesHeaderCluster.Height + mEm);
@@ -181,13 +179,15 @@
                UpdateFontLabels(fontUsage);
             BackColor = clonedTheme.mInterfaceColors[(int)ColorSwatchUsage.PanelBackground];
             mPrimaryTabControl.SetStripBackColor(clonedTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground]);
-            mPrimaryTabControl.ResetStripBackgroundPainted();
-            mHighlightTabControl.SetStripBackColor(clonedTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground]);
-            mHighlightTabControl.ResetStripBackgroundPainted();
             ApplyThemeToControlTree(mPrimaryTabControl);
             ApplyThemeToControlTree(mHighlightTabControl);
             mThemeBottomPanel.SetFontAndColor();
             mExampleBottomPanel.SetFontAndColor();
+            using (Font interfaceFont = CreateNewBoldFont(clonedTheme.mFonts[(int)FontUsage.Interface])) {
+               mPrimaryTabControl.RecalculateItemSize(interfaceFont);
+               mIncludeExcludeTabControl.RecalculateItemSize(interfaceFont);
+               mHighlightTabControl.RecalculateItemSize(interfaceFont);
+            }
             mPrimaryTabControl.Invalidate(true);
             mHighlightTabControl.Invalidate(true);
          }
@@ -312,7 +312,9 @@
             Font font = selected ? CreateNewBoldFont() : CreateNewFont();
             using (SolidBrush brush = new SolidBrush(back))
                pArgs.Graphics.FillRectangle(brush, rect);
-            TextRenderer.DrawText(pArgs.Graphics, page.Text, font, rect, fore,
+            Rectangle textRect = new Rectangle(pArgs.Bounds.X + 4, pArgs.Bounds.Y + 1,
+               pArgs.Bounds.Width - 4, pArgs.Bounds.Height - 1);
+            TextRenderer.DrawText(pArgs.Graphics, page.Text, font, textRect, fore,
                TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
          }
 

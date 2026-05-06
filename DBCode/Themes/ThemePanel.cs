@@ -377,7 +377,7 @@ All text appears in the default foreground color."
             mThemeBottomPanel.AddLeftControl(mCloneButton);
             mThemeBottomPanel.AddRightControl(mApplyButton);
             mPrimaryTabControl = new VariableWidthTabControl();
-            mPrimaryTabControl.TabPages.AddRange([new TabPage("Fonts"), new TabPage("Colors"),
+            mPrimaryTabControl.TabPages.AddRange([new TabPage("Fonts"), new TabPage("ColorsÑ"),
                new TabPage("Targeting"), new TabPage("Examples")]);
             mIncludeExcludeTabControl = new VariableWidthTabControl();
             mIncludeExcludeTabControl.TabPages.AddRange([new TabPage("Inclusions"), new TabPage("Exclusions")]);
