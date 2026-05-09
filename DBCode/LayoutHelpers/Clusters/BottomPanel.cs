@@ -48,6 +48,8 @@
          }
 
          public void LayoutControls() {
+            ThrowIfNull(mHelpButton, nameof(mHelpButton));
+            ThrowIfNull(mCancelButton, nameof(mCancelButton));
             Control? parent = Parent;
             if (parent == null)
                return;
@@ -55,17 +57,24 @@
             SetBottomPanelHeight(this);
             int parentHeight = parent.Height;
             int parentWidth = parent.Width;
-            Location = new Point(1, parentHeight - Height - 1);
+            if (parent is Panel p) {
+               if (p.HorizontalScroll.Visible)
+                  Location = new Point(1, parentHeight - Height - 1 - SystemInformation.HorizontalScrollBarHeight);
+               else
+                  Location = new Point(1, parentHeight - Height - 1);
+            }
+            else
+               Location = new Point(1, parentHeight - Height - 1);
             Width = parentWidth - 2 - SystemInformation.VerticalScrollBarWidth;
             // Left pass: Help then mLeftControls
-            mHelpButton!.Left = mIndent;
+            mHelpButton.Left = mIndent;
             int leftEdge = mHelpButton.Right + mEm2;
             foreach (Control control in mLeftControls) {
                control.Left = leftEdge;
                leftEdge += control.Width + mEm;
             }
             // Right pass: Cancel at far right, then mRightControls leftward
-            mCancelButton!.Left = Width - mCancelButton.Width - mCancelOffset;
+            mCancelButton.Left = Width - mCancelButton.Width - mCancelOffset;
             int rightEdge = mCancelButton.Left - mCancelOffset;
             for (int i = mRightControls.Count - 1; i >= 0; i--) {
                Control control = mRightControls[i];

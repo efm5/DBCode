@@ -18,17 +18,18 @@ namespace DBCode {
          internal double mOriginalOpacity;
 
          public FontPickerPanel(Theme pTheme, FontUsage pFontUsage, Font pInitialFont) {
+            ThrowIfNull(pTheme, nameof(pTheme));
+            ThrowIfNull(pInitialFont, nameof(pInitialFont));
             mInitialFont = CreateNewFont(pInitialFont);
             mWorkingFont = CreateNewFont(pInitialFont);
             mFontUsage = pFontUsage;
             mTheme = pTheme;
-            ThrowIfNull(mTheme, nameof(mTheme));
             Color interfaceBackground = mTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground],
                interfaceFont = mTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
                groupBoxBackground = mTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground];
             Font interfaceTextFont = mTheme.mFonts[(int)FontUsage.Interface];
             mTitleLabel = new TwoLineHeaderLabelCluster(mTheme, "Select A Font",
-               $"Use this font for {ToDescription((FontUsage)mFontUsage)}");
+               $"Use this font for {ToDescription(mFontUsage)}");
             mScrollPanel = new Panel {
                Name = $"FontPickerScrollPanel{mTabIndex++}",
                TabIndex = TAB_INDEX_IGNORED,

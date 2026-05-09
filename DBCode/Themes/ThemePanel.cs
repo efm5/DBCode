@@ -22,7 +22,8 @@ namespace DBCode {
             mCSSColorsContainer, mXMLColorsContainer, mJSONColorsContainer, mPowerShellColorsContainer,
             mBatchColorsContainer, mSQLColorsContainer, mMarkdownColorsContainer, mPythonColorsContainer;
          private readonly List<ClusterContainer> mClusterContainers = [];
-         private readonly DataGridView mIncludeDataGridView, mExcludeDataGridView;
+         internal readonly DataGridView mIncludeDataGridView, mExcludeDataGridView;
+         private Font? mIncludeHeaderFont = null, mExcludeHeaderFont = null;
          private readonly HeaderLabelCluster mInterfaceHeaderCluster, mThemesHeaderCluster, mTargetingHeaderCluster,
             mIncludeHeaderCluster, mExcludeHeaderCluster, mCSharpHeaderCluster,
             mCHeaderCluster, mCppHeaderCluster, mBasicHeaderCluster, mFSharpHeaderCluster, mHTMLHeaderCluster,
@@ -269,12 +270,13 @@ All text appears in the default foreground color."
            mHighlightMarkdownScrollPanel, mHighlightPythonScrollPanel, mIncludeScrollPanel, mExcludeScrollPanel;
          private readonly List<Panel?> mAllScrollPanels = [];
          public Theme mTemporaryTheme;
-         //private Theme mTemporaryTheme;//DEBUG efm5 2026 05 5 testing
          private ThemeUsage mThemeUsage;
 
          public ThemePanel(ThemeUsage pThemeUsage) {
             ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
             ThrowIfNull(mForm, nameof(mForm));
+            Name = "themePanel";
+            TabIndex = mTabIndex++;
             SuspendLayout();
             string temporaryName = TemporaryThemePrefix + DateTime.UtcNow.Ticks.ToString(CultureInfo.InvariantCulture);
             mThemeUsage = pThemeUsage;
@@ -365,10 +367,6 @@ All text appears in the default foreground color."
                HeaderText = "Exclude",
                Name = "ExcludeColumn"
             });
-            for (int i = 0; i < 10; i++) {
-               mIncludeDataGridView.Rows.Add("");
-               mExcludeDataGridView.Rows.Add("");
-            }
             mThemeBottomPanel = new BottomPanel(mTemporaryTheme, "&Cancel") {
                Name = $"ThemeBottomPanel{mTabIndex}",
                TabIndex = mTabIndex++
@@ -377,7 +375,7 @@ All text appears in the default foreground color."
             mThemeBottomPanel.AddLeftControl(mCloneButton);
             mThemeBottomPanel.AddRightControl(mApplyButton);
             mPrimaryTabControl = new VariableWidthTabControl();
-            mPrimaryTabControl.TabPages.AddRange([new TabPage("Fonts"), new TabPage("ColorsÑ"),
+            mPrimaryTabControl.TabPages.AddRange([new TabPage("Fonts"), new TabPage("Colors"),
                new TabPage("Targeting"), new TabPage("Examples")]);
             mIncludeExcludeTabControl = new VariableWidthTabControl();
             mIncludeExcludeTabControl.TabPages.AddRange([new TabPage("Inclusions"), new TabPage("Exclusions")]);
@@ -544,7 +542,7 @@ All text appears in the default foreground color."
                Name = "FontsClusterContainer",
                TabIndex = mTabIndex++
             };
-            mPrimaryScrollPanel.Controls.AddRange(mFontsContainer.mClusters.Cast<Control>().ToArray());//DEBUG efm5 2026 04 28 this may be a problem
+            mPrimaryScrollPanel.Controls.AddRange(mFontsContainer.mClusters.Cast<Control>().ToArray());
 #pragma warning disable IDE0017
             mExamplesContainer = new ClusterContainer(mExampleScrollPanel, mExamplesClusters, ClusterLayoutMode.FlowLayout) {
                Name = "ExamplesClusterContainer"

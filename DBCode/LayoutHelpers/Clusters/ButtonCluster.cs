@@ -21,12 +21,11 @@
 
          internal override void LayoutCluster() {
             SetFontAndColor();
-            LayoutControls();
             mButton?.Invalidate();
          }
 
          internal void LayoutControls() {
-            //DEBUG efm5 2026 04 4 Maybe nothing to do
+            // nothing to do
          }
 
          internal override void SetFontAndColor() {

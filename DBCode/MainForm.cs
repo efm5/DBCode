@@ -3,7 +3,11 @@
       public MainForm() {
          mForm = this;
          Opacity = 0;
-         InitializeUIPart1();
+         InitializeUIPart1();//efm5 split into parts to help with readability and navigation.
+                             //There is some circular dependency between these methods so they can't be fully separated.
+                             //efm5 Currently, there is no logic that relies on first launch
+         if (mUiState.mFirstLaunch)
+            mUiState.mFirstLaunch = false;
          MinimumSize = new Size(300, 150);
          Assembly assembly = Assembly.GetExecutingAssembly();
          FileVersionInfo? fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
@@ -24,6 +28,7 @@
          mTargetWindowName = string.Empty;
          mPreMinimalText = Text;
          mPreMinimalControlBox = ControlBox;
+         TargetListManager.EnsureDataFiles();
       }
 
       private void MakeNews() {
@@ -33,10 +38,13 @@
          mVisibilityMenuItem = new ToolStripMenuItem();
          mModeMenuItem = new ToolStripMenuItem();
          mLanguageMenuItem = new ToolStripMenuItem();
+         mOptionsMenuItem = new ToolStripMenuItem();
          mThemeMenuItem = new ToolStripMenuItem();
          mThemeDesignTSMI = new ToolStripMenuItem();
          mThemePickTSMI = new ToolStripMenuItem();
          mThemeEditTSMI = new ToolStripMenuItem();
+         mThemeEditPickTSMI = new ToolStripMenuItem();
+         mThemeEditCurrentTSMI = new ToolStripMenuItem();
          mHelpMenuItem = new ToolStripMenuItem();
          mTargetedTSMI = new ToolStripMenuItem();
          mRetargetTSMI = new ToolStripMenuItem();
@@ -47,7 +55,6 @@
          mOpaqueTSMI = new ToolStripMenuItem();
          mMinimalTSMI = new ToolStripMenuItem();
          mFeaturesTSMI = new ToolStripMenuItem();
-         mReturnToTopTSMI = new ToolStripMenuItem();
          mPlainTextTSMI = new ToolStripMenuItem();
          mCSharpTSMI = new ToolStripMenuItem();
          mCTSMI = new ToolStripMenuItem();
@@ -63,7 +70,7 @@
          mSqlTSMI = new ToolStripMenuItem();
          mMarkdownTSMI = new ToolStripMenuItem();
          mPythonTSMI = new ToolStripMenuItem();
-         mCurrentLanguageIsTSMI = new ToolStripMenuItem();
+         mCurrentThemeIsTSMI = new ToolStripMenuItem();
          mScrollableMainPanel = new ScrollablePanel() {
             Name = "mainPanel",
             AutoScroll = true,
@@ -81,12 +88,7 @@
 
       private void InitializeUIPart1() {
          mUiState = new UiState();
-         mFirstLaunch = Settings.Default.FirstLaunch;
          mUiState.ReadFromSettings();
-         if (mFirstLaunch) {
-            PerformFirstLaunchInitialization();
-            Settings.Default.FirstLaunch = false;
-         }
          ThemeRegistry.Initialize(); // must precede MakeNews so mCurrentTheme and mThemes are ready
          MakeNews();
          ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
@@ -96,8 +98,11 @@
          ThrowIfNull(mTargetingMenuItem, nameof(mTargetingMenuItem));
          ThrowIfNull(mVisibilityMenuItem, nameof(mVisibilityMenuItem));
          ThrowIfNull(mModeMenuItem, nameof(mModeMenuItem));
+         ThrowIfNull(mOptionsMenuItem, nameof(mOptionsMenuItem));
          ThrowIfNull(mLanguageMenuItem, nameof(mLanguageMenuItem));
          ThrowIfNull(mThemeMenuItem, nameof(mThemeMenuItem));
+         ThrowIfNull(mThemeEditPickTSMI, nameof(mThemeEditPickTSMI));
+         ThrowIfNull(mThemeEditCurrentTSMI, nameof(mThemeEditCurrentTSMI));
          ThrowIfNull(mThemeDesignTSMI, nameof(mThemeDesignTSMI));
          ThrowIfNull(mThemeEditTSMI, nameof(mThemeEditTSMI));
          ThrowIfNull(mThemePickTSMI, nameof(mThemePickTSMI));
@@ -125,24 +130,31 @@
          mVisibilityMenuItem.ShowShortcutKeys = true;
          mModeMenuItem.Name = "modeMenuItem";
          mModeMenuItem.Text = "&Mode";
-         mLanguageMenuItem!.Name = "languageMenuItem";
+         mLanguageMenuItem.Name = "languageMenuItem";
          mLanguageMenuItem.Text = "&Language";
-         mThemeMenuItem!.Name = "themeMenuItem";
+         mOptionsMenuItem.Name = "optionsMenuItem";
+         mOptionsMenuItem.Text = "&Options";
+         mOptionsMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.O;
+         mOptionsMenuItem.Click += Options_Click;
+         mThemeMenuItem.Name = "themeMenuItem";
          mThemeMenuItem.Text = "&Theme";
-         mThemeDesignTSMI!.Name = "themeDesignTSMI";
+         mThemeEditPickTSMI.Name = "themeEditPickTSMI";
+         mThemeEditPickTSMI.Text = "Pick To Edit";//DEBUG efm5 2026 05 8 Excelerator
+         mThemeEditPickTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.E;//DEBUG efm5 2026 05 8 verify
+         mThemeEditPickTSMI.Click += ThemeEditPick_Click;
+         mThemeEditCurrentTSMI.Name = "themeEditCurrentTSMI";
+         mThemeEditCurrentTSMI.Text = "Edit Current";//DEBUG efm5 2026 05 8 Excelerator
+         mThemeEditCurrentTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.C;//DEBUG efm5 2026 05 8 verify
+         mThemeEditCurrentTSMI.Click += ThemeEditCurrent_Click;
+         mThemeDesignTSMI.Name = "themeDesignTSMI";
          mThemeDesignTSMI.Text = "&Design";
          mThemeDesignTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D;
          mThemeDesignTSMI.Click += ThemeDesign_Click;
-         mThemeEditTSMI!.Name = "themeEditTSMI";
+         mThemeEditTSMI.Name = "themeEditTSMI";
          mThemeEditTSMI.Text = "&Edit";
-         mThemeEditTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.E;
-         mThemeEditTSMI.Click += ThemeEdit_Click;
-         mThemePickTSMI!.Name = "themePickTSMI";
+         mThemePickTSMI.Name = "themePickTSMI";
          mThemePickTSMI.Text = "&Pick";
-         mThemePickTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.P;
-         mThemePickTSMI.Click += ThemePick_Click;
-         mThemeMenuItem.DropDownItems.AddRange([mCurrentLanguageIsTSMI!, toolStripSeparator1, mThemePickTSMI, mThemeDesignTSMI, mThemeEditTSMI]);
-         mHelpMenuItem!.Name = "helpMenuItem";
+         mHelpMenuItem.Name = "helpMenuItem";
          mHelpMenuItem.Text = "&Help";
          mHelpMenuItem.Tag = new HelpTag(HelpContext.Main);
          mHelpMenuItem.ShortcutKeys = Keys.F1;
@@ -156,8 +168,18 @@
          mRetargetTSMI.Text = "&Retarget";
          mRetargetTSMI.ShortcutKeys = Keys.Control | Keys.E;
          mRetargetTSMI.Click += RetargetTSMI_Click;
-         mTargetingMenuItem.DropDownItems.Add(mTargetedTSMI);
-         mTargetingMenuItem.DropDownItems.Add(mRetargetTSMI);
+         mThemePickTSMI.DropDownItems.AddRange([mThemeEditPickTSMI, mThemeEditCurrentTSMI]);
+         mVisibilityMenuItem!.DropDownItems.AddRange([mTransparentTSMI, mThirtyTSMI, mFiftyTSMI,
+            mSeventyFiveTSMI, mOpaqueTSMI]);
+         mModeMenuItem!.DropDownItems.AddRange([mMinimalTSMI, mFeaturesTSMI]);
+         mLanguageMenuItem!.DropDownItems.AddRange([mPlainTextTSMI, mCSharpTSMI, mCTSMI, mCppTSMI,
+            mBasicTSMI, mFSharpTSMI, mHtmlTSMI, mCssTSMI,  mXmlTSMI, mJsonTSMI, mPowerShellTSMI, mBatchTSMI,
+            mSqlTSMI, mMarkdownTSMI, mPythonTSMI]);
+         mMenuStrip!.Items.AddRange([mTargetingMenuItem!, mVisibilityMenuItem, mModeMenuItem,
+            mLanguageMenuItem, mOptionsMenuItem!, mThemeMenuItem!, mHelpMenuItem!]);
+         mThemeMenuItem.DropDownItems.AddRange([mCurrentThemeIsTSMI, toolStripSeparator1, mThemePickTSMI,
+            mThemeDesignTSMI, mThemeEditTSMI]);
+         mTargetingMenuItem.DropDownItems.AddRange([mTargetedTSMI, mRetargetTSMI]);
          Load += MainForm_Load;
          FormClosing += MainForm_FormClosing;
          mHighlighterEngine = new HighlighterEngine(mRichTextBox, mCurrentLanguage);
@@ -194,11 +216,6 @@
          mOpaqueTSMI.Text = "&Opaque";
          mOpaqueTSMI.Tag = 1.0;
          mOpaqueTSMI.Click += VisibilityTSMI_Click;
-         mVisibilityMenuItem!.DropDownItems.Add(mTransparentTSMI);
-         mVisibilityMenuItem.DropDownItems.Add(mThirtyTSMI);
-         mVisibilityMenuItem.DropDownItems.Add(mFiftyTSMI);
-         mVisibilityMenuItem.DropDownItems.Add(mSeventyFiveTSMI);
-         mVisibilityMenuItem.DropDownItems.Add(mOpaqueTSMI);
          mMinimalTSMI!.Name = "minimalTSMI";
          mMinimalTSMI.Text = "&Minimal";
          mMinimalTSMI.Click += MinimalTSMI_Click;
@@ -206,11 +223,6 @@
          mFeaturesTSMI.Text = "&Features";
          mFeaturesTSMI.Checked = true;
          mFeaturesTSMI.Click += FeaturesTSMI_Click;
-         mReturnToTopTSMI!.Name = "returnToTopTSMI";
-         mReturnToTopTSMI.Text = "&Return To Top";
-         mReturnToTopTSMI.CheckOnClick = true;
-         mReturnToTopTSMI.ShortcutKeys = Keys.Control | Keys.H;
-         mReturnToTopTSMI.Click += ReturnToTopTSMI_Click;
          mPlainTextTSMI!.Name = "plaintextTSMI";
          mPlainTextTSMI.Text = "Plain&text";
          mPlainTextTSMI.Tag = LanguageKind.PlainText;
@@ -271,11 +283,8 @@
          mPythonTSMI.Text = "P&ython";
          mPythonTSMI.Tag = LanguageKind.Python;
          mPythonTSMI.Click += LanguageTSMI_Click;
-         mCurrentLanguageIsTSMI!.Name = "currentLanguageIsTSMI";
-         mCurrentLanguageIsTSMI.Text = mCurrently + mCurrentTheme!.mName;
-         mModeMenuItem!.DropDownItems.AddRange([mMinimalTSMI, mFeaturesTSMI, mReturnToTopTSMI]);
-         mLanguageMenuItem!.DropDownItems.AddRange([mPlainTextTSMI, mCSharpTSMI, mCTSMI, mCppTSMI, mBasicTSMI, mFSharpTSMI, mHtmlTSMI, mCssTSMI, mXmlTSMI, mJsonTSMI, mPowerShellTSMI, mBatchTSMI, mSqlTSMI, mMarkdownTSMI, mPythonTSMI]);
-         mMenuStrip!.Items.AddRange([mTargetingMenuItem!, mVisibilityMenuItem, mModeMenuItem, mLanguageMenuItem, mThemeMenuItem!, mHelpMenuItem!]);
+         mCurrentThemeIsTSMI!.Name = "currentLanguageIsTSMI";
+         mCurrentThemeIsTSMI.Text = mCurrently + mCurrentTheme!.mName;
       }
 
       private void InitializeUIPart3() {

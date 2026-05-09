@@ -15,7 +15,7 @@ namespace DBCode.Themes {
             }
             catch (Exception pException) {
                string name = Path.GetFileName(file);
-               throw new Exception($"Failed to load theme '{name}'.", pException);
+               throw new Exception($"Failed to load theme “{name}”.", pException);
             }
          }
          return themes;
@@ -46,7 +46,7 @@ namespace DBCode.Themes {
          foreach (FontUsage usage in Enum.GetValues<FontUsage>()) {
             string key = usage.ToString();
             if (!fonts.TryGetProperty(key, out JsonElement fontElement))
-               throw new Exception($"Theme '{name}' is missing font '{key}'.");
+               throw new Exception($"Theme “{name}' is missing font '{key}”.");
             string fontString = fontElement.GetString() ?? "";
 
             theme.mFonts[(int)usage] = ParseFont(fontString);
@@ -56,7 +56,7 @@ namespace DBCode.Themes {
          foreach (ColorSwatchUsage usage in Enum.GetValues<ColorSwatchUsage>()) {
             string key = usage.ToString();
             if (!colors.TryGetProperty(key, out JsonElement colorElement))
-               throw new Exception($"Theme '{name}' is missing color '{key}'.");
+               throw new Exception($"Theme “{name}' is missing color '{key}”.");
             string colorString = colorElement.GetString() ?? "";
 
             theme.mInterfaceColors[(int)usage] = ParseColor(colorString);

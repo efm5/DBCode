@@ -50,7 +50,7 @@
          internal override void LayoutCluster() {
             if ((Parent != null) && (mTopLabel != null) && (mBottomLabel != null)) {
                SetFontAndColor();
-               int x = (ClientSize.Width - mTopLabel.Width) / 2;
+               int x = (Parent.ClientSize.Width - mTopLabel.Width) / 2;
                if (x < 0)
                   x = 0;
                mTopLabel.Left = x;

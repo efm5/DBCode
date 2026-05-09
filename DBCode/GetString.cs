@@ -57,7 +57,7 @@ namespace DBCode {
                Dock = DockStyle.Top
             };
             mOKButton = new Button {
-               Name = $"GetString_OKButton{mTabIndex}",
+               Name = $"GetStringOKButton{mTabIndex}",
                TabIndex = mTabIndex++,
                Text = "&OK",
                AutoSize = true,

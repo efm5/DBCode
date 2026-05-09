@@ -56,11 +56,16 @@ namespace DBCode {
          }
 
          private void NewButton_Click(object? pSender, EventArgs pArgs) {
-            //DEBUG efm5 2026 04 7 reset temporary theme to defaults
+            if (mTemporaryTheme != null)
+               mTemporaryTheme.Dispose();
+            mTemporaryTheme = new Theme("new");
          }
 
          private void CloneButton_Click(object? pSender, EventArgs pArgs) {
-            //DEBUG efm5 2026 04 7 clone current theme to temporary theme
+            ThrowIfNull(mCurrentTheme, nameof(CloneButton_Click));
+            if (mTemporaryTheme != null)
+               mTemporaryTheme.Dispose();
+            mTemporaryTheme = mCurrentTheme.Clone("new");
          }
 
          private void ApplyButton_Click(object? pSender, EventArgs pArgs) {
@@ -78,7 +83,7 @@ namespace DBCode {
                return;
             if (!ThemeNameIsUnique(pResult)) {
                GetString.Show("Theme Name Collision",
-                  $"A theme named '{pResult}' already exists. Please enter a different name:",
+                  $"A theme named “{pResult}” already exists. Please enter a different name:",
                   pResult, ThemeApplyCallback);
                return;
             }
@@ -103,7 +108,10 @@ namespace DBCode {
          }
 
          private void OnSyntaxColorSwatchClicked(LabeledButtonColorSwatchCluster pSender) {
-            // efm5 TODO: wire to color picker for syntax colors
+            if (pSender.Tag is not (TokenKind tokenKind, LanguageKind languageKind))
+               ThrowBadCode($"Tag was not a (TokenKind, LanguageKind) in {nameof(OnSyntaxColorSwatchClicked)}.");
+            else
+               EnsureColorPickerPanel(mTemporaryTheme, tokenKind, languageKind, pSender.GetColor());
          }
 
          private void OnFontButtonClicked(LabeledButtonTextBoxCluster pSender) {

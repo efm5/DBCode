@@ -1,33 +1,45 @@
 ﻿namespace DBCode {
    namespace Themes {
       internal sealed partial class ThemePickerPanel : ScrollablePanel {
-         private readonly HeaderLabelCluster? mTitleLabel;
+         private readonly TwoLineHeaderLabelCluster? mTitleLabel;
          internal readonly BottomPanel? mThemePickerBottomPanel;
          internal ClusterContainer? mClusterContainer;
          private List<BaseCluster>? mButtonBaseClusters;
-         private bool mLayoutReady = false;
+         private readonly PickMode mPickMode;
 
-         public ThemePickerPanel() {
+         public ThemePickerPanel(PickMode pPickMode) {
             ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
-            mTitleLabel = new HeaderLabelCluster(mCurrentTheme, "Theme Picker", HeaderLabelSize.Normal);
+            mPickMode = pPickMode;
+            Name = "themePickerPanel";
+            TabIndex = mTabIndex++;
+            string usage = (pPickMode == PickMode.Edit) ? "Edit" : "Apply";
+            mTitleLabel = new TwoLineHeaderLabelCluster(mCurrentTheme, "Theme Picker", usage);
             mButtonBaseClusters = [];
             mClusterContainer = new ClusterContainer(this, mButtonBaseClusters, ClusterLayoutMode.FlowLayout) {
-               AutoSize = false,
-               mLayoutReadyGuard = () => mLayoutReady
+               Dock = DockStyle.None,
+               AutoSize = false
             };
             mThemePickerBottomPanel = new BottomPanel(mCurrentTheme);
          }
 
          public void LayoutPanel() {
-            ThrowIfNull(mClusterContainer, nameof(mClusterContainer));
             ThrowIfNull(mThemePickerBottomPanel, nameof(mThemePickerBottomPanel));
+            ThrowIfNull(mClusterContainer, nameof(mClusterContainer));
+            ThrowIfNull(mTitleLabel, nameof(mTitleLabel));
             SuspendLayout();
-            mThemePickerBottomPanel.SuspendLayout();
+            //mThemePickerBottomPanel.SuspendLayout();
+            mTitleLabel.SuspendLayout();
             ApplyTheme();
-            mClusterContainer.Dock = DockStyle.Fill;
+            mTitleLabel.LayoutCluster();
             mThemePickerBottomPanel.LayoutControls();
-            mThemePickerBottomPanel.ResumeLayout(true);
-            mLayoutReady = true;
+            mClusterContainer.Size = new Size(ClientSize.Width - mIndent,
+               ClientSize.Height - mTitleLabel.Height - mThemePickerBottomPanel.Height - mEm4);
+            mClusterContainer.Location = new Point(mIndent, mTitleLabel.Bottom + mEm);
+            mTitleLabel.LayoutCluster();
+            mClusterContainer.LayoutClusters();
+            mClusterContainer.AutoSize = true;
+            //mThemePickerBottomPanel.ResumeLayout(true);
+            mTitleLabel.ResumeLayout(true);
             ResumeLayout(true);
          }
 
@@ -35,12 +47,10 @@
             ThrowIfNull(mClusterContainer, nameof(mClusterContainer));
             ThrowIfNull(mTitleLabel, nameof(mTitleLabel));
             ThrowIfNull(mThemePickerBottomPanel, nameof(mThemePickerBottomPanel));
-            ThrowIfNull(mClusterContainer, nameof(mClusterContainer));
             ThrowIfNull(mButtonBaseClusters, nameof(mCurrentTheme));
             CreateButtons();
             mThemePickerBottomPanel.mCancelButton!.Click += CancelButton_Click;
             mThemePickerBottomPanel.mHelpButton!.Click += MainForm.Help_Click;
-            Controls.AddRange([mThemePickerBottomPanel, mClusterContainer, mTitleLabel]);
             mClusterContainer.Invalidate(true);
          }
 
@@ -66,10 +76,12 @@
             ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
             ThrowIfNull(mButtonBaseClusters, nameof(mButtonBaseClusters));
             ThrowIfNull(mThemePickerBottomPanel, nameof(mThemePickerBottomPanel));
+            ThrowIfNull(mTitleLabel, nameof(mTitleLabel));
             BackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.PanelBackground];
             foreach (BaseCluster cluster in mButtonBaseClusters)
                cluster.SetFontAndColor();
             mThemePickerBottomPanel.SetFontAndColor();
+            mTitleLabel.SetFontAndColor();
          }
 
          private void CloseThemePickerPanel() {

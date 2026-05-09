@@ -202,5 +202,125 @@ namespace DBCode.Properties {
                 this["ThemeTargetingTabPageIndex"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int TopDraggerHeight {
+            get {
+                return ((int)(this["TopDraggerHeight"]));
+            }
+            set {
+                this["TopDraggerHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int TopDraggerEdge {
+            get {
+                return ((int)(this["TopDraggerEdge"]));
+            }
+            set {
+                this["TopDraggerEdge"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("350")]
+        public int ActivationDelayMs {
+            get {
+                return ((int)(this["ActivationDelayMs"]));
+            }
+            set {
+                this["ActivationDelayMs"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("350")]
+        public int ClipboardDelayMs {
+            get {
+                return ((int)(this["ClipboardDelayMs"]));
+            }
+            set {
+                this["ClipboardDelayMs"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("350")]
+        public int ReactivationDelayMs {
+            get {
+                return ((int)(this["ReactivationDelayMs"]));
+            }
+            set {
+                this["ReactivationDelayMs"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int Whitespace {
+            get {
+                return ((int)(this["Whitespace"]));
+            }
+            set {
+                this["Whitespace"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public int SpacesPerTab {
+            get {
+                return ((int)(this["SpacesPerTab"]));
+            }
+            set {
+                this["SpacesPerTab"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public int SpacesToBecomeTab {
+            get {
+                return ((int)(this["SpacesToBecomeTab"]));
+            }
+            set {
+                this["SpacesToBecomeTab"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UseTabs {
+            get {
+                return ((bool)(this["UseTabs"]));
+            }
+            set {
+                this["UseTabs"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseSpaces {
+            get {
+                return ((bool)(this["UseSpaces"]));
+            }
+            set {
+                this["UseSpaces"] = value;
+            }
+        }
     }
 }

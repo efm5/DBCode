@@ -66,16 +66,10 @@
       }
 
       public void RehighlightText() {
-         //DEBUG efm5 2026 04 20 do the work
-         TimedMessage("Rehighlighting text with the new language selection", "Rehighlighting Text", 2000);
-         SuspendLayout();
-         switch (mCurrentLanguage) {
-            case LanguageKind.PlainText:
-               break;
-            default:
-               break;
-         }
-         ResumeLayout(true);
+         ThrowIfNull(mHighlighterEngine, nameof(mHighlighterEngine));
+         mRichTextBox!.TextChanged -= OnEditorTextChanged;
+         mHighlighterEngine.HighlightNow();
+         mRichTextBox!.TextChanged += OnEditorTextChanged;
       }
 
       public void LayoutControls() {
@@ -89,14 +83,14 @@
       internal void ApplyTheme() {
          ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
          ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
-         ThrowIfNull(mCurrentLanguageIsTSMI, nameof(mCurrentLanguageIsTSMI));
+         ThrowIfNull(mCurrentThemeIsTSMI, nameof(mCurrentThemeIsTSMI));
          ThrowIfNull(mForm, nameof(mForm));
          ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
          ThrowIfNull(mMenuStrip, nameof(mMenuStrip));
          ThrowIfNull(mHighlighterEngine, nameof(mHighlighterEngine));
          mRichTextBox.TextChanged -= OnEditorTextChanged;
          Theme theme = mCurrentTheme!;
-         mCurrentLanguageIsTSMI.Text = mCurrently + theme.mName;
+         mCurrentThemeIsTSMI.Text = mCurrently + theme.mName;
          mForm!.BackColor = theme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground];
          mRichTextBox.BackColor = theme.mInterfaceColors[(int)ColorSwatchUsage.TextBox];
          mRichTextBox.ForeColor = theme.mInterfaceColors[(int)ColorSwatchUsage.TextBoxFont];
@@ -113,11 +107,6 @@
          mHighlighterEngine.HighlightNow();
          mRichTextBox.TextChanged += OnEditorTextChanged;
          ResumeLayout(true);
-      }
-
-      public static void PerformFirstLaunchInitialization() {
-         TimedMessage("Welcome to DBCode! This message will disappear after a few seconds.", "Welcome to DBCode!", 3000);
-         //DEBUG efm5 2026 04 8 fill out the logic
       }
 
       public static void GetHelp(HelpContext pUIContext, string? pSpecificHREFAnchor = "") {
@@ -202,21 +191,66 @@
          SetWindowPos(Handle, mInsertAfterWindow, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
       }
 
-      private static void Paste(PasteMode pPasteMode) {
-         IntPtr pTarget = ResolveTargetWindow();
-         if (pTarget == IntPtr.Zero)
-            return;
+      private static async void SendAllAsync() {
+         ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
+         ThrowIfNull(mForm, nameof(mForm));
+         mScrollableMainPanel.Enabled = false;
+         try {
+            IntPtr target;
+            if (mIsTargetingEnabled) {
+               if (!IsValidTargetWindow(mTargetWindow)) {
+                  mIsTargetingEnabled = false;
+                  mTargetWindow = IntPtr.Zero;
+                  mTargetWindowName = string.Empty;
+                  if (mTargetedTSMI != null)
+                     mTargetedTSMI.Checked = false;
+                  UpdateTargetingStatusLabel();
+                  TimedMessage("The targeted window no longer exists. Targeting has been turned off.", "Target Lost");
+                  return;
+               }
+               target = mTargetWindow;
+            }
+            else {
+               target = GetMostSuitableWindowAllowedFirst();
+               if (target == IntPtr.Zero) {
+                  TimedMessage("No suitable target window was found.", "No Target");
+                  return;
+               }
+            }
+            string text = mRichTextBox.Text;
+            if (string.IsNullOrEmpty(text)) {
+               TimedMessage("There is no text to send.", "Nothing To Send");
+               return;
+            }
+            ClipboardHelper.TrySetClipboardText(text);
+            await Task.Delay(mUiState.mClipboardDelayMs);
+            BringWindowToTop(target);
+            SetForegroundWindow(target);
+            await Task.Delay(mUiState.mActivationDelayMs);
+            SendKeys.Send("^v");
+            await Task.Delay(mUiState.mClipboardDelayMs);
+            mForm.BringToFront();
+            mForm.Show();
+            mForm.Activate();
+            await Task.Delay(mUiState.mReactivationDelayMs);
+            mRichTextBox.Clear();
+         }
+         finally {
+            ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
+            mScrollableMainPanel.Enabled = true;
+         }
+      }
 
+      private static void Paste(PasteMode pPasteMode) {
          switch (pPasteMode) {
             case PasteMode.SendAll:
-               TimedMessage("sending all data to the target window", "PASTING", 2000);
+               SendAllAsync();
                break;
             case PasteMode.PasteSelected:
-               TimedMessage("pasting selected data to the target window", "PASTING", 2000);
+               TimedMessage("Paste Selected is not yet implemented.", "Coming Soon");
                break;
          }
-         //DEBUG bring to top, paste, restore DBCode if AlwaysOnTop
-         //efm5 I'm probably going to have to rethink always on top to not be TopMost and instead be Top
       }
 
       private static IntPtr ResolveTargetWindow() {
@@ -241,9 +275,7 @@
       }
 
       private static void EnterTargetedMode() {
-         //#pragma warning disable IDE0028//efm5 warning
          IntPtr pWindow = GetMostSuitableWindow();
-         //#pragma warning restore IDE0028
          if ((pWindow == IntPtr.Zero) && (mTargetedTSMI != null)) {
             mTargetedTSMI.Checked = false;
             EnterUntargetedMode();
@@ -322,12 +354,12 @@
       }
 
       private static void UpdateOpacityMenuChecks(double pOpacity) {
-         if (mVisibilityMenuItem == null)
-            return;
+         ThrowIfNull(mVisibilityMenuItem, nameof(mVisibilityMenuItem));
          foreach (ToolStripMenuItem tsmi in mVisibilityMenuItem.DropDownItems.OfType<ToolStripMenuItem>()) {
-            if (tsmi.Tag != null)
-               tsmi.Checked = Math.Abs((double)tsmi.Tag - pOpacity) < 0.001;
-            //else we could warn the programmer of the problem
+            if (tsmi.Tag is not double tagOpacity)
+               ThrowBadCode($"ToolStripMenuItem “{tsmi.Name}” in {nameof(UpdateOpacityMenuChecks)} has a null or non-double Tag.");
+            else
+               tsmi.Checked = Math.Abs(tagOpacity - pOpacity) < 0.001;
          }
       }
 

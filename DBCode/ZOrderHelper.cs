@@ -15,7 +15,7 @@ namespace DBCode {
          List<IntPtr> pFiltered = [];
          for (int pIndex = 0; pIndex < pSnapshot.Count; pIndex++) {
             IntPtr pWindowHandle = pSnapshot[pIndex];
-            if ((IsRealVisibleWindow(pWindowHandle)) && (IsBlacklistedWindow(pWindowHandle) == false))
+            if ((IsRealVisibleWindow(pWindowHandle)) && (IsDisallowedWindow(pWindowHandle) == false))
                pFiltered.Add(pWindowHandle);
          }
          if (pFiltered.Count < 2)
@@ -31,7 +31,7 @@ namespace DBCode {
          List<IntPtr> pSnapshot = GetZOrderSnapshot();
          for (int pIndex = 0; pIndex < pSnapshot.Count; pIndex++) {
             IntPtr pWindowHandle = pSnapshot[pIndex];
-            if (!IsRealVisibleWindow(pWindowHandle) || IsBlacklistedWindow(pWindowHandle))
+            if (!IsRealVisibleWindow(pWindowHandle) || IsDisallowedWindow(pWindowHandle))
                continue;
             pResult.Add(pWindowHandle);
          }
@@ -49,8 +49,21 @@ namespace DBCode {
          return SelectFromMultiple(pCandidates);
       }
 
+      public static IntPtr GetMostSuitableWindowAllowedFirst() {
+         List<IntPtr> pCandidates = GetAcceptableWindowsInZOrder(); // already excludes disallowed and invisible
+         foreach (IntPtr pWindowHandle in pCandidates) { // pass 1: prefer allowed windows
+            if (IsAllowedWindow(pWindowHandle))
+               return pWindowHandle;
+         }
+         foreach (IntPtr pWindowHandle in pCandidates) { // pass 2: accept first neutral window
+            if (!IsAllowedWindow(pWindowHandle))
+               return pWindowHandle;
+         }
+         return IntPtr.Zero;
+      }
+
       public static bool IsValidTargetWindow(IntPtr pWindowHandle) {
-         if ((pWindowHandle == IntPtr.Zero) || (IsWindow(pWindowHandle) == false) || (IsRealVisibleWindow(pWindowHandle) == false) || (IsBlacklistedWindow(pWindowHandle)))
+         if ((pWindowHandle == IntPtr.Zero) || (IsWindow(pWindowHandle) == false) || (IsRealVisibleWindow(pWindowHandle) == false) || (IsDisallowedWindow(pWindowHandle)))
             return false;
          return true;
       }
@@ -114,12 +127,13 @@ namespace DBCode {
          return true;
       }
 
-#pragma warning disable IDE0060 // Remove unused parameter - this is a placeholder for future logic that may need the window handle.
-      private static bool IsBlacklistedWindow(IntPtr pWindowHandle) {
-         //DEBUG efm5 2026 04 5 flesh out this stub
-         return false;
+      private static bool IsDisallowedWindow(IntPtr pWindowHandle) {
+         return TargetListManager.IsDisallowed(GetWindowTitle(pWindowHandle));
       }
-#pragma warning restore IDE0060
+
+      private static bool IsAllowedWindow(IntPtr pWindowHandle) {
+         return TargetListManager.IsAllowed(GetWindowTitle(pWindowHandle));
+      }
       #endregion
    }
 }

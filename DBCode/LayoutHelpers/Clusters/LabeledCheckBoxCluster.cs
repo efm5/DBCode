@@ -46,13 +46,6 @@ namespace DBCode {
             mCheckBox.ForeColor = poForeColor;
             mCheckBox.BackColor = poBackColor;
          }
-
-         //protected override void Dispose(bool pDisposing) {
-         //   if (pDisposing) {
-         //      //DEBUG efm5 2026 04 27 if there are ever handlers, dispose of them here
-         //   }
-         //   base.Dispose(pDisposing);
-         //}
       }
    }
 }

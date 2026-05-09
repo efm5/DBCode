@@ -17,6 +17,9 @@ namespace DBCode {
          private Theme mTheme;
          private TrackBar mBlueSlider, mGraySlider, mGreenSlider, mRedSlider;
          internal double mOriginalOpacity;
+         private TokenKind mTokenKind;
+         private LanguageKind mLanguageKind;
+         private bool mIsSyntaxColor;
 
 
          public ColorPickerPanel(Theme pTheme, ColorSwatchUsage pColorSwatchUsage, Color pInitialColor) {
@@ -27,8 +30,10 @@ namespace DBCode {
                interfaceFont = mTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
                groupBoxBackground = mTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground];
             Font interfaceTextFont = mTheme.mFonts[(int)FontUsage.Interface];
+            Name = "colorPickerPanel";
+            TabIndex = mTabIndex++;
             mTitleLabel = new TwoLineHeaderLabelCluster(mTheme, "Select A Color",
-               $"Use this color for {ToDescription((ColorSwatchUsage)mColorSwatchUsage)}");
+               $"Use this color for {ToDescription(mColorSwatchUsage)}");
             mScrollPanel = new Panel {
                Name = $"ColorPickerScrollPanel{mTabIndex++}",
                TabIndex = TAB_INDEX_IGNORED,
@@ -229,6 +234,14 @@ namespace DBCode {
             mScrollPanel.Controls.AddRange([mNamedColorsGroupBox, mCustomColorGroupBox]);
             Controls.AddRange([mScrollPanel, mColorPickerBottomPanel, mTitleLabel]);
             AttachEventHandlers();
+         }
+
+         public ColorPickerPanel(Theme pTheme, TokenKind pTokenKind, LanguageKind pLanguageKind, Color pInitialColor)
+            : this(pTheme, ColorSwatchUsage.InterfaceBackground, pInitialColor) {
+            mTokenKind = pTokenKind;
+            mLanguageKind = pLanguageKind;
+            mIsSyntaxColor = true;
+            mTitleLabel.ResetBottomLabel($"Use this color for {ToDescription(pTokenKind)} ({pLanguageKind})");
          }
 
          public void LayoutControls() {

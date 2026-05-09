@@ -4,11 +4,19 @@
          protected override void OnHandleCreated(EventArgs pEventArgs) {
             base.OnHandleCreated(pEventArgs);
             ThrowIfNull(mClusterContainer, nameof(mClusterContainer));
-            Dock = DockStyle.Fill;
-            CreateLayout();
-            mClusterContainer.Dock = DockStyle.Fill;
+            ThrowIfNull(mForm, nameof(mForm));
+            ThrowIfNull(mTitleLabel, nameof(mTitleLabel));
+            ThrowIfNull(mThemePickerBottomPanel, nameof(mThemePickerBottomPanel));
+            mForm.SuspendClientSizeChanged();
+            mForm.Bounds = mUiState.ThemePickerBounds;
+            Size = new Size(mForm.Size.Width - 20, mForm.Size.Height - 20);// efm5 temporary seed, actually fills
             PerformLayout();
+            CreateLayout();
+            Controls.AddRange([mClusterContainer, mTitleLabel, mThemePickerBottomPanel]);
             mClusterContainer.PerformLayout();
+            LayoutPanel();
+            mThemePickerBottomPanel.LayoutControls();
+            mForm.ResumeClientSizeChanged();
          }
 
          private void CancelButton_Click(object? pSender, EventArgs pArgs) {
@@ -21,10 +29,16 @@
             if (button == null)
                return;
             Theme? theme = button.Tag as Theme;
-            if (theme != null)
-               mCurrentTheme = theme.Clone();
-            CloseThemePickerPanel();
-            mForm.ApplyTheme();
+            if (mPickMode == PickMode.Edit) {
+               mForm.EnsureThemePanel(ThemeUsage.Edit);
+               CloseThemePickerPanel();
+            }
+            else {
+               if (theme != null)
+                  mCurrentTheme = theme.Clone();
+               mForm.ApplyTheme();
+               CloseThemePickerPanel();
+            }
          }
       }
    }

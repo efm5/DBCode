@@ -14,16 +14,15 @@ namespace DBCode {
 
          #region Named Color Event Handlers
          private void UseNamedCheckBox_CheckedChanged(object? pSender, EventArgs pEventArguments) {
-            if (mUseNamedCheckBox == null)
-               return;
+            ThrowIfNull(mUseNamedCheckBox, nameof(mUseNamedCheckBox));
+            ThrowIfNull(mNamedColorPrefixButton, nameof(mNamedColorPrefixButton));
+            ThrowIfNull(mNamedColorsComboBox, nameof(mNamedColorsComboBox));
+            ThrowIfNull(mUseGrayscaleCheckBox, nameof(mUseGrayscaleCheckBox));
             bool useNamed = mUseNamedCheckBox.Checked;
-            if (mNamedColorPrefixButton != null)
-               mNamedColorPrefixButton.Enabled = useNamed;
-            if (mNamedColorsComboBox != null)
-               mNamedColorsComboBox.Enabled = useNamed;
+            mNamedColorPrefixButton.Enabled = useNamed;
+            mNamedColorsComboBox.Enabled = useNamed;
             if (useNamed) {
-               if (mUseGrayscaleCheckBox != null)
-                  mUseGrayscaleCheckBox.Checked = false;
+               mUseGrayscaleCheckBox.Checked = false;
                DisableCustomControls();
             }
             else
@@ -32,22 +31,21 @@ namespace DBCode {
          }
 
          private void NamedColorPrefixButton_Click(object? pSender, EventArgs pEventArguments) {
-            if (mNamedColorsComboBox != null) {
-               mNamedColorsComboBox.Focus();
-               mNamedColorsComboBox.DroppedDown = true;
-            }
+            ThrowIfNull(mNamedColorsComboBox, nameof(mNamedColorsComboBox));
+            mNamedColorsComboBox.Focus();
+            mNamedColorsComboBox.DroppedDown = true;
          }
 
          private void NamedColorsComboBox_SelectedValueChanged(object? pSender, EventArgs pEventArguments) {
-            if (mNamedColorsComboBox == null)
-               return;
+            ThrowIfNull(mNamedColorsComboBox, nameof(mNamedColorsComboBox));
             string? colorName = mNamedColorsComboBox.Text.Replace(" ", string.Empty);
             if (IsKnownColor(colorName, out Color color))
                SetColorValues(color);
          }
 
          private void NamedColorsComboBox_KeyUp(object? pSender, KeyEventArgs pE) {
-            if (pE.KeyCode == Keys.Enter && mNamedColorsComboBox != null) {
+            ThrowIfNull(mNamedColorsComboBox, nameof(mNamedColorsComboBox));
+            if (pE.KeyCode == Keys.Enter) {
                string? colorName = mNamedColorsComboBox.Text.Replace(" ", string.Empty);
                if (IsKnownColor(colorName, out Color color))
                   SetColorValues(color);
@@ -55,10 +53,9 @@ namespace DBCode {
          }
 
          private void NamedColorsComboBox_Leave(object? pSender, EventArgs pEventArguments) {
-            if (mNamedColorsComboBox == null)
-               return;
+            ThrowIfNull(mNamedColorsComboBox, nameof(mNamedColorsComboBox));
             string? colorName = mNamedColorsComboBox.Text.Replace(" ", string.Empty);
-            if (!IsKnownColor(colorName, out Color color)) {
+            if (!IsKnownColor(colorName, out Color _)) {
                mNamedColorsComboBox.SelectedIndex = -1;
                mNamedColorsComboBox.Text = string.Empty;
             }
@@ -67,43 +64,43 @@ namespace DBCode {
 
          #region Custom Color Event Handlers
          private void UseGrayscaleCheckBox_CheckedChanged(object? pSender, EventArgs pEventArguments) {
-            if (mUseGrayscaleCheckBox == null)
-               return;
+            ThrowIfNull(mUseGrayscaleCheckBox, nameof(mUseGrayscaleCheckBox));
+            ThrowIfNull(mUseNamedCheckBox, nameof(mUseNamedCheckBox));
+            ThrowIfNull(mGrayPrefixButton, nameof(mGrayPrefixButton));
+            ThrowIfNull(mGrayUpDown, nameof(mGrayUpDown));
+            ThrowIfNull(mGraySlider, nameof(mGraySlider));
+            ThrowIfNull(mRedPrefixButton, nameof(mRedPrefixButton));
+            ThrowIfNull(mRedUpDown, nameof(mRedUpDown));
+            ThrowIfNull(mRedSlider, nameof(mRedSlider));
+            ThrowIfNull(mGreenPrefixButton, nameof(mGreenPrefixButton));
+            ThrowIfNull(mGreenUpDown, nameof(mGreenUpDown));
+            ThrowIfNull(mGreenSlider, nameof(mGreenSlider));
+            ThrowIfNull(mBluePrefixButton, nameof(mBluePrefixButton));
+            ThrowIfNull(mBlueUpDown, nameof(mBlueUpDown));
+            ThrowIfNull(mBlueSlider, nameof(mBlueSlider));
             bool useGray = mUseGrayscaleCheckBox.Checked;
             RemoveEventHandlers();
-            if (mGrayPrefixButton != null)
-               mGrayPrefixButton.Enabled = useGray;
-            if (mGrayUpDown != null)
-               mGrayUpDown.Enabled = useGray;
-            if (mGraySlider != null)
-               mGraySlider.Enabled = useGray;
-            if (mRedPrefixButton != null)
-               mRedPrefixButton.Enabled = !useGray;
-            if (mRedUpDown != null)
-               mRedUpDown.Enabled = !useGray;
-            if (mRedSlider != null)
-               mRedSlider.Enabled = !useGray;
-            if (mGreenPrefixButton != null)
-               mGreenPrefixButton.Enabled = !useGray;
-            if (mGreenUpDown != null)
-               mGreenUpDown.Enabled = !useGray;
-            if (mGreenSlider != null)
-               mGreenSlider.Enabled = !useGray;
-            if (mBluePrefixButton != null)
-               mBluePrefixButton.Enabled = !useGray;
-            if (mBlueUpDown != null)
-               mBlueUpDown.Enabled = !useGray;
-            if (mBlueSlider != null)
-               mBlueSlider.Enabled = !useGray;
-            if (useGray && mUseNamedCheckBox != null)
+            mGrayPrefixButton.Enabled = useGray;
+            mGrayUpDown.Enabled = useGray;
+            mGraySlider.Enabled = useGray;
+            mRedPrefixButton.Enabled = !useGray;
+            mRedUpDown.Enabled = !useGray;
+            mRedSlider.Enabled = !useGray;
+            mGreenPrefixButton.Enabled = !useGray;
+            mGreenUpDown.Enabled = !useGray;
+            mGreenSlider.Enabled = !useGray;
+            mBluePrefixButton.Enabled = !useGray;
+            mBlueUpDown.Enabled = !useGray;
+            mBlueSlider.Enabled = !useGray;
+            if (useGray)
                mUseNamedCheckBox.Checked = false;
             AttachEventHandlers();
             UpdateSwatches();
          }
 
          private void GrayUpDown_ValueChanged(object? pSender, EventArgs pEventArguments) {
-            if (mGrayUpDown == null || mGraySlider == null)
-               return;
+            ThrowIfNull(mGrayUpDown, nameof(mGrayUpDown));
+            ThrowIfNull(mGraySlider, nameof(mGraySlider));
             int value = (int)mGrayUpDown.Value;
             if (mGraySlider.Value != value) {
                RemoveEventHandlers();
@@ -114,8 +111,8 @@ namespace DBCode {
          }
 
          private void GraySlider_ValueChanged(object? pSender, EventArgs pEventArguments) {
-            if (mGraySlider == null || mGrayUpDown == null)
-               return;
+            ThrowIfNull(mGraySlider, nameof(mGraySlider));
+            ThrowIfNull(mGrayUpDown, nameof(mGrayUpDown));
             int value = mGraySlider.Value;
             if (mGrayUpDown.Value != value) {
                RemoveEventHandlers();
@@ -126,8 +123,8 @@ namespace DBCode {
          }
 
          private void RedUpDown_ValueChanged(object? pSender, EventArgs pEventArguments) {
-            if (mRedUpDown == null || mRedSlider == null)
-               return;
+            ThrowIfNull(mRedUpDown, nameof(mRedUpDown));
+            ThrowIfNull(mRedSlider, nameof(mRedSlider));
             int value = (int)mRedUpDown.Value;
             if (mRedSlider.Value != value) {
                RemoveEventHandlers();
@@ -138,8 +135,8 @@ namespace DBCode {
          }
 
          private void RedSlider_ValueChanged(object? pSender, EventArgs pEventArguments) {
-            if (mRedSlider == null || mRedUpDown == null)
-               return;
+            ThrowIfNull(mRedSlider, nameof(mRedSlider));
+            ThrowIfNull(mRedUpDown, nameof(mRedUpDown));
             int value = mRedSlider.Value;
             if (mRedUpDown.Value != value) {
                RemoveEventHandlers();
@@ -150,8 +147,8 @@ namespace DBCode {
          }
 
          private void GreenUpDown_ValueChanged(object? pSender, EventArgs pEventArguments) {
-            if (mGreenUpDown == null || mGreenSlider == null)
-               return;
+            ThrowIfNull(mGreenUpDown, nameof(mGreenUpDown));
+            ThrowIfNull(mGreenSlider, nameof(mGreenSlider));
             int value = (int)mGreenUpDown.Value;
             if (mGreenSlider.Value != value) {
                RemoveEventHandlers();
@@ -162,8 +159,8 @@ namespace DBCode {
          }
 
          private void GreenSlider_ValueChanged(object? pSender, EventArgs pEventArguments) {
-            if (mGreenSlider == null || mGreenUpDown == null)
-               return;
+            ThrowIfNull(mGreenSlider, nameof(mGreenSlider));
+            ThrowIfNull(mGreenUpDown, nameof(mGreenUpDown));
             int value = mGreenSlider.Value;
             if (mGreenUpDown.Value != value) {
                RemoveEventHandlers();
@@ -174,8 +171,8 @@ namespace DBCode {
          }
 
          private void BlueUpDown_ValueChanged(object? pSender, EventArgs pEventArguments) {
-            if (mBlueUpDown == null || mBlueSlider == null)
-               return;
+            ThrowIfNull(mBlueUpDown, nameof(mBlueUpDown));
+            ThrowIfNull(mBlueSlider, nameof(mBlueSlider));
             int value = (int)mBlueUpDown.Value;
             if (mBlueSlider.Value != value) {
                RemoveEventHandlers();
@@ -186,8 +183,8 @@ namespace DBCode {
          }
 
          private void BlueSlider_ValueChanged(object? pSender, EventArgs pEventArguments) {
-            if (mBlueSlider == null || mBlueUpDown == null)
-               return;
+            ThrowIfNull(mBlueSlider, nameof(mBlueSlider));
+            ThrowIfNull(mBlueUpDown, nameof(mBlueUpDown));
             int value = mBlueSlider.Value;
             if (mBlueUpDown.Value != value) {
                RemoveEventHandlers();
@@ -200,13 +197,13 @@ namespace DBCode {
 
          #region Button Event Handlers
          private void OkButton_Click(object? pSender, EventArgs pEventArguments) {
-            if (mTheme == null || mDemoSwatch == null)
-               return;
-            if (mDemoSwatch.GetColor() == mInitialColor)
-               ThemePanel.mRepaint = false;
+            ThrowIfNull(mTheme, nameof(mTheme));
+            ThrowIfNull(mDemoSwatch, nameof(mDemoSwatch));
+            ThemePanel.mRepaint = mDemoSwatch.GetColor() != mInitialColor;
+            if (mIsSyntaxColor)
+               mTheme.mHighlightColors[(int)mLanguageKind][(int)mTokenKind] = mDemoSwatch.BackColor;
             else
-               ThemePanel.mRepaint = true;
-            mTheme.mInterfaceColors[(int)mColorSwatchUsage] = mDemoSwatch.BackColor;
+               mTheme.mInterfaceColors[(int)mColorSwatchUsage] = mDemoSwatch.BackColor;
             ThemePanel.RestoreFromColorPickerPanel();
          }
 

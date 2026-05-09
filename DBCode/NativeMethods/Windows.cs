@@ -4,6 +4,11 @@ namespace DBCode {
 #pragma warning disable IDE1006
 #pragma warning disable SYSLIB1054
       internal static partial class NativeMethods {
+         // Brings the specified window to the top of the Z order.
+         [DllImport("user32.dll")]
+         [return: MarshalAs(UnmanagedType.Bool)]
+         internal static extern bool BringWindowToTop(nint pWindowHandle);
+
          // Retrieves the DPI for the specified monitor.
          [LibraryImport("Shcore.dll", EntryPoint = "GetDpiForMonitor")]
          internal static partial int GetDpiForMonitor(nint pMonitorHandle, DPIType pDpiType, out uint pDpiX, out uint pDpiY);

@@ -1,5 +1,9 @@
 ﻿namespace DBCode {
    #region enumerations
+   public enum PickMode { Use, Edit }
+
+   public enum Whitespace { Both, Tabs, Spaces }
+
    public enum ColorTones { Ignore, Dark, MediumDark, MediumLight, Light }
 
    public enum ViewMode { Features, Minimal }
@@ -161,8 +165,8 @@
          mAnchorTopLeftBottomRight =
          AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right,
          mAnchorTopRight = AnchorStyles.Top | AnchorStyles.Right;
-      public static bool mFirstGray = true, mFirstLaunch = true, mForceActivation = true,
-         mIsTargetingEnabled = false, mPreMinimalControlBox = true, mReturnToTop = true,
+      public static bool mFirstGray = true, mForceActivation = true,
+         mIsTargetingEnabled = false, mPreMinimalControlBox = true,
          mFirstColorPicker = true, mFirstFontPicker = true;
       public static List<Control>? mBottomPanelExcluded = null;
       public static float mFontWidthAdjustment = 0.5f;
@@ -171,8 +175,6 @@
       public static HighlighterEngine? mHighlighterEngine = null;
       public static Icon[] mIcons = new Icon[4];
       public static ILayoutable? mActiveLayoutable = null;
-      public static int mThemeHighlightTabPageIndex = 0, mThemePrimaryTabPageIndex = 0,
-         mThemeTargetingTabIndexIndex = 0;
       public static IntPtr mTargetWindow = IntPtr.Zero;
       public static readonly IntPtr mInsertAfterWindow = new IntPtr(0);
       public static LanguageKind mCurrentLanguage = LanguageKind.CSharp;
@@ -183,6 +185,7 @@
       public static FontPickerPanel? mFontPickerPanel = null;
       public static ThemePickerPanel? mThemePickerPanel = null;
       public static GetString? mGetStringPanel = null;
+      public static OptionsPanel? mOptionsPanel = null;
       public static readonly PropertyInfo[] mPredefinedColors =
          typeof(Color).GetProperties(BindingFlags.Public | BindingFlags.Static);
       public static RichTextBox? mRichTextBox = null;
@@ -193,8 +196,11 @@
          mVersionString = "0.0.0.0", mUsingThemeName = string.Empty;
       public static readonly string mAppFolder = AppDomain.CurrentDomain.BaseDirectory,
         mMyDocumentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\",
-        mDataFolder = mMyDocumentsFolder + @"DBCode_Data\", mHelpFolder = mAppFolder + @"Help\", mCurrently = "Currently:  ";
-      public static readonly List<string> mBlackList = [
+        mDataFolder = mMyDocumentsFolder + @"DBCode_Data\", mHelpFolder = mAppFolder + @"Help\",
+         mAllowedTargetWindows = mDataFolder + @"AllowedTargetWindows.txt",
+         mDisallowedTargetWindows = mDataFolder + @"DisallowedTargetWindows.txt",
+         mCurrently = "Currently:  ";
+      public static readonly List<string> mDisallowed = [
          //efm5 these are case insensitive
          //Windows not to paste into
          "ApplicationFrameHost", "Auto Box", "Calculator", "DB Code", "dictation box", "dictationbox", "Dragon",
@@ -202,7 +208,7 @@
          "iexplorer", "MediaMonkey", "Music.UI", "obkagent", "ScriptedSandbox64", "Search Correct", "SearchCorrect",
          "SP Quick Panel", "SPQuickPanel", "SP Search", "SPSearch", "svchost", "SystemSettings", "TextInputHost",
          "Windows Explorer", "XboxApp" ],
-         mIDEs = [
+         mAllowed = [//IDEs and other apps that are appropriate to paste into
             //efm5 these are case insensitive; Uses Contains() – "Visual Studio" matches "Visual Studio Code"
             //Appropriate target Windows to paste into
             "Arduino", "Eclipse", "Emacs", "IntelliJ", "NetBeans", "Particle", "PSPad", "Visual Studio", "vim", "Xcode"  ];
@@ -219,13 +225,19 @@
       #endregion
 
       #region main menu
-      public static ToolStripMenuItem? mFeaturesTSMI = null, mFiftyTSMI = null, mHelpMenuItem = null, mMinimalTSMI = null,
-         mModeMenuItem = null, mLanguageMenuItem = null, mOpaqueTSMI = null, mRetargetTSMI = null, mReturnToTopTSMI = null, mSeventyFiveTSMI = null,
+      public static ToolStripMenuItem? mFeaturesTSMI = null, mFiftyTSMI = null, mHelpMenuItem = null,
+         mMinimalTSMI = null,
+         mModeMenuItem = null, mLanguageMenuItem = null, mOpaqueTSMI = null, mRetargetTSMI = null,
+         mSeventyFiveTSMI = null,
          mTargetedTSMI = null, mTargetingMenuItem = null, mThemeDesignTSMI = null, mThemeEditTSMI = null,
+         mThemeEditCurrentTSMI = null, mThemeEditPickTSMI = null,
          mThemeMenuItem = null, mThemePickTSMI = null, mThirtyTSMI = null, mTransparentTSMI = null,
-         mVisibilityMenuItem = null, mPlainTextTSMI = null, mCSharpTSMI = null, mCTSMI = null, mCppTSMI = null, mBasicTSMI = null, mFSharpTSMI = null,
-         mHtmlTSMI = null, mCssTSMI = null, mXmlTSMI = null, mJsonTSMI = null, mPowerShellTSMI = null, mBatchTSMI = null, mSqlTSMI = null,
-         mMarkdownTSMI = null, mPythonTSMI = null, mCurrentLanguageIsTSMI = null;
+         mOptionsMenuItem = null,
+         mVisibilityMenuItem = null, mPlainTextTSMI = null, mCSharpTSMI = null, mCTSMI = null, mCppTSMI = null,
+         mBasicTSMI = null, mFSharpTSMI = null,
+         mHtmlTSMI = null, mCssTSMI = null, mXmlTSMI = null, mJsonTSMI = null, mPowerShellTSMI = null,
+         mBatchTSMI = null, mSqlTSMI = null,
+         mMarkdownTSMI = null, mPythonTSMI = null, mCurrentThemeIsTSMI = null;
       #endregion
    }
    #endregion

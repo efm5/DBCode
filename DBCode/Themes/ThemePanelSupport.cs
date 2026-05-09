@@ -44,20 +44,30 @@
          public void LayoutControls() {
             SuspendLayout();
             ThrowIfNull(mForm, nameof(mForm));
-            int savedIndex = mPrimaryTabControl.SelectedIndex;
+            //efm5 - switching to each tab forces the controls to be created and laid out, which is necessary
+            //to get accurate measurements for the wanted size of the panel; without this, the panel may report
+            //a smaller wanted size than it actually needs
+            mPrimaryTabControl.SelectedIndexChanged -= PrimaryTabControl_SelectedIndexChanged;
+            mIncludeExcludeTabControl.SelectedIndexChanged -= IncludeExcludeTabControl_SelectedIndexChanged;
+            mHighlightTabControl.SelectedIndexChanged -= HighlightTabControl_SelectedIndexChanged;
+            int savedPrimary = mUiState.mThemePrimaryTabPageIndex;
+            int savedHighlight = mUiState.mThemeHighlightTabPageIndex;
+            int savedTargeting = mUiState.mThemeTargetingTabIndexIndex;
             mPrimaryTabControl.SelectedIndex = (int)PrimaryTabPageUsage.Interface;
             mPrimaryTabControl.SelectedIndex = (int)PrimaryTabPageUsage.Color;
             mPrimaryTabControl.SelectedIndex = (int)PrimaryTabPageUsage.Examples;
             mPrimaryTabControl.SelectedIndex = (int)PrimaryTabPageUsage.Targeting;
-            mPrimaryTabControl.SelectedIndex = savedIndex;
-            savedIndex = mHighlightTabControl.SelectedIndex;
             for (int i = 0; i < mHighlightTabControl.TabPages.Count; i++)
                mHighlightTabControl.SelectedIndex = i;
-            mHighlightTabControl.SelectedIndex = savedIndex;
-            savedIndex = mIncludeExcludeTabControl.SelectedIndex;
             for (int i = 0; i < mIncludeExcludeTabControl.TabPages.Count; i++)
                mIncludeExcludeTabControl.SelectedIndex = i;
-            mIncludeExcludeTabControl.SelectedIndex = savedIndex;
+            //efm5 - now that all controls have been visited, restore the persisted selections
+            mPrimaryTabControl.SelectedIndex = savedPrimary;
+            mHighlightTabControl.SelectedIndex = savedHighlight;
+            mIncludeExcludeTabControl.SelectedIndex = savedTargeting;
+            mPrimaryTabControl.SelectedIndexChanged += PrimaryTabControl_SelectedIndexChanged;
+            mIncludeExcludeTabControl.SelectedIndexChanged += IncludeExcludeTabControl_SelectedIndexChanged;
+            mHighlightTabControl.SelectedIndexChanged += HighlightTabControl_SelectedIndexChanged;
             ApplyTheme(mTemporaryTheme);
             LayoutClustersAndContainers();
             mThemeBottomPanel.LayoutControls();
@@ -165,6 +175,29 @@
             }
          }
 
+         private void ApplyThemeToDataGridView(DataGridView pGrid, ref Font? pHeaderFont) {
+            Color backColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground];
+            Color foreColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont];
+            Color selectedBackColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground];
+            Color selectedForeColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxFont];
+            Font interfaceFont = mTemporaryTheme.mFonts[(int)FontUsage.Interface];
+            pHeaderFont?.Dispose();
+            pHeaderFont = CreateNewBoldFont(interfaceFont); // we own this; DataGridView will not dispose it
+            pGrid.EnableHeadersVisualStyles = false; // required or ColumnHeadersDefaultCellStyle is ignored
+            pGrid.BackgroundColor = backColor;
+            pGrid.GridColor = foreColor;
+            pGrid.DefaultCellStyle.BackColor = backColor;
+            pGrid.DefaultCellStyle.ForeColor = foreColor;
+            pGrid.DefaultCellStyle.SelectionBackColor = selectedBackColor;
+            pGrid.DefaultCellStyle.SelectionForeColor = selectedForeColor;
+            pGrid.DefaultCellStyle.Font = interfaceFont; // owned by theme; not disposed here
+            pGrid.ColumnHeadersDefaultCellStyle.BackColor = selectedBackColor;
+            pGrid.ColumnHeadersDefaultCellStyle.ForeColor = selectedForeColor;
+            pGrid.ColumnHeadersDefaultCellStyle.SelectionBackColor = selectedBackColor;
+            pGrid.ColumnHeadersDefaultCellStyle.SelectionForeColor = selectedForeColor;
+            pGrid.ColumnHeadersDefaultCellStyle.Font = pHeaderFont;
+         }
+
          public void ApplyTheme(Theme pTheme) {
             Theme clonedTheme = pTheme.Clone();
             mTemporaryTheme.Dispose();
@@ -181,6 +214,8 @@
             mPrimaryTabControl.SetStripBackColor(clonedTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground]);
             ApplyThemeToControlTree(mPrimaryTabControl);
             ApplyThemeToControlTree(mHighlightTabControl);
+            ApplyThemeToDataGridView(mIncludeDataGridView, ref mIncludeHeaderFont);
+            ApplyThemeToDataGridView(mExcludeDataGridView, ref mExcludeHeaderFont);
             mThemeBottomPanel.SetFontAndColor();
             mExampleBottomPanel.SetFontAndColor();
             using (Font interfaceFont = CreateNewBoldFont(clonedTheme.mFonts[(int)FontUsage.Interface])) {
@@ -268,20 +303,22 @@
             LabelPosition pLabelPosition = LabelPosition.Left) {
             Color color = mTemporaryTheme.mInterfaceColors[(int)pUsage];
             LabeledButtonColorSwatchCluster cluster = new LabeledButtonColorSwatchCluster(mTemporaryTheme, pLabel,
-               ToDescription(pUsage), pUsage, pLabelPosition, color);
-            cluster.Tag = pUsage;
+               ToDescription(pUsage), pUsage, pLabelPosition, color) {
+               Tag = pUsage
+            };
             cluster.SwatchClicked += OnColorSwatchClicked;
             pClusters.Add(cluster);
          }
 
-         private void AddColorCluster(List<BaseCluster> pClusters, string pLabel, TokenKind pTokenKind, LanguageKind pLanguage,
-            LabelPosition pLabelPosition = LabelPosition.Left) {
+         private void AddColorCluster(List<BaseCluster> pClusters, string pLabel, TokenKind pTokenKind,
+            LanguageKind pLanguage, LabelPosition pLabelPosition = LabelPosition.Left) {
             Color color = mTemporaryTheme.mHighlightColors[(int)pLanguage][(int)pTokenKind];
             LabeledButtonColorSwatchCluster cluster = new LabeledButtonColorSwatchCluster(mTemporaryTheme, pLabel,
-               ToDescription(pTokenKind), pTokenKind, pLabelPosition, color);
-            cluster.Tag = pTokenKind;
+               ToDescription(pTokenKind), pTokenKind, pLabelPosition, color) {
+               Tag = (pTokenKind, pLanguage)
+            };
             cluster.SwatchClicked += OnSyntaxColorSwatchClicked;
-            mSyntaxColorClusters.Add(cluster); // tracked separately for clean unsubscribe
+            mSyntaxColorClusters.Add(cluster);
             pClusters.Add(cluster);
          }
 
@@ -292,8 +329,9 @@
                string buttonText = ColorSwatchUsageButtonNames.Names[usage];
                Color initialColor = mTemporaryTheme.mInterfaceColors[(int)usage];
                LabeledButtonColorSwatchCluster cluster = new LabeledButtonColorSwatchCluster(mTemporaryTheme,
-                  labelText, buttonText, usage, LabelPosition.Left, initialColor, null);
-               cluster.Tag = usage;
+                  labelText, buttonText, usage, LabelPosition.Left, initialColor, null) {
+                  Tag = usage
+               };
                cluster.SwatchClicked += OnColorSwatchClicked;
                clusters.Add(cluster);
             }
@@ -327,6 +365,23 @@
             mUiState.ThemeBounds = mForm.Bounds;
             if (mColorPickerPanel == null)
                mColorPickerPanel = new ColorPickerPanel(pTheme, pUsage, pInitialColor);
+            else
+               mColorPickerPanel.LayoutControls();
+            mForm.SuspendClientSizeChanged();
+            if (mFirstColorPicker) {
+               mForm.SuspendClientSizeChanged();
+               mForm.Bounds = mUiState.mColorPickerBounds;
+               mForm.ResumeClientSizeChanged();
+            }
+            ShowColorPickerPanel();
+         }
+
+         public void EnsureColorPickerPanel(Theme pTheme, TokenKind pTokenKind, LanguageKind pLanguageKind,
+            Color pInitialColor) {
+            ThrowIfNull(mForm, nameof(mForm));
+            mUiState.ThemeBounds = mForm.Bounds;
+            if (mColorPickerPanel == null)
+               mColorPickerPanel = new ColorPickerPanel(pTheme, pTokenKind, pLanguageKind, pInitialColor);
             else
                mColorPickerPanel.LayoutControls();
             mForm.SuspendClientSizeChanged();
@@ -493,6 +548,8 @@
                         textBoxCluster.FontButtonClicked -= OnFontButtonClicked;
                   }
                }
+               mIncludeHeaderFont?.Dispose();
+               mExcludeHeaderFont?.Dispose();
                mTemporaryTheme?.Dispose();
                mThemeBottomPanel?.Dispose();
                mExampleBottomPanel?.Dispose();

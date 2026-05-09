@@ -155,6 +155,7 @@ namespace DBCode {
          mEm = (int)Math.Ceiling(fontSize);
          mEm2 = mEm * 2;
          mEm3 = mEm * 3;
+         mEm4 = mEm * 4;
          mEmHalf = (int)Math.Ceiling(mEm * 0.5f);
          mEmFifth = Math.Clamp(mEm / 5, 3, 14);
          mBottomPad = (int)Math.Ceiling(fontSize * 0.75f);
@@ -224,6 +225,28 @@ namespace DBCode {
             right = (int)Math.Ceiling(stringSize.Width);
          pGroupBox.Size = new Size(right + rightPad, bottom + bottomPad);
       }
+
+      public static void SetUpDownBoxWidth(NumericUpDown pNumericUpDown) {
+         float boxWidth = 0f, boxHeight = 0f;
+         SizeF stringSize = new SizeF();
+         string minimumValue = string.Format("{0}", pNumericUpDown.Minimum),
+            maximumValue = string.Format("{0}", pNumericUpDown.Maximum);
+
+         using (Graphics graphics = pNumericUpDown.CreateGraphics()) {
+            if (maximumValue.Length > minimumValue.Length)
+               stringSize = graphics.MeasureString(maximumValue + "0", pNumericUpDown.Font);
+            else
+               stringSize = graphics.MeasureString(minimumValue + "0", pNumericUpDown.Font);
+            if (stringSize.Width > boxWidth)
+               boxWidth = stringSize.Width;
+            if (stringSize.Height > boxHeight)
+               boxHeight = stringSize.Height;
+         }
+         //The Up/Down arrows is about the same width as the scrollbar width
+         pNumericUpDown.Width = (int)(boxWidth + SystemInformation.VerticalScrollBarWidth);
+         pNumericUpDown.Height = (int)(boxHeight + mIndent);
+      }
+
 
       internal static void SizePanel(Panel pPanel, int pLeftPad = 10, bool pScrollbarPad = true) {
          int right = 0;

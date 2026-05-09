@@ -14,6 +14,18 @@
       internal LanguageKind mLanguageKind;
       internal string mCurrentThemeName;
       internal bool mFirstTheme;
+      internal bool mFirstLaunch;
+      internal int mTopDraggerHeight;
+      internal int mTopDraggerEdge;
+      internal int mActivationDelayMs;
+      internal int mClipboardDelayMs;
+      internal int mReactivationDelayMs;
+      internal int mWhitespace;
+      internal int mSpacesPerTab;
+      internal int mSpacesToBecomeTab;
+      internal bool mUseTabs;
+      internal bool mUseSpaces;
+
       internal Rectangle FormBounds {
          get => new Rectangle(mFormLocation, mFormSize);
          set { mFormLocation = value.Location; mFormSize = value.Size; }
@@ -31,14 +43,15 @@
       internal Rectangle mGetStringBounds = new Rectangle(50, 50, 200, 300);
       internal Rectangle mColorPickerBounds = new Rectangle(50, 50, 450, 550);
       internal Rectangle mFontPickerBounds = new Rectangle(50, 50, 400, 400);
+      internal Rectangle mOptionsBounds = new Rectangle(200, 200, 500, 400);
 
       public UiState() {
          mFormSize = new Size(400, 300);
          mFormLocation = new Point(200, 150);
          mThemeSize = new Size(600, 400);
          mThemeLocation = new Point(100, 100);
-         mThemePickerSize = new Size(600, 400);
-         mThemePickerLocation = new Point(100, 100);
+         mThemePickerSize = new Size(700, 500);
+         mThemePickerLocation = new Point(610, 290);
          mFormOpacity = 1.0;
          mThemePrimaryTabPageIndex = 0;
          mThemeTargetingTabIndexIndex = 0;
@@ -46,6 +59,17 @@
          mLanguageKind = LanguageKind.CSharp;
          mCurrentThemeName = string.Empty;
          mFirstTheme = true;
+         mFirstLaunch = true;
+         mTopDraggerHeight = 10;
+         mTopDraggerEdge = 2;
+         mActivationDelayMs = 350;
+         mClipboardDelayMs = 350;
+         mReactivationDelayMs = 350;
+         mWhitespace = (int)Whitespace.Tabs;
+         mSpacesPerTab = 3;
+         mSpacesToBecomeTab = 3;
+         mUseTabs = false;
+         mUseSpaces = true;
       }
 
       public void ReadFromSettings() {
@@ -63,6 +87,17 @@
          mCurrentLanguage = (LanguageKind)Settings.Default.CurrentLanguage;
          mCurrentThemeName = Settings.Default.CurrentThemeName;
          mFirstTheme = Settings.Default.FirstTheme;
+         mFirstLaunch = Settings.Default.FirstLaunch;
+         mTopDraggerHeight = Settings.Default.TopDraggerHeight;
+         mTopDraggerEdge = Settings.Default.TopDraggerEdge;
+         mActivationDelayMs = Settings.Default.ActivationDelayMs;
+         mClipboardDelayMs = Settings.Default.ClipboardDelayMs;
+         mReactivationDelayMs = Settings.Default.ReactivationDelayMs;
+         mWhitespace = Settings.Default.Whitespace;
+         mSpacesPerTab = Settings.Default.SpacesPerTab;
+         mSpacesToBecomeTab = Settings.Default.SpacesToBecomeTab;
+         mUseTabs = Settings.Default.UseTabs;
+         mUseSpaces = Settings.Default.UseSpaces;
       }
 
       public void WriteToSettings() {
@@ -79,6 +114,17 @@
          Settings.Default.CurrentLanguage = (int)mCurrentLanguage;
          Settings.Default.CurrentThemeName = mCurrentThemeName;
          Settings.Default.FirstTheme = mFirstTheme;
+         Settings.Default.FirstLaunch = mFirstLaunch;
+         Settings.Default.TopDraggerHeight = mTopDraggerHeight;
+         Settings.Default.TopDraggerEdge = mTopDraggerEdge;
+         Settings.Default.ActivationDelayMs = mActivationDelayMs;
+         Settings.Default.ClipboardDelayMs = mClipboardDelayMs;
+         Settings.Default.ReactivationDelayMs = mReactivationDelayMs;
+         Settings.Default.Whitespace = (int)mWhitespace;
+         Settings.Default.SpacesPerTab = mSpacesPerTab;
+         Settings.Default.SpacesToBecomeTab = mSpacesToBecomeTab;
+         Settings.Default.UseTabs = mUseTabs;
+         Settings.Default.UseSpaces = mUseSpaces;
       }
    }
 }

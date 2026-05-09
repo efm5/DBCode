@@ -6,9 +6,6 @@
          Point savedLocation = mUiState.mFormLocation;
          double savedOpacity = mUiState.mFormOpacity;
 
-         mThemePrimaryTabPageIndex = mUiState.mThemePrimaryTabPageIndex;
-         mThemeTargetingTabIndexIndex = mUiState.mThemeTargetingTabIndexIndex;
-         mThemeHighlightTabPageIndex = mUiState.mThemeHighlightTabPageIndex;
          if (!savedSize.IsEmpty)
             Size = savedSize;
          if (!savedLocation.IsEmpty) {
@@ -25,23 +22,25 @@
          mActiveLayoutable?.LayoutControls();
          Opacity = mUiState.mFormOpacity;
          ClientSizeChanged += OnClientSizeChanged;
-         //GetString.Show("GetString Test", "Please enter any string to test the GetString harness:", string.Empty, TestGetStringCallback);
-      }
+#if DEBUG
+         //RadioButtonClusterTestHarness.Show("RadioButton Cluster Test Harness");
 
-      //private void TestGetStringCallback(string? pResult, bool pWasCancelled) {
-      //   GetString.Restore();
-      //   if (pWasCancelled || pResult is null)
-      //      return;
-      //   TimedMessage(pResult, "GetString Test Result");
-      //}
+         //ClusterTestHarness.Show("Cluster Test Harness");
+         //GetString.Show("GetString Test", "Please enter any string to test the GetString harness:", string.Empty, TestGetStringCallback);
+
+         //private void TestGetStringCallback(string? pResult, bool pWasCancelled) {
+         //   GetString.Restore();
+         //   if (pWasCancelled || pResult is null)
+         //      return;
+         //   TimedMessage(pResult, "GetString Test Result");
+         //}
+#endif
+      }
 
       private void MainForm_FormClosing(object? pSender, FormClosingEventArgs pEventArgs) {
          ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
          mUiState.FormBounds = Bounds;
          mUiState.mFormOpacity = Opacity;
-         mUiState.mThemePrimaryTabPageIndex = mThemePrimaryTabPageIndex;
-         mUiState.mThemeTargetingTabIndexIndex = mThemeTargetingTabIndexIndex;
-         mUiState.mThemeHighlightTabPageIndex = mThemeHighlightTabPageIndex;
          mUiState.mLanguageKind = mCurrentLanguage;
          mUiState.mCurrentThemeName = mCurrentTheme.mName;
 
@@ -63,17 +62,23 @@
          EnsureThemePanel(ThemeUsage.Design);
       }
 
-      private void ThemeEdit_Click(object? pSender, EventArgs pEventArgs) {
-         EnsureThemePickerPanel();
+      private void Options_Click(object? pSender, EventArgs pEventArgs) {
+         EnsureOptionsPanel();
+      }
+
+      private void ThemeEditPick_Click(object? pSender, EventArgs pEventArgs) {
+         EnsureThemePickerPanel(PickMode.Edit);
+      }
+
+      private void ThemeEditCurrent_Click(object? pSender, EventArgs pEventArgs) {
       }
 
       private void ThemePick_Click(object? pSender, EventArgs pEventArgs) {
-         EnsureThemePickerPanel();
+         EnsureThemePickerPanel(PickMode.Use);
       }
 
       private void OnEditorTextChanged(object? pSender, EventArgs pArgs) {
          mRichTextBox!.TextChanged -= OnEditorTextChanged;
-         //mTimer?.Stop();
          mHighlighterEngine!.HighlightNow();
          mRichTextBox.TextChanged += OnEditorTextChanged;
       }
@@ -120,11 +125,6 @@
          ApplyViewMode(ViewMode.Features);
       }
 
-      private void ReturnToTopTSMI_Click(object? pSender, EventArgs pEventArgs) {
-         ThrowIfNull(mReturnToTopTSMI, nameof(mReturnToTopTSMI));
-         mReturnToTop = mReturnToTopTSMI.Checked;
-      }
-
       private void LanguageTSMI_Click(object? pSender, EventArgs pEventArgs) {
          if (pSender == null)
             return;
@@ -168,10 +168,8 @@
          PasteMode pasteMode = button == mSendAllButton ? PasteMode.SendAll : PasteMode.PasteSelected;
 
          Paste(pasteMode);
-         if (mReturnToTop) {
-            TopMost = true;
-            TopMost = false;
-         }
+         TopMost = true;
+         TopMost = false;
       }
 
       private void RevertButton_Click(object? pSender, EventArgs pEventArgs) {
