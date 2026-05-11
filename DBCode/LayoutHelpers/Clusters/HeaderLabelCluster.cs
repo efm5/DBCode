@@ -1,12 +1,11 @@
-﻿using DBCode.Themes;
-
-namespace DBCode {
+﻿namespace DBCode {
    internal static partial class LayoutHelpers {
       internal sealed class HeaderLabelCluster : BaseCluster {
          internal Label mLabel;
 
-         internal HeaderLabelCluster(Theme pTheme, string pText, HeaderLabelSize pSizeMultiplier, Color?
-            pBackgroundColor = null) : base(pTheme, pBackgroundColor) {
+         internal HeaderLabelCluster(Theme pTheme, string pText, HeaderLabelSize pSizeMultiplier,
+            Color? pBackgroundColor = null) : base(pTheme, pBackgroundColor) {
+            ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
             mSkipTheme = true;
             mLabel = new Label() {
                Name = $"HeaderLabelCluster{nameof(mLabel)}{mTabIndex}",
@@ -16,7 +15,7 @@ namespace DBCode {
                Font = CreateNewTitleFont(pSizeMultiplier),
                TextAlign = ContentAlignment.MiddleCenter,
                BackColor = pBackgroundColor ?? Color.Transparent,
-               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont]
+               ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont]
             };
             Controls.Add(mLabel);
             AutoSize = true;

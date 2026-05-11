@@ -31,18 +31,22 @@ namespace DBCode {
          }
 
          internal override void LayoutCluster() {
+            ThrowIfNull(mLabel, nameof(mLabel));
+            ThrowIfNull(mCheckBox, nameof(mCheckBox));
             SetFontAndColor();
-            ApplyLabelPosition(mLabel!, mCheckBox!);
-            mLabel!.Invalidate();
-            mCheckBox!.Invalidate();
+            ApplyLabelPosition(mLabel, mCheckBox);
+            mLabel.Invalidate();
+            mCheckBox.Invalidate();
          }
 
          internal override void SetFontAndColor() {
+            ThrowIfNull(mLabel, nameof(mLabel));
+            ThrowIfNull(mCheckBox, nameof(mCheckBox));
             Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
-            mLabel!.Font = CreateNewFont(poFont);
+            mLabel.Font = CreateNewFont(poFont);
             mLabel.ForeColor = poForeColor;
             mLabel.BackColor = poBackColor;
-            mCheckBox!.Font = CreateNewFont(poFont);
+            mCheckBox.Font = CreateNewFont(poFont);
             mCheckBox.ForeColor = poForeColor;
             mCheckBox.BackColor = poBackColor;
          }

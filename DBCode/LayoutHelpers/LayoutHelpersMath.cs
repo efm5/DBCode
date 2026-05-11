@@ -500,7 +500,6 @@ namespace DBCode {
          if (pControls == null || pControls.Count == 0)
             return null;
          Control currentControl = pControls[0], nextControl = pControls[0];
-
          for (int index = 1; index < pControls.Count; index++) {
             nextControl = pControls[index];
             if (nextControl.Right > currentControl.Right)
@@ -695,10 +694,11 @@ namespace DBCode {
       }
 
       internal static void ComputeTabWidths(VariableWidthTabControl pTabControl) {
+         ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
          pTabControl.TabHeaderWidths.Clear();
          for (int i = 0; i < pTabControl.TabPages.Count; i++) {
             TabPage page = pTabControl.TabPages[i];
-            Font font = mCurrentTheme!.mFonts[(int)FontUsage.Interface];
+            Font font = mCurrentTheme.mFonts[(int)FontUsage.Interface];
             int width = GetTabHeaderWidth(page.Text, font);
             pTabControl.TabHeaderWidths.Add(width);
          }

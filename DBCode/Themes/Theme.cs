@@ -115,7 +115,7 @@ namespace DBCode.Themes {
       public void Dispose() {
          if (mFonts != null) {
             foreach (Font font in mFonts) {
-               font?.Dispose();
+               font.Dispose();
             }
          }
       }

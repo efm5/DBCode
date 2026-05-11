@@ -1,5 +1,3 @@
-using DBCode.Themes;
-
 namespace DBCode {
    internal static partial class LayoutHelpers {
       internal sealed class LabeledButtonCluster : BaseCluster {
@@ -7,8 +5,9 @@ namespace DBCode {
          internal Button mButton { get; private set; }
          internal Color? mBackgroundColor;
 
-         internal LabeledButtonCluster(Theme pTheme, string pLabelText, string pButtonText, LabelPosition pLabelPosition,
-            Color? pBackgroundColor = null) : base(pTheme, pBackgroundColor) {
+         internal LabeledButtonCluster(Theme pTheme, string pLabelText, string pButtonText,
+            LabelPosition pLabelPosition, Color? pBackgroundColor = null) : base(pTheme, pBackgroundColor) {
+            ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
             mBackgroundColor = pBackgroundColor;
             mLabelPosition = pLabelPosition;
             mLabel = new Label() {
@@ -18,7 +17,7 @@ namespace DBCode {
                AutoSize = true,
                TextAlign = ContentAlignment.MiddleCenter,
                Font = CreateNewFont(),
-               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+               ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
                BackColor = pBackgroundColor ?? Color.Transparent
             };
             mButton = new Button() {
@@ -28,7 +27,7 @@ namespace DBCode {
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink,
                Font = CreateNewFont(),
-               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont]
+               ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont]
             };
          }
 

@@ -6,12 +6,15 @@ namespace DBCode {
          protected override void OnHandleCreated(EventArgs pEventArgs) {
             base.OnHandleCreated(pEventArgs);
             SuspendLayout();
-            mThemeBottomPanel.mCancelButton!.Click += CancelButton_Click;
-            mThemeBottomPanel.mHelpButton!.Click += MainForm.Help_Click;
+            ThrowIfNull(mThemeBottomPanel.mCancelButton, nameof(mThemeBottomPanel.mCancelButton));
+            ThrowIfNull(mThemeBottomPanel.mHelpButton, nameof(mThemeBottomPanel.mHelpButton));
+            mThemeBottomPanel.mCancelButton.Click += CancelButton_Click;
+            mThemeBottomPanel.mHelpButton.Click += MainForm.Help_Click;
             mApplyButton.Click += ApplyButton_Click;
             mNewButton.Click += NewButton_Click;
             mCloneButton.Click += CloneButton_Click;
-            mExampleScrollPanel!.ClientSizeChanged += ExampleScrollPanel_ClientSizeChanged;
+            ThrowIfNull(mExampleScrollPanel, nameof(mExampleScrollPanel));
+            mExampleScrollPanel.ClientSizeChanged += ExampleScrollPanel_ClientSizeChanged;
             Controls.AddRange([mPrimaryTabControl, mThemeBottomPanel, mThemesHeaderCluster]);
             ResumeLayout(false);
          }
@@ -44,7 +47,8 @@ namespace DBCode {
 
          private void OnExampleTextChanged(object? pSender, EventArgs pArgs) {
             RichTextBox? box = pSender as RichTextBox;
-            if (box?.Tag is not LanguageKind language)
+            ThrowIfNull(box, nameof(box));
+            if (box.Tag is not LanguageKind language)
                return;
             box.TextChanged -= OnExampleTextChanged;
             HighlightExampleBox(box, language);
@@ -78,19 +82,20 @@ namespace DBCode {
          }
 
          private void ThemeApplyCallback(string? pResult, bool pWasCancelled) {
+            ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
             GetString.Restore();
             if (pWasCancelled || string.IsNullOrWhiteSpace(pResult))
                return;
             if (!ThemeNameIsUnique(pResult)) {
                GetString.Show("Theme Name Collision",
-                  $"A theme named “{pResult}” already exists. Please enter a different name:",
+                  $"A theme named \"{pResult}\" already exists. Please enter a different name:",
                   pResult, ThemeApplyCallback);
                return;
             }
             Theme newTheme = mTemporaryTheme.Clone(pResult);
             AddTheme(newTheme);
             SetCurrentThemeName(pResult);
-            mCurrentTheme?.Dispose(); // release GDI fonts from the previous current theme
+            mCurrentTheme.Dispose(); // release GDI fonts from the previous current theme
             mCurrentTheme = newTheme;
             mThemeIsDirty = true;
             CloseThemePanel(); // RestoreFromThemePanel → mForm.ApplyTheme() picks up mCurrentTheme

@@ -21,7 +21,6 @@ namespace DBCode {
          private LanguageKind mLanguageKind;
          private bool mIsSyntaxColor;
 
-
          public ColorPickerPanel(Theme pTheme, ColorSwatchUsage pColorSwatchUsage, Color pInitialColor) {
             mInitialColor = pInitialColor;
             mColorSwatchUsage = pColorSwatchUsage;
@@ -217,7 +216,9 @@ namespace DBCode {
             mColorPickerBottomPanel = new BottomPanel(mTheme, "&Cancel") {
                Name = $"ColorPickerBottomPanel{mTabIndex++}"
             };
-            mColorPickerBottomPanel.mHelpButton!.Text = "Help";
+            ThrowIfNull(mColorPickerBottomPanel.mHelpButton, nameof(mColorPickerBottomPanel.mHelpButton));
+            ThrowIfNull(mColorPickerBottomPanel.mCancelButton, nameof(mColorPickerBottomPanel.mCancelButton));
+            mColorPickerBottomPanel.mHelpButton.Text = "Help";
             mColorPickerBottomPanel.mHelpButton.Tag = new HelpTag(HelpContext.ColorPicker);
             mColorPickerBottomPanel.mHelpButton.Click += MainForm.Help_Click;
             Button okButton = new Button {
@@ -229,7 +230,7 @@ namespace DBCode {
             };
             mColorPickerBottomPanel.AddRightControl(okButton);
             okButton.Click += OkButton_Click;
-            mColorPickerBottomPanel.mCancelButton!.Click += CancelButton_Click;
+            mColorPickerBottomPanel.mCancelButton.Click += CancelButton_Click;
             BackColor = interfaceBackground;
             mScrollPanel.Controls.AddRange([mNamedColorsGroupBox, mCustomColorGroupBox]);
             Controls.AddRange([mScrollPanel, mColorPickerBottomPanel, mTitleLabel]);
@@ -492,8 +493,10 @@ namespace DBCode {
          protected override void Dispose(bool pDisposing) {
             if (pDisposing) {
                RemoveEventHandlers();
-               mColorPickerBottomPanel.mHelpButton!.Click -= MainForm.Help_Click;
-               mColorPickerBottomPanel.mCancelButton!.Click -= CancelButton_Click;
+               ThrowIfNull(mColorPickerBottomPanel.mHelpButton, nameof(mColorPickerBottomPanel.mHelpButton));
+               ThrowIfNull(mColorPickerBottomPanel.mCancelButton, nameof(mColorPickerBottomPanel.mCancelButton));
+               mColorPickerBottomPanel.mHelpButton.Click -= MainForm.Help_Click;
+               mColorPickerBottomPanel.mCancelButton.Click -= CancelButton_Click;
                mTitleLabel.Dispose();
                mUseNamedCheckBox.Dispose();
                mNamedColorPrefixButton.Dispose();

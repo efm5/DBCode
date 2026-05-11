@@ -20,6 +20,7 @@ namespace DBCode {
                         $"name \"{pRadioButtonNames[i]}\" at indices {i} and {j}.");
                }
             }
+            ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
             mLabelPosition = pLabelPosition;
             mLayoutMode = pLayoutMode;
             mFixedColumns = (pFixedColumns > 0) ? pFixedColumns : 1;
@@ -35,7 +36,7 @@ namespace DBCode {
                Text = pLabelText,
                AutoSize = true,
                Font = CreateNewFont(),
-               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+               ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
                BackColor = Color.Transparent
             };
             int checkedIndex = 0;
@@ -46,7 +47,7 @@ namespace DBCode {
                   Text = labelName,
                   AutoSize = true,
                   Font = CreateNewFont(),
-                  ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+                  ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
                   BackColor = Color.Transparent
                };
                if ((pInitiallyChecked > -1) && (pInitiallyChecked < pRadioButtonNames.Count)) {
@@ -88,8 +89,9 @@ namespace DBCode {
          }
 
          internal override void SetFontAndColor() {
+            ThrowIfNull(mLabel, nameof(mLabel));
             Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
-            mLabel!.Font = CreateNewFont(poFont);
+            mLabel.Font = CreateNewFont(poFont);
             mLabel.ForeColor = poForeColor;
             mLabel.BackColor = Color.Transparent;
             foreach (RadioButton radioButton in mRadioButtons) {
@@ -128,7 +130,8 @@ namespace DBCode {
             int gap = borderInset * 2;
             // Shift inner panel first so ApplyLabelPosition sees its final position.
             mInnerPanel.Location = new Point(gap, gap);
-            ApplyLabelPosition(mLabel!, mInnerPanel);
+            ThrowIfNull(mLabel, nameof(mLabel));
+            ApplyLabelPosition(mLabel, mInnerPanel);
             // Now read post-shift, post-label bounds to size the outer panel.
             int right = 0, bottom = 0;
             foreach (Control control in Controls) {
@@ -159,7 +162,8 @@ namespace DBCode {
          }
 
          private void LayoutMaxWidth() {
-            int usableWidth = Parent!.ClientSize.Width;
+            ThrowIfNull(Parent, nameof(Parent));
+            int usableWidth = Parent.ClientSize.Width;
             int x = 0, y = 0, rowHeight = 0;
             foreach (RadioButton radioButton in mRadioButtons) {
                if (x > 0 && x + radioButton.Width > usableWidth) {
@@ -175,7 +179,8 @@ namespace DBCode {
          }
 
          private void LayoutMaxHeight() {
-            int usableHeight = Parent!.ClientSize.Height;
+            ThrowIfNull(Parent, nameof(Parent));
+            int usableHeight = Parent.ClientSize.Height;
             int x = 0, y = 0, columnWidth = 0;
             foreach (RadioButton radioButton in mRadioButtons) {
                if (y > 0 && y + radioButton.Height > usableHeight) {
@@ -271,9 +276,10 @@ namespace DBCode {
                (mLayoutMode == ClusterLayoutMode.MaxWidth || mLayoutMode == ClusterLayoutMode.MaxHeight))
                ThrowBadCode($"{nameof(RadioButtonCluster)}.{nameof(LayoutCluster)}: Parent is null. " +
                   "Cluster must be added to a container before LayoutCluster is called with MaxWidth or MaxHeight.");
+            ThrowIfNull(mLabel, nameof(mLabel));
             SetFontAndColor();
             LayoutControls();
-            mLabel!.Invalidate();
+            mLabel.Invalidate();
             mLabel.Refresh();
             foreach (RadioButton radioButton in mRadioButtons) {
                radioButton.Invalidate();
@@ -283,9 +289,12 @@ namespace DBCode {
 
          protected override void Dispose(bool pDisposing) {
             if (pDisposing) {
-               MainForm.DisposeFontIfOwned(mLabel?.Font);
-               foreach (RadioButton radioButton in mRadioButtons)
+               ThrowIfNull(mLabel, nameof(mLabel));
+               MainForm.DisposeFontIfOwned(mLabel.Font);
+               foreach (RadioButton radioButton in mRadioButtons) {
+                  ThrowIfNull(radioButton, nameof(radioButton));
                   MainForm.DisposeFontIfOwned(radioButton.Font);
+               }
             }
             base.Dispose(pDisposing);
          }

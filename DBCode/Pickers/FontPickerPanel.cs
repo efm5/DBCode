@@ -6,8 +6,8 @@ namespace DBCode {
          private static Theme? mTheme;
          private Button mFamilyPrefixButton, mFontDropDownPrefixButton, mFontSizeDropDownPrefixButton,
             mFontSizePrefixButton, mOkButton;
-         private CheckBox mBoldStyleCheckBox, mItalicsStyleCheckBox, mNormalStyleCheckBox, mStrikethroughStyleCheckBox,
-            mUnderlineStyleCheckBox;
+         private CheckBox mBoldStyleCheckBox, mItalicsStyleCheckBox, mNormalStyleCheckBox,
+            mStrikethroughStyleCheckBox, mUnderlineStyleCheckBox;
          private ComboBox mFontFamilyComboBox, mFontSizeComboBox;
          private GroupBox mFontStyleGroupBox;
          internal Label mFontDescriptionLabel;
@@ -134,8 +134,8 @@ namespace DBCode {
                ForeColor = interfaceFont,
                BackColor = Color.Transparent
             };
-            mFontStyleGroupBox.Controls.AddRange([mNormalStyleCheckBox, mBoldStyleCheckBox, mItalicsStyleCheckBox,
-               mUnderlineStyleCheckBox, mStrikethroughStyleCheckBox]);
+            mFontStyleGroupBox.Controls.AddRange([mNormalStyleCheckBox, mBoldStyleCheckBox,
+               mItalicsStyleCheckBox, mUnderlineStyleCheckBox, mStrikethroughStyleCheckBox]);
             mFontSizePanel = new Panel {
                Name = $"FontSizePanel{mTabIndex++}",
                TabIndex = TAB_INDEX_IGNORED,
@@ -191,7 +191,9 @@ namespace DBCode {
             mFontPickerBottomPanel = new BottomPanel(mTheme, "&Cancel") {
                Name = $"FontPickerBottomPanel{mTabIndex++}"
             };
-            mFontPickerBottomPanel.mHelpButton!.Tag = new HelpTag(HelpContext.FontPicker);
+            ThrowIfNull(mFontPickerBottomPanel.mHelpButton, nameof(mFontPickerBottomPanel.mHelpButton));
+            ThrowIfNull(mFontPickerBottomPanel.mCancelButton, nameof(mFontPickerBottomPanel.mCancelButton));
+            mFontPickerBottomPanel.mHelpButton.Tag = new HelpTag(HelpContext.FontPicker);
             mFontPickerBottomPanel.mHelpButton.Click += HelpButton_Click;
             mOkButton = new Button {
                Name = $"FontPickerOkButton{mTabIndex}",
@@ -201,7 +203,7 @@ namespace DBCode {
                AutoSizeMode = AutoSizeMode.GrowAndShrink
             };
             mFontPickerBottomPanel.AddRightControl(mOkButton);
-            mFontPickerBottomPanel.mCancelButton!.Click += CancelButton_Click;
+            mFontPickerBottomPanel.mCancelButton.Click += CancelButton_Click;
             mOkButton.Click += OkButton_Click;
             mScrollPanel.Controls.AddRange([mPickFontPanel, mFontStyleGroupBox, mFontSizePanel,
                mFontDescriptionLabel]);
@@ -314,7 +316,8 @@ namespace DBCode {
             mFontPickerBottomPanel.Top = mScrollPanel.Bottom;
             mFontPickerBottomPanel.LayoutControls();
             Size wantedSize = GetRequiredSize();
-            Rectangle primaryArea = Screen.PrimaryScreen!.WorkingArea;
+            ThrowIfNull(Screen.PrimaryScreen, nameof(Screen.PrimaryScreen));
+            Rectangle primaryArea = Screen.PrimaryScreen.WorkingArea;
             int width = Math.Min(wantedSize.Width, (int)(primaryArea.Width * 0.9));
             int height = Math.Min(wantedSize.Height, (int)(primaryArea.Height * 0.9));
             RestoreFontPickerHandlers();
@@ -493,8 +496,10 @@ namespace DBCode {
                mFontDropDownPrefixButton.Click -= FontDropDownPrefixButton_Click;
                mFontSizePrefixButton.Click -= FontSizePrefixButton_Click;
                mFontSizeDropDownPrefixButton.Click -= FontSizeDropDownPrefixButton_Click;
-               mFontPickerBottomPanel.mHelpButton!.Click -= HelpButton_Click;
-               mFontPickerBottomPanel.mCancelButton!.Click -= CancelButton_Click;
+               ThrowIfNull(mFontPickerBottomPanel.mHelpButton, nameof(mFontPickerBottomPanel.mHelpButton));
+               ThrowIfNull(mFontPickerBottomPanel.mCancelButton, nameof(mFontPickerBottomPanel.mCancelButton));
+               mFontPickerBottomPanel.mHelpButton.Click -= HelpButton_Click;
+               mFontPickerBottomPanel.mCancelButton.Click -= CancelButton_Click;
                mFontFamilyComboBox.DrawItem -= FontFamilyComboBox_DrawItem;
                mFontFamilyNameTextBox.Leave -= FontFamilyNameTextBox_Leave;
                mFontSizeTextBox.Leave -= FontSizeTextBox_Leave;

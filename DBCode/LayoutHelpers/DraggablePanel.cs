@@ -71,6 +71,7 @@
          /// then adds this panel to the Form and makes it visible.
          /// </summary>
          private void AttachCore() {
+            ThrowIfNull(mForm, nameof(mForm));
             ScrollablePanel? scrollablePanel = FindScrollablePanel();
             if (scrollablePanel != null)
                scrollablePanel.Enabled = false;
@@ -78,7 +79,7 @@
                ? SampleDominantTone(scrollablePanel)
                : ColorTones.Light;
             ApplyDragTone(tone);
-            mForm!.SuspendLayout();
+            mForm.SuspendLayout();
             mForm.Controls.Add(this);
             PerformLayout();
             mForm.ResumeLayout(true);
@@ -94,7 +95,7 @@
          public void Detach() {
             ThrowIfNull(mForm, nameof(mForm));
             ScrollablePanel? scrollablePanel = FindScrollablePanel();
-            mForm!.SuspendLayout();
+            mForm.SuspendLayout();
             Visible = false;
             SendToBack();
             if (mForm.Controls.Contains(this))
@@ -140,7 +141,7 @@
 
          private void CenterOnClientArea() {
             ThrowIfNull(mForm, nameof(mForm));
-            Rectangle client = mForm!.ClientRectangle;
+            Rectangle client = mForm.ClientRectangle;
             Location = new Point(
                client.Left + (client.Width - Width) / 2,
                client.Top + (client.Height - Height) / 2);
@@ -148,7 +149,7 @@
 
          private Point ClampToClientArea(Point pLocation) {
             ThrowIfNull(mForm, nameof(mForm));
-            Rectangle client = mForm!.ClientRectangle;
+            Rectangle client = mForm.ClientRectangle;
             int x = Math.Clamp(pLocation.X, client.Left, client.Right - Width);
             int y = Math.Clamp(pLocation.Y, client.Top, client.Bottom - Height);
             return new Point(x, y);

@@ -179,10 +179,12 @@
             mTopDraggerEdgeUpDownCluster, mActivationDelayUpDownCluster, mReactivationRateUpDownCluster,
             mClipboardDelayUpDownCluster]);
          Controls.AddRange([mClusterGroupBox, mWhitespaceGroupBox, mOptionsBottomPanel, mTitleLabel]);
-         mOptionsBottomPanel.mHelpButton!.Tag = new HelpTag(HelpContext.Main, "Options");
+         ThrowIfNull(mOptionsBottomPanel.mHelpButton, nameof(mOptionsBottomPanel.mHelpButton));
+         ThrowIfNull(mOptionsBottomPanel.mCancelButton, nameof(mOptionsBottomPanel.mCancelButton));
+         mOptionsBottomPanel.mHelpButton.Tag = new HelpTag(HelpContext.Main, "Options");
          mOKButton.Click += OKButton_Click;
-         mOptionsBottomPanel.mCancelButton!.Click += CancelButton_Click;
-         mOptionsBottomPanel.mHelpButton!.Click += MainForm.Help_Click;
+         mOptionsBottomPanel.mCancelButton.Click += CancelButton_Click;
+         mOptionsBottomPanel.mHelpButton.Click += MainForm.Help_Click;
          ResumeLayout(true);
       }
 
@@ -235,8 +237,8 @@
          mOptionsBottomPanel.LayoutControls();
          Size wantedSize = new Size(Math.Max(mClusterGroupBox.Right, mWhitespaceGroupBox.Right) +
             mEm + SystemInformation.VerticalScrollBarWidth,
-           mTitleLabel.Height + mWhitespaceGroupBox.Height + mClusterGroupBox.Height + mOptionsBottomPanel.Height +
-           mEm3 + SystemInformation.HorizontalScrollBarHeight);
+            mTitleLabel.Height + mWhitespaceGroupBox.Height + mClusterGroupBox.Height +
+            mOptionsBottomPanel.Height + mEm3 + SystemInformation.HorizontalScrollBarHeight);
          Screen screen = Screen.FromPoint(mUiState.FormBounds.Location) as Screen;
          Point location = new Point(((screen.WorkingArea.Width - wantedSize.Width) / 2) + screen.WorkingArea.Left,
             ((screen.WorkingArea.Height - wantedSize.Height) / 2) + screen.WorkingArea.Top);

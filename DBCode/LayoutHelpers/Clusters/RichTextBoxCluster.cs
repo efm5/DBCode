@@ -1,5 +1,3 @@
-using DBCode.Themes;
-
 namespace DBCode {
    internal static partial class LayoutHelpers {
       internal sealed class RichTextBoxCluster : BaseCluster {
@@ -8,9 +6,9 @@ namespace DBCode {
          private RichTextBox? mRichTextBox = null;
          internal Color? mBackgroundColor;
 
-         public RichTextBoxCluster(Theme pTheme, int pTextBoxWidth, string? pLabelText = null, string? pButtonText = null,
-            LabelPosition pLabelPosition = LabelPosition.Left, Color? pBackgroundColor = null)
-            : base(pTheme, pBackgroundColor) {
+         public RichTextBoxCluster(Theme pTheme, int pTextBoxWidth, string? pLabelText = null,
+            string? pButtonText = null, LabelPosition pLabelPosition = LabelPosition.Left,
+            Color? pBackgroundColor = null) : base(pTheme, pBackgroundColor) {
             if (((pLabelText == null) && (pButtonText == null)) || ((pLabelText != null) && (pButtonText != null)) ||
                ((pButtonText != null) && pBackgroundColor == null))
                throw new ArgumentException("Invalid parameter combination: must provide either pLabelText or pButtonText (but not both), and pBackgroundColor is required when pButtonText is used");
@@ -31,7 +29,7 @@ namespace DBCode {
                   TabIndex = mTabIndex++,
                   Name = $"RichTextFieldClusterButton{mTabIndex++}"
                };
-               Controls.AddRange([mFlattenedButton, mRichTextBox!]);
+               Controls.AddRange([mFlattenedButton, mRichTextBox]);
                FlattenButton(mFlattenedButton, pBackgroundColor);
                mRichTextBox.Location = new Point(mFlattenedButton.Right, 0);
             }
@@ -42,7 +40,7 @@ namespace DBCode {
                   Text = pLabelText,
                   TabIndex = TAB_INDEX_IGNORED
                };
-               Controls.AddRange([mLabel, mRichTextBox!]);
+               Controls.AddRange([mLabel, mRichTextBox]);
                ApplyLabelPosition(mLabel, mRichTextBox);
             }
             mRichTextBox.TabIndex = mTabIndex++;
@@ -51,8 +49,11 @@ namespace DBCode {
          private void LayoutControls() {
             if (mLabel != null)
                ApplyLabelPosition(mLabel, mRichTextBox!);
-            else
-               mRichTextBox!.Location = new Point(mFlattenedButton!.Right, 0);
+            else {
+               ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
+               ThrowIfNull(mFlattenedButton, nameof(mFlattenedButton));
+               mRichTextBox.Location = new Point(mFlattenedButton.Right, 0);
+            }
          }
 
          internal override void LayoutCluster() {
@@ -64,11 +65,14 @@ namespace DBCode {
          }
 
          internal override void SetFontAndColor() {
+            ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
             Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
-            mLabel!.Font = CreateNewFont(poFont);
-            mLabel.ForeColor = poForeColor;
-            mLabel.BackColor = poBackColor;
-            mRichTextBox!.Font = CreateNewFont(poFont);
+            if (mLabel != null) {
+               mLabel.Font = CreateNewFont(poFont);
+               mLabel.ForeColor = poForeColor;
+               mLabel.BackColor = poBackColor;
+            }
+            mRichTextBox.Font = CreateNewFont(poFont);
             mRichTextBox.ForeColor = poForeColor;
             mRichTextBox.BackColor = poBackColor;
          }

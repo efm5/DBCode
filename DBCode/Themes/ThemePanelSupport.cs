@@ -85,7 +85,8 @@
          }
 
          private void SizeExamplesContainer() {
-            mExamplesContainer.Width = mExampleScrollPanel!.ClientSize.Width - mRightPad;
+            ThrowIfNull(mExampleScrollPanel, nameof(mExampleScrollPanel));
+            mExamplesContainer.Width = mExampleScrollPanel.ClientSize.Width - mRightPad;
             mExamplesContainer.LayoutClusters();
             SizePanel(mExamplesContainer, mIndent, false);
             mExamplesContainer.Height += mEmHalf;
@@ -149,14 +150,15 @@
                         PaintMenuItemsRecursive(tsmi, mTemporaryTheme);
                }
                else if (control is StatusStrip statusStrip)
-                  ApplyThemeToToolStrip(statusStrip, FontUsage.Status, ColorSwatchUsage.StatusFont, ColorSwatchUsage.StatusBackground);
+                  ApplyThemeToToolStrip(statusStrip, FontUsage.Status, ColorSwatchUsage.StatusFont,
+                     ColorSwatchUsage.StatusBackground);
                if (control is not BaseCluster) // let the cluster own its children entirely
                   ApplyThemeToControlTree(control);
             }
          }
 
-         private void ApplyThemeToToolStrip(ToolStrip pToolStrip, FontUsage pFontUsage, ColorSwatchUsage pForeUsage,
-            ColorSwatchUsage pBackUsage) {
+         private void ApplyThemeToToolStrip(ToolStrip pToolStrip, FontUsage pFontUsage,
+            ColorSwatchUsage pForeUsage, ColorSwatchUsage pBackUsage) {
             pToolStrip.BackColor = mTemporaryTheme.mInterfaceColors[(int)pBackUsage];
             pToolStrip.ForeColor = mTemporaryTheme.mInterfaceColors[(int)pForeUsage];
             pToolStrip.Font = CreateNewFont(mTemporaryTheme.mFonts[(int)pFontUsage]);
@@ -176,12 +178,13 @@
          }
 
          private void ApplyThemeToDataGridView(DataGridView pGrid, ref Font? pHeaderFont) {
+            ThrowIfNull(pHeaderFont, nameof(pHeaderFont));
             Color backColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground];
             Color foreColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont];
             Color selectedBackColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground];
             Color selectedForeColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxFont];
             Font interfaceFont = mTemporaryTheme.mFonts[(int)FontUsage.Interface];
-            pHeaderFont?.Dispose();
+            pHeaderFont.Dispose();
             pHeaderFont = CreateNewBoldFont(interfaceFont); // we own this; DataGridView will not dispose it
             pGrid.EnableHeadersVisualStyles = false; // required or ColumnHeadersDefaultCellStyle is ignored
             pGrid.BackgroundColor = backColor;
@@ -523,8 +526,12 @@
 
          protected override void Dispose(bool pDisposing) {
             if (pDisposing) {
-               mThemeBottomPanel.mCancelButton!.Click -= CancelButton_Click;
-               mThemeBottomPanel.mHelpButton!.Click -= MainForm.Help_Click;
+               ThrowIfNull(mThemeBottomPanel.mCancelButton, nameof(mThemeBottomPanel.mCancelButton));
+               ThrowIfNull(mThemeBottomPanel.mHelpButton, nameof(mThemeBottomPanel.mHelpButton));
+               ThrowIfNull(mIncludeHeaderFont, nameof(mIncludeHeaderFont));
+               ThrowIfNull(mExcludeHeaderFont, nameof(mExcludeHeaderFont));
+               mThemeBottomPanel.mCancelButton.Click -= CancelButton_Click;
+               mThemeBottomPanel.mHelpButton.Click -= MainForm.Help_Click;
                mApplyButton.Click -= ApplyButton_Click;
                mNewButton.Click -= NewButton_Click;
                mCloneButton.Click -= CloneButton_Click;
@@ -548,43 +555,43 @@
                         textBoxCluster.FontButtonClicked -= OnFontButtonClicked;
                   }
                }
-               mIncludeHeaderFont?.Dispose();
-               mExcludeHeaderFont?.Dispose();
-               mTemporaryTheme?.Dispose();
-               mThemeBottomPanel?.Dispose();
-               mExampleBottomPanel?.Dispose();
-               mHighlightTabControl?.Dispose();
-               mIncludeExcludeTabControl?.Dispose();
-               mPrimaryTabControl?.Dispose();
+               mIncludeHeaderFont.Dispose();
+               mExcludeHeaderFont.Dispose();
+               mTemporaryTheme.Dispose();
+               mThemeBottomPanel.Dispose();
+               mExampleBottomPanel.Dispose();
+               mHighlightTabControl.Dispose();
+               mIncludeExcludeTabControl.Dispose();
+               mPrimaryTabControl.Dispose();
                foreach (ClusterContainer container in mClusterContainers)
-                  container?.Dispose();
-               mInterfaceHeaderCluster?.Dispose();
-               mTargetingHeaderCluster?.Dispose();
-               mIncludeHeaderCluster?.Dispose();
-               mExcludeHeaderCluster?.Dispose();
-               mThemesHeaderCluster?.Dispose();
-               mExamplesHeaderCluster?.Dispose();
-               mCSharpHeaderCluster?.Dispose();
-               mCHeaderCluster?.Dispose();
-               mCppHeaderCluster?.Dispose();
-               mBasicHeaderCluster?.Dispose();
-               mFSharpHeaderCluster?.Dispose();
-               mHTMLHeaderCluster?.Dispose();
-               mCSSHeaderCluster?.Dispose();
-               mXMLHeaderCluster?.Dispose();
-               mJSONHeaderCluster?.Dispose();
-               mPowerShellHeaderCluster?.Dispose();
-               mBatchHeaderCluster?.Dispose();
-               mSQLHeaderCluster?.Dispose();
-               mMarkdownHeaderCluster?.Dispose();
-               mPythonHeaderCluster?.Dispose();
-               mExampleMenuStrip?.Dispose();
-               mExampleGroupBox?.Dispose();
+                  container.Dispose();
+               mInterfaceHeaderCluster.Dispose();
+               mTargetingHeaderCluster.Dispose();
+               mIncludeHeaderCluster.Dispose();
+               mExcludeHeaderCluster.Dispose();
+               mThemesHeaderCluster.Dispose();
+               mExamplesHeaderCluster.Dispose();
+               mCSharpHeaderCluster.Dispose();
+               mCHeaderCluster.Dispose();
+               mCppHeaderCluster.Dispose();
+               mBasicHeaderCluster.Dispose();
+               mFSharpHeaderCluster.Dispose();
+               mHTMLHeaderCluster.Dispose();
+               mCSSHeaderCluster.Dispose();
+               mXMLHeaderCluster.Dispose();
+               mJSONHeaderCluster.Dispose();
+               mPowerShellHeaderCluster.Dispose();
+               mBatchHeaderCluster.Dispose();
+               mSQLHeaderCluster.Dispose();
+               mMarkdownHeaderCluster.Dispose();
+               mPythonHeaderCluster.Dispose();
+               mExampleMenuStrip.Dispose();
+               mExampleGroupBox.Dispose();
                foreach (Panel? panel in mAllScrollPanels)
                   panel?.Dispose();
                foreach (List<BaseCluster> clusterList in mAllClusters) {
                   foreach (BaseCluster cluster in clusterList)
-                     cluster?.Dispose();
+                     cluster.Dispose();
                }
             }
             base.Dispose(pDisposing);

@@ -12,6 +12,7 @@
          public LabeledButtonColorSwatchCluster(Theme pTheme, string pLabelText, string pButtonText,
             ColorSwatchUsage pUsage, LabelPosition pLabelPosition, Color pInitialColor,
             Color? pBackgroundColor = null) : base(pTheme, pBackgroundColor) {
+            ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
             mLabelPosition = pLabelPosition;
             mLabel = new Label() {
                TabIndex = TAB_INDEX_IGNORED,
@@ -20,7 +21,7 @@
                AutoSize = true,
                TextAlign = ContentAlignment.MiddleCenter,
                Font = CreateNewFont(),
-               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+               ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
                BackColor = pBackgroundColor ?? Color.Transparent
             };
             mButton = new Button() {
@@ -30,7 +31,7 @@
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink,
                Font = CreateNewFont(),
-               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+               ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
                Tag = pUsage
             };
             mButton.Click += OnClusterClicked;
@@ -43,6 +44,7 @@
          public LabeledButtonColorSwatchCluster(Theme pTheme, string pLabelText, string pButtonText,
             TokenKind pTokenKind, LabelPosition pLabelPosition, Color pInitialColor,
             Color? pBackgroundColor = null) : base(pTheme, pBackgroundColor) {
+            ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
             mLabelPosition = pLabelPosition;
             mLabel = new Label() {
                TabIndex = TAB_INDEX_IGNORED,
@@ -51,7 +53,7 @@
                AutoSize = true,
                TextAlign = ContentAlignment.MiddleCenter,
                Font = CreateNewFont(),
-               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+               ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
                BackColor = pBackgroundColor ?? Color.Transparent
             };
             mButton = new Button() {
@@ -61,7 +63,7 @@
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink,
                Font = CreateNewFont(),
-               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+               ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
                Tag = pTokenKind
             };
             mButton.Click += OnClusterClicked;
@@ -81,15 +83,18 @@
          }
 
          private void OnClusterClicked(object? pSender, EventArgs pArgs) {
-            SwatchClicked?.Invoke(this);
+            ThrowIfNull(SwatchClicked, nameof(SwatchClicked));
+            SwatchClicked.Invoke(this);
          }
 
          private void OnSwatchClicked(object? pSender, ColorSwatchUsage pUsage) {
-            SwatchClicked?.Invoke(this);
+            ThrowIfNull(SwatchClicked, nameof(SwatchClicked));
+            SwatchClicked.Invoke(this);
          }
 
          private void OnSyntaxSwatchClicked(object? pSender, TokenKind pTokenKind) {
-            SwatchClicked?.Invoke(this);
+            ThrowIfNull(SwatchClicked, nameof(SwatchClicked));
+            SwatchClicked.Invoke(this);
          }
 
          internal override void LayoutCluster() {

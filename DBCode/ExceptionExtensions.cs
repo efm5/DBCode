@@ -1,6 +1,4 @@
-﻿using DBCode.Syntax;
-
-namespace DBCode {
+﻿namespace DBCode {
    internal static class ExceptionExtensions {
       public static string ToDiagnosticString(Exception pException) {
          StringBuilder stringBuilder = new StringBuilder(4096);

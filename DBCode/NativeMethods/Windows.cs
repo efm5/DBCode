@@ -4,6 +4,21 @@ namespace DBCode {
 #pragma warning disable IDE1006
 #pragma warning disable SYSLIB1054
       internal static partial class NativeMethods {
+         [DllImport("user32.dll")]
+         internal static extern IntPtr GetFocus();
+
+         [DllImport("user32.dll", SetLastError = true)]
+         internal static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+
+         [DllImport("user32.dll")]
+         internal static extern bool AttachThreadInput(uint idAttach, uint idAttachTo, bool fAttach);
+
+         [DllImport("kernel32.dll")]
+         internal static extern uint GetCurrentThreadId();
+
+         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+         internal static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
+
          // Brings the specified window to the top of the Z order.
          [DllImport("user32.dll")]
          [return: MarshalAs(UnmanagedType.Bool)]

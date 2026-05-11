@@ -8,7 +8,7 @@
 
    public enum ViewMode { Features, Minimal }
 
-   public enum PasteMode { SendAll, PasteSelected }
+   public enum PasteMode { SendAll, PasteSelected, GetAll, GetSelected }
 
    public enum Icons { CurlyTargeted, CurlyUntargeted, StatusTargeted, StatusUntargeted }
 
@@ -140,6 +140,22 @@
             }
          }
       }
+
+      public static string? TryGetClipboardText() {
+         const int maxAttempts = 3;
+         int attempt = 0;
+
+         while (attempt < maxAttempts) {
+            try {
+               return Clipboard.GetText();
+            }
+            catch {
+               Thread.Sleep(50);
+               attempt++;
+            }
+         }
+         return null;
+      }
    }
 
    internal sealed class HelpTag {
@@ -168,6 +184,7 @@
       public static bool mFirstGray = true, mForceActivation = true,
          mIsTargetingEnabled = false, mPreMinimalControlBox = true,
          mFirstColorPicker = true, mFirstFontPicker = true;
+      public static ContextMenuStrip? mContextMenuStrip = null;
       public static List<Control>? mBottomPanelExcluded = null;
       public static float mFontWidthAdjustment = 0.5f;
       public static FontUsage mFontUsage = FontUsage.Text;
@@ -175,7 +192,7 @@
       public static HighlighterEngine? mHighlighterEngine = null;
       public static Icon[] mIcons = new Icon[4];
       public static ILayoutable? mActiveLayoutable = null;
-      public static IntPtr mTargetWindow = IntPtr.Zero;
+      public static IntPtr mTargetWindow = IntPtr.Zero, mThisWindow = IntPtr.Zero;
       public static readonly IntPtr mInsertAfterWindow = new IntPtr(0);
       public static LanguageKind mCurrentLanguage = LanguageKind.CSharp;
       public static MenuStrip? mMenuStrip = null;
@@ -221,7 +238,8 @@
       public static ViewMode mCurrentViewMode = ViewMode.Features;
       public static BottomPanel? mMainBottomPanel = null;
       public static Label? mTargetingLabel = null, mVersionLabel = null;
-      public static Button? mSendAllButton = null, mPasteSelectedButton = null, mRevertButton = null;
+      public static Button? mSendAllButton = null, mPasteSelectedButton = null, mRevertButton = null,
+         mGetAllButton = null, mGetSelectedButton = null;
       #endregion
 
       #region main menu

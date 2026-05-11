@@ -1,22 +1,20 @@
-﻿using DBCode.Themes;
-
-namespace DBCode {
+﻿namespace DBCode {
    internal static partial class LayoutHelpers {
       internal sealed class CheckBoxCluster : BaseCluster {
          internal CheckBox mCheckBox;
 
          internal CheckBoxCluster(Theme pTheme, string pText, Color? pBackgroundColor = null)
             : base(pTheme, pBackgroundColor) {
+            ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
             mCheckBox = new CheckBox() {
                Name = $"CheckBoxCluster{nameof(mCheckBox)}{mTabIndex}",
                TabIndex = mTabIndex++,
                Text = pText,
                AutoSize = true,
                Font = CreateNewFont(),
-               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+               ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
                BackColor = pBackgroundColor ?? Color.Transparent
             };
-
             Controls.Add(mCheckBox);
          }
 

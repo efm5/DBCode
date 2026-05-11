@@ -5,6 +5,7 @@
 
          internal ButtonCluster(Theme pTheme, string pText, Color? pBackgroundColor = null)
             : base(pTheme, pBackgroundColor) {
+            ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
             mButton = new Button() {
                Name = $"ButtonCluster{mTabIndex}",
                TabIndex = mTabIndex++,
@@ -13,15 +14,16 @@
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink,
                Font = CreateNewFont(pTheme.mFonts[(int)FontUsage.Interface]),
-               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+               ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
                BackColor = pBackgroundColor ?? Color.Transparent
             };
             Controls.Add(mButton);
          }
 
          internal override void LayoutCluster() {
+            ThrowIfNull(mButton, nameof(mButton));
             SetFontAndColor();
-            mButton?.Invalidate();
+            mButton.Invalidate();
          }
 
          internal void LayoutControls() {
@@ -29,8 +31,9 @@
          }
 
          internal override void SetFontAndColor() {
+            ThrowIfNull(mButton, nameof(mButton));
             Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
-            mButton!.Font = CreateNewFont(poFont);
+            mButton.Font = CreateNewFont(poFont);
             mButton.ForeColor = poForeColor;
             mButton.BackColor = poBackColor;
          }

@@ -32,8 +32,14 @@
             AutoSize = false;
          }
 
-         public int NeededWidth => mHelpButton!.Width + mEm2 + mLeftControls.Sum(pC => pC.Width + mEm) +
-            mRightControls.Sum(pC => pC.Width + mEm) + mCancelButton!.Width + mCancelOffset * 2;
+         public int NeededWidth {
+            get {
+               ThrowIfNull(mHelpButton, nameof(mHelpButton));
+               ThrowIfNull(mCancelButton, nameof(mCancelButton));
+               return mHelpButton.Width + mEm2 + mLeftControls.Sum(pC => pC.Width + mEm) +
+                  mRightControls.Sum(pC => pC.Width + mEm) + mCancelButton.Width + mCancelOffset * 2;
+            }
+         }
 
          internal Control AddLeftControl(Control pControl) {
             mLeftControls.Add(pControl);
@@ -87,12 +93,14 @@
          }
 
          internal void SetFontAndColor() {
+            ThrowIfNull(mHelpButton, nameof(mHelpButton));
+            ThrowIfNull(mCancelButton, nameof(mCancelButton));
             Theme.ThemeStatusThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
-            MainForm.DisposeFontIfOwned(mHelpButton!.Font);
+            MainForm.DisposeFontIfOwned(mHelpButton.Font);
             mHelpButton.Font = CreateNewFont(poFont);
             mHelpButton.ForeColor = poForeColor;
             mHelpButton.BackColor = poBackColor;
-            MainForm.DisposeFontIfOwned(mCancelButton!.Font);
+            MainForm.DisposeFontIfOwned(mCancelButton.Font);
             mCancelButton.Font = CreateNewFont(poFont);
             mCancelButton.ForeColor = poForeColor;
             mCancelButton.BackColor = poBackColor;
@@ -117,9 +125,11 @@
 
          protected override void Dispose(bool pDisposing) {
             if (pDisposing) {
-               mHelpButton!.Click -= MainForm.Help_Click;
-               MainForm.DisposeFontIfOwned(mHelpButton!.Font);
-               MainForm.DisposeFontIfOwned(mCancelButton!.Font);
+               ThrowIfNull(mHelpButton, nameof(mHelpButton));
+               ThrowIfNull(mCancelButton, nameof(mCancelButton));
+               mHelpButton.Click -= MainForm.Help_Click;
+               MainForm.DisposeFontIfOwned(mHelpButton.Font);
+               MainForm.DisposeFontIfOwned(mCancelButton.Font);
                foreach (Control control in mLeftControls) {
                   MainForm.DisposeFontIfOwned(control.Font);
                   Controls.Remove(control);

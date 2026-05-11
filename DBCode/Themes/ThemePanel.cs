@@ -601,9 +601,12 @@ All text appears in the default foreground color."
                TabIndex = mTabIndex++
             };
 #pragma warning restore IDE0017
+            ThrowIfNull(mExampleBottomPanel, nameof(mExampleBottomPanel));
+            ThrowIfNull(mExampleBottomPanel.mHelpButton, nameof(mExampleBottomPanel.mHelpButton));
+            ThrowIfNull(mExampleBottomPanel.mCancelButton, nameof(mExampleBottomPanel.mCancelButton));
             mExampleBottomPanel.Anchor = mAnchorTopLeft;
-            mExampleBottomPanel.mHelpButton!.Text = "NO Help";
-            mExampleBottomPanel.mCancelButton!.Text = "UN Canceled";
+            mExampleBottomPanel.mHelpButton.Text = "NO Help";
+            mExampleBottomPanel.mCancelButton.Text = "UN Canceled";
             mExampleBottomPanel.AddLeftControl(mBottomExampleButton);
             mExampleScrollPanel.Controls.AddRange([mExamplesContainer, mExampleBottomPanel,
                mExampleGroupBox, mExampleMenuStrip, mExamplesHeaderCluster]);

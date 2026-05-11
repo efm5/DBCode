@@ -7,6 +7,7 @@
          internal FlattenedButtonCluster(Theme pTheme, string pText, Control pAssociatedControl,
             Color? pBackgroundColor = null) : base(pTheme, pBackgroundColor) {
             ThrowIfNull(pAssociatedControl, nameof(pAssociatedControl));
+            ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
             mAssociatedControl = pAssociatedControl;
             if (!pText.EndsWith(':'))
                pText += ':';
@@ -18,12 +19,12 @@
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink,
                Font = CreateNewFont(pTheme.mFonts[(int)FontUsage.Interface]),
-               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+               ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
                BackColor = pBackgroundColor ?? Color.Transparent
             };
             pAssociatedControl.TabIndex = mTabIndex++;
             FlattenButton(mButton, pBackgroundColor);
-            mButton.Click += Button_Click;  // added
+            mButton.Click += Button_Click;
             Controls.AddRange([mButton, pAssociatedControl]);
          }
 
@@ -33,25 +34,30 @@
          }
 
          internal override void LayoutCluster() {
+            ThrowIfNull(mButton, nameof(mButton));
             SetFontAndColor();
             LayoutControls();
-            mButton?.Invalidate();
+            mButton.Invalidate();
          }
 
          internal void LayoutControls() {
-            mAssociatedControl.Location = new Point(mButton!.Right, mButton.Top);
+            ThrowIfNull(mButton, nameof(mButton));
+            mAssociatedControl.Location = new Point(mButton.Right, mButton.Top);
          }
 
          internal override void SetFontAndColor() {
+            ThrowIfNull(mButton, nameof(mButton));
             Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
-            mButton!.Font = CreateNewFont(poFont);
+            mButton.Font = CreateNewFont(poFont);
             mButton.ForeColor = poForeColor;
             mButton.BackColor = poBackColor;
          }
 
          protected override void Dispose(bool pDisposing) {
-            if (pDisposing)
-               mButton!.Click -= Button_Click;
+            if (pDisposing) {
+               ThrowIfNull(mButton, nameof(mButton));
+               mButton.Click -= Button_Click;
+            }
             base.Dispose(pDisposing);
          }
       }

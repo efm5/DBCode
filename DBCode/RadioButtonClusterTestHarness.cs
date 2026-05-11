@@ -35,6 +35,7 @@
       }
 
       private void MakeControls() {
+         ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
          mContentPanel = new Panel {
             AutoSize = false,
             AutoScroll = true,
@@ -70,7 +71,7 @@
             Text = "Click a radio button to see output here.",
             AutoSize = true,
             Font = CreateNewFont(),
-            ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+            ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
             BackColor = Color.Transparent
          };
          mContentPanel.Controls.AddRange([
@@ -95,19 +96,27 @@
       }
 
       private void WireEvents() {
+         ThrowIfNull(mCloseButton, nameof(mCloseButton));
+         ThrowIfNull(mMutualExclusionCluster, nameof(mMutualExclusionCluster));
          Load += OnLoad;
          ClientSizeChanged += OnClientSizeChanged;
-         mCloseButton!.Click += OnCloseClick;
-         foreach (Control control in mMutualExclusionCluster!.Controls) {
+         mCloseButton.Click += OnCloseClick;
+         foreach (Control control in mMutualExclusionCluster.Controls) {
             if (control is RadioButton radioButton)
                radioButton.CheckedChanged += OnMutualExclusionCheckedChanged;
          }
       }
 
       private void LayoutControls() {
+         ThrowIfNull(mContentPanel, nameof(mContentPanel));
+         ThrowIfNull(mCloseButton, nameof(mCloseButton));
+         ThrowIfNull(mResultLabel, nameof(mResultLabel));
+         ThrowIfNull(mHorizontalCluster, nameof(mHorizontalCluster));
+         ThrowIfNull(mVerticalCluster, nameof(mVerticalCluster));
+         ThrowIfNull(mFixedColumns3Cluster, nameof(mFixedColumns3Cluster));
          const int padding = 12, rowSpacing = 8, closeMargin = 8;
-         int closeHeight = mCloseButton!.Height + closeMargin * 2;
-         mContentPanel!.Location = new Point(padding, padding);
+         int closeHeight = mCloseButton.Height + closeMargin * 2;
+         mContentPanel.Location = new Point(padding, padding);
          mContentPanel.Size = new Size(
             ClientSize.Width - padding * 2,
             ClientSize.Height - padding - closeHeight - padding);
@@ -119,7 +128,7 @@
          LayoutClusterRow(mFlowCluster!, ref y, rowSpacing);
          LayoutClusterRow(mAutoSquareCluster!, ref y, rowSpacing);
          LayoutClusterRow(mMutualExclusionCluster!, ref y, rowSpacing);
-         mResultLabel!.Location = new Point(padding, y + rowSpacing);
+         mResultLabel.Location = new Point(padding, y + rowSpacing);
          mCloseButton.Location = new Point(
             ClientSize.Width - mCloseButton.Width - closeMargin,
             ClientSize.Height - mCloseButton.Height - closeMargin);
@@ -144,9 +153,10 @@
       }
 
       private void OnMutualExclusionCheckedChanged(object? pSender, EventArgs pEventArgs) {
+         ThrowIfNull(mMutualExclusionCluster, nameof(mMutualExclusionCluster));
          if (pSender is not RadioButton radioButton || !radioButton.Checked)
             return;
-         int checkedIndex = mMutualExclusionCluster!.GetCheckedIndex();
+         int checkedIndex = mMutualExclusionCluster.GetCheckedIndex();
          int checkedCount = 0;
          foreach (Control control in mMutualExclusionCluster.Controls) {
             if (control is RadioButton rb && rb.Checked)
@@ -159,31 +169,39 @@
       }
 
       private void VerifyInitialCheckedIndices() {
-         if (mHorizontalCluster!.GetCheckedIndex() != 0) {
+         ThrowIfNull(mHorizontalCluster, nameof(mHorizontalCluster));
+         ThrowIfNull(mVerticalCluster, nameof(mVerticalCluster));
+         ThrowIfNull(mFixedColumns3Cluster, nameof(mFixedColumns3Cluster));
+         ThrowIfNull(mFixedRows3Cluster, nameof(mFixedRows3Cluster));
+         ThrowIfNull(mFlowCluster, nameof(mFlowCluster));
+         ThrowIfNull(mAutoSquareCluster, nameof(mAutoSquareCluster));
+         ThrowIfNull(mMutualExclusionCluster, nameof(mMutualExclusionCluster));
+
+         if (mHorizontalCluster.GetCheckedIndex() != 0) {
             SetResult("FAIL – Horizontal cluster: expected checked index 0.");
             return;
          }
-         if (mVerticalCluster!.GetCheckedIndex() != 1) {
+         if (mVerticalCluster.GetCheckedIndex() != 1) {
             SetResult("FAIL – Vertical cluster: expected checked index 1.");
             return;
          }
-         if (mFixedColumns3Cluster!.GetCheckedIndex() != 0) {
+         if (mFixedColumns3Cluster.GetCheckedIndex() != 0) {
             SetResult("FAIL – FixedColumns3 cluster: expected checked index 0.");
             return;
          }
-         if (mFixedRows3Cluster!.GetCheckedIndex() != 0) {
+         if (mFixedRows3Cluster.GetCheckedIndex() != 0) {
             SetResult("FAIL – FixedRows3 cluster: expected checked index 0.");
             return;
          }
-         if (mFlowCluster!.GetCheckedIndex() != 0) {
+         if (mFlowCluster.GetCheckedIndex() != 0) {
             SetResult("FAIL – FlowLayout cluster: expected checked index 0.");
             return;
          }
-         if (mAutoSquareCluster!.GetCheckedIndex() != 0) {
+         if (mAutoSquareCluster.GetCheckedIndex() != 0) {
             SetResult("FAIL – AutoSquareGrid cluster: expected checked index 0.");
             return;
          }
-         if (mMutualExclusionCluster!.GetCheckedIndex() != 0) {
+         if (mMutualExclusionCluster.GetCheckedIndex() != 0) {
             SetResult("FAIL – MutualExclusion cluster: expected checked index 0.");
             return;
          }
@@ -191,23 +209,26 @@
       }
 
       private void SetResult(string pMessage) {
-         mResultLabel!.Text = pMessage;
+         ThrowIfNull(mResultLabel, nameof(mResultLabel));
+         mResultLabel.Text = pMessage;
          mResultLabel.Refresh();
       }
 
       protected override void Dispose(bool pDisposing) {
          if (pDisposing) {
+            ThrowIfNull(mCloseButton, nameof(mCloseButton));
+            ThrowIfNull(mResultLabel, nameof(mResultLabel));
             Load -= OnLoad;
             ClientSizeChanged -= OnClientSizeChanged;
-            mCloseButton!.Click -= OnCloseClick;
+            mCloseButton.Click -= OnCloseClick;
             if (mMutualExclusionCluster != null) {
                foreach (Control control in mMutualExclusionCluster.Controls) {
                   if (control is RadioButton radioButton)
                      radioButton.CheckedChanged -= OnMutualExclusionCheckedChanged;
                }
             }
-            MainForm.DisposeFontIfOwned(mResultLabel?.Font);
-            MainForm.DisposeFontIfOwned(mCloseButton?.Font);
+            MainForm.DisposeFontIfOwned(mResultLabel.Font);
+            MainForm.DisposeFontIfOwned(mCloseButton.Font);
          }
          base.Dispose(pDisposing);
       }

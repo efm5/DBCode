@@ -38,7 +38,8 @@
          }
 
          private void OnButtonClicked(object? pSender, EventArgs pArgs) {
-            FontButtonClicked?.Invoke(this);
+            ThrowIfNull(FontButtonClicked, nameof(FontButtonClicked));
+            FontButtonClicked.Invoke(this);
          }
 
          internal override void LayoutCluster() {

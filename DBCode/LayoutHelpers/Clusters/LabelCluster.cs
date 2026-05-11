@@ -5,13 +5,14 @@
 
          internal LabelCluster(Theme pTheme, string pText, Color? pBackgroundColor = null)
             : base(pTheme, pBackgroundColor) {
+            ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
             mLabel = new Label() {
                Name = $"LabelCluster{nameof(mLabel)}{mTabIndex}",
                TabIndex = mTabIndex++,
                Text = pText,
                AutoSize = true,
                Font = CreateNewFont(),
-               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+               ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
                BackColor = pBackgroundColor ?? Color.Transparent,
                Location = new Point(0, 0)
             };

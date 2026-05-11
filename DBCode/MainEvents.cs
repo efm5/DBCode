@@ -23,6 +23,7 @@
          Opacity = mUiState.mFormOpacity;
          ClientSizeChanged += OnClientSizeChanged;
 #if DEBUG
+         //AddAccelerators(
          //RadioButtonClusterTestHarness.Show("RadioButton Cluster Test Harness");
 
          //ClusterTestHarness.Show("Cluster Test Harness");
@@ -43,7 +44,6 @@
          mUiState.mFormOpacity = Opacity;
          mUiState.mLanguageKind = mCurrentLanguage;
          mUiState.mCurrentThemeName = mCurrentTheme.mName;
-
          mUiState.WriteToSettings();
          Settings.Default.Save();
          mThemePanel?.Dispose();
@@ -54,7 +54,8 @@
       }
 
       internal static void OnClientSizeChanged(object? pSender, EventArgs pEventArgs) {
-         mActiveLayoutable?.LayoutControls();
+         ThrowIfNull(mActiveLayoutable, nameof(mActiveLayoutable));
+         mActiveLayoutable.LayoutControls();
       }
       #endregion
 
@@ -78,8 +79,31 @@
       }
 
       private void OnEditorTextChanged(object? pSender, EventArgs pArgs) {
-         mRichTextBox!.TextChanged -= OnEditorTextChanged;
-         mHighlighterEngine!.HighlightNow();
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
+         ThrowIfNull(mHighlighterEngine, nameof(mHighlighterEngine));
+         mRichTextBox.TextChanged -= OnEditorTextChanged;
+         string whitespace = string.Empty;
+         if ((mUiState.mWhitespace == (int)Whitespace.Tabs) && (mUiState.mUseTabs)) {
+            for (int i = 0; i < (int)mUiState.mSpacesPerTab; i++)
+               whitespace += " ";
+            if (mRichTextBox.Text.Contains(whitespace)) {
+               do {
+                  mRichTextBox.Text = mRichTextBox.Text.Replace(whitespace, "\t");
+               } while (mRichTextBox.Text.Contains(whitespace));
+               mRichTextBox.Text = mRichTextBox.Text.Replace(whitespace, "\t");
+            }
+         }
+         else if ((mUiState.mWhitespace == (int)Whitespace.Spaces) && (mUiState.mUseSpaces)) {
+            for (int i = 0; i < (int)mUiState.mSpacesToBecomeTab; i++)
+               whitespace += " ";
+            if (mRichTextBox.Text.Contains('\t')) {
+               do {
+                  mRichTextBox.Text = mRichTextBox.Text.Replace("\t", whitespace);
+               } while (mRichTextBox.Text.Contains(whitespace));
+               mRichTextBox.Text = mRichTextBox.Text.Replace(whitespace, "\t");
+            }
+         }//else both - do nothing
+         mHighlighterEngine.HighlightNow();
          mRichTextBox.TextChanged += OnEditorTextChanged;
       }
 
@@ -89,7 +113,6 @@
          ToolStripMenuItem? toolStripMenuItem = pSender as ToolStripMenuItem;
          if (toolStripMenuItem == null)
             return;
-
          if (toolStripMenuItem.Checked)
             EnterTargetedMode();
          else
@@ -108,7 +131,6 @@
          ToolStripMenuItem? clickedTSMI = pSender as ToolStripMenuItem;
          object? tagObject = clickedTSMI == null ? null : clickedTSMI.Tag;
          double opacityValue = 0.0;
-
          if ((clickedTSMI == null) || (tagObject == null))
             return;
          if (!double.TryParse(tagObject.ToString(), out opacityValue))
@@ -135,14 +157,14 @@
             return;
          mCurrentLanguage = selectedLanguage;
          CheckLanguage();
-         mHighlighterEngine!.SetLanguage(mCurrentLanguage);
+         ThrowIfNull(mHighlighterEngine, nameof(mHighlighterEngine));
+         mHighlighterEngine.SetLanguage(mCurrentLanguage);
          mHighlighterEngine.HighlightNow();
       }
 
       public static void Help_Click(object? pSender, EventArgs pEventArgs) {
          HelpContext context = HelpContext.Main;
          string? anchor = "";
-
          if (pSender is Control control) {
             if (control.Tag is HelpTag tag) {
                context = tag.Context;
@@ -157,18 +179,25 @@
          }
          else
             return;
-
          GetHelp(context, anchor);
       }
 
       private void TransMove_Click(object? pSender, EventArgs pEventArgs) {
          Button? button = pSender as Button;
-         if (button == null)
-            return;
-         PasteMode pasteMode = button == mSendAllButton ? PasteMode.SendAll : PasteMode.PasteSelected;
+         ThrowIfNull(button, nameof(button));
+         PasteMode? pasteMode = button.Tag as PasteMode?;
 
-         Paste(pasteMode);
-         TopMost = true;
+         switch (pasteMode) {
+            case PasteMode.SendAll:
+            case PasteMode.PasteSelected:
+               Paste(pasteMode);
+               break;
+            case PasteMode.GetAll:
+            case PasteMode.GetSelected:
+               Get(pasteMode);
+               break;
+         }
+         TopMost = true;//efm5 make it pop to the top but do not force it to stay there
          TopMost = false;
       }
 

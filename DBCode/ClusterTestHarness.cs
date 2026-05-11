@@ -29,6 +29,7 @@
       }
 
       private void MakeControls() {
+         ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
          mContentPanel = new Panel {
             AutoSize = false,
             AutoScroll = true,
@@ -44,7 +45,7 @@
             Text = "(assoc label)",
             AutoSize = true,
             Font = CreateNewFont(),
-            ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+            ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
             BackColor = Color.Transparent
          };
          mFlattenedWithColon = new FlattenedButtonCluster(mCurrentTheme!, "Already has colon:", mAssocLabel1, BackColor);
@@ -59,7 +60,7 @@
             Text = "(assoc label)",
             AutoSize = true,
             Font = CreateNewFont(),
-            ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+            ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
             BackColor = Color.Transparent
          };
          mFlattenedNullBackground = new FlattenedButtonCluster(mCurrentTheme!, "Null bg (not flat)", mAssocLabel3, null);
@@ -69,7 +70,7 @@
             Text = "Click a cluster button to see output here.",
             AutoSize = true,
             Font = CreateNewFont(),
-            ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+            ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
             BackColor = Color.Transparent
          };
          mContentPanel.Controls.AddRange([
@@ -92,20 +93,35 @@
       }
 
       private void WireEvents() {
+         ThrowIfNull(mButtonClusterNoOp, nameof(mButtonClusterNoOp));
+         ThrowIfNull(mButtonClusterWithClick, nameof(mButtonClusterWithClick));
+         ThrowIfNull(mFlattenedWithColon, nameof(mFlattenedWithColon));
+         ThrowIfNull(mFlattenedNoColon, nameof(mFlattenedNoColon));
+         ThrowIfNull(mFlattenedNullBackground, nameof(mFlattenedNullBackground));
+         ThrowIfNull(mCloseButton, nameof(mCloseButton));
+         ThrowIfNull(mButtonClusterNoOp.mButton, nameof(mButtonClusterNoOp.mButton));
+         ThrowIfNull(mButtonClusterWithClick.mButton, nameof(mButtonClusterWithClick.mButton));
+         ThrowIfNull(mFlattenedWithColon.mButton, nameof(mFlattenedWithColon.mButton));
+         ThrowIfNull(mFlattenedNoColon.mButton, nameof(mFlattenedNoColon.mButton));
+         ThrowIfNull(mFlattenedNullBackground.mButton, nameof(mFlattenedNullBackground.mButton));
+
          Load += OnLoad;
          ClientSizeChanged += OnClientSizeChanged;
-         mCloseButton!.Click += OnCloseClick;
-         mButtonClusterNoOp!.mButton!.Click += OnNoOpButtonClick;
-         mButtonClusterWithClick!.mButton!.Click += OnClickMeClick;
-         mFlattenedWithColon!.mButton!.Click += OnFlattenedWithColonClick;
-         mFlattenedNoColon!.mButton!.Click += OnFlattenedNoColonClick;
-         mFlattenedNullBackground!.mButton!.Click += OnFlattenedNullBgClick;
+         mCloseButton.Click += OnCloseClick;
+         mButtonClusterNoOp.mButton.Click += OnNoOpButtonClick;
+         mButtonClusterWithClick.mButton.Click += OnClickMeClick;
+         mFlattenedWithColon.mButton.Click += OnFlattenedWithColonClick;
+         mFlattenedNoColon.mButton.Click += OnFlattenedNoColonClick;
+         mFlattenedNullBackground.mButton.Click += OnFlattenedNullBgClick;
       }
 
       private void LayoutControls() {
+         ThrowIfNull(mContentPanel, nameof(mContentPanel));
+         ThrowIfNull(mCloseButton, nameof(mCloseButton));
+         ThrowIfNull(mResultLabel, nameof(mResultLabel));
          const int padding = 12, rowSpacing = 8, closeMargin = 8;
-         int closeHeight = mCloseButton!.Height + closeMargin * 2;
-         mContentPanel!.Location = new Point(padding, padding);
+         int closeHeight = mCloseButton.Height + closeMargin * 2;
+         mContentPanel.Location = new Point(padding, padding);
          mContentPanel.Size = new Size(
             ClientSize.Width - padding * 2,
             ClientSize.Height - padding - closeHeight - padding);
@@ -115,7 +131,7 @@
          LayoutClusterRow(mFlattenedWithColon!, ref y, rowSpacing);
          LayoutClusterRow(mFlattenedNoColon!, ref y, rowSpacing);
          LayoutClusterRow(mFlattenedNullBackground!, ref y, rowSpacing);
-         mResultLabel!.Location = new Point(padding, y + rowSpacing);
+         mResultLabel.Location = new Point(padding, y + rowSpacing);
          mCloseButton.Location = new Point(
             ClientSize.Width - mCloseButton.Width - closeMargin,
             ClientSize.Height - mCloseButton.Height - closeMargin);
@@ -141,9 +157,11 @@
       }
 
       private void OnNoOpButtonClick(object? pSender, EventArgs pEventArgs) {
-         Rectangle before = mButtonClusterNoOp!.mButton!.Bounds;
+         ThrowIfNull(mButtonClusterNoOp, nameof(mButtonClusterNoOp));
+         ThrowIfNull(mButtonClusterNoOp.mButton, nameof(mButtonClusterNoOp.mButton));
+         Rectangle before = mButtonClusterNoOp.mButton.Bounds;
          mButtonClusterNoOp.LayoutControls();
-         Rectangle after = mButtonClusterNoOp.mButton!.Bounds;
+         Rectangle after = mButtonClusterNoOp.mButton.Bounds;
          string result = before == after
             ? $"PASS – ButtonCluster.LayoutControls() is a no-op. Bounds before and after: {before}."
             : $"FAIL – ButtonCluster.LayoutControls() changed button bounds from {before} to {after}.";
@@ -155,7 +173,9 @@
       }
 
       private void OnFlattenedWithColonClick(object? pSender, EventArgs pEventArgs) {
-         string buttonText = mFlattenedWithColon!.mButton!.Text;
+         ThrowIfNull(mFlattenedWithColon, nameof(mFlattenedWithColon));
+         ThrowIfNull(mFlattenedWithColon.mButton, nameof(mFlattenedWithColon.mButton));
+         string buttonText = mFlattenedWithColon.mButton.Text;
          string result = buttonText.EndsWith(':') && buttonText.IndexOf(':', StringComparison.Ordinal) == buttonText.Length - 1
             ? $"PASS – Colon not doubled. Button text is \"{buttonText}\"."
             : $"FAIL – Unexpected button text: \"{buttonText}\".";
@@ -163,64 +183,92 @@
       }
 
       private void OnFlattenedNoColonClick(object? pSender, EventArgs pEventArgs) {
-         string buttonText = mFlattenedNoColon!.mButton!.Text;
+         ThrowIfNull(mFlattenedNoColon, nameof(mFlattenedNoColon));
+         ThrowIfNull(mFlattenedNoColon.mButton, nameof(mFlattenedNoColon.mButton));
+         ThrowIfNull(mTextBox, nameof(mTextBox));
+         string buttonText = mFlattenedNoColon.mButton.Text;
          string result = buttonText.EndsWith(':')
             ? $"PASS – Colon was appended. Button text is \"{buttonText}\"."
             : $"FAIL – Colon was not appended. Button text is \"{buttonText}\".";
          SetResult(result);
-         mTextBox!.Text = buttonText;
+         mTextBox.Text = buttonText;
          mTextBox.Focus();
       }
 
       private void OnFlattenedNullBgClick(object? pSender, EventArgs pEventArgs) {
-         Button btn = mFlattenedNullBackground!.mButton!;
-         bool isFlat = btn.FlatStyle == FlatStyle.Flat;
+         ThrowIfNull(mFlattenedNullBackground, nameof(mFlattenedNullBackground));
+         ThrowIfNull(mFlattenedNullBackground.mButton, nameof(mFlattenedNullBackground.mButton));
+         Button button = mFlattenedNullBackground.mButton;
+         bool isFlat = button.FlatStyle == FlatStyle.Flat;
          string result = !isFlat
-            ? $"PASS – Null background correctly skips FlattenButton. FlatStyle is {btn.FlatStyle}."
+            ? $"PASS – Null background correctly skips FlattenButton. FlatStyle is {button.FlatStyle}."
             : $"FAIL – Button was flattened despite null background.";
          SetResult(result);
       }
 
       private void VerifyColonInvariant() {
-         if (!mFlattenedWithColon!.mButton!.Text.EndsWith(':'))
+         ThrowIfNull(mFlattenedWithColon, nameof(mFlattenedWithColon));
+         ThrowIfNull(mFlattenedWithColon.mButton, nameof(mFlattenedWithColon.mButton));
+         ThrowIfNull(mFlattenedNoColon, nameof(mFlattenedNoColon));
+         ThrowIfNull(mFlattenedNoColon.mButton, nameof(mFlattenedNoColon.mButton));
+         ThrowIfNull(mFlattenedNullBackground, nameof(mFlattenedNullBackground));
+         ThrowIfNull(mFlattenedNullBackground.mButton, nameof(mFlattenedNullBackground.mButton));
+         if (!mFlattenedWithColon.mButton.Text.EndsWith(':'))
             SetResult("FAIL – mFlattenedWithColon button text does not end in ':'.");
-         else if (!mFlattenedNoColon!.mButton!.Text.EndsWith(':'))
+         else if (!mFlattenedNoColon.mButton.Text.EndsWith(':'))
             SetResult("FAIL – mFlattenedNoColon button text does not end in ':'.");
-         else if (!mFlattenedNullBackground!.mButton!.Text.EndsWith(':'))
+         else if (!mFlattenedNullBackground.mButton.Text.EndsWith(':'))
             SetResult("FAIL – mFlattenedNullBackground button text does not end in ':'.");
          else
             SetResult("Load – Colon invariant PASS for all FlattenedButtonCluster instances. Click a button to run its test.");
       }
 
       private void VerifyNoOpLayoutControls() {
-         Rectangle b1 = mButtonClusterNoOp!.mButton!.Bounds;
+         ThrowIfNull(mButtonClusterNoOp, nameof(mButtonClusterNoOp));
+         ThrowIfNull(mButtonClusterNoOp.mButton, nameof(mButtonClusterNoOp.mButton));
+         Rectangle b1 = mButtonClusterNoOp.mButton.Bounds;
          mButtonClusterNoOp.LayoutControls();
-         Rectangle b2 = mButtonClusterNoOp.mButton!.Bounds;
+         Rectangle b2 = mButtonClusterNoOp.mButton.Bounds;
          mButtonClusterNoOp.LayoutControls();
-         Rectangle b3 = mButtonClusterNoOp.mButton!.Bounds;
+         Rectangle b3 = mButtonClusterNoOp.mButton.Bounds;
          if (b1 != b2 || b2 != b3) // else: colon-invariant message already shown; no need to overwrite it
             SetResult($"FAIL – ButtonCluster.LayoutControls() is NOT a no-op. Bounds: {b1} → {b2} → {b3}");
       }
 
       private void SetResult(string pMessage) {
-         mResultLabel!.Text = pMessage;
+         ThrowIfNull(mResultLabel, nameof(mResultLabel));
+         mResultLabel.Text = pMessage;
          mResultLabel.Refresh();
       }
 
       protected override void Dispose(bool pDisposing) {
+         ThrowIfNull(mResultLabel, nameof(mResultLabel));
+         ThrowIfNull(mCloseButton, nameof(mCloseButton));
+         ThrowIfNull(mButtonClusterNoOp, nameof(mButtonClusterNoOp));
+         ThrowIfNull(mButtonClusterNoOp.mButton, nameof(mButtonClusterNoOp.mButton));
+         ThrowIfNull(mButtonClusterWithClick, nameof(mButtonClusterWithClick));
+         ThrowIfNull(mButtonClusterWithClick.mButton, nameof(mButtonClusterWithClick.mButton));
+         ThrowIfNull(mFlattenedWithColon, nameof(mFlattenedWithColon));
+         ThrowIfNull(mFlattenedWithColon.mButton, nameof(mFlattenedWithColon.mButton));
+         ThrowIfNull(mFlattenedNoColon, nameof(mFlattenedNoColon));
+         ThrowIfNull(mFlattenedNoColon.mButton, nameof(mFlattenedNoColon.mButton));
+         ThrowIfNull(mFlattenedNullBackground, nameof(mFlattenedNullBackground));
+         ThrowIfNull(mFlattenedNullBackground.mButton, nameof(mFlattenedNullBackground.mButton));
+         ThrowIfNull(mAssocLabel1, nameof(mAssocLabel1));
+         ThrowIfNull(mAssocLabel3, nameof(mAssocLabel3));
          if (pDisposing) {
             Load -= OnLoad;
             ClientSizeChanged -= OnClientSizeChanged;
-            mCloseButton!.Click -= OnCloseClick;
-            mButtonClusterNoOp?.mButton?.Click -= OnNoOpButtonClick;
-            mButtonClusterWithClick?.mButton?.Click -= OnClickMeClick;
-            mFlattenedWithColon?.mButton?.Click -= OnFlattenedWithColonClick;
-            mFlattenedNoColon?.mButton?.Click -= OnFlattenedNoColonClick;
-            mFlattenedNullBackground?.mButton?.Click -= OnFlattenedNullBgClick;
-            MainForm.DisposeFontIfOwned(mResultLabel?.Font);
-            MainForm.DisposeFontIfOwned(mCloseButton?.Font);
-            MainForm.DisposeFontIfOwned(mAssocLabel1?.Font);
-            MainForm.DisposeFontIfOwned(mAssocLabel3?.Font);
+            mCloseButton.Click -= OnCloseClick;
+            mButtonClusterNoOp.mButton.Click -= OnNoOpButtonClick;
+            mButtonClusterWithClick.mButton.Click -= OnClickMeClick;
+            mFlattenedWithColon.mButton.Click -= OnFlattenedWithColonClick;
+            mFlattenedNoColon.mButton.Click -= OnFlattenedNoColonClick;
+            mFlattenedNullBackground.mButton.Click -= OnFlattenedNullBgClick;
+            MainForm.DisposeFontIfOwned(mResultLabel.Font);
+            MainForm.DisposeFontIfOwned(mCloseButton.Font);
+            MainForm.DisposeFontIfOwned(mAssocLabel1.Font);
+            MainForm.DisposeFontIfOwned(mAssocLabel3.Font);
          }
          base.Dispose(pDisposing); // base walks Controls tree — clusters disposed here
       }

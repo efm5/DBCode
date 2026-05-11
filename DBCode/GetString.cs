@@ -22,7 +22,7 @@ namespace DBCode {
             ThrowIfNull(pPrompt, nameof(pPrompt));
             ThrowIfNull(mForm, nameof(mForm));
             ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
-            mHasControlBox = mForm!.ControlBox;
+            mHasControlBox = mForm.ControlBox;
             if (mHasControlBox)
                mForm.ControlBox = false;
             mInitialValue = pInitialValue;
@@ -40,7 +40,7 @@ namespace DBCode {
                Location = new Point(mEmHalf, mEmHalf),
                AutoScroll = false
             };
-            mTitleCluster = new HeaderLabelCluster(mCurrentTheme!, pTitle, HeaderLabelSize.Normal);
+            mTitleCluster = new HeaderLabelCluster(mCurrentTheme, pTitle, HeaderLabelSize.Normal);
             mPromptLabel = new Label {
                Name = $"GetString_PromptLabel{mTabIndex}",
                TabIndex = mTabIndex++,
@@ -63,12 +63,14 @@ namespace DBCode {
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink
             };
-            mGetStringBottomPanel = new BottomPanel(mCurrentTheme!, pCancelText: "&Cancel") {
+            mGetStringBottomPanel = new BottomPanel(mCurrentTheme, pCancelText: "&Cancel") {
                Dock = DockStyle.Top
             };
-            mGetStringBottomPanel.mHelpButton!.Tag = new HelpTag(HelpContext.Main, "GetString");
+            ThrowIfNull(mGetStringBottomPanel.mHelpButton, nameof(mGetStringBottomPanel.mHelpButton));
+            ThrowIfNull(mGetStringBottomPanel.mCancelButton, nameof(mGetStringBottomPanel.mCancelButton));
+            mGetStringBottomPanel.mHelpButton.Tag = new HelpTag(HelpContext.Main, "GetString");
             mGetStringBottomPanel.AddRightControl(mOKButton);
-            mGetStringBottomPanel.mCancelButton!.Click += CancelButton_Click;
+            mGetStringBottomPanel.mCancelButton.Click += CancelButton_Click;
             mOKButton.Click += OKButton_Click;
             mInputTextBox.KeyDown += InputTextBox_KeyDown;
             mInnerPanel.Controls.AddRange([mGetStringBottomPanel, mInputTextBox, mPromptLabel, mTitleCluster]);
@@ -82,7 +84,7 @@ namespace DBCode {
          public static void Show(string pTitle, string pPrompt, string pInitialValue, Action<string?, bool> pCallback) {
             ThrowIfNull(mForm, nameof(mForm));
             // Invariant: Form must have exactly one direct child and it must be a ScrollablePanel.
-            if (mForm!.Controls.Count != 1 || mForm.Controls[0] is not ScrollablePanel)
+            if (mForm.Controls.Count != 1 || mForm.Controls[0] is not ScrollablePanel)
                throw new InvalidOperationException(
                   "GetString.Show: Form must have exactly one direct child control and it must be a ScrollablePanel.");
             mUiState.FormBounds = mForm.Bounds;
@@ -99,15 +101,16 @@ namespace DBCode {
          public static void Restore() {
             ThrowIfNull(mForm, nameof(mForm));
             ThrowIfNull(mGetStringPanel, nameof(mGetStringPanel));
-            bool hadControlBox = mGetStringPanel!.mHasControlBox; // capture before dispose
+            ThrowIfNull(mActiveLayoutable, nameof(mActiveLayoutable));
+            bool hadControlBox = mGetStringPanel.mHasControlBox; // capture before dispose
             mGetStringPanel.Detach();
             mGetStringPanel.Dispose();
             mGetStringPanel = null;
-            if (mForm!.Size != mUiState.FormBounds.Size)          // only restore if Show() enlarged the Form
+            if (mForm.Size != mUiState.FormBounds.Size)          // only restore if Show() enlarged the Form
                mForm.Bounds = mUiState.FormBounds;
             if (hadControlBox)
                mForm.ControlBox = true;
-            mActiveLayoutable?.LayoutControls();                   // defensive: ensures layout reflects restored bounds
+            mActiveLayoutable.LayoutControls();                   // defensive: ensures layout reflects restored bounds
          }
 
          private void LayoutClusters() {
@@ -128,7 +131,6 @@ namespace DBCode {
             wantedWidth = Math.Max(wantedWidth, mPromptLabel.Width);
             wantedWidth = Math.Max(wantedWidth, mInputTextBox.Width);
             wantedWidth = Math.Max(wantedWidth, mGetStringBottomPanel.NeededWidth);
-            //[is this an unnecessary duplication]            mTitleCluster.LayoutCluster();
             mGetStringBottomPanel.LayoutControls();             // get correct sizes after font is applied
             mInnerPanel.Size = new Size(
                wantedWidth + mEm,
@@ -161,7 +163,7 @@ namespace DBCode {
 
          private void ApplyTheme() {
             ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
-            Theme theme = mCurrentTheme!;
+            Theme theme = mCurrentTheme;
             Theme.ThemeInterfaceThings(theme, out Font interfaceFont, out Color interfaceForeColor,
                out Color interfaceBackColor);
             // mInnerPanel: content area — themed normally.
@@ -187,7 +189,8 @@ namespace DBCode {
 
          private void CloseDialog(bool pCancelled) {
             WasCancelled = pCancelled;
-            OnClose?.Invoke(ResultValue, WasCancelled);
+            ThrowIfNull(OnClose, nameof(OnClose));
+            OnClose.Invoke(ResultValue, WasCancelled);
          }
 
          private void OKButton_Click(object? pSender, EventArgs pEventArguments) =>
@@ -212,7 +215,8 @@ namespace DBCode {
          protected override void Dispose(bool pDisposing) {
             if (pDisposing) {
                mOKButton.Click -= OKButton_Click;
-               mGetStringBottomPanel.mCancelButton!.Click -= CancelButton_Click;
+               ThrowIfNull(mGetStringBottomPanel.mCancelButton, nameof(mGetStringBottomPanel.mCancelButton));
+               mGetStringBottomPanel.mCancelButton.Click -= CancelButton_Click;
                mInputTextBox.KeyDown -= InputTextBox_KeyDown;
                MainForm.DisposeFontIfOwned(mPromptLabel.Font);
                MainForm.DisposeFontIfOwned(mInputTextBox.Font);

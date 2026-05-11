@@ -6,7 +6,9 @@
          internal Label? mSuffixLabel = null;
 
          internal UpDownCluster(Theme pTheme, string pText, int pMinimum, int pMaximum, int pValue,
-            int pIncrement, Color pBackgroundColor, string? pSuffixText = null) : base(pTheme, pBackgroundColor) {
+            int pIncrement, Color pBackgroundColor, string? pSuffixText = null)
+            : base(pTheme, pBackgroundColor) {
+            ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
             if (!pText.EndsWith(':'))
                pText += ':';
             mNumericUpDown = new NumericUpDown() {
@@ -17,7 +19,7 @@
                Value = pValue,
                Increment = pIncrement,
                Font = CreateNewFont(pTheme.mFonts[(int)FontUsage.Interface]),
-               ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+               ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
                BackColor = pBackgroundColor
             };
             mPrefixButton = new FlattenedButtonCluster(pTheme, pText, mNumericUpDown, pBackgroundColor);
@@ -29,7 +31,7 @@
                   Text = pSuffixText,
                   AutoSize = true,
                   Font = CreateNewFont(pTheme.mFonts[(int)FontUsage.Interface]),
-                  ForeColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
+                  ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
                   BackColor = pBackgroundColor
                };
                Controls.AddRange([mPrefixButton, mNumericUpDown, mSuffixLabel]);

@@ -2,12 +2,61 @@
 
 namespace DBCode {
    internal static class ZOrderHelper {
-
       #region public methods
+      public static bool FocusedControlAcceptsClipboard(IntPtr pWindow) {
+         uint targetThread = GetWindowThreadProcessId(pWindow, out _);
+         uint currentThread = GetCurrentThreadId();
+         // Attach to the target thread so GetFocus() returns its focused control
+         bool attached = AttachThreadInput(currentThread, targetThread, true);
+         IntPtr focusedControl = IntPtr.Zero;
+
+         try {
+            focusedControl = GetFocus();
+         }
+         finally {
+            if (attached)
+               AttachThreadInput(currentThread, targetThread, false);
+         }
+         if (focusedControl == IntPtr.Zero)
+            return false;
+         StringBuilder? className = new StringBuilder(256);
+         GetClassName(focusedControl, className, className.Capacity);
+         string name = className.ToString();
+
+         // Win32 class names for text-accepting controls
+         return name.Equals("Edit", StringComparison.OrdinalIgnoreCase) // TextBox, RichTextBox (WinForms), raw Edit
+            || name.Equals("RichEdit", StringComparison.OrdinalIgnoreCase)
+            || name.Equals("RichEdit20A", StringComparison.OrdinalIgnoreCase)
+            || name.Equals("RichEdit20W", StringComparison.OrdinalIgnoreCase)
+            || name.Equals("RichEdit50W", StringComparison.OrdinalIgnoreCase)   // Word, WordPad, etc.
+            || name.Equals("RICHEDIT60W", StringComparison.OrdinalIgnoreCase)   // Office 2007+
+            || name.StartsWith("WindowsForms10.EDIT", StringComparison.OrdinalIgnoreCase)      // WinForms TextBox
+            || name.StartsWith("WindowsForms10.RichEdit", StringComparison.OrdinalIgnoreCase) // WinForms RichTextBox
+            || name.StartsWith("Scintilla", StringComparison.OrdinalIgnoreCase);
+      }
+
       public static List<IntPtr> GetZOrderSnapshot() {
          List<IntPtr> pList = [];
          EnumWindowsCollect(pList);
          return pList;
+      }
+
+      public static IntPtr GetNextVisibleWindow(IntPtr pTopWindow) {
+         List<IntPtr> pSnapshot = GetZOrderSnapshot();
+         List<IntPtr> pFiltered = [];
+         for (int pIndex = 0; pIndex < pSnapshot.Count; pIndex++) {
+            IntPtr pWindowHandle = pSnapshot[pIndex];
+            if (IsRealVisibleWindow(pWindowHandle))
+               pFiltered.Add(pWindowHandle);
+         }
+         if (pFiltered.Count < 2)
+            return IntPtr.Zero;
+         int pTopIndex = pFiltered.IndexOf(pTopWindow);
+         if (pTopIndex < 0)
+            return IntPtr.Zero;
+         if (pTopIndex >= pFiltered.Count - 1)
+            return IntPtr.Zero;
+         return pFiltered[pTopIndex + 1];
       }
 
       public static IntPtr GetPenultimateVisibleWindow(IntPtr pTopWindow) {
@@ -42,6 +91,22 @@ namespace DBCode {
          if (pCandidates.Count == 0)
             return IntPtr.Zero;
          return pCandidates[0];
+      }
+
+      public static IntPtr GetNextWindow(IntPtr pTarget) {
+         IntPtr foregroundWindow = GetForegroundWindow();
+
+         if ((foregroundWindow == IntPtr.Zero) || (foregroundWindow == pTarget)) {
+            int iterations = 0;
+            do {
+               foregroundWindow = GetForegroundWindow();
+               if ((foregroundWindow == IntPtr.Zero) || (foregroundWindow == pTarget)) {
+                  iterations++;
+                  Thread.Sleep(mUiState.mActivationDelayMs);
+               }
+            } while ((iterations < 5) || (foregroundWindow == pTarget));
+         }
+         return foregroundWindow;
       }
 
       public static IntPtr GetMostSuitableWindow() {
