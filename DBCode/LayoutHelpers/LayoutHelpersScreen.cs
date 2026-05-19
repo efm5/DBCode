@@ -100,13 +100,10 @@ namespace DBCode {
          Screen formScreen = Screen.FromControl(pForm);
          Rectangle workingArea = formScreen.WorkingArea;
          Size size = pForm.Size;
-         int controlBoxSpace = pForm.ControlBox ? 4 : 1; // derived from Form state; no longer a parameter
+         int controlBoxSpace = pForm.ControlBox ? 4 : 1;
          bool changed = false;
          const int margin = 10;
-         SizeF titleSize;
-         using (Graphics graphics = pForm.CreateGraphics()) {
-            titleSize = graphics.MeasureString(pForm.Text, SystemFonts.CaptionFont!);
-         }
+         SizeF titleSize = TextRenderer.MeasureText(pForm.Text, SystemFonts.CaptionFont!);
          int wantedTitleWidth = (int)((titleSize.Width * 0.86f) +
             (SystemInformation.CaptionButtonSize.Width * controlBoxSpace) + (margin * 2));
          int maxAllowedWidth = workingArea.Width - margin;

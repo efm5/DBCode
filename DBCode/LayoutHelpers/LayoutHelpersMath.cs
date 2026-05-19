@@ -685,8 +685,8 @@ namespace DBCode {
       }
 
       internal static int GetTabHeaderHeight(Font pFont) {
-         return TextRenderer.MeasureText(Fields.mUnicodeSampleString,
-            new Font(pFont.FontFamily, pFont.Size + 1f, FontStyle.Bold)).Height + 6;
+         using Font headerFont = new Font(pFont.FontFamily, pFont.Size + 1f, FontStyle.Bold);
+         return TextRenderer.MeasureText(Fields.mUnicodeSampleString, headerFont).Height + 6;
       }
 
       internal static int GetTabHeaderWidth(string pText, Font pFont) {

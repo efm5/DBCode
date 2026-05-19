@@ -1,4 +1,4 @@
-﻿namespace DBCode {
+namespace DBCode {
    internal static partial class LayoutHelpers {
       internal sealed class FlattenedButtonCluster : BaseCluster {
          internal Button? mButton;
@@ -26,11 +26,28 @@
             FlattenButton(mButton, pBackgroundColor);
             mButton.Click += Button_Click;
             Controls.AddRange([mButton, pAssociatedControl]);
+            LayoutControls();
          }
 
          private void Button_Click(object? pSender, EventArgs pEventArguments) {
             mAssociatedControl.Focus();
-            mAssociatedControl.Select();
+            switch (mAssociatedControl) {
+               case TextBox textBox:
+                  textBox.SelectAll();
+                  break;
+               case NumericUpDown numericUpDown:
+                  numericUpDown.Select(0, numericUpDown.Text.Length);
+                  break;
+               case RichTextBox richTextBox:
+                  richTextBox.SelectAll();
+                  break;
+               case ComboBox comboBox when comboBox.Items.Count > 0:
+                  comboBox.DroppedDown = true;
+                  break;
+               default:
+                  mAssociatedControl.Select();
+                  break;
+            }
          }
 
          internal override void LayoutCluster() {
@@ -40,15 +57,18 @@
             mButton.Invalidate();
          }
 
+         internal override void LayoutControlsOnly() => LayoutControls();
+
          internal void LayoutControls() {
             ThrowIfNull(mButton, nameof(mButton));
-            mAssociatedControl.Location = new Point(mButton.Right, mButton.Top);
+            int verticalOffset = (mButton.Height - mAssociatedControl.Height) / 2;
+            mAssociatedControl.Location = new Point(mButton.Right + mEmHalf, mButton.Top + verticalOffset);
          }
 
          internal override void SetFontAndColor() {
             ThrowIfNull(mButton, nameof(mButton));
             Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
-            mButton.Font = CreateNewFont(poFont);
+            UpdateFont(mButton, CreateNewFont(poFont));
             mButton.ForeColor = poForeColor;
             mButton.BackColor = poBackColor;
          }
@@ -57,6 +77,8 @@
             if (pDisposing) {
                ThrowIfNull(mButton, nameof(mButton));
                mButton.Click -= Button_Click;
+               MainForm.DisposeFontIfOwned(mButton.Font);
+               Controls.Remove(mAssociatedControl);  // don't let BaseCluster dispose what we don't own
             }
             base.Dispose(pDisposing);
          }

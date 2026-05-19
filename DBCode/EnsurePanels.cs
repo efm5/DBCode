@@ -9,7 +9,7 @@
          ShowThemePanel(pThemeUsage);
       }
 
-      public void ShowThemePanel(ThemeUsage pThemeUsage) {
+      public static void ShowThemePanel(ThemeUsage pThemeUsage) {
          ThrowIfNull(mForm, nameof(mForm));
          ThrowIfNull(mThemePanel, nameof(mThemePanel));
          ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
@@ -28,11 +28,8 @@
          mThemePanel.SetThemeUsage(pThemeUsage);
          mForm.Controls.Add(mThemePanel);
          EnsureWindowFitsMonitor(mForm);
-         mThemePanel.ApplyTheme(mCurrentTheme);
          mThemePanel.LayoutControls();
-         mActiveLayoutable = mThemePanel.mThemeBottomPanel;
-         TargetListManager.PopulateGrid(mThemePanel.mIncludeDataGridView, mAllowedTargetWindows);
-         TargetListManager.PopulateGrid(mThemePanel.mExcludeDataGridView, mDisallowedTargetWindows);
+         mActiveLayoutable = mThemePanel.mBottomPanel;
          mThemePanel.BringToFront();
          mThemePanel.Visible = true;
          mThemePanel.Show();
@@ -50,8 +47,6 @@
          mUiState.mThemeLocation = mForm.Location;
          mUiState.mThemeSize = mForm.Size;
          bool dirtyTheme = mThemePanel.ThemeIsDirty();
-         TargetListManager.SaveGrid(mThemePanel.mIncludeDataGridView, mAllowedTargetWindows);
-         TargetListManager.SaveGrid(mThemePanel.mExcludeDataGridView, mDisallowedTargetWindows);
          mThemePanel.Visible = false;
          mThemePanel.SendToBack();
          mForm.Controls.Remove(mThemePanel);
@@ -72,14 +67,15 @@
          mMainBottomPanel.LayoutControls();
       }
 
-      public void EnsureThemePickerPanel(PickMode pPickMode) {
+      public static void EnsureThemePickerPanel(PickMode pPickMode) {
          ThrowIfNull(mForm, nameof(mForm));
          mUiState.FormBounds = mForm.Bounds;
+         mThemePickerPanel?.Dispose();
          mThemePickerPanel = new ThemePickerPanel(pPickMode);
          ShowThemePickerPanel();
       }
 
-      public void ShowThemePickerPanel() {
+      public static void ShowThemePickerPanel() {
          ThrowIfNull(mForm, nameof(mForm));
          ThrowIfNull(mThemePickerPanel, nameof(mThemePickerPanel));
          ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
@@ -130,19 +126,21 @@
          mMainBottomPanel.LayoutControls();
       }
 
-      public void EnsureOptionsPanel() {
+      public static void EnsureOptionsPanel() {
          ThrowIfNull(mForm, nameof(mForm));
          mUiState.FormBounds = mForm.Bounds;
+         mOptionsPanel?.Dispose();
          mOptionsPanel = new OptionsPanel();
          ShowOptionsPanel();
       }
 
-      public void ShowOptionsPanel() {
+      public static void ShowOptionsPanel() {
          ThrowIfNull(mForm, nameof(mForm));
          ThrowIfNull(mOptionsPanel, nameof(mOptionsPanel));
-         ThrowIfNull(mOptionsPanel.mOptionsBottomPanel, nameof(mOptionsPanel.mOptionsBottomPanel));
+         ThrowIfNull(mOptionsPanel.mTitleLabel, nameof(mOptionsPanel.mTitleLabel));
+         ThrowIfNull(mOptionsPanel.mBottomPanel, nameof(mOptionsPanel.mBottomPanel));
          ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
-         ThrowIfNull(mOptionsPanel.mClusterGroupBox, nameof(mOptionsPanel.mClusterGroupBox));
+         ThrowIfNull(mOptionsPanel.mMagicNumbersGroupBox, nameof(mOptionsPanel.mMagicNumbersGroupBox));
          double savedOpacity = mForm.Opacity;
          mForm.Opacity = 0;
          mForm.ControlBox = false;
@@ -153,11 +151,12 @@
          }
          mForm.Controls.Add(mOptionsPanel);
          mForm.SuspendClientSizeChanged();
+         mActiveLayoutable = mOptionsPanel.mBottomPanel;
          mOptionsPanel.LayoutControls();
-         mActiveLayoutable = mOptionsPanel.mOptionsBottomPanel;
          mForm.Bounds = mUiState.mOptionsBounds;
          EnsureWindowFitsMonitor(mForm);
-         mOptionsPanel.mOptionsBottomPanel.LayoutControls();
+         TargetListManager.PopulateGrid(mOptionsPanel.mIncludeDataGridView, mAllowedTargetWindows);
+         TargetListManager.PopulateGrid(mOptionsPanel.mExcludeDataGridView, mDisallowedTargetWindows);
          mForm.ResumeClientSizeChanged();
          mOptionsPanel.BringToFront();
          mOptionsPanel.Visible = true;
@@ -173,6 +172,8 @@
          double savedOpacity = mForm.Opacity;
          mForm.Opacity = 0;
          mUiState.mOptionsBounds = mForm.Bounds;
+         TargetListManager.SaveGrid(mOptionsPanel.mIncludeDataGridView, mAllowedTargetWindows);
+         TargetListManager.SaveGrid(mOptionsPanel.mExcludeDataGridView, mDisallowedTargetWindows);
          mOptionsPanel.Visible = false;
          mOptionsPanel.SendToBack();
          mForm.Controls.Remove(mOptionsPanel);
@@ -183,6 +184,72 @@
          ResumeClientSizeChanged();
          mForm.Controls.Add(mScrollableMainPanel);
          mForm.ApplyTheme();
+         mMainBottomPanel.LayoutControls();
+         mScrollableMainPanel.BringToFront();
+         mScrollableMainPanel.Visible = true;
+         mScrollableMainPanel.Show();
+         mForm.ControlBox = true;
+         mForm.Activate();
+         mScrollableMainPanel.Focus();
+         mForm.Opacity = savedOpacity;
+         mActiveLayoutable = mMainBottomPanel;
+         mMainBottomPanel.LayoutControls();
+      }
+
+      public static void EnsureTargetPickerPanel() {
+         ThrowIfNull(mForm, nameof(mForm));
+         mUiState.FormBounds = mForm.Bounds;
+         TargetListManager.InvalidateCache();
+         TargetListManager.EnsureDataFiles();
+         PopulateTargets();
+         mTargetPickerPanel = new TargetPickerPanel();
+         ShowTargetPickerPanel();
+      }
+
+      public static void ShowTargetPickerPanel() {
+         ThrowIfNull(mForm, nameof(mForm));
+         ThrowIfNull(mTargetPickerPanel, nameof(mTargetPickerPanel));
+         ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
+         ThrowIfNull(mTargetPickerPanel.mClusterContainer, nameof(mTargetPickerPanel.mClusterContainer));
+         double savedOpacity = mForm.Opacity;
+         mForm.Opacity = 0;
+         mForm.ControlBox = false;
+         if (mForm.Controls.Contains(mScrollableMainPanel)) {
+            mScrollableMainPanel.Visible = false;
+            mScrollableMainPanel.SendToBack();
+            mForm.Controls.Remove(mScrollableMainPanel);
+         }
+         mForm.Controls.Add(mTargetPickerPanel);
+         mActiveLayoutable = mTargetPickerPanel.mTargetPickerBottomPanel;
+         mTargetPickerPanel.BringToFront();
+         mTargetPickerPanel.Visible = true;
+         mTargetPickerPanel.Show();
+         mForm.Opacity = savedOpacity;
+      }
+
+      public void RestoreFromTargetPickerPanel() {
+         ThrowIfNull(mForm, nameof(mForm));
+         ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
+         ThrowIfNull(mTargetPickerPanel, nameof(mTargetPickerPanel));
+         ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
+         double savedOpacity = mForm.Opacity;
+         mForm.Opacity = 0;
+         mUiState.mTargetPickerBounds = mForm.Bounds;
+         bool targetSelected = mTargetPickerPanel.mTargetSelected;
+         mTargetPickerPanel.Visible = false;
+         mTargetPickerPanel.SendToBack();
+         mForm.Controls.Remove(mTargetPickerPanel);
+         mTargetPickerPanel.Dispose();
+         mTargetPickerPanel = null;
+         if (mTargetedTSMI != null)
+            mTargetedTSMI.Checked = targetSelected;
+         if (!targetSelected)
+            EnterUntargetedMode();
+         SuspendClientSizeChanged();
+         mForm.Bounds = mUiState.FormBounds;
+         ResumeClientSizeChanged();
+         mForm.Controls.Add(mScrollableMainPanel);
+         UpdateTargetingStatusLabel();
          mMainBottomPanel.LayoutControls();
          mScrollableMainPanel.BringToFront();
          mScrollableMainPanel.Visible = true;

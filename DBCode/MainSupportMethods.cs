@@ -1,6 +1,9 @@
 ﻿namespace DBCode {
    public sealed partial class MainForm : Form {
 #if DEBUG
+#pragma warning disable CA2211
+#pragma warning disable IDE0028
+#pragma warning disable IDE0306
       public class MenuNode {
          internal ToolStripMenuItem mItem;
          internal List<MenuNode> mChildren = [];
@@ -9,15 +12,12 @@
          }
       }
 
-      public static List<char> mUsableCharacters = [
-         'a','b','c','d','e','f','g','h','i','j','k','l','m',
-   'n','o','p','q','r','s','t','u','v','w','x','y','z',
-   '0','1','2','3','4','5','6','7','8','9',
-   '`','-','=','[',']',';','\'','"',',','.','/','\\'
-      ];
+      public static List<char> mUsableCharacters = [ 'a','b','c','d','e','f','g','h','i','j','k','l','m',
+         'n','o','p','q','r','s','t','u','v','w','x','y','z',
+         '0','1','2','3','4','5','6','7','8','9',
+         '`','-','=','[',']',';','\'','"',',','.','/','\\' ];
 
       internal static void ProposeAccelerators(MenuStrip pMenuStrip, List<ButtonBase> pReserved) {
-
          static char ExtractAccelerator(string pText) {       // '\0' if no accelerator found.
             for (int i = 0; i < pText.Length - 1; i++) {
                if (pText[i] == '&' && pText[i + 1] != '&')
@@ -472,9 +472,12 @@
          Clipboard.SetText(mReport.ToString());
          TimedMessage("The shortcut information is on the clipboard.", "Information");
       }
+#pragma warning restore CA2211
+#pragma warning restore IDE0028
+#pragma warning restore IDE0306
 #endif
 
-      private int MinimumMainBottomWidth() {
+      private static int MinimumMainBottomWidth() {
          Font font;
          if (mCurrentTheme != null)
             font = mCurrentTheme.mFonts[(int)FontUsage.Status];
@@ -499,9 +502,27 @@
          ClientSizeChanged += OnClientSizeChanged;
       }
 
-      public static void DisposeFontIfOwned(Font? pFont) {
-         if (pFont != null && !pFont.IsSystemFont)
+      internal static void DisposeFontIfOwned(Font pFont) {
+         if (!pFont.IsSystemFont)
             pFont.Dispose();
+      }
+
+      public static void DrawTabControlItem(VariableWidthTabControl pTabControl, DrawItemEventArgs pArgs,
+         Theme pTheme) {
+         TabPage page = pTabControl.TabPages[pArgs.Index];
+         Rectangle rect = pTabControl.GetTabRect(pArgs.Index);
+         bool selected = pTabControl.SelectedIndex == pArgs.Index;
+         Color back = selected ? pTheme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderSelectedBackground]
+                               : pTheme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderUnselectedBackground];
+         Color fore = selected ? pTheme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderSelectedFont]
+                               : pTheme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderUnselectedFont];
+         using Font font = selected ? CreateNewBoldFont() : CreateNewFont();
+         using (SolidBrush brush = new SolidBrush(back))
+            pArgs.Graphics.FillRectangle(brush, rect);
+         Rectangle textRect = new Rectangle(pArgs.Bounds.X + 4, pArgs.Bounds.Y + 1,
+            pArgs.Bounds.Width - 4, pArgs.Bounds.Height - 1);
+         TextRenderer.DrawText(pArgs.Graphics, page.Text, font, textRect, fore,
+            TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
       }
 
       public static void CheckLanguage() {
@@ -595,6 +616,7 @@
          ThrowIfNull(mForm, nameof(mForm));
          ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
          ThrowIfNull(mMenuStrip, nameof(mMenuStrip));
+         ThrowIfNull(mContextMenuStrip, nameof(mContextMenuStrip));
          ThrowIfNull(mHighlighterEngine, nameof(mHighlighterEngine));
          mRichTextBox.TextChanged -= OnEditorTextChanged;
          Theme theme = mCurrentTheme;
@@ -604,6 +626,11 @@
          mRichTextBox.ForeColor = theme.mInterfaceColors[(int)ColorSwatchUsage.TextBoxFont];
          mMenuStrip.BackColor = theme.mInterfaceColors[(int)ColorSwatchUsage.MenuBackground];
          foreach (ToolStripMenuItem toolStripMenuItem in mMenuStrip.Items.OfType<ToolStripMenuItem>()) {
+            PaintMenuItem(toolStripMenuItem, theme);
+            foreach (ToolStripMenuItem subItem in toolStripMenuItem.DropDownItems.OfType<ToolStripMenuItem>())
+               PaintMenuItemsRecursive(subItem, theme);
+         }
+         foreach (ToolStripMenuItem toolStripMenuItem in mContextMenuStrip.Items.OfType<ToolStripMenuItem>()) {
             PaintMenuItem(toolStripMenuItem, theme);
             foreach (ToolStripMenuItem subItem in toolStripMenuItem.DropDownItems.OfType<ToolStripMenuItem>())
                PaintMenuItemsRecursive(subItem, theme);
@@ -626,8 +653,11 @@
                case HelpContext.Main:
                   fullyQualifiedPath = Path.Combine(fullyQualifiedPath, "DBCodeHelp.html");
                   break;
-               case HelpContext.Theme:
-                  fullyQualifiedPath = Path.Combine(fullyQualifiedPath, "DBCodeThemeHelp.html");
+               case HelpContext.ThemeEditor:
+                  fullyQualifiedPath = Path.Combine(fullyQualifiedPath, "DBCodeThemeEditorHelp.html");
+                  break;
+               case HelpContext.ThemePicker:
+                  fullyQualifiedPath = Path.Combine(fullyQualifiedPath, "DBCodeThemePickerHelp.html");
                   break;
                case HelpContext.FontPicker:
                   fullyQualifiedPath = Path.Combine(fullyQualifiedPath, "DBCodeFontPickerHelp.html");
@@ -637,9 +667,12 @@
                   break;
             }
             if (!File.Exists(fullyQualifiedPath)) {
-               TimedMessage(string.Format("DBCode's help HTML file:\ncould not be found"), "Missing Help File");
+               TimedMessage(string.Format($"DBCode's help HTML file:\ncould not be found/n {fullyQualifiedPath}"),
+                  "Missing Help File");
                return;
             }
+            if (!string.IsNullOrEmpty(pSpecificHREFAnchor))
+               fullyQualifiedPath = Path.Combine(fullyQualifiedPath, "DBCodeHelp.html") + "#" + pSpecificHREFAnchor;
             Process process = new Process {
                StartInfo = new ProcessStartInfo(fullyQualifiedPath) {
                   UseShellExecute = true
@@ -957,17 +990,77 @@
          return GetMostSuitableWindow();
       }
 
-      private static void EnterTargetedMode() {
-         IntPtr pWindow = GetMostSuitableWindow();
-         if ((pWindow == IntPtr.Zero) && (mTargetedTSMI != null)) {
-            mTargetedTSMI.Checked = false;
-            EnterUntargetedMode();
-            return;
+      public static void PopulateTargets() {
+         List<string> allowedKeywords = TargetListManager.GetAllowed();
+         mTargets.Clear();
+         List<IntPtr> allowed = [];
+         List<IntPtr> neutral = [];
+         List<nint> debugging = GetAcceptableWindowsInZOrder();
+         foreach (IntPtr handle in GetAcceptableWindowsInZOrder()) {
+            string processName = GetProcessNameForWindow(handle);
+            bool isAllowed = false;
+            foreach (string keyword in allowedKeywords) {
+               if (processName.Contains(keyword, StringComparison.OrdinalIgnoreCase)) {
+                  isAllowed = true;
+                  break;
+               }
+            }
+            if (isAllowed)
+               allowed.Add(handle);
+            else
+               neutral.Add(handle);
          }
-         mIsTargetingEnabled = true;
-         mTargetWindow = pWindow;
-         mTargetWindowName = GetWindowTitle(pWindow);
-         UpdateTargetingStatusLabel();
+         allowed.Sort((pA, pB) => {
+            string keyA = GetMatchedAllowedKeyword(GetProcessNameForWindow(pA), allowedKeywords);
+            string keyB = GetMatchedAllowedKeyword(GetProcessNameForWindow(pB), allowedKeywords);
+            return string.Compare(keyA, keyB, StringComparison.OrdinalIgnoreCase);
+         });
+         foreach (IntPtr handle in allowed) {
+            string fullTitle = GetWindowTitle(handle);
+            string appName = GetMatchedAllowedKeyword(GetProcessNameForWindow(handle), allowedKeywords);
+            if (string.Equals(appName, "devenv", StringComparison.OrdinalIgnoreCase))
+               appName = "Visual Studio";
+            else if (string.Equals(appName, "code", StringComparison.OrdinalIgnoreCase))
+               appName = "Visual Studio Code";
+            mTargets.Add(new Target(appName, handle, true, fullTitle));
+         }
+         foreach (IntPtr handle in neutral) {
+            string fullTitle = GetWindowTitle(handle);
+            string appName = GetProcessNameForWindow(handle);
+            mTargets.Add(new Target(fullTitle, handle, false, GetProcessNameForWindow(handle)));
+         }
+      }
+
+      public static string GetProcessNameForWindow(IntPtr pWindowHandle) {
+         uint success = GetWindowThreadProcessId(pWindowHandle, out uint processId);
+         if (success == 0)
+            return string.Empty;
+         try {
+            using Process process = Process.GetProcessById((int)processId);
+            return process.ProcessName;
+         }
+         catch {
+            return string.Empty;
+         }
+      }
+
+      private static string GetMatchedAllowedKeyword(string pTitle, List<string> pKeywords) {
+         foreach (string keyword in pKeywords)
+            if (pTitle.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+               return keyword;
+         return pTitle;
+      }
+
+      private static string GetMatchedAllowedKeyword(string pTitle) {
+         foreach (string keyword in mAllowed) {
+            if (pTitle.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+               return keyword;
+         }
+         return pTitle;
+      }
+
+      public static void EnterTargetedMode() {
+         EnsureTargetPickerPanel();
       }
 
       private static void EnterUntargetedMode() {
@@ -977,25 +1070,25 @@
          UpdateTargetingStatusLabel();
       }
 
-      private static void UpdateTargetingStatusLabel() {
-         if (mTargetingLabel == null)
-            return;
+      public static void UpdateTargetingStatusLabel() {
+         ThrowIfNull(mTargetingLabel, nameof(mTargetingLabel));
          float fontSize = mTargetingLabel.Font.Size;
-         Size fontMeasure = TextRenderer.MeasureText("Wg", mTargetingLabel.Font); // avoids Font.Height DC dependency
+         Size fontMeasure = TextRenderer.MeasureText(mUnicodeSampleString, mTargetingLabel.Font); // avoids Font.Height DC dependency
+
          if (mIsTargetingEnabled) {
             Image image = GetSizedImage(Icons.StatusTargeted, fontSize);
             mTargetingLabel.Image = image;
             mTargetingLabel.Text = GetWindowTitle(mTargetWindow);
             int textWidth = TextRenderer.MeasureText(mTargetingLabel.Text, mTargetingLabel.Font).Width;
             int height = Math.Max(image.Height, fontMeasure.Height);
-            mTargetingLabel.Size = new Size(image.Width + textWidth + 4, height);
+            mTargetingLabel.Size = new Size(image.Width + textWidth + mTextPadding, height);
          }
          else {
             Image image = GetSizedImage(Icons.StatusUntargeted, fontSize);
             mTargetingLabel.Image = image;
             mTargetingLabel.Text = string.Empty;
             int height = Math.Max(image.Height, fontMeasure.Height);
-            mTargetingLabel.Size = new Size(image.Width, height);
+            mTargetingLabel.Size = new Size(image.Width + 2, height);
          }
          ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
          mTargetingLabel.Top = (mMainBottomPanel.Height - mTargetingLabel.Height) / 2;
@@ -1083,11 +1176,72 @@
          mFeaturesTSMI.Checked = true;
       }
 
-      private void LayoutMainBottomPanel() {
+      private static void LayoutMainBottomPanel() {
          ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
          ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
          ThrowIfNull(mMenuStrip, nameof(mMenuStrip));
          mMainBottomPanel.LayoutControls();
+      }
+
+      private static void Undo() {
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
+         if (mRichTextBox.CanUndo)
+            mRichTextBox.Undo();
+      }
+
+      private static void Redo() {
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
+         if (mRichTextBox.CanRedo)
+            mRichTextBox.Redo();
+      }
+
+      private static void AllIfNothing() {
+         //DEBUG efm5 2026 05 18 implement
+         //if ((Settings.Default.AllIfNothing) && string.IsNullOrEmpty(mRichTextBox..SelectedText))
+         //   mRichTextBox..SelectAll();
+      }
+
+      private static void ActivateVisualStudio() {
+         try {
+            Process process = null;
+            IntPtr vsHandle = IntPtr.Zero;
+            Process[] processList = Process.GetProcesses();
+
+            foreach (Process theprocess in processList) {
+               if (string.Equals(theprocess.ProcessName, "devenv", StringComparison.OrdinalIgnoreCase)) {
+                  process = theprocess;
+                  break;
+               }
+            }
+            if (process != null) {
+               vsHandle = process.MainWindowHandle;
+               if (!SetForegroundWindow(vsHandle))
+                  TimedMessage("SetForegroundWindow failed", "ERROR", 3000);
+               Thread.Sleep(50);
+               _ = SetActiveWindow(vsHandle);
+               Thread.Sleep(20);//efm5 Possibly unnecessary
+            }
+            else
+               TimedMessage("GetProcessesByName failed", "ERROR", 3000);
+         }
+         catch (Exception pException) {
+            TimedMessage("Exception caught; the error message is:" + Environment.NewLine + pException.ToString(),
+               "EXCEPTION CAUGHT", 0);
+         }
+      }
+
+      private void HardFocus() {
+         TopMost = true;
+         Show();
+         BringToFront();
+         Activate();
+         mRichTextBox.Show();
+         mRichTextBox.BringToFront();
+         mRichTextBox.Enabled = true;
+         _ = mRichTextBox.Focus();
+         mRichTextBox.Refresh();
+         ActiveControl = mRichTextBox;
+         //DEBUG efm5 2026 05 18 briefly top
       }
    }
 }

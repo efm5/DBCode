@@ -16,16 +16,13 @@ namespace DBCode {
          private readonly List<LabeledButtonColorSwatchCluster> mSyntaxColorClusters = [];
          public static bool mRepaint = false;
          private readonly Button mApplyButton, mNewButton, mCloneButton;
-         internal readonly BottomPanel mThemeBottomPanel;
+         internal readonly BottomPanel mBottomPanel;
          private ClusterContainer mExamplesContainer, mFontsContainer, mInterfaceColorsContainer, mCSharpColorsContainer,
             mCColorsContainer, mCppColorsContainer, mBasicColorsContainer, mFSharpColorsContainer, mHTMLColorsContainer,
             mCSSColorsContainer, mXMLColorsContainer, mJSONColorsContainer, mPowerShellColorsContainer,
             mBatchColorsContainer, mSQLColorsContainer, mMarkdownColorsContainer, mPythonColorsContainer;
          private readonly List<ClusterContainer> mClusterContainers = [];
-         internal readonly DataGridView mIncludeDataGridView, mExcludeDataGridView;
-         private Font? mIncludeHeaderFont = null, mExcludeHeaderFont = null;
-         private readonly HeaderLabelCluster mInterfaceHeaderCluster, mThemesHeaderCluster, mTargetingHeaderCluster,
-            mIncludeHeaderCluster, mExcludeHeaderCluster, mCSharpHeaderCluster,
+         private readonly HeaderLabelCluster mInterfaceHeaderCluster, mThemesHeaderCluster, mCSharpHeaderCluster,
             mCHeaderCluster, mCppHeaderCluster, mBasicHeaderCluster, mFSharpHeaderCluster, mHTMLHeaderCluster,
             mCSSHeaderCluster, mXMLHeaderCluster, mJSONHeaderCluster, mPowerShellHeaderCluster, mBatchHeaderCluster,
             mSQLHeaderCluster, mMarkdownHeaderCluster, mPythonHeaderCluster, mExamplesHeaderCluster;
@@ -261,13 +258,13 @@ print(f""Primes: {primes}"")",
 All text appears in the default foreground color."
 };
 #pragma warning restore IDE0300
-         private readonly VariableWidthTabControl mPrimaryTabControl, mHighlightTabControl, mIncludeExcludeTabControl;
+         private readonly VariableWidthTabControl mPrimaryTabControl, mHighlightTabControl;
          private bool mThemeIsDirty = false;
          private Panel? mPrimaryScrollPanel, mHighlightInterfaceScrollPanel, mExampleScrollPanel, mHighlightCSharpScrollPanel,
            mHighlightCScrollPanel, mHighlightCppScrollPanel, mHighlightBasicScrollPanel, mHighlightFSharpScrollPanel,
            mHighlightHTMLScrollPanel, mHighlightCSSScrollPanel, mHighlightXMLScrollPanel, mHighlightJSONScrollPanel,
            mHighlightPowerShellScrollPanel, mHighlightBatchScrollPanel, mHighlightSQLScrollPanel,
-           mHighlightMarkdownScrollPanel, mHighlightPythonScrollPanel, mIncludeScrollPanel, mExcludeScrollPanel;
+           mHighlightMarkdownScrollPanel, mHighlightPythonScrollPanel;
          private readonly List<Panel?> mAllScrollPanels = [];
          public Theme mTemporaryTheme;
          private ThemeUsage mThemeUsage;
@@ -310,9 +307,6 @@ All text appears in the default foreground color."
             };
             mThemesHeaderCluster = new HeaderLabelCluster(mTemporaryTheme,
                $"Current Theme's Name: \u201c{mCurrentTheme.mName}\u201d", HeaderLabelSize.Normal);
-            mTargetingHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "Targeting", HeaderLabelSize.Small);
-            mIncludeHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "Windows To Include While Transferring", HeaderLabelSize.Small);
-            mExcludeHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "Windows To Exclude While Transferring", HeaderLabelSize.Small);
             mInterfaceHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "Interface Colors", HeaderLabelSize.Small);
             mExamplesHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "Examples", HeaderLabelSize.Small);
             mCSharpHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "C# Token Highlight Colors", HeaderLabelSize.Small);
@@ -329,90 +323,39 @@ All text appears in the default foreground color."
             mSQLHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "SQL Token Highlight Colors", HeaderLabelSize.Small);
             mMarkdownHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "Markdown Token Highlight Colors", HeaderLabelSize.Small);
             mPythonHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "Python Token Highlight Colors", HeaderLabelSize.Small);
-            mIncludeDataGridView = new DataGridView {
-               Name = "IncludeDataGridView",
-               AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
-               AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None,
-               AllowUserToAddRows = true,
-               AllowUserToDeleteRows = true,
-               AllowUserToResizeRows = false,
-               RowHeadersVisible = false,
-               ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize,
-               SelectionMode = DataGridViewSelectionMode.FullRowSelect,
-               MultiSelect = true,
-               Dock = DockStyle.Fill
-            };
-            mExcludeDataGridView = new DataGridView {
-               Name = "ExcludeDataGridView",
-               AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
-               AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None,
-               AllowUserToAddRows = true,
-               AllowUserToDeleteRows = true,
-               AllowUserToResizeRows = false,
-               RowHeadersVisible = false,
-               ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize,
-               SelectionMode = DataGridViewSelectionMode.FullRowSelect,
-               MultiSelect = true,
-               Dock = DockStyle.Fill
-            };
-            mIncludeDataGridView.ColumnHeadersVisible = false;
-            mExcludeDataGridView.ColumnHeadersVisible = false;
-            mIncludeDataGridView.RowTemplate.Height = 25;
-            mExcludeDataGridView.RowTemplate.Height = 25;
-            mIncludeDataGridView.Columns.Add(new DataGridViewTextBoxColumn {
-               HeaderText = "Include",
-               Name = "IncludeColumn"
-            });
-            mExcludeDataGridView.Columns.Add(new DataGridViewTextBoxColumn {
-               HeaderText = "Exclude",
-               Name = "ExcludeColumn"
-            });
-            mThemeBottomPanel = new BottomPanel(mTemporaryTheme, "&Cancel") {
+
+            mBottomPanel = new BottomPanel(mTemporaryTheme, "&Cancel") {
                Name = $"ThemeBottomPanel{mTabIndex}",
                TabIndex = mTabIndex++
             };
-            mThemeBottomPanel.AddLeftControl(mNewButton);
-            mThemeBottomPanel.AddLeftControl(mCloneButton);
-            mThemeBottomPanel.AddRightControl(mApplyButton);
+            ThrowIfNull(mBottomPanel, nameof(mBottomPanel));
+            ThrowIfNull(mBottomPanel.mHelpButton, nameof(mBottomPanel.mHelpButton));
+            ThrowIfNull(mBottomPanel.mCancelButton, nameof(mBottomPanel.mCancelButton));
+            mBottomPanel.Anchor = mAnchorTopLeft;
+            mBottomPanel.mHelpButton.Tag = new HelpTag(HelpContext.ThemeEditor);
+            mBottomPanel.AddLeftControl(mNewButton);
+            mBottomPanel.AddLeftControl(mCloneButton);
+            mBottomPanel.AddRightControl(mApplyButton);
             mPrimaryTabControl = new VariableWidthTabControl();
             mPrimaryTabControl.TabPages.AddRange([new TabPage("Fonts"), new TabPage("Colors"),
-               new TabPage("Targeting"), new TabPage("Examples")]);
-            mIncludeExcludeTabControl = new VariableWidthTabControl();
-            mIncludeExcludeTabControl.TabPages.AddRange([new TabPage("Inclusions"), new TabPage("Exclusions")]);
+               new TabPage("Examples")]);
             mHighlightTabControl = new VariableWidthTabControl();
             mHighlightTabControl.TabPages.AddRange([new TabPage("Interface"), new TabPage("C#"), new TabPage("C"),
                new TabPage("C++"), new TabPage("Basic"), new TabPage("F#"), new TabPage("HTML"), new TabPage("CSS"),
                new TabPage("XML"), new TabPage("JSON"), new TabPage("Power Shell"), new TabPage("Batch"),
                new TabPage("SQL"), new TabPage("Markdown"), new TabPage("Python")]);
             mPrimaryTabControl.Dock = DockStyle.Fill;
-            mIncludeExcludeTabControl.Dock = DockStyle.Fill;
             mHighlightTabControl.Dock = DockStyle.Fill;
             mPrimaryTabControl.SetStripBackColor(mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground]);
-            mIncludeExcludeTabControl.SetStripBackColor(mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground]);
             mHighlightTabControl.SetStripBackColor(mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground]);
             mPrimaryTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
-            mIncludeExcludeTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
             mHighlightTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;
             mPrimaryTabControl.DrawItem += PrimaryTabControl_DrawItem;
-            mIncludeExcludeTabControl.DrawItem += IncludeExcludeTabControl_DrawItem;
             mHighlightTabControl.DrawItem += HighlightTabControl_DrawItem;
             mPrimaryTabControl.SelectedIndexChanged += PrimaryTabControl_SelectedIndexChanged;
-            mIncludeExcludeTabControl.SelectedIndexChanged += IncludeExcludeTabControl_SelectedIndexChanged;
             mHighlightTabControl.SelectedIndexChanged += HighlightTabControl_SelectedIndexChanged;
             mPrimaryScrollPanel = new Panel {
                Name = $"PrimaryTabControlTabPageScrollPanel{mTabIndex}",
-               TabIndex = mTabIndex++,
-               Dock = DockStyle.Fill,
-               AutoScroll = true
-            };
-            mIncludeScrollPanel = new Panel {
-               Name = $"IncludeTabControlTabPageScrollPanel{mTabIndex}",
-               TabIndex = mTabIndex++,
-               Dock = DockStyle.Fill,
-               AutoScroll = true
-            };
-            mExcludeScrollPanel = new Panel {
-               Name = $"ExcludeTabControlTabPageScrollPanel{mTabIndex}",
                TabIndex = mTabIndex++,
                Dock = DockStyle.Fill,
                AutoScroll = true
@@ -610,10 +553,6 @@ All text appears in the default foreground color."
             mExampleBottomPanel.AddLeftControl(mBottomExampleButton);
             mExampleScrollPanel.Controls.AddRange([mExamplesContainer, mExampleBottomPanel,
                mExampleGroupBox, mExampleMenuStrip, mExamplesHeaderCluster]);
-            mIncludeExcludeTabControl.TabPages[(int)TargetingTabPageUsage.Include].Controls.Add(mIncludeScrollPanel);
-            mIncludeScrollPanel.Controls.AddRange([mIncludeDataGridView, mIncludeHeaderCluster]);
-            mIncludeExcludeTabControl.TabPages[(int)TargetingTabPageUsage.Exclude].Controls.Add(mExcludeScrollPanel);
-            mExcludeScrollPanel.Controls.AddRange([mExcludeDataGridView, mExcludeHeaderCluster]);
             mHighlightTabControl.TabPages[(int)HighlightTabPageUsage.Interface].Controls.Add(mHighlightInterfaceScrollPanel);
             AddColorCluster(mInterfaceColorClusters, "Panel Background", ColorSwatchUsage.PanelBackground);
             AddColorCluster(mInterfaceColorClusters, "TextBox Background", ColorSwatchUsage.TextBox);
@@ -631,7 +570,7 @@ All text appears in the default foreground color."
             AddColorCluster(mInterfaceColorClusters, "Tab Header Unselected Background", ColorSwatchUsage.TabHeaderUnselectedBackground);
             AddColorCluster(mInterfaceColorClusters, "Tab Header Selected Background", ColorSwatchUsage.TabHeaderSelectedBackground);
             mInterfaceColorsContainer = new ClusterContainer(mHighlightInterfaceScrollPanel, mInterfaceColorClusters,
-               ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               ClusterLayoutMode.FixedColumns, 0, 0, 2, 0) {
                Name = "InterfaceColorsClusterContainer"
             };
             mHighlightInterfaceScrollPanel.Controls.AddRange([mInterfaceHeaderCluster, mInterfaceColorsContainer]);
@@ -648,7 +587,7 @@ All text appears in the default foreground color."
             AddColorCluster(mCSharpColorClusters, "Operator", TokenKind.Operator, LanguageKind.CSharp);
             AddColorCluster(mCSharpColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.CSharp);
             mCSharpColorsContainer = new ClusterContainer(mHighlightCSharpScrollPanel, mCSharpColorClusters,
-               ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               ClusterLayoutMode.FixedColumns, 0, 0, 2, 0) {
                Name = "CSharpColorsClusterContainer"
             };
             mHighlightCSharpScrollPanel.Controls.AddRange([mCSharpHeaderCluster, mCSharpColorsContainer]);
@@ -665,7 +604,7 @@ All text appears in the default foreground color."
             AddColorCluster(mCColorClusters, "Operator", TokenKind.Operator, LanguageKind.C);
             AddColorCluster(mCColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.C);
             mCColorsContainer = new ClusterContainer(mHighlightCScrollPanel, mCColorClusters,
-               ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               ClusterLayoutMode.FixedColumns, 0, 0, 2, 0) {
                Name = "CColorsClusterContainer"
             };
             mHighlightCScrollPanel.Controls.AddRange([mCHeaderCluster, mCColorsContainer]);
@@ -682,7 +621,7 @@ All text appears in the default foreground color."
             AddColorCluster(mCppColorClusters, "Operator", TokenKind.Operator, LanguageKind.Cpp);
             AddColorCluster(mCppColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.Cpp);
             mCppColorsContainer = new ClusterContainer(mHighlightCppScrollPanel, mCppColorClusters,
-               ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               ClusterLayoutMode.FixedColumns, 0, 0, 2, 0) {
                Name = "CppColorsClusterContainer"
             };
             mHighlightCppScrollPanel.Controls.AddRange([mCppHeaderCluster, mCppColorsContainer]);
@@ -699,7 +638,7 @@ All text appears in the default foreground color."
             AddColorCluster(mBasicColorClusters, "Operator", TokenKind.Operator, LanguageKind.Basic);
             AddColorCluster(mBasicColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.Basic);
             mBasicColorsContainer = new ClusterContainer(mHighlightBasicScrollPanel, mBasicColorClusters,
-               ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               ClusterLayoutMode.FixedColumns, 0, 0, 2, 0) {
                Name = "BasicColorsClusterContainer"
             };
             mHighlightBasicScrollPanel.Controls.AddRange([mBasicHeaderCluster, mBasicColorsContainer]);
@@ -716,7 +655,7 @@ All text appears in the default foreground color."
             AddColorCluster(mFSharpColorClusters, "Operator", TokenKind.Operator, LanguageKind.FSharp);
             AddColorCluster(mFSharpColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.FSharp);
             mFSharpColorsContainer = new ClusterContainer(mHighlightFSharpScrollPanel, mFSharpColorClusters,
-               ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               ClusterLayoutMode.FixedColumns, 0, 0, 2, 0) {
                Name = "FSharpColorsClusterContainer"
             };
             mHighlightFSharpScrollPanel.Controls.AddRange([mFSharpHeaderCluster, mFSharpColorsContainer]);
@@ -733,7 +672,7 @@ All text appears in the default foreground color."
             AddColorCluster(mHTMLColorClusters, "Operator", TokenKind.Operator, LanguageKind.Html);
             AddColorCluster(mHTMLColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.Html);
             mHTMLColorsContainer = new ClusterContainer(mHighlightHTMLScrollPanel, mHTMLColorClusters,
-               ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               ClusterLayoutMode.FixedColumns, 0, 0, 2, 0) {
                Name = "HTMLColorsClusterContainer"
             };
             mHighlightHTMLScrollPanel.Controls.AddRange([mHTMLHeaderCluster, mHTMLColorsContainer]);
@@ -750,7 +689,7 @@ All text appears in the default foreground color."
             AddColorCluster(mCSSColorClusters, "Operator", TokenKind.Operator, LanguageKind.Css);
             AddColorCluster(mCSSColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.Css);
             mCSSColorsContainer = new ClusterContainer(mHighlightCSSScrollPanel, mCSSColorClusters,
-               ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               ClusterLayoutMode.FixedColumns, 0, 0, 2, 0) {
                Name = "CSSColorsClusterContainer"
             };
             mHighlightCSSScrollPanel.Controls.AddRange([mCSSHeaderCluster, mCSSColorsContainer]);
@@ -767,7 +706,7 @@ All text appears in the default foreground color."
             AddColorCluster(mXMLColorClusters, "Operator", TokenKind.Operator, LanguageKind.Xml);
             AddColorCluster(mXMLColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.Xml);
             mXMLColorsContainer = new ClusterContainer(mHighlightXMLScrollPanel, mXMLColorClusters,
-               ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               ClusterLayoutMode.FixedColumns, 0, 0, 2, 0) {
                Name = "XMLColorsClusterContainer"
             };
             mHighlightXMLScrollPanel.Controls.AddRange([mXMLHeaderCluster, mXMLColorsContainer]);
@@ -784,7 +723,7 @@ All text appears in the default foreground color."
             AddColorCluster(mJSONColorClusters, "Operator", TokenKind.Operator, LanguageKind.Json);
             AddColorCluster(mJSONColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.Json);
             mJSONColorsContainer = new ClusterContainer(mHighlightJSONScrollPanel, mJSONColorClusters,
-               ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               ClusterLayoutMode.FixedColumns, 0, 0, 2, 0) {
                Name = "JSONColorsClusterContainer"
             };
             mHighlightJSONScrollPanel.Controls.AddRange([mJSONHeaderCluster, mJSONColorsContainer]);
@@ -801,7 +740,7 @@ All text appears in the default foreground color."
             AddColorCluster(mPowerShellColorClusters, "Operator", TokenKind.Operator, LanguageKind.PowerShell);
             AddColorCluster(mPowerShellColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.PowerShell);
             mPowerShellColorsContainer = new ClusterContainer(mHighlightPowerShellScrollPanel, mPowerShellColorClusters,
-               ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               ClusterLayoutMode.FixedColumns, 0, 0, 2, 0) {
                Name = "PowerShellColorsClusterContainer"
             };
             mHighlightPowerShellScrollPanel.Controls.AddRange([mPowerShellHeaderCluster, mPowerShellColorsContainer]);
@@ -818,7 +757,7 @@ All text appears in the default foreground color."
             AddColorCluster(mBatchColorClusters, "Operator", TokenKind.Operator, LanguageKind.Batch);
             AddColorCluster(mBatchColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.Batch);
             mBatchColorsContainer = new ClusterContainer(mHighlightBatchScrollPanel, mBatchColorClusters,
-               ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               ClusterLayoutMode.FixedColumns, 0, 0, 2, 0) {
                Name = "BatchColorsClusterContainer"
             };
             mHighlightBatchScrollPanel.Controls.AddRange([mBatchHeaderCluster, mBatchColorsContainer]);
@@ -835,7 +774,7 @@ All text appears in the default foreground color."
             AddColorCluster(mSQLColorClusters, "Operator", TokenKind.Operator, LanguageKind.Sql);
             AddColorCluster(mSQLColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.Sql);
             mSQLColorsContainer = new ClusterContainer(mHighlightSQLScrollPanel, mSQLColorClusters,
-               ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               ClusterLayoutMode.FixedColumns, 0, 0, 2, 0) {
                Name = "SQLColorsClusterContainer"
             };
             mHighlightSQLScrollPanel.Controls.AddRange([mSQLHeaderCluster, mSQLColorsContainer]);
@@ -852,7 +791,7 @@ All text appears in the default foreground color."
             AddColorCluster(mMarkdownColorClusters, "Operator", TokenKind.Operator, LanguageKind.Markdown);
             AddColorCluster(mMarkdownColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.Markdown);
             mMarkdownColorsContainer = new ClusterContainer(mHighlightMarkdownScrollPanel, mMarkdownColorClusters,
-               ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               ClusterLayoutMode.FixedColumns, 0, 0, 2, 0) {
                Name = "MarkdownColorsClusterContainer"
             };
             mHighlightMarkdownScrollPanel.Controls.AddRange([mMarkdownHeaderCluster, mMarkdownColorsContainer]);
@@ -869,13 +808,12 @@ All text appears in the default foreground color."
             AddColorCluster(mPythonColorClusters, "Operator", TokenKind.Operator, LanguageKind.Python);
             AddColorCluster(mPythonColorClusters, "Punctuation", TokenKind.Punctuation, LanguageKind.Python);
             mPythonColorsContainer = new ClusterContainer(mHighlightPythonScrollPanel, mPythonColorClusters,
-               ClusterLayoutMode.FixedColumns, 0, 0, 3, 0) {
+               ClusterLayoutMode.FixedColumns, 0, 0, 2, 0) {
                Name = "PythonColorsClusterContainer"
             };
             mHighlightPythonScrollPanel.Controls.AddRange([mPythonHeaderCluster, mPythonColorsContainer]);
             mPrimaryTabControl.TabPages[(int)PrimaryTabPageUsage.Interface].Controls.Add(mPrimaryScrollPanel);
             mPrimaryTabControl.TabPages[(int)PrimaryTabPageUsage.Color].Controls.Add(mHighlightTabControl);
-            mPrimaryTabControl.TabPages[(int)PrimaryTabPageUsage.Targeting].Controls.Add(mIncludeExcludeTabControl);
             mPrimaryTabControl.TabPages[(int)PrimaryTabPageUsage.Examples].Controls.Add(mExampleScrollPanel);
             mClusterContainers.AddRange([mFontsContainer, mInterfaceColorsContainer,
                mCSharpColorsContainer, mCColorsContainer, mCppColorsContainer, mBasicColorsContainer,
@@ -886,13 +824,81 @@ All text appears in the default foreground color."
                mCColorClusters, mCppColorClusters, mBasicColorClusters, mFSharpColorClusters, mHTMLColorClusters,
                mCSSColorClusters, mXMLColorClusters, mJSONColorClusters, mPowerShellColorClusters, mBatchColorClusters,
                mSQLColorClusters, mMarkdownColorClusters, mPythonColorClusters, mExamplesClusters]);
-            mAllScrollPanels.AddRange([mPrimaryScrollPanel, mIncludeScrollPanel,
+            mAllScrollPanels.AddRange([mPrimaryScrollPanel,
                mHighlightInterfaceScrollPanel, mExampleScrollPanel, mHighlightCSharpScrollPanel, mHighlightCScrollPanel,
                mHighlightCppScrollPanel, mHighlightBasicScrollPanel, mHighlightFSharpScrollPanel, mHighlightHTMLScrollPanel,
                mHighlightCSSScrollPanel, mHighlightXMLScrollPanel, mHighlightJSONScrollPanel,
                mHighlightPowerShellScrollPanel, mHighlightBatchScrollPanel, mHighlightSQLScrollPanel,
                mHighlightMarkdownScrollPanel, mHighlightPythonScrollPanel]);
             ResumeLayout(false);
+         }
+
+         protected override void Dispose(bool pDisposing) {
+            if (pDisposing) {
+               ThrowIfNull(mBottomPanel.mCancelButton, nameof(mBottomPanel.mCancelButton));
+               ThrowIfNull(mBottomPanel.mHelpButton, nameof(mBottomPanel.mHelpButton));
+               mBottomPanel.mCancelButton.Click -= CancelButton_Click;
+               mBottomPanel.mHelpButton.Click -= MainForm.Help_Click;
+               mApplyButton.Click -= ApplyButton_Click;
+               mNewButton.Click -= NewButton_Click;
+               mCloneButton.Click -= CloneButton_Click;
+               mPrimaryTabControl.DrawItem -= PrimaryTabControl_DrawItem;
+               mHighlightTabControl.DrawItem -= HighlightTabControl_DrawItem;
+               mPrimaryTabControl.SelectedIndexChanged -= PrimaryTabControl_SelectedIndexChanged;
+               mHighlightTabControl.SelectedIndexChanged -= HighlightTabControl_SelectedIndexChanged;
+               if (mExampleScrollPanel != null)
+                  mExampleScrollPanel.ClientSizeChanged -= ExampleScrollPanel_ClientSizeChanged;
+               foreach (List<BaseCluster> clusterList in mAllClusters) {
+                  foreach (BaseCluster cluster in clusterList) {
+                     if (cluster is LabeledButtonColorSwatchCluster colorCluster) {
+                        if (mSyntaxColorClusters.Contains(colorCluster))
+                           colorCluster.SwatchClicked -= OnSyntaxColorSwatchClicked;
+                        else
+                           colorCluster.SwatchClicked -= OnColorSwatchClicked;
+                     }
+                     else if (cluster is LabeledButtonTextBoxCluster textBoxCluster)
+                        textBoxCluster.FontButtonClicked -= OnFontButtonClicked;
+                  }
+               }
+               mTemporaryTheme.Dispose();
+               mBottomPanel.Dispose();
+               mExampleBottomPanel.Dispose();
+               mHighlightTabControl.Dispose();
+               mPrimaryTabControl.Dispose();
+               foreach (ClusterContainer container in mClusterContainers)
+                  container.Dispose();
+               mInterfaceHeaderCluster.Dispose();
+               mThemesHeaderCluster.Dispose();
+               mExamplesHeaderCluster.Dispose();
+               mCSharpHeaderCluster.Dispose();
+               mCHeaderCluster.Dispose();
+               mCppHeaderCluster.Dispose();
+               mBasicHeaderCluster.Dispose();
+               mFSharpHeaderCluster.Dispose();
+               mHTMLHeaderCluster.Dispose();
+               mCSSHeaderCluster.Dispose();
+               mXMLHeaderCluster.Dispose();
+               mJSONHeaderCluster.Dispose();
+               mPowerShellHeaderCluster.Dispose();
+               mBatchHeaderCluster.Dispose();
+               mSQLHeaderCluster.Dispose();
+               mMarkdownHeaderCluster.Dispose();
+               mPythonHeaderCluster.Dispose();
+               mExampleMenuStrip.Dispose();
+               mExampleGroupBox.Dispose();
+               mExampleRichTextBox.Dispose();
+               mExampleButton.Dispose();
+               mExampleCheckBox.Dispose();
+               mExampleRadioButton.Dispose();
+               mBottomExampleButton.Dispose();
+               foreach (Panel? panel in mAllScrollPanels)
+                  panel?.Dispose();
+               foreach (List<BaseCluster> clusterList in mAllClusters) {
+                  foreach (BaseCluster cluster in clusterList)
+                     cluster.Dispose();
+               }
+            }
+            base.Dispose(pDisposing);
          }
       }
    }

@@ -1,25 +1,25 @@
 namespace DBCode {
    namespace Themes {
       internal sealed partial class ColorPickerPanel : ScrollablePanel {
+         internal BottomPanel mBottomPanel;
+         private bool mIsSyntaxColor;
          private Button mBluePrefixButton, mGrayPrefixButton, mGreenPrefixButton,
-            mNamedColorPrefixButton, mRedPrefixButton;
-         private CheckBox mUseGrayscaleCheckBox, mUseNamedCheckBox;
+            mNamedColorPrefixButton, mRedPrefixButton, mOKButton;
+         private ScalableCheckBox mUseGrayscaleCheckBox, mUseNamedCheckBox;
          private Color mInitialColor;
          private ColorSwatch mBlueSwatch, mGraySwatch, mGreenSwatch, mRedSwatch;
          private ColorSwatchUsage mColorSwatchUsage;
          private ComboBox mNamedColorsComboBox;
+         private List<Font> mOwnedFonts = [];
          private GroupBox mCustomColorGroupBox, mNamedColorsGroupBox;
-         private TwoLineHeaderLabelCluster mTitleLabel;
          private LabeledColorSwatchCluster mDemoSwatch;
+         private LanguageKind mLanguageKind;
          private NumericUpDown mBlueUpDown, mGrayUpDown, mGreenUpDown, mRedUpDown;
          private Panel mScrollPanel;
-         internal BottomPanel mColorPickerBottomPanel;
-         private Theme mTheme;
-         private TrackBar mBlueSlider, mGraySlider, mGreenSlider, mRedSlider;
-         internal double mOriginalOpacity;
+         internal Theme mTheme;
          private TokenKind mTokenKind;
-         private LanguageKind mLanguageKind;
-         private bool mIsSyntaxColor;
+         private TrackBar mBlueSlider, mGraySlider, mGreenSlider, mRedSlider;
+         private TwoLineHeaderLabelCluster mTitleLabel;
 
          public ColorPickerPanel(Theme pTheme, ColorSwatchUsage pColorSwatchUsage, Color pInitialColor) {
             mInitialColor = pInitialColor;
@@ -37,25 +37,18 @@ namespace DBCode {
                Name = $"ColorPickerScrollPanel{mTabIndex++}",
                TabIndex = TAB_INDEX_IGNORED,
                AutoScroll = true,
-               BackColor = interfaceBackground,
-               Anchor = mAnchorTopLeftBottomRight
+               BackColor = interfaceBackground
             };
             mNamedColorsGroupBox = new GroupBox {
                Name = $"NamedColorsGroupBox{mTabIndex++}",
                TabIndex = TAB_INDEX_IGNORED,
                Text = "Named Colors",
-               Font = CreateNewBoldFont(interfaceTextFont),
                ForeColor = interfaceFont,
                BackColor = groupBoxBackground
             };
-            mUseNamedCheckBox = new CheckBox {
+            mUseNamedCheckBox = new ScalableCheckBox("&Use Named Colors Only", mTheme, false) {
                Name = $"UseNamedCheckBox{mTabIndex}",
-               TabIndex = mTabIndex++,
-               Text = "&Use Named Colors Only",
-               AutoSize = true,
-               Font = CreateNewFont(interfaceTextFont),
-               ForeColor = interfaceFont,
-               BackColor = Color.Transparent
+               TabIndex = mTabIndex++
             };
             mNamedColorPrefixButton = new Button {
                Name = $"NamedColorPrefixButton{mTabIndex}",
@@ -63,14 +56,12 @@ namespace DBCode {
                Text = "Named Color &Drop-down:",
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-               Font = CreateNewFont(interfaceTextFont),
                ForeColor = interfaceFont
             };
             mNamedColorsComboBox = new ComboBox {
                Name = $"NamedColorsComboBox{mTabIndex}",
                TabIndex = mTabIndex++,
                DropDownStyle = ComboBoxStyle.DropDown,
-               Font = CreateNewFont(interfaceTextFont)
             };
             PropertyInfo[] predefinedColors = typeof(Color).GetProperties(BindingFlags.Static | BindingFlags.Public)
                .Where(p => p.PropertyType == typeof(Color)).ToArray();
@@ -82,18 +73,12 @@ namespace DBCode {
                Name = $"CustomColorGroupBox{mTabIndex++}",
                TabIndex = TAB_INDEX_IGNORED,
                Text = "Custom Color",
-               Font = CreateNewBoldFont(interfaceTextFont),
                ForeColor = interfaceFont,
                BackColor = groupBoxBackground
             };
-            mUseGrayscaleCheckBox = new CheckBox {
+            mUseGrayscaleCheckBox = new ScalableCheckBox("&Use Grayscale Only", mTheme, false) {
                Name = $"UseGrayscaleCheckBox{mTabIndex}",
-               TabIndex = mTabIndex++,
-               Text = "&Use Grayscale Only",
-               AutoSize = true,
-               Font = CreateNewFont(interfaceTextFont),
-               ForeColor = interfaceFont,
-               BackColor = Color.Transparent
+               TabIndex = mTabIndex++
             };
             mGrayPrefixButton = new Button {
                Name = $"GrayPrefixButton{mTabIndex}",
@@ -101,7 +86,6 @@ namespace DBCode {
                Text = "Gra&y Value:",
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-               Font = CreateNewFont(interfaceTextFont),
                ForeColor = interfaceFont
             };
             mGrayUpDown = new NumericUpDown {
@@ -109,9 +93,9 @@ namespace DBCode {
                TabIndex = mTabIndex++,
                Minimum = 0,
                Maximum = 255,
-               Value = 128,
-               Font = CreateNewFont(interfaceTextFont)
+               Value = 128
             };
+            SetUpDownBoxWidth(mGrayUpDown);
             mGraySlider = new TrackBar {
                Name = $"GraySlider{mTabIndex}",
                TabIndex = mTabIndex++,
@@ -121,7 +105,7 @@ namespace DBCode {
                TickFrequency = 16,
                Width = 200
             };
-            mGraySwatch = new ColorSwatch(ColorPickerSwatchUsage.Gray, GrayFromInitialColor(), -1);
+            mGraySwatch = new ColorSwatch(ColorPickerSwatchUsage.Gray, GraySwatchColor(mInitialColor), -1);
             FlattenButton(mGrayPrefixButton, groupBoxBackground);
             mRedPrefixButton = new Button {
                Name = $"RedPrefixButton{mTabIndex}",
@@ -129,7 +113,6 @@ namespace DBCode {
                Text = "&Red Value:",
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-               Font = CreateNewFont(interfaceTextFont),
                ForeColor = interfaceFont
             };
             mRedUpDown = new NumericUpDown {
@@ -137,9 +120,9 @@ namespace DBCode {
                TabIndex = mTabIndex++,
                Minimum = 0,
                Maximum = 255,
-               Value = 255,
-               Font = CreateNewFont(interfaceTextFont)
+               Value = 255
             };
+            SetUpDownBoxWidth(mRedUpDown);
             mRedSlider = new TrackBar {
                Name = $"RedSlider{mTabIndex}",
                TabIndex = mTabIndex++,
@@ -149,7 +132,7 @@ namespace DBCode {
                TickFrequency = 16,
                Width = 200
             };
-            mRedSwatch = new ColorSwatch(ColorPickerSwatchUsage.Red, RedFromInitialColor(), -1);
+            mRedSwatch = new ColorSwatch(ColorPickerSwatchUsage.Red, RedSwatchColor(mInitialColor), -1);
             FlattenButton(mRedPrefixButton, groupBoxBackground);
             mGreenPrefixButton = new Button {
                Name = $"GreenPrefixButton{mTabIndex}",
@@ -157,7 +140,6 @@ namespace DBCode {
                Text = "&Green Value:",
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-               Font = CreateNewFont(interfaceTextFont),
                ForeColor = interfaceFont
             };
             mGreenUpDown = new NumericUpDown {
@@ -165,9 +147,9 @@ namespace DBCode {
                TabIndex = mTabIndex++,
                Minimum = 0,
                Maximum = 255,
-               Value = 0,
-               Font = CreateNewFont(interfaceTextFont)
+               Value = 0
             };
+            SetUpDownBoxWidth(mGreenUpDown);
             mGreenSlider = new TrackBar {
                Name = $"GreenSlider{mTabIndex}",
                TabIndex = mTabIndex++,
@@ -177,7 +159,7 @@ namespace DBCode {
                TickFrequency = 16,
                Width = 200
             };
-            mGreenSwatch = new ColorSwatch(ColorPickerSwatchUsage.Green, GreenFromInitialColor(), -1);
+            mGreenSwatch = new ColorSwatch(ColorPickerSwatchUsage.Green, GreenSwatchColor(mInitialColor), -1);
             FlattenButton(mGreenPrefixButton, groupBoxBackground);
             mBluePrefixButton = new Button {
                Name = $"BluePrefixButton{mTabIndex}",
@@ -185,7 +167,6 @@ namespace DBCode {
                Text = "&Blue Value:",
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink,
-               Font = CreateNewFont(interfaceTextFont),
                ForeColor = interfaceFont
             };
             mBlueUpDown = new NumericUpDown {
@@ -193,9 +174,9 @@ namespace DBCode {
                TabIndex = mTabIndex++,
                Minimum = 0,
                Maximum = 255,
-               Value = 0,
-               Font = CreateNewFont(interfaceTextFont)
+               Value = 0
             };
+            SetUpDownBoxWidth(mBlueUpDown);
             mBlueSlider = new TrackBar {
                Name = $"BlueSlider{mTabIndex}",
                TabIndex = mTabIndex++,
@@ -205,7 +186,7 @@ namespace DBCode {
                TickFrequency = 16,
                Width = 200
             };
-            mBlueSwatch = new ColorSwatch(ColorPickerSwatchUsage.Blue, BlueFromInitialColor(), -1);
+            mBlueSwatch = new ColorSwatch(ColorPickerSwatchUsage.Blue, BlueSwatchColor(mInitialColor), -1);
             FlattenButton(mBluePrefixButton, groupBoxBackground);
             mCustomColorGroupBox.Controls.AddRange([mUseGrayscaleCheckBox, mGrayPrefixButton, mGrayUpDown,
                mGraySlider, mGraySwatch, mRedPrefixButton, mRedUpDown, mRedSlider, mRedSwatch,
@@ -213,27 +194,27 @@ namespace DBCode {
                mBlueUpDown, mBlueSlider, mBlueSwatch]);
             mDemoSwatch = new LabeledColorSwatchCluster(mTheme, "Example:", LabelPosition.Left, mInitialColor);
             mCustomColorGroupBox.Controls.Add(mDemoSwatch);
-            mColorPickerBottomPanel = new BottomPanel(mTheme, "&Cancel") {
+            mBottomPanel = new BottomPanel(mTheme, "&Cancel") {
                Name = $"ColorPickerBottomPanel{mTabIndex++}"
             };
-            ThrowIfNull(mColorPickerBottomPanel.mHelpButton, nameof(mColorPickerBottomPanel.mHelpButton));
-            ThrowIfNull(mColorPickerBottomPanel.mCancelButton, nameof(mColorPickerBottomPanel.mCancelButton));
-            mColorPickerBottomPanel.mHelpButton.Text = "Help";
-            mColorPickerBottomPanel.mHelpButton.Tag = new HelpTag(HelpContext.ColorPicker);
-            mColorPickerBottomPanel.mHelpButton.Click += MainForm.Help_Click;
-            Button okButton = new Button {
+            ThrowIfNull(mBottomPanel.mHelpButton, nameof(mBottomPanel.mHelpButton));
+            ThrowIfNull(mBottomPanel.mCancelButton, nameof(mBottomPanel.mCancelButton));
+            mBottomPanel.mHelpButton.Text = "Help";
+            mBottomPanel.mHelpButton.Tag = new HelpTag(HelpContext.ColorPicker);
+            mBottomPanel.mHelpButton.Click += MainForm.Help_Click;
+            mOKButton = new Button {
                Name = $"ColorPickerOkButton{mTabIndex}",
                TabIndex = mTabIndex++,
                Text = "&OK",
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink
             };
-            mColorPickerBottomPanel.AddRightControl(okButton);
-            okButton.Click += OkButton_Click;
-            mColorPickerBottomPanel.mCancelButton.Click += CancelButton_Click;
+            mBottomPanel.AddRightControl(mOKButton);
+            mOKButton.Click += OkButton_Click;
+            mBottomPanel.mCancelButton.Click += CancelButton_Click;
             BackColor = interfaceBackground;
             mScrollPanel.Controls.AddRange([mNamedColorsGroupBox, mCustomColorGroupBox]);
-            Controls.AddRange([mScrollPanel, mColorPickerBottomPanel, mTitleLabel]);
+            Controls.AddRange([mScrollPanel, mBottomPanel, mTitleLabel]);
             AttachEventHandlers();
          }
 
@@ -249,10 +230,11 @@ namespace DBCode {
             ThrowIfNull(mTitleLabel, nameof(mTitleLabel));
             ThrowIfNull(mNamedColorsGroupBox, nameof(mNamedColorsGroupBox));
             ThrowIfNull(mCustomColorGroupBox, nameof(mCustomColorGroupBox));
+            ThrowIfNull(mColorPickerPanel, nameof(mColorPickerPanel));
             ThrowIfNull(mForm, nameof(mForm));
             RemoveEventHandlers();
-            RemoveEventHandlers();
             SetFontsAndColors();
+            SetColorValues(mInitialColor);
             mTitleLabel.LayoutCluster();
             mNamedColorsGroupBox.Location = new Point(mEm, mEm);
             mUseNamedCheckBox.Location = GetGroupBoxFirstLineOffset(mNamedColorsGroupBox);
@@ -285,18 +267,39 @@ namespace DBCode {
             mDemoSwatch.Location = new Point(mEm3, mBlueSlider.Bottom + mEm2);
             SizeGroupBox(mCustomColorGroupBox);
             mScrollPanel.Location = new Point(1, mTitleLabel.Bottom);
-            mScrollPanel.Size = new Size(ClientSize.Width - 2,
-               ClientSize.Height - mTitleLabel.Height - mColorPickerBottomPanel.Height);
-            mColorPickerBottomPanel.Top = mScrollPanel.Bottom;
-            mColorPickerBottomPanel.LayoutControls();
-            RestoreColorPickerHandlers();
+            SizePanel(mScrollPanel);
+            mBottomPanel.Top = mScrollPanel.Bottom;
+            mBottomPanel.LayoutControls();
+            AttachEventHandlers();
+            mForm.BeginInvoke(() => {
+               mForm.SuspendClientSizeChanged();
+               if (mUiState.mColorPickerFirstShow) {
+                  Size wantedSize = GetRequiredSize();
+                  Screen screen = Screen.FromPoint(mUiState.FormBounds.Location);
+                  int width = Math.Min(wantedSize.Width, (int)(screen.WorkingArea.Width * 0.9));
+                  int height = Math.Min(wantedSize.Height, (int)(screen.WorkingArea.Height * 0.9));
+                  mForm.ClientSize = new Size(width, height);
+                  CenterFormOnMonitor(mForm, screen);
+                  mUiState.mColorPickerFirstShow = false;
+               }
+               else {
+                  mForm.Bounds = mUiState.mColorPickerBounds;
+                  EnsureWindowFitsMonitor(mForm);
+               }
+               mUiState.mColorPickerBounds = mForm.Bounds;
+               mForm.Opacity = mUiState.mFormOpacity;
+               mForm.ResumeClientSizeChanged();
+               mBottomPanel.LayoutControls();
+               mTitleLabel.LayoutCluster();
+               mScrollPanel.Anchor = mAnchorTopLeftBottomRight;
+            });
          }
 
          internal Size GetRequiredSize() {
             int contentWidth = mCustomColorGroupBox.Right + (mEm * 2);
             int contentHeight = mCustomColorGroupBox.Bottom + (mEm * 2);
             int totalWidth = contentWidth + SystemInformation.VerticalScrollBarWidth + (mEm * 2);
-            int totalHeight = mTitleLabel.Height + contentHeight + mColorPickerBottomPanel.Height + (mEm * 2);
+            int totalHeight = mTitleLabel.Height + contentHeight + mBottomPanel.Height + (mEm * 2);
             return new Size(totalWidth, totalHeight);
          }
 
@@ -315,6 +318,10 @@ namespace DBCode {
             mGreenSlider.ValueChanged += GreenSlider_ValueChanged;
             mBlueUpDown.ValueChanged += BlueUpDown_ValueChanged;
             mBlueSlider.ValueChanged += BlueSlider_ValueChanged;
+            mGrayPrefixButton.Click += GrayPrefixButton_Click;
+            mRedPrefixButton.Click += RedPrefixButton_Click;
+            mGreenPrefixButton.Click += GreenPrefixButton_Click;
+            mBluePrefixButton.Click += BluePrefixButton_Click;
          }
 
          private void RemoveEventHandlers() {
@@ -332,23 +339,10 @@ namespace DBCode {
             mGreenSlider.ValueChanged -= GreenSlider_ValueChanged;
             mBlueUpDown.ValueChanged -= BlueUpDown_ValueChanged;
             mBlueSlider.ValueChanged -= BlueSlider_ValueChanged;
-         }
-
-         private void RestoreColorPickerHandlers() {
-            mUseNamedCheckBox.CheckedChanged += UseNamedCheckBox_CheckedChanged;
-            mNamedColorPrefixButton.Click += NamedColorPrefixButton_Click;
-            mNamedColorsComboBox.SelectedValueChanged += NamedColorsComboBox_SelectedValueChanged;
-            mNamedColorsComboBox.KeyUp += NamedColorsComboBox_KeyUp;
-            mNamedColorsComboBox.Leave += NamedColorsComboBox_Leave;
-            mUseGrayscaleCheckBox.CheckedChanged += UseGrayscaleCheckBox_CheckedChanged;
-            mGrayUpDown.ValueChanged += GrayUpDown_ValueChanged;
-            mGraySlider.ValueChanged += GraySlider_ValueChanged;
-            mRedUpDown.ValueChanged += RedUpDown_ValueChanged;
-            mRedSlider.ValueChanged += RedSlider_ValueChanged;
-            mGreenUpDown.ValueChanged += GreenUpDown_ValueChanged;
-            mGreenSlider.ValueChanged += GreenSlider_ValueChanged;
-            mBlueUpDown.ValueChanged += BlueUpDown_ValueChanged;
-            mBlueSlider.ValueChanged += BlueSlider_ValueChanged;
+            mGrayPrefixButton.Click -= GrayPrefixButton_Click;
+            mRedPrefixButton.Click -= RedPrefixButton_Click;
+            mGreenPrefixButton.Click -= GreenPrefixButton_Click;
+            mBluePrefixButton.Click -= BluePrefixButton_Click;
          }
 
          private void SetColorValues(Color pColor) {
@@ -357,30 +351,30 @@ namespace DBCode {
             mGrayUpDown.Value = gray;
             mGraySlider.Value = gray;
             mRedUpDown.Value = pColor.R;
-            mGreenUpDown.Value = pColor.G;
-            mBlueUpDown.Value = pColor.B;
             mRedSlider.Value = pColor.R;
+            mGreenUpDown.Value = pColor.G;
             mGreenSlider.Value = pColor.G;
+            mBlueUpDown.Value = pColor.B;
             mBlueSlider.Value = pColor.B;
             UpdateSwatches();
             AttachEventHandlers();
          }
 
-         private Color GrayFromInitialColor() {
-            int gray = (mInitialColor.R + mInitialColor.G + mInitialColor.B) / 3;
+         private static Color GraySwatchColor(Color pColor) {
+            int gray = (int)(0.2126 * pColor.R + 0.7152 * pColor.G + 0.0722 * pColor.B);
             return Color.FromArgb(gray, gray, gray);
          }
 
-         private Color RedFromInitialColor() {
-            return Color.FromArgb(mInitialColor.R, 0, 0);
+         private static Color RedSwatchColor(Color pColor) {
+            return Color.FromArgb(pColor.R, 0, 0);
          }
 
-         private Color GreenFromInitialColor() {
-            return Color.FromArgb(0, mInitialColor.G, 0);
+         private static Color GreenSwatchColor(Color pColor) {
+            return Color.FromArgb(0, pColor.G, 0);
          }
 
-         private Color BlueFromInitialColor() {
-            return Color.FromArgb(0, 0, mInitialColor.B);
+         private static Color BlueSwatchColor(Color pColor) {
+            return Color.FromArgb(0, 0, pColor.B);
          }
 
          private void UpdateSwatches() {
@@ -388,14 +382,16 @@ namespace DBCode {
             int g = (int)mGreenUpDown.Value;
             int b = (int)mBlueUpDown.Value;
             int gray = (int)mGrayUpDown.Value;
-            mRedSwatch.BackColor = Color.FromArgb(r, 0, 0);
-            mGreenSwatch.BackColor = Color.FromArgb(0, g, 0);
-            mBlueSwatch.BackColor = Color.FromArgb(0, 0, b);
-            mGraySwatch.BackColor = Color.FromArgb(gray, gray, gray);
+            Color workingColor = Color.FromArgb(r, g, b);
+
+            mRedSwatch.SetColor(RedSwatchColor(workingColor));
+            mGreenSwatch.SetColor(GreenSwatchColor(workingColor));
+            mBlueSwatch.SetColor(BlueSwatchColor(workingColor));
+            mGraySwatch.SetColor(Color.FromArgb(gray, gray, gray));
             if (mUseGrayscaleCheckBox.Checked)
-               mDemoSwatch.BackColor = Color.FromArgb(gray, gray, gray);
+               mDemoSwatch.SetColor(Color.FromArgb(gray, gray, gray));
             else
-               mDemoSwatch.BackColor = Color.FromArgb(r, g, b);
+               mDemoSwatch.SetColor(Color.FromArgb(r, g, b));
          }
 
          private void DisableCustomControls() {
@@ -435,73 +431,108 @@ namespace DBCode {
             Color backColor = mTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground],
                foreColor = mTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
                groupBoxBackgroundColor = mTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground];
-            Font interfaceFont = mTheme.mFonts[(int)FontUsage.Interface];
+            Font interfaceFont = mTheme.mFonts[(int)FontUsage.Interface], workingFont;
+            List<Font> previousFonts = mOwnedFonts;
+            mOwnedFonts = [];
             BackColor = backColor;
             mScrollPanel.BackColor = backColor;
-            mBluePrefixButton.Font = CreateNewFont(interfaceFont);
+            workingFont = CreateNewFont(interfaceFont);
+            mOwnedFonts.Add(workingFont);
+            mBluePrefixButton.Font = workingFont;
             mBluePrefixButton.ForeColor = foreColor;
             mBluePrefixButton.BackColor = backColor;
             FlattenButton(mBluePrefixButton, groupBoxBackgroundColor);
-            mGrayPrefixButton.Font = CreateNewFont(interfaceFont);
+            workingFont = CreateNewFont(interfaceFont);
+            mOwnedFonts.Add(workingFont);
+            mGrayPrefixButton.Font = workingFont;
             mGrayPrefixButton.ForeColor = foreColor;
             mGrayPrefixButton.BackColor = backColor;
             FlattenButton(mGrayPrefixButton, groupBoxBackgroundColor);
-            mGreenPrefixButton.Font = CreateNewFont(interfaceFont);
+            workingFont = CreateNewFont(interfaceFont);
+            mOwnedFonts.Add(workingFont);
+            mGreenPrefixButton.Font = workingFont;
             mGreenPrefixButton.ForeColor = foreColor;
             mGreenPrefixButton.BackColor = backColor;
             FlattenButton(mGreenPrefixButton, groupBoxBackgroundColor);
-            mNamedColorPrefixButton.Font = CreateNewFont(interfaceFont);
+            workingFont = CreateNewFont(interfaceFont);
+            mOwnedFonts.Add(workingFont);
+            mNamedColorPrefixButton.Font = workingFont;
             mNamedColorPrefixButton.ForeColor = foreColor;
             mNamedColorPrefixButton.BackColor = backColor;
             FlattenButton(mNamedColorPrefixButton, groupBoxBackgroundColor);
-            mRedPrefixButton.Font = CreateNewFont(interfaceFont);
+            workingFont = CreateNewFont(interfaceFont);
+            mOwnedFonts.Add(workingFont);
+            mRedPrefixButton.Font = workingFont;
             mRedPrefixButton.ForeColor = foreColor;
             mRedPrefixButton.BackColor = backColor;
             FlattenButton(mRedPrefixButton, groupBoxBackgroundColor);
-            mUseGrayscaleCheckBox.Font = CreateNewFont(interfaceFont);
-            mUseGrayscaleCheckBox.ForeColor = foreColor;
-            mUseGrayscaleCheckBox.BackColor = Color.Transparent;
-            mUseNamedCheckBox.Font = CreateNewFont(interfaceFont);
-            mUseNamedCheckBox.ForeColor = foreColor;
-            mUseNamedCheckBox.BackColor = Color.Transparent;
-            mNamedColorsComboBox.Font = CreateNewFont(interfaceFont);
+            workingFont = CreateNewFont(interfaceFont);
+            mOwnedFonts.Add(workingFont);
+            mOKButton.Font = workingFont;
+            mOKButton.ForeColor = foreColor;
+            mOKButton.BackColor = backColor;
+            mUseGrayscaleCheckBox.SetFontAndColors(mTheme);
+            mUseNamedCheckBox.SetFontAndColors(mTheme);
+            workingFont = CreateNewFont(interfaceFont);
+            mOwnedFonts.Add(workingFont);
+            mNamedColorsComboBox.Font = workingFont;
             mNamedColorsComboBox.ForeColor = foreColor;
             mNamedColorsComboBox.BackColor = backColor;
-            mCustomColorGroupBox.Font = CreateNewBoldFont(interfaceFont);
+            workingFont = CreateNewBoldFont(interfaceFont);
+            mOwnedFonts.Add(workingFont);
+            mCustomColorGroupBox.Font = workingFont;
             mCustomColorGroupBox.ForeColor = foreColor;
             mCustomColorGroupBox.BackColor = groupBoxBackgroundColor;
-            mNamedColorsGroupBox.Font = CreateNewBoldFont(interfaceFont);
+            workingFont = CreateNewBoldFont(interfaceFont);
+            mOwnedFonts.Add(workingFont);
+            mNamedColorsGroupBox.Font = workingFont;
             mNamedColorsGroupBox.ForeColor = foreColor;
             mNamedColorsGroupBox.BackColor = groupBoxBackgroundColor;
-            mBlueUpDown.Font = CreateNewFont(interfaceFont);
+            workingFont = CreateNewFont(interfaceFont);
+            mOwnedFonts.Add(workingFont);
+            mBlueUpDown.Font = workingFont;
             mBlueUpDown.ForeColor = foreColor;
             mBlueUpDown.BackColor = backColor;
-            mGrayUpDown.Font = CreateNewFont(interfaceFont);
+            workingFont = CreateNewFont(interfaceFont);
+            mOwnedFonts.Add(workingFont);
+            mGrayUpDown.Font = workingFont;
             mGrayUpDown.ForeColor = foreColor;
             mGrayUpDown.BackColor = backColor;
-            mGreenUpDown.Font = CreateNewFont(interfaceFont);
+            workingFont = CreateNewFont(interfaceFont);
+            mOwnedFonts.Add(workingFont);
+            mGreenUpDown.Font = workingFont;
             mGreenUpDown.ForeColor = foreColor;
             mGreenUpDown.BackColor = backColor;
-            mRedUpDown.Font = CreateNewFont(interfaceFont);
+            workingFont = CreateNewFont(interfaceFont);
+            mOwnedFonts.Add(workingFont);
+            mRedUpDown.Font = workingFont;
             mRedUpDown.ForeColor = foreColor;
             mRedUpDown.BackColor = backColor;
-            mColorPickerBottomPanel.SetFontAndColor();
+            mBottomPanel.SetFontAndColor();
             mTitleLabel.SetFontAndColor();
             mDemoSwatch.SetFontAndColor();
+            foreach (Font font in previousFonts)
+               MainForm.DisposeFontIfOwned(font);
          }
 
          protected override void Dispose(bool pDisposing) {
             if (pDisposing) {
                RemoveEventHandlers();
-               ThrowIfNull(mColorPickerBottomPanel.mHelpButton, nameof(mColorPickerBottomPanel.mHelpButton));
-               ThrowIfNull(mColorPickerBottomPanel.mCancelButton, nameof(mColorPickerBottomPanel.mCancelButton));
-               mColorPickerBottomPanel.mHelpButton.Click -= MainForm.Help_Click;
-               mColorPickerBottomPanel.mCancelButton.Click -= CancelButton_Click;
+               ThrowIfNull(mBottomPanel.mHelpButton, nameof(mBottomPanel.mHelpButton));
+               ThrowIfNull(mBottomPanel.mCancelButton, nameof(mBottomPanel.mCancelButton));
+               mBottomPanel.mHelpButton.Click -= MainForm.Help_Click;
+               mBottomPanel.mCancelButton.Click -= CancelButton_Click;
+               mOKButton.Click -= OkButton_Click;
+               foreach (Font font in mOwnedFonts)
+                  MainForm.DisposeFontIfOwned(font);
+               mOwnedFonts.Clear();
                mTitleLabel.Dispose();
+               MainForm.DisposeFontIfOwned(mUseNamedCheckBox.Font);
                mUseNamedCheckBox.Dispose();
                mNamedColorPrefixButton.Dispose();
                mNamedColorsComboBox.Dispose();
                mNamedColorsGroupBox.Dispose();
+               MainForm.DisposeFontIfOwned(mUseGrayscaleCheckBox.Font);
                mUseGrayscaleCheckBox.Dispose();
                mGrayPrefixButton.Dispose();
                mGrayUpDown.Dispose();
@@ -521,7 +552,7 @@ namespace DBCode {
                mBlueSwatch.Dispose();
                mDemoSwatch.Dispose();
                mCustomColorGroupBox.Dispose();
-               mColorPickerBottomPanel.Dispose();
+               mBottomPanel.Dispose();
             }
             base.Dispose(pDisposing);
          }

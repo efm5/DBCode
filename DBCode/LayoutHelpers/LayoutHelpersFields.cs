@@ -44,7 +44,8 @@
          mHorizontalScrollOffset = 0, mIndent = 0, mMaximumGridWidth = 0, mMenuLeftOffset = 0, mOkOffset = 0,
          mScalePad = 0, mRightPad = 0, mScalingGroupBoxTopLinePad = 0, mTabIndex = 1, mTitleBarHeight = 0,
          mVerticalScrollOffset = 0, mWidgetBigHorizontalSpace = 0, mWidgetBigVerticalOffset = 0,
-         mWidgetHorizontalSpace = 0, mWidgetVerticalOffset = 0,
+         mWidgetHorizontalSpace = 0, mWidgetVerticalOffset = 0, mTextPadding = 2, mTabControlTopPad = 0,
+         mTabControlLeftPad = 0,
 #pragma warning disable CS8602
          COMBOBOX_MAXIMUM_DROPDOWN_WIDTH = Screen.PrimaryScreen.WorkingArea.Width - 100;
 #pragma warning restore CS8602

@@ -39,20 +39,25 @@ namespace DBCode.Themes {
       }
 
       public Theme Clone() {
-         Theme pClone = new Theme(mName) { mBrightness = mBrightness };
+         Theme clone = new Theme(mName) { mBrightness = mBrightness };
+         List<Font> oldFonts = [];
 
          for (int i = 0; i < mFonts.Length; i++) {
-            if (mFonts[i] != null)
-               pClone.mFonts[i] = (Font)mFonts[i].Clone();
-         }
-         for (int i = 0; i < mInterfaceColors.Length; i++)
-            pClone.mInterfaceColors[i] = mInterfaceColors[i];
-         for (int i = 0; i < mHighlightColors.Length; i++) {
-            for (int j = 0; j < mHighlightColors[i].Length; j++) {
-               pClone.mHighlightColors[i][j] = mHighlightColors[i][j];
+            if (mFonts[i] != null) {
+               oldFonts.Add(clone.mFonts[i]);
+               clone.mFonts[i] = (Font)mFonts[i].Clone();
             }
          }
-         return pClone;
+         for (int i = 0; i < mInterfaceColors.Length; i++)
+            clone.mInterfaceColors[i] = mInterfaceColors[i];
+         for (int i = 0; i < mHighlightColors.Length; i++) {
+            for (int j = 0; j < mHighlightColors[i].Length; j++) {
+               clone.mHighlightColors[i][j] = mHighlightColors[i][j];
+            }
+         }
+         foreach (Font font in oldFonts)
+            font.Dispose();
+         return clone;
       }
 
       public Theme Clone(string pName) {

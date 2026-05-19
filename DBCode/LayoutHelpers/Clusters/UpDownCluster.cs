@@ -51,6 +51,16 @@
                mSuffixLabel.Invalidate();
          }
 
+         internal override void LayoutControlsOnly() {
+            ThrowIfNull(mPrefixButton, nameof(mPrefixButton));
+            ThrowIfNull(mNumericUpDown, nameof(mNumericUpDown));
+            LayoutControls();
+            mPrefixButton.Invalidate();
+            mNumericUpDown.Invalidate();
+            if (mSuffixLabel != null)
+               mSuffixLabel.Invalidate();
+         }
+
          internal void LayoutControls() {
             ThrowIfNull(mPrefixButton, nameof(mPrefixButton));
             ThrowIfNull(mNumericUpDown, nameof(mNumericUpDown));
@@ -63,17 +73,25 @@
             ThrowIfNull(mPrefixButton, nameof(mPrefixButton));
             ThrowIfNull(mNumericUpDown, nameof(mNumericUpDown));
             Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
-            mPrefixButton.Font = CreateNewFont(poFont);
-            mPrefixButton.ForeColor = poForeColor;
-            mPrefixButton.BackColor = poBackColor;
-            mNumericUpDown.Font = CreateNewFont(poFont);
+            mPrefixButton.SetFontAndColor(); // delegates to FlattenedButtonCluster's own method
+            UpdateFont(mNumericUpDown, CreateNewFont(poFont));
             mNumericUpDown.ForeColor = poForeColor;
             mNumericUpDown.BackColor = poBackColor;
             if (mSuffixLabel != null) {
-               mSuffixLabel.Font = CreateNewFont(poFont);
+               UpdateFont(mSuffixLabel, CreateNewFont(poFont));
                mSuffixLabel.ForeColor = poForeColor;
                mSuffixLabel.BackColor = poBackColor;
             }
+         }
+
+         protected override void Dispose(bool pDisposing) {
+            if (pDisposing) {
+               if (mNumericUpDown != null)
+                  MainForm.DisposeFontIfOwned(mNumericUpDown.Font);
+               if (mSuffixLabel != null)
+                  MainForm.DisposeFontIfOwned(mSuffixLabel.Font);
+            }
+            base.Dispose(pDisposing);
          }
       }
    }

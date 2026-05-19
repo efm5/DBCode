@@ -39,7 +39,7 @@
          TargetListManager.EnsureDataFiles();
       }
 
-      private void MakeNews() {
+      private static void MakeNews() {
          ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
          mMenuStrip = new MenuStrip();
          mContextMenuStrip = new ContextMenuStrip();
@@ -80,6 +80,54 @@
          mMarkdownTSMI = new ToolStripMenuItem();
          mPythonTSMI = new ToolStripMenuItem();
          mCurrentThemeIsTSMI = new ToolStripMenuItem();
+         mContextUndoTSMI = new ToolStripMenuItem();
+         mContextRedoTSMI = new ToolStripMenuItem();
+         mContextCopyAllTSMI = new ToolStripMenuItem();
+         mContextCopyTSMI = new ToolStripMenuItem();
+         mContextCutTSMI = new ToolStripMenuItem();
+         mContextDeleteTSMI = new ToolStripMenuItem();
+         mContextPasteTSMI = new ToolStripMenuItem();
+         mContextSelectAllTSMI = new ToolStripMenuItem();
+         mContextSelectNoneTSMI = new ToolStripMenuItem();
+         mContextFindTSMI = new ToolStripMenuItem();
+         mContextFindNextTSMI = new ToolStripMenuItem();
+         mContextFindPreviousTSMI = new ToolStripMenuItem();
+         mContextReplaceTSMI = new ToolStripMenuItem();
+         mContextGoToTSMI = new ToolStripMenuItem();
+         mEditMenuItem = new ToolStripMenuItem();
+         mEditUndoTSMI = new ToolStripMenuItem();
+         mEditRedoTSMI = new ToolStripMenuItem();
+         mEditCutTSMI = new ToolStripMenuItem();
+         mEditDeleteTSMI = new ToolStripMenuItem();
+         mEditPasteTSMI = new ToolStripMenuItem();
+         mEditSelectAllTSMI = new ToolStripMenuItem();
+         mEditSelectNoneTSMI = new ToolStripMenuItem();
+         mEditTrimToBeginningTSMI = new ToolStripMenuItem();
+         mEditTrimToEndTSMI = new ToolStripMenuItem();
+         mEditCopyTSMI = new ToolStripMenuItem();
+         mEditCopyAllTSMI = new ToolStripMenuItem();
+         mEditCopyToBeginningTSMI = new ToolStripMenuItem();
+         mEditCopyToEndTSMI = new ToolStripMenuItem();
+         mEditFindTSMI = new ToolStripMenuItem();
+         mEditFindNextTSMI = new ToolStripMenuItem();
+         mEditFindPreviousTSMI = new ToolStripMenuItem();
+         mEditReplaceTSMI = new ToolStripMenuItem();
+         mEditGoToTSMI = new ToolStripMenuItem();
+         mEditWordWrapTSMI = new ToolStripMenuItem();
+         mCommentAddDoubleTSMI = new ToolStripMenuItem();
+         mCommentAddNotImplementedTSMI = new ToolStripMenuItem();
+         mCommentAddTripleTSMI = new ToolStripMenuItem();
+         mCommentCPlusPlusTSMI = new ToolStripMenuItem();
+         mCommentExpressionBodiedMethodTSMI = new ToolStripMenuItem();
+         mCommentGetTSMI = new ToolStripMenuItem();
+         mCommentMakeSummaryTSMI = new ToolStripMenuItem();
+         mCommentOutTSMI = new ToolStripMenuItem();
+         mCommentRemoveTSMI = new ToolStripMenuItem();
+         mCommentReplaceTSMI = new ToolStripMenuItem();
+         mCommentReverseEqualityTSMI = new ToolStripMenuItem();
+         mCommentTSMI = new ToolStripMenuItem();
+         mCommentUpdateTSMI = new ToolStripMenuItem();
+         mCommentWrapTSMI = new ToolStripMenuItem();
          mScrollableMainPanel = new ScrollablePanel() {
             Name = "mainPanel",
             AutoScroll = true,
@@ -99,7 +147,8 @@
 
       private void InitializeUIPart1() {
          mUiState = new UiState();
-         mUiState.ReadFromSettings();
+         mUiState.Read();
+         mUsePCRE = mUiState.mUsePCRE;
          ThemeRegistry.Initialize(); // must precede MakeNews so mCurrentTheme and mThemes are ready
          MakeNews();
          ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
@@ -145,6 +194,40 @@
          ThrowIfNull(mCurrentThemeIsTSMI, nameof(mCurrentThemeIsTSMI));
          ThrowIfNull(mCTSMI, nameof(mCTSMI));
          ThrowIfNull(mCppTSMI, nameof(mCppTSMI));
+         ThrowIfNull(mContextCopyTSMI, nameof(mContextCopyTSMI));
+         ThrowIfNull(mContextCutTSMI, nameof(mContextCutTSMI));
+         ThrowIfNull(mContextDeleteTSMI, nameof(mContextDeleteTSMI));
+         ThrowIfNull(mContextPasteTSMI, nameof(mContextPasteTSMI));
+         ThrowIfNull(mContextSelectAllTSMI, nameof(mContextSelectAllTSMI));
+         ThrowIfNull(mContextSelectNoneTSMI, nameof(mContextSelectNoneTSMI));
+         ThrowIfNull(mContextFindTSMI, nameof(mContextFindTSMI));
+         ThrowIfNull(mContextFindNextTSMI, nameof(mContextFindNextTSMI));
+         ThrowIfNull(mContextFindPreviousTSMI, nameof(mContextFindPreviousTSMI));
+         ThrowIfNull(mContextReplaceTSMI, nameof(mContextReplaceTSMI));
+         ThrowIfNull(mContextGoToTSMI, nameof(mContextGoToTSMI));
+         ThrowIfNull(mEditMenuItem, nameof(mEditMenuItem));
+         ThrowIfNull(mEditUndoTSMI, nameof(mEditUndoTSMI));
+         ThrowIfNull(mEditRedoTSMI, nameof(mEditRedoTSMI));
+         ThrowIfNull(mEditCutTSMI, nameof(mEditCutTSMI));
+         ThrowIfNull(mEditDeleteTSMI, nameof(mEditDeleteTSMI));
+         ThrowIfNull(mEditPasteTSMI, nameof(mEditPasteTSMI));
+         ThrowIfNull(mEditSelectAllTSMI, nameof(mEditSelectAllTSMI));
+         ThrowIfNull(mEditSelectNoneTSMI, nameof(mEditSelectNoneTSMI));
+         ThrowIfNull(mEditTrimToBeginningTSMI, nameof(mEditTrimToBeginningTSMI));
+         ThrowIfNull(mEditTrimToEndTSMI, nameof(mEditTrimToEndTSMI));
+         ThrowIfNull(mEditCopyTSMI, nameof(mEditCopyTSMI));
+         ThrowIfNull(mEditCopyAllTSMI, nameof(mEditCopyAllTSMI));
+         ThrowIfNull(mEditCopyToBeginningTSMI, nameof(mEditCopyToBeginningTSMI));
+         ThrowIfNull(mEditCopyToEndTSMI, nameof(mEditCopyToEndTSMI));
+         ThrowIfNull(mEditFindTSMI, nameof(mEditFindTSMI));
+         ThrowIfNull(mEditFindNextTSMI, nameof(mEditFindNextTSMI));
+         ThrowIfNull(mEditFindPreviousTSMI, nameof(mEditFindPreviousTSMI));
+         ThrowIfNull(mEditReplaceTSMI, nameof(mEditReplaceTSMI));
+         ThrowIfNull(mEditGoToTSMI, nameof(mEditGoToTSMI));
+         ThrowIfNull(mEditWordWrapTSMI, nameof(mEditWordWrapTSMI));
+         ThrowIfNull(mContextUndoTSMI, nameof(mContextUndoTSMI));
+         ThrowIfNull(mContextRedoTSMI, nameof(mContextRedoTSMI));
+         ThrowIfNull(mContextCopyAllTSMI, nameof(mContextCopyAllTSMI));
          LoadEmbeddedIcons();
          InitializeUIPart2();
          InitializeUIPart3();
@@ -163,19 +246,19 @@
          mVisibilityMenuItem.Name = "visibilityMenuItem";
          mVisibilityMenuItem.Text = "&Visibility";
          mModeMenuItem.Name = "modeMenuItem";
-         mModeMenuItem.Text = "&Mode";
+         mModeMenuItem.Text = "Mo&de";
          mLanguageMenuItem.Name = "languageMenuItem";
          mLanguageMenuItem.Text = "&Language";
          mOptionsMenuItem.Name = "optionsMenuItem";
          mOptionsMenuItem.Text = "&Options";
          mOptionsMenuItem.Click += Options_Click;
          mThemeMenuItem.Name = "themeMenuItem";
-         mThemeMenuItem.Text = "&Theme";
+         mThemeMenuItem.Text = "The&me";
          mThemeEditPickTSMI.Name = "themeEditPickTSMI";
-         mThemeEditPickTSMI.Text = "Pick To Edit";
+         mThemeEditPickTSMI.Text = "P&ick To Edit";
          mThemeEditPickTSMI.Click += ThemeEditPick_Click;
          mThemeEditCurrentTSMI.Name = "themeEditCurrentTSMI";
-         mThemeEditCurrentTSMI.Text = "Edit Current";
+         mThemeEditCurrentTSMI.Text = "&Edit Current";
          mThemeEditCurrentTSMI.Click += ThemeEditCurrent_Click;
          mThemeDesignTSMI.Name = "themeDesignTSMI";
          mThemeDesignTSMI.Text = "&Design";
@@ -284,6 +367,107 @@
          mPythonTSMI.Click += LanguageTSMI_Click;
          mCurrentThemeIsTSMI.Name = "currentThemeIsTSMI";
          mCurrentThemeIsTSMI.Text = mCurrently + mCurrentTheme.mName;
+         mContextUndoTSMI.Name = "contextUndoTSMI";
+         mContextUndoTSMI.Text = "&Undo";
+         mContextUndoTSMI.Click += Undo_Click;
+         mContextRedoTSMI.Name = "contextRedoTSMI";
+         mContextRedoTSMI.Text = "&Redo";
+         mContextRedoTSMI.Click += Redo_Click;
+         mContextCopyTSMI.Name = "contextCopyTSMI";
+         mContextCopyTSMI.Text = "&Copy";
+         mContextCopyTSMI.Click += Copy_Click;
+         mContextCopyAllTSMI.Name = "contextCopyAllTSMI";
+         mContextCopyAllTSMI.Text = "Copy &All";
+         mContextCopyAllTSMI.Click += CopyAll_Click;
+         mContextCutTSMI.Name = "contextCutTSMI";
+         mContextCutTSMI.Text = "Cu&t";
+         mContextCutTSMI.Click += Cut_Click;
+         mContextDeleteTSMI.Name = "contextDeleteTSMI";
+         mContextDeleteTSMI.Text = "&Delete";
+         mContextDeleteTSMI.Click += Delete_Click;
+         mContextPasteTSMI.Name = "contextPasteTSMI";
+         mContextPasteTSMI.Text = "&Paste";
+         mContextPasteTSMI.Click += Paste_Click;
+         mContextSelectAllTSMI.Name = "contextSelectAllTSMI";
+         mContextSelectAllTSMI.Text = "Select &All";
+         mContextSelectAllTSMI.Click += SelectAll_Click;
+         mContextSelectNoneTSMI.Name = "contextSelectNoneTSMI";
+         mContextSelectNoneTSMI.Text = "Select &None";
+         mContextSelectNoneTSMI.Click += SelectNone_Click;
+         mContextFindTSMI.Name = "contextFindTSMI";
+         mContextFindTSMI.Text = "&Find";
+         mContextFindTSMI.Click += Find_Click;
+         mContextFindNextTSMI.Name = "contextFindNextTSMI";
+         mContextFindNextTSMI.Text = "Find Ne&xt";
+         mContextFindNextTSMI.Click += FindNext_Click;
+         mContextFindPreviousTSMI.Name = "contextFindPreviousTSMI";
+         mContextFindPreviousTSMI.Text = "Find Pre&vious";
+         mContextFindPreviousTSMI.Click += FindPrevious_Click;
+         mContextReplaceTSMI.Name = "contextReplaceTSMI";
+         mContextReplaceTSMI.Text = "Re&place";
+         mContextReplaceTSMI.Click += Replace_Click;
+         mContextGoToTSMI.Name = "contextGoToTSMI";
+         mContextGoToTSMI.Text = "&GoTo";
+         mContextGoToTSMI.Click += GoTo_Click;
+         mEditMenuItem.Name = "editTSMI";
+         mEditMenuItem.Text = "&Edit";
+         mEditUndoTSMI.Name = "editUndoTSMI";
+         mEditUndoTSMI.Text = "&Undo";
+         mEditUndoTSMI.Click += Undo_Click;
+         mEditRedoTSMI.Name = "editRedoTSMI";
+         mEditRedoTSMI.Text = "&Redo";
+         mEditRedoTSMI.Click += Redo_Click;
+         mEditCutTSMI.Name = "editCutTSMI";
+         mEditCutTSMI.Text = "Cu&t";
+         mEditCutTSMI.Click += Cut_Click;
+         mEditDeleteTSMI.Name = "editDeleteTSMI";
+         mEditDeleteTSMI.Text = "&Delete";
+         mEditDeleteTSMI.Click += Delete_Click;
+         mEditPasteTSMI.Name = "editPasteTSMI";
+         mEditPasteTSMI.Text = "&Paste";
+         mEditPasteTSMI.Click += Paste_Click;
+         mEditSelectAllTSMI.Name = "editSelectAllTSMI";
+         mEditSelectAllTSMI.Text = "Select &All";
+         mEditSelectAllTSMI.Click += SelectAll_Click;
+         mEditSelectNoneTSMI.Name = "editSelectNoneTSMI";
+         mEditSelectNoneTSMI.Text = "Select &None";
+         mEditSelectNoneTSMI.Click += SelectNone_Click;
+         mEditTrimToBeginningTSMI.Name = "editTrimToBeginningTSMI";
+         mEditTrimToBeginningTSMI.Text = "Trim To &Beginning";
+         mEditTrimToBeginningTSMI.Click += TrimToBeginning_Click;
+         mEditTrimToEndTSMI.Name = "editTrimToEndTSMI";
+         mEditTrimToEndTSMI.Text = "Tr&im To End";
+         mEditTrimToEndTSMI.Click += TrimToEnd_Click;
+         mEditCopyTSMI.Name = "editCopyTSMI";
+         mEditCopyTSMI.Text = "&Copy";
+         mEditCopyTSMI.Click += Copy_Click;
+         mEditCopyAllTSMI.Name = "editCopyAllTSMI";
+         mEditCopyAllTSMI.Text = "Cop&y All";
+         mEditCopyAllTSMI.Click += CopyAll_Click;
+         mEditCopyToBeginningTSMI.Name = "editCopyToBeginningTSMI";
+         mEditCopyToBeginningTSMI.Text = "C&opy To Beginning";
+         mEditCopyToBeginningTSMI.Click += CopyToBeginning_Click;
+         mEditCopyToEndTSMI.Name = "editCopyToEndTSMI";
+         mEditCopyToEndTSMI.Text = "Copy To &End";
+         mEditCopyToEndTSMI.Click += CopyToEnd_Click;
+         mEditFindTSMI.Name = "editFindTSMI";
+         mEditFindTSMI.Text = "&Find";
+         mEditFindTSMI.Click += Find_Click;
+         mEditFindNextTSMI.Name = "editFindNextTSMI";
+         mEditFindNextTSMI.Text = "Find Ne&xt";
+         mEditFindNextTSMI.Click += FindNext_Click;
+         mEditFindPreviousTSMI.Name = "editFindPreviousTSMI";
+         mEditFindPreviousTSMI.Text = "Find Pre&vious";
+         mEditFindPreviousTSMI.Click += FindPrevious_Click;
+         mEditReplaceTSMI.Name = "editReplaceTSMI";
+         mEditReplaceTSMI.Text = "Rep&lace";
+         mEditReplaceTSMI.Click += Replace_Click;
+         mEditGoToTSMI.Name = "editGoToTSMI";
+         mEditGoToTSMI.Text = "&GoTo";
+         mEditGoToTSMI.Click += GoTo_Click;
+         mEditWordWrapTSMI.Name = "editWordWrapTSMI";
+         mEditWordWrapTSMI.Text = "&Wordwrap";
+         mEditWordWrapTSMI.Click += WordWrap_Click;
          mThemePickTSMI.DropDownItems.AddRange([mThemeEditPickTSMI, mThemeEditCurrentTSMI]);
          mVisibilityMenuItem.DropDownItems.AddRange([mTransparentTSMI, mThirtyTSMI, mFiftyTSMI,
             mSeventyFiveTSMI, mOpaqueTSMI]);
@@ -291,8 +475,23 @@
          mLanguageMenuItem.DropDownItems.AddRange([mPlainTextTSMI, mCSharpTSMI, mCTSMI, mCppTSMI,
             mBasicTSMI, mFSharpTSMI, mHtmlTSMI, mCssTSMI, mXmlTSMI, mJsonTSMI, mPowerShellTSMI, mBatchTSMI,
             mSqlTSMI, mMarkdownTSMI, mPythonTSMI]);
-         mMenuStrip.Items.AddRange([mTargetingMenuItem, mVisibilityMenuItem, mModeMenuItem,
-            mLanguageMenuItem, mOptionsMenuItem, mThemeMenuItem, mHelpMenuItem]);
+         mEditMenuItem.DropDownItems.AddRange([mEditUndoTSMI, mEditRedoTSMI, toolStripSeparator2,
+            mEditSelectAllTSMI, mEditSelectNoneTSMI, toolStripSeparator3, mEditCutTSMI, mEditDeleteTSMI,
+            mEditTrimToBeginningTSMI, mEditTrimToEndTSMI, toolStripSeparator4, mEditCopyTSMI, mEditCopyAllTSMI,
+            mEditCopyToBeginningTSMI, mEditCopyToEndTSMI, mEditPasteTSMI, toolStripSeparator5, mEditFindTSMI,
+            mEditFindNextTSMI, mEditFindPreviousTSMI, mEditReplaceTSMI, toolStripSeparator6, mEditGoToTSMI,
+            mEditWordWrapTSMI]);
+         mCommentTSMI.DropDownItems.AddRange(new ToolStripItem[] {
+            mCommentAddDoubleTSMI, mCommentAddTripleTSMI, mCommentMakeSummaryTSMI, mCommentCPlusPlusTSMI, mCommentOutTSMI,
+            mCommentRemoveTSMI, mCommentWrapTSMI, mCommentUpdateTSMI, mCommentGetTSMI, mCommentReplaceTSMI, toolStripSeparator10,
+            mCommentAddNotImplementedTSMI, mCommentReverseEqualityTSMI, mCommentExpressionBodiedMethodTSMI });
+         mMenuStrip.Items.AddRange([mEditMenuItem, mTargetingMenuItem, mVisibilityMenuItem, mModeMenuItem,
+            mLanguageMenuItem, mCommentTSMI, mOptionsMenuItem, mThemeMenuItem, mHelpMenuItem]);
+         mContextMenuStrip.Items.AddRange([mContextUndoTSMI, mContextRedoTSMI, mContextCopyAllTSMI,
+            mContextCopyTSMI, mContextCutTSMI, mContextDeleteTSMI, mContextPasteTSMI, toolStripSeparator7,
+            mContextSelectAllTSMI, mContextSelectNoneTSMI, toolStripSeparator8, mContextFindTSMI,
+            mContextFindNextTSMI, mContextFindPreviousTSMI, mContextReplaceTSMI, toolStripSeparator9,
+            mContextGoToTSMI]);
          mThemeMenuItem.DropDownItems.AddRange([mCurrentThemeIsTSMI, toolStripSeparator1, mThemePickTSMI,
             mThemeDesignTSMI, mThemeEditTSMI]);
          mTargetingMenuItem.DropDownItems.AddRange([mTargetedTSMI, mRetargetTSMI]);
@@ -311,7 +510,7 @@
          PerformLayout();
       }
 
-      private void InitializeUIPart2() {
+      private static void InitializeUIPart2() {
          ThrowIfNull(mBasicTSMI, nameof(mBasicTSMI));
          ThrowIfNull(mBatchTSMI, nameof(mBatchTSMI));
          ThrowIfNull(mContextMenuStrip, nameof(mContextMenuStrip));
@@ -355,12 +554,63 @@
          ThrowIfNull(mTransparentTSMI, nameof(mTransparentTSMI));
          ThrowIfNull(mVisibilityMenuItem, nameof(mVisibilityMenuItem));
          ThrowIfNull(mXmlTSMI, nameof(mXmlTSMI));
-         mVisibilityMenuItem.ShortcutKeys = Keys.Control | Keys.G;
-         mOptionsMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.O;
+         ThrowIfNull(mContextCopyTSMI, nameof(mContextCopyTSMI));
+         ThrowIfNull(mContextCutTSMI, nameof(mContextCutTSMI));
+         ThrowIfNull(mContextDeleteTSMI, nameof(mContextDeleteTSMI));
+         ThrowIfNull(mContextPasteTSMI, nameof(mContextPasteTSMI));
+         ThrowIfNull(mContextSelectAllTSMI, nameof(mContextSelectAllTSMI));
+         ThrowIfNull(mContextSelectNoneTSMI, nameof(mContextSelectNoneTSMI));
+         ThrowIfNull(mContextFindTSMI, nameof(mContextFindTSMI));
+         ThrowIfNull(mContextFindNextTSMI, nameof(mContextFindNextTSMI));
+         ThrowIfNull(mContextFindPreviousTSMI, nameof(mContextFindPreviousTSMI));
+         ThrowIfNull(mContextReplaceTSMI, nameof(mContextReplaceTSMI));
+         ThrowIfNull(mContextGoToTSMI, nameof(mContextGoToTSMI));
+         ThrowIfNull(mEditMenuItem, nameof(mEditMenuItem));
+         ThrowIfNull(mEditUndoTSMI, nameof(mEditUndoTSMI));
+         ThrowIfNull(mEditRedoTSMI, nameof(mEditRedoTSMI));
+         ThrowIfNull(mEditSelectAllTSMI, nameof(mEditSelectAllTSMI));
+         ThrowIfNull(mEditSelectNoneTSMI, nameof(mEditSelectNoneTSMI));
+         ThrowIfNull(mEditTrimToBeginningTSMI, nameof(mEditTrimToBeginningTSMI));
+         ThrowIfNull(mEditTrimToEndTSMI, nameof(mEditTrimToEndTSMI));
+         ThrowIfNull(mEditCopyTSMI, nameof(mEditCopyTSMI));
+         ThrowIfNull(mEditCopyAllTSMI, nameof(mEditCopyAllTSMI));
+         ThrowIfNull(mEditCopyToBeginningTSMI, nameof(mEditCopyToBeginningTSMI));
+         ThrowIfNull(mEditCopyToEndTSMI, nameof(mEditCopyToEndTSMI));
+         ThrowIfNull(mEditFindTSMI, nameof(mEditFindTSMI));
+         ThrowIfNull(mEditFindNextTSMI, nameof(mEditFindNextTSMI));
+         ThrowIfNull(mEditFindPreviousTSMI, nameof(mEditFindPreviousTSMI));
+         ThrowIfNull(mEditReplaceTSMI, nameof(mEditReplaceTSMI));
+         ThrowIfNull(mEditGoToTSMI, nameof(mEditGoToTSMI));
+         ThrowIfNull(mEditWordWrapTSMI, nameof(mEditWordWrapTSMI));
+         ThrowIfNull(mEditCutTSMI, nameof(mEditCutTSMI));
+         ThrowIfNull(mEditDeleteTSMI, nameof(mEditDeleteTSMI));
+         ThrowIfNull(mEditPasteTSMI, nameof(mEditPasteTSMI));
+         ThrowIfNull(mContextUndoTSMI, nameof(mContextUndoTSMI));
+         ThrowIfNull(mContextRedoTSMI, nameof(mContextRedoTSMI));
+         ThrowIfNull(mContextCopyAllTSMI, nameof(mContextCopyAllTSMI));
          mThemeEditPickTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.E;
          mThemeEditCurrentTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.C;
          mThemeDesignTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D;
          mHelpMenuItem.ShortcutKeys = Keys.F1;
+         mEditUndoTSMI.ShortcutKeys = Keys.Control | Keys.Z;
+         mEditRedoTSMI.ShortcutKeys = Keys.Control | Keys.Y;
+         mEditSelectAllTSMI.ShortcutKeys = Keys.Control | Keys.A;
+         mEditSelectNoneTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.A;
+         mEditCutTSMI.ShortcutKeys = Keys.Control | Keys.X;
+         mEditDeleteTSMI.ShortcutKeys = Keys.Delete;
+         mEditPasteTSMI.ShortcutKeys = Keys.Control | Keys.V;
+         mEditTrimToBeginningTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.X;
+         mEditTrimToEndTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.X;
+         mEditCopyTSMI.ShortcutKeys = Keys.Control | Keys.C;
+         mEditCopyAllTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.C;
+         mEditCopyToBeginningTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.Home;
+         mEditCopyToEndTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.End;
+         mEditFindTSMI.ShortcutKeys = Keys.Control | Keys.F;
+         mEditFindNextTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.F;
+         mEditFindPreviousTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.Alt | Keys.F;
+         mEditReplaceTSMI.ShortcutKeys = Keys.Control | Keys.H;
+         mEditGoToTSMI.ShortcutKeys = Keys.Control | Keys.G;
+         mEditWordWrapTSMI.ShortcutKeys = Keys.Control | Keys.W;
          mTargetedTSMI.ShortcutKeys = Keys.Control | Keys.D;
          mRetargetTSMI.ShortcutKeys = Keys.Control | Keys.E;
          mFeaturesTSMI.ShortcutKeys = Keys.Control | Keys.J;
@@ -386,7 +636,26 @@
          mSqlTSMI.ShortcutKeys = Keys.Control | Keys.OemPeriod;
          mMarkdownTSMI.ShortcutKeys = Keys.Control | Keys.Down;
          mPythonTSMI.ShortcutKeys = Keys.Control | Keys.OemQuestion;
-         mCurrentThemeIsTSMI.ShortcutKeys = Keys.Control | Keys.OemBackslash;
+         mContextUndoTSMI.ShortcutKeys = Keys.Control | Keys.Z;
+         mContextRedoTSMI.ShortcutKeys = Keys.Control | Keys.Y;
+         mContextSelectAllTSMI.ShortcutKeys = Keys.Control | Keys.A;
+         mContextSelectNoneTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.A;
+         mContextCutTSMI.ShortcutKeys = Keys.Control | Keys.X;
+         mContextDeleteTSMI.ShortcutKeys = Keys.Delete;
+         mContextPasteTSMI.ShortcutKeys = Keys.Control | Keys.V;
+         //DEBUG efm5 2026 05 14 these four don't currently exist
+         //mContextTrimToBeginningTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.X;
+         //mContextTrimToEndTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.X;
+         mContextCopyTSMI.ShortcutKeys = Keys.Control | Keys.C;
+         mContextCopyAllTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.C;
+         //mContextCopyToBeginningTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.Home;
+         //mContextCopyToEndTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.End;
+         mContextFindTSMI.ShortcutKeys = Keys.Control | Keys.F;
+         mContextFindNextTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.F;
+         mContextFindPreviousTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.Alt | Keys.F;
+         mContextReplaceTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.F;
+         mContextGoToTSMI.ShortcutKeys = Keys.Control | Keys.G;
+         //mContextWordWrapTSMI.ShortcutKeys = Keys.Control | Keys.W;
       }
 
       private void InitializeUIPart3() {
@@ -400,6 +669,21 @@
          ThrowIfNull(mVersionLabel, nameof(mVersionLabel));
          ThrowIfNull(mRevertButton, nameof(mRevertButton));
          ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
+         ThrowIfNull(mContextMenuStrip, nameof(mContextMenuStrip));
+         ThrowIfNull(mCommentAddDoubleTSMI, nameof(mCommentAddDoubleTSMI));
+         ThrowIfNull(mCommentAddNotImplementedTSMI, nameof(mCommentAddNotImplementedTSMI));
+         ThrowIfNull(mCommentAddTripleTSMI, nameof(mCommentAddTripleTSMI));
+         ThrowIfNull(mCommentCPlusPlusTSMI, nameof(mCommentCPlusPlusTSMI));
+         ThrowIfNull(mCommentExpressionBodiedMethodTSMI, nameof(mCommentExpressionBodiedMethodTSMI));
+         ThrowIfNull(mCommentGetTSMI, nameof(mCommentGetTSMI));
+         ThrowIfNull(mCommentMakeSummaryTSMI, nameof(mCommentMakeSummaryTSMI));
+         ThrowIfNull(mCommentOutTSMI, nameof(mCommentOutTSMI));
+         ThrowIfNull(mCommentRemoveTSMI, nameof(mCommentRemoveTSMI));
+         ThrowIfNull(mCommentReplaceTSMI, nameof(mCommentReplaceTSMI));
+         ThrowIfNull(mCommentReverseEqualityTSMI, nameof(mCommentReverseEqualityTSMI));
+         ThrowIfNull(mCommentTSMI, nameof(mCommentTSMI));
+         ThrowIfNull(mCommentUpdateTSMI, nameof(mCommentUpdateTSMI));
+         ThrowIfNull(mCommentWrapTSMI, nameof(mCommentWrapTSMI));
          mRichTextBox.Multiline = true;
          mRichTextBox.ScrollBars = RichTextBoxScrollBars.Both;
          mRichTextBox.AcceptsTab = true;
@@ -407,6 +691,7 @@
          mRichTextBox.Anchor = mAnchorTopLeftBottomRight;
          mRichTextBox.Name = "mainTextBox";
          mRichTextBox.TabIndex = mTabIndex++;
+         mRichTextBox.ContextMenuStrip = mContextMenuStrip;
          mSendAllButton.Text = "&Send All";
          mSendAllButton.Name = "sendAllButton";
          mSendAllButton.TabIndex = mTabIndex++;
@@ -452,6 +737,78 @@
          mRevertButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
          mRevertButton.Tag = PasteMode.SendAll;
          mRevertButton.Click += RevertButton_Click;
+
+
+
+         mCommentAddDoubleTSMI.Click += CommentAddDoubleTSMI_Click;
+         mCommentAddDoubleTSMI.Name = "commentAddDoubleTSMI";
+         mCommentAddDoubleTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Shift | Keys.D;
+         mCommentAddDoubleTSMI.Size = new Size(585, 36);
+         mCommentAddDoubleTSMI.Text = "Add Double";
+         mCommentAddNotImplementedTSMI.Click += AddNotImplementedTSMI_Click;
+         mCommentAddNotImplementedTSMI.Name = "addNotImplementedTSMI";
+         mCommentAddNotImplementedTSMI.ShortcutKeyDisplayString = "Ctrl+Alt+Shift+0 (zero)";
+         mCommentAddNotImplementedTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Shift | Keys.D0;
+         mCommentAddNotImplementedTSMI.Size = new Size(585, 36);
+         mCommentAddNotImplementedTSMI.Text = "Add Not Implemented";
+         mCommentAddTripleTSMI.Click += CommentAddTripleTSMI_Click;
+         mCommentAddTripleTSMI.Name = "commentAddTripleTSMI";
+         mCommentAddTripleTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Shift | Keys.T;
+         mCommentAddTripleTSMI.Size = new Size(585, 36);
+         mCommentAddTripleTSMI.Text = "Add Triple";
+         mCommentCPlusPlusTSMI.Click += CPlusPlusTSMI_Click;
+         mCommentCPlusPlusTSMI.Name = "cPlusPlusTSMI";
+         mCommentCPlusPlusTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Shift | Keys.C;
+         mCommentCPlusPlusTSMI.Size = new Size(585, 36);
+         mCommentCPlusPlusTSMI.Text = "C++";
+         mCommentExpressionBodiedMethodTSMI.Click += ExpressionBodiedMethodTSMI_Click;
+         mCommentExpressionBodiedMethodTSMI.Name = "expressionBodiedMethodTSMI";
+         mCommentExpressionBodiedMethodTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Shift | Keys.D8;
+         mCommentExpressionBodiedMethodTSMI.Size = new Size(585, 36);
+         mCommentExpressionBodiedMethodTSMI.Text = "Expression-Bodied Method";
+         mCommentGetTSMI.Click += CommentGetTSMI_Click;
+         mCommentGetTSMI.Name = "commentGetTSMI";
+         mCommentGetTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Shift | Keys.G;
+         mCommentGetTSMI.Size = new Size(585, 36);
+         mCommentGetTSMI.Text = "Get";
+         mCommentMakeSummaryTSMI.Click += MakeSummaryTSMI_Click;
+         mCommentMakeSummaryTSMI.Name = "makeSummaryTSMI";
+         mCommentMakeSummaryTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Shift | Keys.M;
+         mCommentMakeSummaryTSMI.Size = new Size(585, 36);
+         mCommentMakeSummaryTSMI.Text = "Make Summary";
+         mCommentOutTSMI.Click += CommentOutTSMI_Click;
+         mCommentOutTSMI.Name = "commentOutTSMI";
+         mCommentOutTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Shift | Keys.D7;
+         mCommentOutTSMI.Size = new Size(585, 36);
+         mCommentOutTSMI.Text = "Comment Out";
+
+         mCommentRemoveTSMI.Click += CommentRemoveTSMI_Click;
+         mCommentRemoveTSMI.Name = "commentRemoveTSMI";
+         mCommentRemoveTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Shift | Keys.R;
+         mCommentRemoveTSMI.Size = new Size(585, 36);
+         mCommentRemoveTSMI.Text = "Remove";
+         mCommentReplaceTSMI.Click += CommentReplaceTSMI_Click;
+         mCommentReplaceTSMI.Name = "commentReplaceTSMI";
+         mCommentReplaceTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Shift | Keys.E;
+         mCommentReplaceTSMI.Size = new Size(585, 36);
+         mCommentReplaceTSMI.Text = "Replace";
+         mCommentReverseEqualityTSMI.Click += ReverseEqualityTSMI_Click;
+         mCommentReverseEqualityTSMI.Name = "reverseEqualityTSMI";
+         mCommentReverseEqualityTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Shift | Keys.D1;
+         mCommentReverseEqualityTSMI.Size = new Size(585, 36);
+         mCommentReverseEqualityTSMI.Text = "Reverse Equality";
+         mCommentTSMI.Name = "commentTSMI";
+         mCommentTSMI.Text = "&Coding";
+         mCommentUpdateTSMI.Click += CommentUpdateTSMI_Click;
+         mCommentUpdateTSMI.Name = "commentUpdateTSMI";
+         mCommentUpdateTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Shift | Keys.U;
+         mCommentUpdateTSMI.Size = new Size(585, 36);
+         mCommentUpdateTSMI.Text = "Update";
+         mCommentWrapTSMI.Click += CommentWrapTSMI_Click;
+         mCommentWrapTSMI.Name = "commentWrapTSMI";
+         mCommentWrapTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Shift | Keys.W;
+         mCommentWrapTSMI.Size = new Size(585, 36);
+         mCommentWrapTSMI.Text = "Wrap";
          mMainBottomPanel.AddLeftControl(mSendAllButton);
          mMainBottomPanel.AddLeftControl(mPasteSelectedButton);
          mMainBottomPanel.AddLeftControl(mGetAllButton);
@@ -460,9 +817,12 @@
          mMainBottomPanel.AddRightControl(mVersionLabel);  // added first = leftmost of right group
          mMainBottomPanel.AddRightControl(mRevertButton);
          ThrowIfNull(mMainBottomPanel.mCancelButton, nameof(mMainBottomPanel.mCancelButton));
+         ThrowIfNull(mMainBottomPanel.mHelpButton, nameof(mMainBottomPanel.mHelpButton));
+         mMainBottomPanel.mHelpButton.Tag = new HelpTag(HelpContext.Main);
          mMainBottomPanel.mCancelButton.Click += ExitButton_Click;
          mScrollableMainPanel.Controls.AddRange([mRichTextBox, mMainBottomPanel, mMenuStrip!]);
          mActiveLayoutable = mMainBottomPanel;
       }
+
    }
 }

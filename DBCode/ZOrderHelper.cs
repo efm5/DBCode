@@ -20,7 +20,8 @@ namespace DBCode {
          if (focusedControl == IntPtr.Zero)
             return false;
          StringBuilder? className = new StringBuilder(256);
-         GetClassName(focusedControl, className, className.Capacity);
+         if (GetClassName(focusedControl, className, className.Capacity) == 0)
+            return false;
          string name = className.ToString();
 
          // Win32 class names for text-accepting controls
@@ -173,7 +174,8 @@ namespace DBCode {
       }
 
       private static bool IsRealVisibleWindow(IntPtr pWindowHandle) {
-         if ((pWindowHandle == IntPtr.Zero) || (IsWindow(pWindowHandle) == false) || (IsWindowVisible(pWindowHandle) == false))
+         if ((pWindowHandle == IntPtr.Zero) || (IsWindow(pWindowHandle) == false) ||
+            (IsWindowVisible(pWindowHandle) == false))
             return false;
          int pLength = GetWindowTextLength(pWindowHandle);
          if (pLength == 0)
@@ -182,7 +184,8 @@ namespace DBCode {
          if ((pStyle & WS_VISIBLE) == 0)
             return false;
          int pExStyle = (int)GetWindowLongPtr(pWindowHandle, GWL_EXSTYLE);
-         if (((pExStyle & WS_EX_TOOLWINDOW) != 0) || ((pExStyle & WS_EX_NOACTIVATE) != 0) || ((pExStyle & WS_EX_LAYERED) != 0))
+         if (((pExStyle & WS_EX_TOOLWINDOW) != 0) || ((pExStyle & WS_EX_NOACTIVATE) != 0) ||
+               ((pExStyle & WS_EX_LAYERED) != 0) || ((pExStyle & WS_EX_NOREDIRECTIONBITMAP) != 0))
             return false;
          INT32 pOCloakedValue;
          int pResult = DwmGetWindowAttributeInt(pWindowHandle, (int)DWMWINDOWATTRIBUTE.DWMWA_CLOAKED, out pOCloakedValue, sizeof(int));
@@ -193,10 +196,19 @@ namespace DBCode {
       }
 
       private static bool IsDisallowedWindow(IntPtr pWindowHandle) {
-         return TargetListManager.IsDisallowed(GetWindowTitle(pWindowHandle));
+         string title = GetWindowTitle(pWindowHandle);
+         if (TargetListManager.IsDisallowed(title))
+            return true;
+         StringBuilder className = new StringBuilder(256);
+         if (GetClassName(pWindowHandle, className, className.Capacity) > 0) {
+            string name = className.ToString();
+            if (name.Equals("ApplicationFrameHost", StringComparison.OrdinalIgnoreCase))
+               return true;
+         }
+         return false;
       }
 
-      private static bool IsAllowedWindow(IntPtr pWindowHandle) {
+      public static bool IsAllowedWindow(IntPtr pWindowHandle) {
          return TargetListManager.IsAllowed(GetWindowTitle(pWindowHandle));
       }
       #endregion

@@ -287,6 +287,18 @@ namespace DBCode {
             }
          }
 
+         internal override void LayoutControlsOnly() {
+            if (Parent == null &&
+               (mLayoutMode == ClusterLayoutMode.MaxWidth || mLayoutMode == ClusterLayoutMode.MaxHeight))
+               ThrowBadCode($"{nameof(RadioButtonCluster)}.{nameof(LayoutControlsOnly)}: Parent is null. " +
+                  "Cluster must be added to a container before LayoutControlsOnly is called with MaxWidth or MaxHeight.");
+            ThrowIfNull(mLabel, nameof(mLabel));
+            LayoutControls();
+            mLabel.Invalidate();
+            foreach (RadioButton radioButton in mRadioButtons)
+               radioButton.Invalidate();
+         }
+
          protected override void Dispose(bool pDisposing) {
             if (pDisposing) {
                ThrowIfNull(mLabel, nameof(mLabel));

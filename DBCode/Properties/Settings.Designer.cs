@@ -12,7 +12,7 @@ namespace DBCode.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "18.6.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "18.7.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -320,6 +320,162 @@ namespace DBCode.Properties {
             }
             set {
                 this["UseSpaces"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int OptionsGeneralTabControlPageIndex {
+            get {
+                return ((int)(this["OptionsGeneralTabControlPageIndex"]));
+            }
+            set {
+                this["OptionsGeneralTabControlPageIndex"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int OptionsIncludeExcludeTabControlPageIndex {
+            get {
+                return ((int)(this["OptionsIncludeExcludeTabControlPageIndex"]));
+            }
+            set {
+                this["OptionsIncludeExcludeTabControlPageIndex"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("25")]
+        public int SearchHistoryMaxEntries {
+            get {
+                return ((int)(this["SearchHistoryMaxEntries"]));
+            }
+            set {
+                this["SearchHistoryMaxEntries"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("25")]
+        public int ReplaceHistoryMaxEntries {
+            get {
+                return ((int)(this["ReplaceHistoryMaxEntries"]));
+            }
+            set {
+                this["ReplaceHistoryMaxEntries"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UsePCRE {
+            get {
+                return ((bool)(this["UsePCRE"]));
+            }
+            set {
+                this["UsePCRE"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool FindMatchCase {
+            get {
+                return ((bool)(this["FindMatchCase"]));
+            }
+            set {
+                this["FindMatchCase"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool FindWholeWord {
+            get {
+                return ((bool)(this["FindWholeWord"]));
+            }
+            set {
+                this["FindWholeWord"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool FindRegularExpressions {
+            get {
+                return ((bool)(this["FindRegularExpressions"]));
+            }
+            set {
+                this["FindRegularExpressions"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool FindScopeSelection {
+            get {
+                return ((bool)(this["FindScopeSelection"]));
+            }
+            set {
+                this["FindScopeSelection"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SRMatchCase {
+            get {
+                return ((bool)(this["SRMatchCase"]));
+            }
+            set {
+                this["SRMatchCase"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SRWholeWord {
+            get {
+                return ((bool)(this["SRWholeWord"]));
+            }
+            set {
+                this["SRWholeWord"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SRRegularExpressions {
+            get {
+                return ((bool)(this["SRRegularExpressions"]));
+            }
+            set {
+                this["SRRegularExpressions"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SRScopeSelection {
+            get {
+                return ((bool)(this["SRScopeSelection"]));
+            }
+            set {
+                this["SRScopeSelection"] = value;
             }
         }
     }

@@ -62,17 +62,34 @@
             mFlattenedButton?.Invalidate();
          }
 
+         internal override void LayoutControlsOnly() {
+            LayoutControls();
+            mLabel?.Invalidate();
+            mTextBox?.Invalidate();
+            mFlattenedButton?.Invalidate();
+         }
+
          internal override void SetFontAndColor() {
             ThrowIfNull(mTextBox, nameof(mTextBox));
             Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
             if (mLabel != null) {
-               mLabel.Font = CreateNewFont(poFont);
+               UpdateFont(mLabel, CreateNewFont(poFont));
                mLabel.ForeColor = poForeColor;
                mLabel.BackColor = poBackColor;
             }
-            mTextBox.Font = CreateNewFont(poFont);
+            UpdateFont(mTextBox, CreateNewFont(poFont));
             mTextBox.ForeColor = poForeColor;
             mTextBox.BackColor = poBackColor;
+         }
+
+         protected override void Dispose(bool pDisposing) {
+            if (pDisposing) {
+               if (mLabel != null)
+                  MainForm.DisposeFontIfOwned(mLabel.Font);
+               if (mTextBox != null)
+                  MainForm.DisposeFontIfOwned(mTextBox.Font);
+            }
+            base.Dispose(pDisposing);
          }
       }
    }

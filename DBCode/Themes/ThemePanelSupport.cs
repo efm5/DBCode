@@ -33,7 +33,7 @@
             }
             wantedWidth = maxWidth + mEm3 + SystemInformation.VerticalScrollBarWidth;
             wantedHeight = maxHeight + SystemInformation.HorizontalScrollBarHeight + mThemesHeaderCluster.Height +
-               mThemeBottomPanel.Height + primaryTabStripHeight + highlightTabStripHeight + mEm3;
+               mBottomPanel.Height + primaryTabStripHeight + highlightTabStripHeight + mEm3;
             if (wantedWidth < 300)
                wantedWidth = 300;
             if (wantedHeight < 300)
@@ -43,34 +43,30 @@
 
          public void LayoutControls() {
             SuspendLayout();
-            ThrowIfNull(mForm, nameof(mForm));
             //efm5 - switching to each tab forces the controls to be created and laid out, which is necessary
             //to get accurate measurements for the wanted size of the panel; without this, the panel may report
             //a smaller wanted size than it actually needs
             mPrimaryTabControl.SelectedIndexChanged -= PrimaryTabControl_SelectedIndexChanged;
-            mIncludeExcludeTabControl.SelectedIndexChanged -= IncludeExcludeTabControl_SelectedIndexChanged;
+            mPrimaryTabControl.DrawItem -= PrimaryTabControl_DrawItem;
             mHighlightTabControl.SelectedIndexChanged -= HighlightTabControl_SelectedIndexChanged;
+            mHighlightTabControl.DrawItem -= HighlightTabControl_DrawItem;
             int savedPrimary = mUiState.mThemePrimaryTabPageIndex;
             int savedHighlight = mUiState.mThemeHighlightTabPageIndex;
-            int savedTargeting = mUiState.mThemeTargetingTabIndexIndex;
             mPrimaryTabControl.SelectedIndex = (int)PrimaryTabPageUsage.Interface;
             mPrimaryTabControl.SelectedIndex = (int)PrimaryTabPageUsage.Color;
             mPrimaryTabControl.SelectedIndex = (int)PrimaryTabPageUsage.Examples;
-            mPrimaryTabControl.SelectedIndex = (int)PrimaryTabPageUsage.Targeting;
             for (int i = 0; i < mHighlightTabControl.TabPages.Count; i++)
                mHighlightTabControl.SelectedIndex = i;
-            for (int i = 0; i < mIncludeExcludeTabControl.TabPages.Count; i++)
-               mIncludeExcludeTabControl.SelectedIndex = i;
             //efm5 - now that all controls have been visited, restore the persisted selections
             mPrimaryTabControl.SelectedIndex = savedPrimary;
             mHighlightTabControl.SelectedIndex = savedHighlight;
-            mIncludeExcludeTabControl.SelectedIndex = savedTargeting;
             mPrimaryTabControl.SelectedIndexChanged += PrimaryTabControl_SelectedIndexChanged;
-            mIncludeExcludeTabControl.SelectedIndexChanged += IncludeExcludeTabControl_SelectedIndexChanged;
             mHighlightTabControl.SelectedIndexChanged += HighlightTabControl_SelectedIndexChanged;
+            mPrimaryTabControl.DrawItem += PrimaryTabControl_DrawItem;
+            mHighlightTabControl.DrawItem += HighlightTabControl_DrawItem;
             ApplyTheme(mTemporaryTheme);
             LayoutClustersAndContainers();
-            mThemeBottomPanel.LayoutControls();
+            mBottomPanel.LayoutControls();
             mExampleBottomPanel.LayoutControls();
             SizeExamplesContainer();
             mExamplesContainer.Height += mEmHalf;
@@ -79,7 +75,7 @@
             mExamplesContainer.Location = new Point(mIndent, mExampleBottomPanel.Bottom + mEmHalf);
             mPrimaryTabControl.Location = new Point(mIndent, mThemesHeaderCluster.Bottom + mEmHalf);
             mPrimaryTabControl.Width = ClientSize.Width - (2 * mIndent);
-            mPrimaryTabControl.Height = ClientSize.Height - (mThemeBottomPanel.Height + mThemesHeaderCluster.Height + mEm);
+            mPrimaryTabControl.Height = ClientSize.Height - (mBottomPanel.Height + mThemesHeaderCluster.Height + mEm);
             mPrimaryTabControl.Anchor = mAnchorTopLeftBottomRight;
             ResumeLayout(true);
          }
@@ -136,7 +132,6 @@
                }
                if (control is BaseCluster baseCluster) {
                   baseCluster.LayoutCluster();
-                  baseCluster.LayoutCluster();
                }
                else if (control is GroupBox groupBox) {
                   groupBox.Font = CreateNewBoldFont();
@@ -177,30 +172,6 @@
             }
          }
 
-         private void ApplyThemeToDataGridView(DataGridView pGrid, ref Font? pHeaderFont) {
-            ThrowIfNull(pHeaderFont, nameof(pHeaderFont));
-            Color backColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground];
-            Color foreColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont];
-            Color selectedBackColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground];
-            Color selectedForeColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxFont];
-            Font interfaceFont = mTemporaryTheme.mFonts[(int)FontUsage.Interface];
-            pHeaderFont.Dispose();
-            pHeaderFont = CreateNewBoldFont(interfaceFont); // we own this; DataGridView will not dispose it
-            pGrid.EnableHeadersVisualStyles = false; // required or ColumnHeadersDefaultCellStyle is ignored
-            pGrid.BackgroundColor = backColor;
-            pGrid.GridColor = foreColor;
-            pGrid.DefaultCellStyle.BackColor = backColor;
-            pGrid.DefaultCellStyle.ForeColor = foreColor;
-            pGrid.DefaultCellStyle.SelectionBackColor = selectedBackColor;
-            pGrid.DefaultCellStyle.SelectionForeColor = selectedForeColor;
-            pGrid.DefaultCellStyle.Font = interfaceFont; // owned by theme; not disposed here
-            pGrid.ColumnHeadersDefaultCellStyle.BackColor = selectedBackColor;
-            pGrid.ColumnHeadersDefaultCellStyle.ForeColor = selectedForeColor;
-            pGrid.ColumnHeadersDefaultCellStyle.SelectionBackColor = selectedBackColor;
-            pGrid.ColumnHeadersDefaultCellStyle.SelectionForeColor = selectedForeColor;
-            pGrid.ColumnHeadersDefaultCellStyle.Font = pHeaderFont;
-         }
-
          public void ApplyTheme(Theme pTheme) {
             Theme clonedTheme = pTheme.Clone();
             mTemporaryTheme.Dispose();
@@ -217,13 +188,10 @@
             mPrimaryTabControl.SetStripBackColor(clonedTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground]);
             ApplyThemeToControlTree(mPrimaryTabControl);
             ApplyThemeToControlTree(mHighlightTabControl);
-            ApplyThemeToDataGridView(mIncludeDataGridView, ref mIncludeHeaderFont);
-            ApplyThemeToDataGridView(mExcludeDataGridView, ref mExcludeHeaderFont);
-            mThemeBottomPanel.SetFontAndColor();
+            mBottomPanel.SetFontAndColor();
             mExampleBottomPanel.SetFontAndColor();
             using (Font interfaceFont = CreateNewBoldFont(clonedTheme.mFonts[(int)FontUsage.Interface])) {
                mPrimaryTabControl.RecalculateItemSize(interfaceFont);
-               mIncludeExcludeTabControl.RecalculateItemSize(interfaceFont);
                mHighlightTabControl.RecalculateItemSize(interfaceFont);
             }
             mPrimaryTabControl.Invalidate(true);
@@ -341,62 +309,28 @@
             return clusters;
          }
 
-         private void DrawTabControlItem(VariableWidthTabControl pTabControl, DrawItemEventArgs pArgs) {
-            Theme theme = mTemporaryTheme;
-            TabPage page = pTabControl.TabPages[pArgs.Index];
-            Rectangle rect = pTabControl.GetTabRect(pArgs.Index);
-            bool selected = pTabControl.SelectedIndex == pArgs.Index;
-            Color back = selected ? theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderSelectedBackground]
-                                  : theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderUnselectedBackground];
-            Color fore = selected ? theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderSelectedFont]
-                                  : theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderUnselectedFont];
-            Font font = selected ? CreateNewBoldFont() : CreateNewFont();
-            using (SolidBrush brush = new SolidBrush(back))
-               pArgs.Graphics.FillRectangle(brush, rect);
-            Rectangle textRect = new Rectangle(pArgs.Bounds.X + 4, pArgs.Bounds.Y + 1,
-               pArgs.Bounds.Width - 4, pArgs.Bounds.Height - 1);
-            TextRenderer.DrawText(pArgs.Graphics, page.Text, font, textRect, fore,
-               TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
-         }
-
          public bool ThemeIsDirty() {
             return mThemeIsDirty;
          }
 
-         public void EnsureColorPickerPanel(Theme pTheme, ColorSwatchUsage pUsage, Color pInitialColor) {
+         public static void EnsureColorPickerPanel(Theme pTheme, ColorSwatchUsage pUsage, Color pInitialColor) {
             ThrowIfNull(mForm, nameof(mForm));
             mUiState.ThemeBounds = mForm.Bounds;
-            if (mColorPickerPanel == null)
-               mColorPickerPanel = new ColorPickerPanel(pTheme, pUsage, pInitialColor);
-            else
-               mColorPickerPanel.LayoutControls();
-            mForm.SuspendClientSizeChanged();
-            if (mFirstColorPicker) {
-               mForm.SuspendClientSizeChanged();
-               mForm.Bounds = mUiState.mColorPickerBounds;
-               mForm.ResumeClientSizeChanged();
-            }
+            mColorPickerPanel?.Dispose();
+            mColorPickerPanel = new ColorPickerPanel(pTheme, pUsage, pInitialColor);
             ShowColorPickerPanel();
          }
 
-         public void EnsureColorPickerPanel(Theme pTheme, TokenKind pTokenKind, LanguageKind pLanguageKind,
+         public static void EnsureColorPickerPanel(Theme pTheme, TokenKind pTokenKind, LanguageKind pLanguageKind,
             Color pInitialColor) {
             ThrowIfNull(mForm, nameof(mForm));
             mUiState.ThemeBounds = mForm.Bounds;
-            if (mColorPickerPanel == null)
-               mColorPickerPanel = new ColorPickerPanel(pTheme, pTokenKind, pLanguageKind, pInitialColor);
-            else
-               mColorPickerPanel.LayoutControls();
-            mForm.SuspendClientSizeChanged();
-            if (mFirstColorPicker) {
-               mForm.SuspendClientSizeChanged();
-               mForm.Bounds = mUiState.mColorPickerBounds;
-               mForm.ResumeClientSizeChanged();
-            }
+            mColorPickerPanel?.Dispose();
+            mColorPickerPanel = new ColorPickerPanel(pTheme, pTokenKind, pLanguageKind, pInitialColor);
             ShowColorPickerPanel();
          }
 
-         public void ShowColorPickerPanel() {
+         public static void ShowColorPickerPanel() {
             ThrowIfNull(mColorPickerPanel, nameof(mColorPickerPanel));
             ThrowIfNull(mForm, nameof(mForm));
             ThrowIfNull(mThemePanel, nameof(mThemePanel));
@@ -404,56 +338,32 @@
                mForm.Controls.Remove(mThemePanel);
             if (!mForm.Controls.Contains(mColorPickerPanel))
                mForm.Controls.Add(mColorPickerPanel);
-            mActiveLayoutable = mColorPickerPanel.mColorPickerBottomPanel;
+            mActiveLayoutable = mColorPickerPanel.mBottomPanel;
             mColorPickerPanel.Dock = DockStyle.Fill;
             mColorPickerPanel.Visible = true;
             mColorPickerPanel.BringToFront();
             mColorPickerPanel.Show();
-            if (mFirstColorPicker) {
-               mForm.SuspendClientSizeChanged();
-               mColorPickerPanel.LayoutControls();
-               Size requiredSize = mColorPickerPanel.GetRequiredSize();
-               Rectangle screenBounds = ScreenBoundsPrimary();
-               int maxWidth = (int)(screenBounds.Width * 0.9);
-               int maxHeight = (int)(screenBounds.Height * 0.9);
-               int width = Math.Min(requiredSize.Width, maxWidth);
-               int height = Math.Min(requiredSize.Height, maxHeight);
-               mForm.ClientSize = new Size(width, height);
-               Point center = ScreenCenterPrimary();
-               mForm.Location = new Point(center.X - (width / 2), center.Y - (height / 2));
-               EnsureWindowFitsMonitor(mForm);
-               mColorPickerPanel.LayoutControls();
-               mForm.ResumeClientSizeChanged();
-               mFirstColorPicker = false;
-            }
-            else {
-               mForm.SuspendClientSizeChanged();
-               mUiState.ThemeBounds = mForm.Bounds;
-               mForm.Bounds = mUiState.mColorPickerBounds;
-               EnsureWindowFitsMonitor(mForm);
-               mColorPickerPanel.LayoutControls();
-               mForm.ResumeClientSizeChanged();
-            }
-            mForm.BeginInvoke(() => {
-               mForm.Opacity = mColorPickerPanel.mOriginalOpacity;
-            });
          }
 
          public static void RestoreFromColorPickerPanel() {
             ThrowIfNull(mForm, nameof(mForm));
             ThrowIfNull(mColorPickerPanel, nameof(mColorPickerPanel));
             ThrowIfNull(mThemePanel, nameof(mThemePanel));
-            mColorPickerPanel.Visible = false;
-            mColorPickerPanel.SendToBack();
             if (mForm.Controls.Contains(mColorPickerPanel))
                mForm.Controls.Remove(mColorPickerPanel);
+            mColorPickerPanel.Dispose();
+            mColorPickerPanel = null;
             mUiState.mColorPickerBounds = mForm.Bounds;
             mForm.SuspendClientSizeChanged();
             mForm.Bounds = mUiState.ThemeBounds;
-            mActiveLayoutable = mThemePanel.mThemeBottomPanel;
+            mActiveLayoutable = mThemePanel.mBottomPanel;
             mForm.ResumeClientSizeChanged();
             if (!mForm.Controls.Contains(mThemePanel))
                mForm.Controls.Add(mThemePanel);
+            mThemePanel.BringToFront();
+            mThemePanel.Show();
+            mForm.Activate();
+            mThemePanel.Focus();
             if (mRepaint) {
                mRepaint = false;
                mThemePanel.ApplyTheme(mThemePanel.mTemporaryTheme);
@@ -463,19 +373,17 @@
             }
          }
 
-         public void EnsureFontPickerPanel(Theme pTheme, FontUsage pUsage, Font pInitialFont) {
+         public static void EnsureFontPickerPanel(Theme pTheme, FontUsage pUsage, Font pInitialFont) {
             ThrowIfNull(mForm, nameof(mForm));
             Theme theme = pTheme.Clone();
             mUiState.ThemeBounds = mForm.Bounds;
-            if (mFontPickerPanel == null)
-               mFontPickerPanel = new FontPickerPanel(theme, pUsage, pInitialFont);
-            else
-               mFontPickerPanel.LayoutControls();
+            mFontPickerPanel?.Dispose();
+            mFontPickerPanel = new FontPickerPanel(theme, pUsage, pInitialFont);
             mBottomPanelExcluded = new List<Control>([mFontPickerPanel.mFontDescriptionLabel]);
             ShowFontPickerPanel();
          }
 
-         public void ShowFontPickerPanel() {
+         public static void ShowFontPickerPanel() {
             ThrowIfNull(mFontPickerPanel, nameof(mFontPickerPanel));
             ThrowIfNull(mForm, nameof(mForm));
             ThrowIfNull(mThemePanel, nameof(mThemePanel));
@@ -483,7 +391,7 @@
                mForm.Controls.Remove(mThemePanel);
             if (!mForm.Controls.Contains(mFontPickerPanel))
                mForm.Controls.Add(mFontPickerPanel);
-            mActiveLayoutable = mFontPickerPanel.mFontPickerBottomPanel;
+            mActiveLayoutable = mFontPickerPanel.mBottomPanel;
             mFontPickerPanel.Dock = DockStyle.Fill;
             mFontPickerPanel.Visible = true;
             mFontPickerPanel.BringToFront();
@@ -497,17 +405,21 @@
             ThrowIfNull(mBottomPanelExcluded, nameof(mBottomPanelExcluded));
             mBottomPanelExcluded.Clear();
             mBottomPanelExcluded = null;
-            mFontPickerPanel.Visible = false;
-            mFontPickerPanel.SendToBack();
             if (mForm.Controls.Contains(mFontPickerPanel))
                mForm.Controls.Remove(mFontPickerPanel);
+            mFontPickerPanel.Dispose();
+            mFontPickerPanel = null;
             mUiState.mFontPickerBounds = mForm.Bounds;
             mForm.SuspendClientSizeChanged();
             mForm.Bounds = mUiState.ThemeBounds;
-            mActiveLayoutable = mThemePanel.mThemeBottomPanel;
+            mActiveLayoutable = mThemePanel.mBottomPanel;
             mForm.ResumeClientSizeChanged();
             if (!mForm.Controls.Contains(mThemePanel))
                mForm.Controls.Add(mThemePanel);
+            mThemePanel.BringToFront();
+            mThemePanel.Show();
+            mForm.Activate();
+            mThemePanel.Focus();
             if (mRepaint) {
                mRepaint = false;
                if (pTheme != null)
@@ -516,85 +428,11 @@
                   mThemePanel.HighlightAllExampleBoxes();
                mThemePanel.Invalidate(true);
             }
-            mForm.Opacity = mFontPickerPanel.mOriginalOpacity;
          }
 
-         private void CloseThemePanel() {
+         private static void CloseThemePanel() {
             ThrowIfNull(mForm, nameof(mForm));
             mForm.RestoreFromThemePanel();
-         }
-
-         protected override void Dispose(bool pDisposing) {
-            if (pDisposing) {
-               ThrowIfNull(mThemeBottomPanel.mCancelButton, nameof(mThemeBottomPanel.mCancelButton));
-               ThrowIfNull(mThemeBottomPanel.mHelpButton, nameof(mThemeBottomPanel.mHelpButton));
-               ThrowIfNull(mIncludeHeaderFont, nameof(mIncludeHeaderFont));
-               ThrowIfNull(mExcludeHeaderFont, nameof(mExcludeHeaderFont));
-               mThemeBottomPanel.mCancelButton.Click -= CancelButton_Click;
-               mThemeBottomPanel.mHelpButton.Click -= MainForm.Help_Click;
-               mApplyButton.Click -= ApplyButton_Click;
-               mNewButton.Click -= NewButton_Click;
-               mCloneButton.Click -= CloneButton_Click;
-               mPrimaryTabControl.DrawItem -= PrimaryTabControl_DrawItem;
-               mIncludeExcludeTabControl.DrawItem -= IncludeExcludeTabControl_DrawItem;
-               mHighlightTabControl.DrawItem -= HighlightTabControl_DrawItem;
-               mPrimaryTabControl.SelectedIndexChanged -= PrimaryTabControl_SelectedIndexChanged;
-               mIncludeExcludeTabControl.SelectedIndexChanged -= IncludeExcludeTabControl_SelectedIndexChanged;
-               mHighlightTabControl.SelectedIndexChanged -= HighlightTabControl_SelectedIndexChanged;
-               if (mExampleScrollPanel != null)
-                  mExampleScrollPanel.ClientSizeChanged -= ExampleScrollPanel_ClientSizeChanged;
-               foreach (List<BaseCluster> clusterList in mAllClusters) {
-                  foreach (BaseCluster cluster in clusterList) {
-                     if (cluster is LabeledButtonColorSwatchCluster colorCluster) {
-                        if (mSyntaxColorClusters.Contains(colorCluster))
-                           colorCluster.SwatchClicked -= OnSyntaxColorSwatchClicked;
-                        else
-                           colorCluster.SwatchClicked -= OnColorSwatchClicked;
-                     }
-                     else if (cluster is LabeledButtonTextBoxCluster textBoxCluster)
-                        textBoxCluster.FontButtonClicked -= OnFontButtonClicked;
-                  }
-               }
-               mIncludeHeaderFont.Dispose();
-               mExcludeHeaderFont.Dispose();
-               mTemporaryTheme.Dispose();
-               mThemeBottomPanel.Dispose();
-               mExampleBottomPanel.Dispose();
-               mHighlightTabControl.Dispose();
-               mIncludeExcludeTabControl.Dispose();
-               mPrimaryTabControl.Dispose();
-               foreach (ClusterContainer container in mClusterContainers)
-                  container.Dispose();
-               mInterfaceHeaderCluster.Dispose();
-               mTargetingHeaderCluster.Dispose();
-               mIncludeHeaderCluster.Dispose();
-               mExcludeHeaderCluster.Dispose();
-               mThemesHeaderCluster.Dispose();
-               mExamplesHeaderCluster.Dispose();
-               mCSharpHeaderCluster.Dispose();
-               mCHeaderCluster.Dispose();
-               mCppHeaderCluster.Dispose();
-               mBasicHeaderCluster.Dispose();
-               mFSharpHeaderCluster.Dispose();
-               mHTMLHeaderCluster.Dispose();
-               mCSSHeaderCluster.Dispose();
-               mXMLHeaderCluster.Dispose();
-               mJSONHeaderCluster.Dispose();
-               mPowerShellHeaderCluster.Dispose();
-               mBatchHeaderCluster.Dispose();
-               mSQLHeaderCluster.Dispose();
-               mMarkdownHeaderCluster.Dispose();
-               mPythonHeaderCluster.Dispose();
-               mExampleMenuStrip.Dispose();
-               mExampleGroupBox.Dispose();
-               foreach (Panel? panel in mAllScrollPanels)
-                  panel?.Dispose();
-               foreach (List<BaseCluster> clusterList in mAllClusters) {
-                  foreach (BaseCluster cluster in clusterList)
-                     cluster.Dispose();
-               }
-            }
-            base.Dispose(pDisposing);
          }
       }
    }

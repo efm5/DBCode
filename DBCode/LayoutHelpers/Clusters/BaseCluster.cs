@@ -18,11 +18,11 @@ namespace DBCode {
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
          }
 
-         protected void GlueControlsHorizontally(Control pFirstControl, Control pSecondControl, int pSpacing) {
+         protected static void GlueControlsHorizontally(Control pFirstControl, Control pSecondControl, int pSpacing) {
             pSecondControl.Location = new Point(pFirstControl.Right + pSpacing, pFirstControl.Top);
          }
 
-         protected void GlueControlsVertically(Control pFirstControl, Control pSecondControl, int pSpacing) {
+         protected static void GlueControlsVertically(Control pFirstControl, Control pSecondControl, int pSpacing) {
             pSecondControl.Location = new Point(pFirstControl.Left, pFirstControl.Bottom + pSpacing);
          }
 
@@ -137,7 +137,25 @@ namespace DBCode {
 
          internal abstract void LayoutCluster();
 
+         internal virtual void LayoutControlsOnly() { }
+
+         internal void LayoutCluster(bool pApplyFonts) {
+            if (pApplyFonts)
+               LayoutCluster();
+            else
+               LayoutControlsOnly();
+         }
+
          internal abstract void SetFontAndColor();
+
+         protected static void UpdateFont(Control pControl, Font pNewFont) {
+            Font oldFont = pControl.Font;
+            pControl.Font = pNewFont;
+            if (object.ReferenceEquals(pControl.Font, pNewFont))
+               MainForm.DisposeFontIfOwned(oldFont);
+            else
+               pNewFont.Dispose();
+         }
 
          protected override void Dispose(bool pDisposing) {
             if (pDisposing) {

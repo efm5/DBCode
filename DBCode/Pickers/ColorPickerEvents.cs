@@ -2,14 +2,11 @@ namespace DBCode {
    namespace Themes {
       internal sealed partial class ColorPickerPanel : ScrollablePanel {
          protected override void OnHandleCreated(EventArgs pEventArgs) {
+            ThrowIfNull(mForm, nameof(mForm));
             base.OnHandleCreated(pEventArgs);
             Dock = DockStyle.Fill;
-            ThrowIfNull(mForm, nameof(mForm));
-            mOriginalOpacity = mForm.Opacity;
             mForm.Opacity = 0;
-            mForm.Location = new Point(-32000, -32000);
             LayoutControls();
-            PerformLayout();
          }
 
          #region Named Color Event Handlers
@@ -196,6 +193,19 @@ namespace DBCode {
          #endregion
 
          #region Button Event Handlers
+         private void GrayPrefixButton_Click(object? pSender, EventArgs pEventArguments) {
+            UpDownSelectAll(mGrayUpDown);
+         }
+         private void RedPrefixButton_Click(object? pSender, EventArgs pEventArguments) {
+            UpDownSelectAll(mRedUpDown);
+         }
+         private void GreenPrefixButton_Click(object? pSender, EventArgs pEventArguments) {
+            UpDownSelectAll(mGreenUpDown);
+         }
+         private void BluePrefixButton_Click(object? pSender, EventArgs pEventArguments) {
+            UpDownSelectAll(mBlueUpDown);
+         }
+
          private void OkButton_Click(object? pSender, EventArgs pEventArguments) {
             ThrowIfNull(mTheme, nameof(mTheme));
             ThrowIfNull(mDemoSwatch, nameof(mDemoSwatch));

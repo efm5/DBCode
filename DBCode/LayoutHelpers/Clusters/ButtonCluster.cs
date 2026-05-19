@@ -26,16 +26,24 @@
             mButton.Invalidate();
          }
 
-         internal void LayoutControls() {
+         internal static void LayoutControls() {
             // nothing to do
          }
 
          internal override void SetFontAndColor() {
             ThrowIfNull(mButton, nameof(mButton));
             Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
-            mButton.Font = CreateNewFont(poFont);
+            UpdateFont(mButton, CreateNewFont(poFont));
             mButton.ForeColor = poForeColor;
             mButton.BackColor = poBackColor;
+         }
+
+         protected override void Dispose(bool pDisposing) {
+            if (pDisposing) {
+               ThrowIfNull(mButton, nameof(mButton));
+               MainForm.DisposeFontIfOwned(mButton.Font);
+            }
+            base.Dispose(pDisposing);
          }
       }
    }

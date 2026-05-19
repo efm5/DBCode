@@ -33,6 +33,14 @@ namespace DBCode {
 
          internal override void LayoutCluster() {
             SetFontAndColor();
+            Controls.AddRange([mLabel, mButton]);
+            ApplyLabelPosition(mLabel as Label, mButton);
+            mLabel.Invalidate();
+            mButton.Invalidate();
+         }
+
+         internal override void LayoutControlsOnly() {
+            Controls.AddRange([mLabel, mButton]);
             ApplyLabelPosition(mLabel as Label, mButton);
             mLabel.Invalidate();
             mButton.Invalidate();
@@ -40,12 +48,20 @@ namespace DBCode {
 
          internal override void SetFontAndColor() {
             Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
-            mLabel.Font = CreateNewFont(poFont);
+            UpdateFont(mLabel, CreateNewFont(poFont));
             mLabel.ForeColor = poForeColor;
             mLabel.BackColor = poBackColor;
-            mButton.Font = CreateNewFont(poFont);
+            UpdateFont(mButton, CreateNewFont(poFont));
             mButton.ForeColor = poForeColor;
             mButton.BackColor = poBackColor;
+         }
+
+         protected override void Dispose(bool pDisposing) {
+            if (pDisposing) {
+               MainForm.DisposeFontIfOwned(mLabel.Font);
+               MainForm.DisposeFontIfOwned(mButton.Font);
+            }
+            base.Dispose(pDisposing);
          }
       }
    }

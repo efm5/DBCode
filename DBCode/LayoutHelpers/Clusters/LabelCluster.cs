@@ -25,9 +25,15 @@
 
          internal override void SetFontAndColor() {
             Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
-            mLabel.Font = CreateNewFont(poFont);
+            UpdateFont(mLabel, CreateNewFont(poFont));
             mLabel.ForeColor = poForeColor;
             mLabel.BackColor = poBackColor;
+         }
+
+         protected override void Dispose(bool pDisposing) {
+            if (pDisposing)
+               MainForm.DisposeFontIfOwned(mLabel.Font);
+            base.Dispose(pDisposing);
          }
       }
    }

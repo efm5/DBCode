@@ -26,14 +26,12 @@ namespace DBCode {
             if (mHasControlBox)
                mForm.ControlBox = false;
             mInitialValue = pInitialValue;
-#pragma warning disable IDE0017
             mOuterPanel = new ScrollablePanel {
                Name = $"GetString_OuterPanel{mTabIndex}",
                TabIndex = mTabIndex++,
-               Location = new Point(mEmHalf, mEm)    // inset within DraggablePanel (this)
+               Location = new Point(mEmHalf, mEm),    // inset within DraggablePanel (this)
+               Dock = DockStyle.None
             };
-#pragma warning restore IDE0017
-            mOuterPanel.Dock = DockStyle.None; //Override default
             mInnerPanel = new Panel {
                Name = $"GetString_InnerPanel{mTabIndex}",
                TabIndex = mTabIndex++,
@@ -81,12 +79,12 @@ namespace DBCode {
             LayoutClusters();
          }
 
-         public static void Show(string pTitle, string pPrompt, string pInitialValue, Action<string?, bool> pCallback) {
+         public static void ShowMe(string pTitle, string pPrompt, string pInitialValue, Action<string?, bool> pCallback) {
             ThrowIfNull(mForm, nameof(mForm));
             // Invariant: Form must have exactly one direct child and it must be a ScrollablePanel.
             if (mForm.Controls.Count != 1 || mForm.Controls[0] is not ScrollablePanel)
                throw new InvalidOperationException(
-                  "GetString.Show: Form must have exactly one direct child control and it must be a ScrollablePanel.");
+                  "GetString.ShowMe: Form must have exactly one direct child control and it must be a ScrollablePanel.");
             mUiState.FormBounds = mForm.Bounds;
             mGetStringPanel = new GetString(pTitle, pPrompt, pInitialValue) {
                OnClose = pCallback
@@ -94,6 +92,10 @@ namespace DBCode {
             // Attach() uses the self-hosting overload: GetString has already sized itself in
             // LayoutClusters() and owns its content in Controls. Attach() just registers with
             // the Form, disables the ScrollablePanel, centers, and makes visible.
+            if (mForm.ClientSize.Width < mGetStringPanel.Width + mEm2 * 2 || mForm.ClientSize.Height < mGetStringPanel.Height + mEm2 * 2)
+               mForm.ClientSize = new Size(
+                  Math.Max(mForm.ClientSize.Width, mGetStringPanel.Width + mEm2 * 2),
+                  Math.Max(mForm.ClientSize.Height, mGetStringPanel.Height + mEm2 * 2));
             mGetStringPanel.Attach(mForm);
             mGetStringPanel.FocusInputTextBox();
          }
@@ -130,20 +132,15 @@ namespace DBCode {
             int wantedWidth = mTitleCluster.Width;
             wantedWidth = Math.Max(wantedWidth, mPromptLabel.Width);
             wantedWidth = Math.Max(wantedWidth, mInputTextBox.Width);
+            mGetStringBottomPanel.LayoutControls();
             wantedWidth = Math.Max(wantedWidth, mGetStringBottomPanel.NeededWidth);
-            mGetStringBottomPanel.LayoutControls();             // get correct sizes after font is applied
-            mInnerPanel.Size = new Size(
-               wantedWidth + mEm,
+            mInnerPanel.Size = new Size(wantedWidth + mEm,
                mTitleCluster.Height + mPromptLabel.Height + mInputTextBox.Height + mGetStringBottomPanel.Height);
-            mGetStringBottomPanel.LayoutControls();             // recalculate needed width after inner panel is sized
+            mGetStringBottomPanel.LayoutControls();
                                                                 // mOuterPanel (ScrollablePanel) wraps mInnerPanel with mEmHalf inset on all four sides.
-            mOuterPanel.Size = new Size(
-               mInnerPanel.Width + (mEmHalf * 2),
-               mInnerPanel.Height + (mEmHalf * 2));
+            mOuterPanel.Size = new Size(mInnerPanel.Width + (mEmHalf * 2), mInnerPanel.Height + (mEmHalf * 2));
             // DraggablePanel (this) wraps mOuterPanel with mEm top and mEmHalf left/right/bottom.
-            Size = new Size(
-               mOuterPanel.Width + (mEmHalf * 2),
-               mOuterPanel.Height + mEm + mEmHalf);
+            Size = new Size(mOuterPanel.Width + (mEmHalf * 2), mOuterPanel.Height + mEm + mEmHalf);
             mInnerPanel.ResumeLayout(true);
             ResumeLayout(true);
          }
@@ -170,14 +167,16 @@ namespace DBCode {
             // Contrast colors for this and mOuterPanel are set in ApplyDragTone(), which is called
             // by AttachCore() after the ScrollablePanel is disabled and sampled.
             mInnerPanel.BackColor = theme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground];
-            MainForm.DisposeFontIfOwned(mPromptLabel.Font);
+            Font oldPrompt = mPromptLabel.Font;
             mPromptLabel.Font = CreateNewFont(interfaceFont);
+            MainForm.DisposeFontIfOwned(oldPrompt);
             mPromptLabel.ForeColor = interfaceForeColor;
             mPromptLabel.BackColor = interfaceBackColor;
             Theme.ThemeTextBoxThings(theme, out Font textBoxFont, out Color textBoxForeColor,
                out Color textBoxBackColor);
-            MainForm.DisposeFontIfOwned(mInputTextBox.Font);
+            Font oldInput = mInputTextBox.Font;
             mInputTextBox.Font = CreateNewFont(textBoxFont);
+            MainForm.DisposeFontIfOwned(oldInput);
             mInputTextBox.ForeColor = textBoxForeColor;
             mInputTextBox.BackColor = textBoxBackColor;
          }

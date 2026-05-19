@@ -63,15 +63,16 @@ namespace DBCode {
          float boxWidth = 30f;
          float boxHeight = 30f;
          SizeF stringSize = new SizeF();
-         using (Graphics graphics = pComboBox.CreateGraphics()) {
-            foreach (string fontName in pComboBox.Items)
-               if (!String.IsNullOrEmpty(fontName)) {
-                  stringSize = graphics.MeasureString(fontName, pComboBox.Font);
-                  if (stringSize.Width > boxWidth)
-                     boxWidth = stringSize.Width;
-                  if (stringSize.Height > boxHeight)
-                     boxHeight = stringSize.Height;
-               }
+         Font font = pComboBox.Font;
+
+         foreach (string fontName in pComboBox.Items) {
+            if (!String.IsNullOrEmpty(fontName)) {
+               stringSize = TextRenderer.MeasureText(fontName, font);
+               if (stringSize.Width > boxWidth)
+                  boxWidth = stringSize.Width;
+               if (stringSize.Height > boxHeight)
+                  boxHeight = stringSize.Height;
+            }
          }
          pComboBox.Width = (int)(boxWidth + SystemInformation.VerticalScrollBarWidth);
          pComboBox.Height = (int)(boxHeight + mIndent);
@@ -84,13 +85,14 @@ namespace DBCode {
             return;
          float boxWidth = 30f;
          SizeF stringSize = new SizeF();
-         using (Graphics graphics = pComboBox.CreateGraphics()) {
-            foreach (string fontName in pComboBox.Items)
-               if (!String.IsNullOrEmpty(fontName)) {
-                  stringSize = graphics.MeasureString(fontName, pComboBox.Font);
-                  if (stringSize.Width > boxWidth)
-                     boxWidth = stringSize.Width;
-               }
+         Font font = pComboBox.Font;
+
+         foreach (string fontName in pComboBox.Items) {
+            if (!String.IsNullOrEmpty(fontName)) {
+               stringSize = TextRenderer.MeasureText(fontName, font);
+               if (stringSize.Width > boxWidth)
+                  boxWidth = stringSize.Width;
+            }
          }
          if (boxWidth > pComboBox.Width) {
             if (boxWidth > COMBOBOX_MAXIMUM_DROPDOWN_WIDTH)
@@ -158,21 +160,24 @@ namespace DBCode {
          mEm4 = mEm * 4;
          mEmHalf = (int)Math.Ceiling(mEm * 0.5f);
          mEmFifth = Math.Clamp(mEm / 5, 3, 14);
+         mTabControlTopPad = (int)Math.Ceiling(fontSize * 0.25f);
+         mTabControlLeftPad = (int)Math.Ceiling(fontSize * 0.25f);
+         mTextPadding = TextRenderer.MeasureText(" ", pFont).Width - TextRenderer.MeasureText("", pFont).Width;
          mBottomPad = (int)Math.Ceiling(fontSize * 0.75f);
          mRightPad = (int)Math.Ceiling(fontSize * 0.75f);
          mMenuLeftOffset = (int)Math.Ceiling(fontSize * 2.5f);
          mGroupTopPad = (int)Math.Ceiling(fontSize * 0.2f);
          GroupBox groupBox = new GroupBox {
-            Font = CreateNewFont(pFont),
+            Font = pFont,
             Text = mUnicodeSampleString,
             AutoSize = true
          };
          Panel panel = new Panel {
-            Font = CreateNewFont(pFont),
+            Font = pFont,
             Dock = DockStyle.Fill
          };
          Label label = new Label {
-            Font = CreateNewFont(pFont),
+            Font = pFont,
             Text = mUnicodeSampleString,
             AutoSize = true,
          };
@@ -194,13 +199,12 @@ namespace DBCode {
          int bottomPad = pGroupPad ? mGroupBottomPad : 0;
          int wide = mMenuLeftOffset;
          int menuCount = 0;
+         Font font = pGroupBox.Font;
          SizeF stringSize = new SizeF(0, 0);
-         using (Graphics graphics = pGroupBox.CreateGraphics()) {
-            if (string.IsNullOrEmpty(pGroupBox.Text))
-               stringSize = graphics.MeasureString(mUnicodeSampleString, pGroupBox.Font);
-            else
-               stringSize = graphics.MeasureString(mUnicodeSampleString + pGroupBox.Text, pGroupBox.Font);
-         }
+         if (string.IsNullOrEmpty(pGroupBox.Text))
+            stringSize = TextRenderer.MeasureText(mUnicodeSampleString, font);
+         else
+            stringSize = TextRenderer.MeasureText(pGroupBox.Text, font);
          foreach (Control control in pGroupBox.Controls) {
             if (control is MenuStrip strip) {
                int menuWidth = 0;
@@ -227,21 +231,20 @@ namespace DBCode {
       }
 
       public static void SetUpDownBoxWidth(NumericUpDown pNumericUpDown) {
+         Font font = pNumericUpDown.Font;
          float boxWidth = 0f, boxHeight = 0f;
          SizeF stringSize = new SizeF();
          string minimumValue = string.Format("{0}", pNumericUpDown.Minimum),
             maximumValue = string.Format("{0}", pNumericUpDown.Maximum);
 
-         using (Graphics graphics = pNumericUpDown.CreateGraphics()) {
-            if (maximumValue.Length > minimumValue.Length)
-               stringSize = graphics.MeasureString(maximumValue + "0", pNumericUpDown.Font);
-            else
-               stringSize = graphics.MeasureString(minimumValue + "0", pNumericUpDown.Font);
-            if (stringSize.Width > boxWidth)
-               boxWidth = stringSize.Width;
-            if (stringSize.Height > boxHeight)
-               boxHeight = stringSize.Height;
-         }
+         if (maximumValue.Length > minimumValue.Length)
+            stringSize = TextRenderer.MeasureText(maximumValue + "0", font);
+         else
+            stringSize = TextRenderer.MeasureText(minimumValue + "0", font);
+         if (stringSize.Width > boxWidth)
+            boxWidth = stringSize.Width;
+         if (stringSize.Height > boxHeight)
+            boxHeight = stringSize.Height;
          //The Up/Down arrows is about the same width as the scrollbar width
          pNumericUpDown.Width = (int)(boxWidth + SystemInformation.VerticalScrollBarWidth);
          pNumericUpDown.Height = (int)(boxHeight + mIndent);
@@ -271,52 +274,48 @@ namespace DBCode {
          }
       }
 
-      internal static void SizeTextBoxToFitString(out SizeF pSize, RichTextBox pTextBox,
+      internal static void SizeTextBoxToFitString(out SizeF pOSize, RichTextBox pTextBox,
          string pExample = "", bool pDoWidth = true, bool pDoHeight = true, bool pPadWidth = true) {
          Font font = pTextBox.Font;
-         SizeF stringSize = new SizeF(0, 0);
-         pSize = stringSize;
+         SizeF stringSize;
 
-         using (Graphics graphics = pTextBox.CreateGraphics()) {
-            if (!string.IsNullOrEmpty(pExample)) //Prefer example
-               stringSize = graphics.MeasureString(pExample, font);
-            else if (!string.IsNullOrEmpty(pTextBox.Text))
-               stringSize = graphics.MeasureString(pTextBox.Text, font);
-            else//Worst-case
-               stringSize = graphics.MeasureString(mUnicodeSampleString, font);
-         }
+         if (!string.IsNullOrEmpty(pExample)) //Prefer example
+            stringSize = TextRenderer.MeasureText(pExample, font);
+         else if (!string.IsNullOrEmpty(pTextBox.Text))
+            stringSize = TextRenderer.MeasureText(pTextBox.Text, font);
+         else//Worst-case
+            stringSize = TextRenderer.MeasureText(Fields.mUnicodeSampleString, font);
+         pOSize = stringSize;
          if (pDoWidth) {
             if (pPadWidth)
-               pSize.Width = stringSize.Width + mEm;
+               pOSize.Width = stringSize.Width + mEm;
             else
-               pSize.Width = stringSize.Width;
+               pOSize.Width = stringSize.Width;
          }
          if (pDoHeight)
-            pSize.Height = (int)Math.Ceiling(stringSize.Height * 1.3f);
+            pOSize.Height = (int)Math.Ceiling(stringSize.Height * 1.3f);
       }
 
-      internal static void SizeTextBoxToFitString(out SizeF pSize, TextBox pTextBox, string pExample = "",
+      internal static void SizeTextBoxToFitString(out SizeF pOSize, TextBox pTextBox, string pExample = "",
          bool pDoWidth = true, bool pDoHeight = true, bool pPadWidth = true) {
          Font font = pTextBox.Font;
-         SizeF stringSize = new SizeF(0, 0);
-         pSize = stringSize;
+         SizeF stringSize;
 
-         using (Graphics graphics = pTextBox.CreateGraphics()) {
-            if (!string.IsNullOrEmpty(pExample)) //Prefer example
-               stringSize = graphics.MeasureString(pExample, font);
-            else if (!string.IsNullOrEmpty(pTextBox.Text))
-               stringSize = graphics.MeasureString(pTextBox.Text, font);
-            else//Worst-case
-               stringSize = graphics.MeasureString(mUnicodeSampleString, font);
-         }
+         if (!string.IsNullOrEmpty(pExample)) //Prefer example
+            stringSize = TextRenderer.MeasureText(pExample, font);
+         else if (!string.IsNullOrEmpty(pTextBox.Text))
+            stringSize = TextRenderer.MeasureText(pTextBox.Text, font);
+         else//Worst-case
+            stringSize = TextRenderer.MeasureText(Fields.mUnicodeSampleString, font);
+         pOSize = stringSize;
          if (pDoWidth) {
             if (pPadWidth)
-               pSize.Width = stringSize.Width + mEm;
+               pOSize.Width = stringSize.Width + mEm;
             else
-               pSize.Width = stringSize.Width;
+               pOSize.Width = stringSize.Width;
          }
          if (pDoHeight)
-            pSize.Height = stringSize.Height;
+            pOSize.Height = stringSize.Height;
       }
 
       internal static void TextBoxSelectAll(TextBox pTextBox) {
@@ -328,14 +327,13 @@ namespace DBCode {
       internal static void ComboBoxSelectAll(ComboBox pComboBox) {
          pComboBox.Focus();
          pComboBox.SelectAll();
-         pComboBox.DroppedDown = true;
+         if (pComboBox.Items.Count > 0)
+            pComboBox.DroppedDown = true;
       }
 
       public static Point GetGroupBoxFirstLineOffset(GroupBox pGroupBox) {
-         SizeF stringSize = new SizeF();
+         Size stringSize = TextRenderer.MeasureText(Fields.mUnicodeSampleString, pGroupBox.Font);
 
-         using (Graphics graphics = pGroupBox.CreateGraphics())
-            stringSize = graphics.MeasureString(pGroupBox.Text + "Ñçg", pGroupBox.Font);
          return new Point(mGroupLeftPad, (int)stringSize.Height + mGroupTopPad + mScalingGroupBoxTopLinePad);
       }
    }

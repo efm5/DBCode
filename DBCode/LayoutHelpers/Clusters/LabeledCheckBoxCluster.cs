@@ -39,16 +39,38 @@ namespace DBCode {
             mCheckBox.Invalidate();
          }
 
+         internal override void LayoutControlsOnly() {
+            ThrowIfNull(mLabel, nameof(mLabel));
+            ThrowIfNull(mCheckBox, nameof(mCheckBox));
+            ApplyLabelPosition(mLabel, mCheckBox);
+            mLabel.Invalidate();
+            mCheckBox.Invalidate();
+         }
+
          internal override void SetFontAndColor() {
             ThrowIfNull(mLabel, nameof(mLabel));
             ThrowIfNull(mCheckBox, nameof(mCheckBox));
             Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
+            Font oldLabel = mLabel.Font;
             mLabel.Font = CreateNewFont(poFont);
+            MainForm.DisposeFontIfOwned(oldLabel);
             mLabel.ForeColor = poForeColor;
             mLabel.BackColor = poBackColor;
+            Font oldCheckBox = mCheckBox.Font;
             mCheckBox.Font = CreateNewFont(poFont);
+            MainForm.DisposeFontIfOwned(oldCheckBox);
             mCheckBox.ForeColor = poForeColor;
             mCheckBox.BackColor = poBackColor;
+         }
+
+         protected override void Dispose(bool pDisposing) {
+            if (pDisposing) {
+               if (mLabel != null)
+                  MainForm.DisposeFontIfOwned(mLabel.Font);
+               if (mCheckBox != null)
+                  MainForm.DisposeFontIfOwned(mCheckBox.Font);
+            }
+            base.Dispose(pDisposing);
          }
       }
    }

@@ -26,9 +26,15 @@
 
          internal override void SetFontAndColor() {
             Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
-            mCheckBox.Font = CreateNewFont(poFont);
+            UpdateFont(mCheckBox, CreateNewFont(poFont));
             mCheckBox.ForeColor = poForeColor;
             mCheckBox.BackColor = poBackColor;
+         }
+
+         protected override void Dispose(bool pDisposing) {
+            if (pDisposing)
+               MainForm.DisposeFontIfOwned(mCheckBox.Font);
+            base.Dispose(pDisposing);
          }
       }
    }

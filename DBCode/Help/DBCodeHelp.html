@@ -1,113 +1,285 @@
+<!DOCTYPE html>
 <html>
-<head>
-   <title>
-      DBCode Help
-   </title>
-   <meta name="description" content="Reference manual for DBCode">
-   <meta name="keywords" content="DBCode">
-   <link rel="stylesheet" href="styles.css">
-   <link rel="icon" type="image/x-icon" href="helpIcon.ico">
-</head>
-<body style="margin:50px;padding:0">
-   <h1>DBCode&rsquo;s</h1>
-   <h2>Reference Manual</h2>
-   <br>
-   <div class="introdiv">
-      <p>This replacement for Windows&rsquo;s built&ndash;in dictation box is specifically designed for use with IDEs.</p>
-   </div>
-   <div class="imageLabel">
-      <b><big>DBCode</big>&rsquo;s main window:</b>
-   </div>
-   <div class="picturediv">
-      <img src="DBCodeMain.png" alt="DBCode&rsquo;s main window">
-   </div>
-   <h3>Table of Contents</h3>
-   <table class="center">
-      <tr>
-         <td colspan="4"><a href="#menu"><big><b>The&nbsp;Menu</b></big></a></td>
-      </tr>
-      <tr>
-         <td><a href="#file">The&nbsp;File&nbsp;Menu</a></td>
-         <td><a href="#edit">The&nbsp;Edit&nbsp;Menu</a></td>
-         <td><a href="#view">The&nbsp;View&nbsp;Menu</a></td>
-      </tr>
-      <tr>
-         <td><a href="#options">The&nbsp;Options&nbsp;Menu</a></td>
-         <td><a href="#help">The&nbsp;Help&nbsp;Menu&nbsp;Item</a></td>
-      </tr>
-      <tr>
-         <td class="alignleft"><a href="#externalFontPicker">The&nbsp;External&nbsp;Font&nbsp;Picker</a></td>
-         <td class="alignleft"><a href="#externalColorPicker">The&nbsp;External&nbsp;Color&nbsp;Picker</a></td>
-      </tr>
-      <tr>
-         <td colspan="4"><a href="#toolbar"><big><b>The&nbsp;Toolbar</b></big></a></td>
-      </tr>
-      <tr>
-         <td><a href="#editing">The&nbsp;Editing&nbsp;Tools</a></td>
-         <td><a href="#scrolling">The&nbsp;Scrolling&nbsp;Tools</a></td>
-      </tr>
-      <tr>
-         <td colspan="4"><a href="#statusBar"><big><b>The&nbsp;Status&nbsp;Bar</b></big></a></td>
-      </tr>
-      <tr>
-         <td colspan="4"><a href="#dialogs"><big><b>The&nbsp;Dialogs</b></big></a></td>
-      </tr>
-      <tr>
-         <td><a href="#find">The&nbsp;Find&nbsp;Dialog</a></td>
-         <td><a href="#replace">The&nbsp;Replace&nbsp;Dialog</a></td>
-         <td><a href="#goTo">The&nbsp;Go&nbsp;To&nbsp;Dialog</a></td>
-      </tr>
-      <tr>
-         <td><a href="#fontSize">The&nbsp;Font&nbsp;Size&nbsp;Dialogs</a></td>
-         <td><a href="#fileHistory">The&nbsp;Maximum&nbsp;File&nbsp;History&nbsp;Dialog</a></td>
-      </tr>
-      <tr>
-         <td><a href="#createTheme">The&nbsp;Create&nbsp;Theme&nbsp;Dialog</a></td>
-         <td><a href="#editTheme">The&nbsp;Edit&nbsp;Theme&nbsp;Picker&nbsp;Dialog</a></td>
-         <td><a href="#themeEditor">The&nbsp;Theme&nbsp;Editor&nbsp;Dialog</a></td>
-         <td><a href="#removeTheme">The&nbsp;Remove&nbsp;Theme&nbsp;Picker&nbsp;Dialog</a></td>
-      </tr>
-      <tr>
-         <td colspan="2"><a href="#cleaner">Easy&nbsp;Pad&nbsp;Cleaner</a></td>
-      </tr>
-      <tr>
-         <td><a href="#pageLinks">Other&nbsp;Help&nbsp;Pages</a></td>
-      </tr>
-   </table>
-   <br>
-   <div class="largesectiondiv" id="menu">
+   <head>
+      <title> DBCode Help </title>
+      <meta name="description" content="Reference manual for DBCode">
+      <meta name="keywords" content="DBCode">
+      <link rel="stylesheet" href="styles.css">
+      <link rel="icon" type="image/x-icon" href="helpIcon.ico">
+   </head>
+   <body style="margin:50px;padding:0">
+      <h1>DBCode&rsquo;s</h1>
+      <h2>Reference Manual</h2>
+      <h3>Version 0.0.0.1</h3>
+      <div class="introdiv">
+         <p>This replacement for Dragon&rsquo;s built&ndash;in dictation box is specifically designed for use with IDEs by programmers. It can also be used as a general purpose dictation box replacement.</p>
+      </div>
+      <div class="imageLabel">
+         <b>
+            <big>DBCode</big>&rsquo;s main window, untargeted:
+         </b>
+      </div>
+      <div class="pictureTightVerticaldiv">
+         <img src="DBCodeMainUntargeted.png" alt="DBCode&rsquo;s main window, untargeted">
+      </div>
+      <div class="imageLabel">
+         <big>DBCode</big> targeted:
+      </div>
+      <div class="picturediv">
+         <img src="DBCodeMainTargeted.png" alt="DBCode&rsquo;s main window, targeted">
+      </div>
+      <h3>Table of Contents</h3>
+      <table class="center">
+         <tr>
+            <td colspan="4">
+               <a href="#menu">
+                  <big>
+                     <b>The&nbsp;Menu</b>
+                  </big>
+               </a>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <a href="#edit">The&nbsp;Edit&nbsp;Menu</a>
+            </td>
+            <td>
+               <a href="#targeting">The&nbsp;Targeting&nbsp;Menu</a>
+            </td>
+            <td>
+               <a href="#visibility">The&nbsp;Visibility&nbsp;Menu</a>
+            </td>
+            <td>
+               <a href="#mode">The&nbsp;Mode&nbsp;Menu</a>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <a href="#language">The&nbsp;Language&nbsp;Menu</a>
+            </td>
+            <td>
+               <a href="options">The&nbsp;Options&nbsp;Menu&nbsp;Item</a>
+            </td>
+            <td>
+               <a href="#theme">The&nbsp;Theme&nbsp;Menu</a>
+            </td>
+            <td>
+               <a href="#help">The&nbsp;Help&nbsp;Menu&nbsp;Item</a>
+            </td>
+         </tr>
+         <tr>
+            <td colspan="4">
+               <a href="#dialogs">
+                  <big>
+                     <b>The&nbsp;Dialogs</b>
+                  </big>
+               </a>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <a href="#find">The&nbsp;Find&nbsp;Dialog</a>
+            </td>
+            <td>
+               <a href="#replace">The&nbsp;Replace&nbsp;Dialog</a>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <a href="#target">The&nbsp;Pick&nbsp;Target&nbsp;Dialog</a>
+            </td>
+            <td>
+               <a href="#getString">The&nbsp;Get&nbsp;String&nbsp;Dialog</a>
+            </td>
+            <td>
+               <a href="#goTo">The&nbsp;Go&nbsp;To&nbsp;Dialog</a>
+            </td>
+         </tr>
+         <tr>
+            <td colspan="4">
+               <a href="#contextMenu">Context&nbsp;Menu</a>
+            </td>
+         </tr>
+         <tr>
+            <td colspan="4">
+               <a href="#shortcutKeys">Shortcut&nbsp;Keys</a>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <a href="#pageLinks">Other&nbsp;Help&nbsp;Pages</a>
+            </td>
+         </tr>
+      </table>
+      <br>
+      <div class="largesectiondiv" id="menu">
+         <p>The Menu</p>
+      </div>
+      <div class="picturediv">
+         <img src="Menu.png" alt="DBCode&rsquo;s menu">
+      </div>
       <p>
-         The Menu
+         The menu has 8 items: &ldquo;<u>E</u>dit&rdquo;; &ldquo;<u>T</u>argeting&rdquo;;
+         &ldquo;<u>V</u>isibility&rdquo;;  &ldquo;Mo<u>d</u>e&rdquo;;
+         &ldquo;<u>L</u>anguage&rdquo;; &ldquo;<u>O</u>ptions&rdquo;; &ldquo;The<u>m</u>e&rdquo;; and
+         &ldquo;<u>H</u>elp&rdquo;. All of these items have accelerator keys. All menu items and their children have
+         accelerator keys and keyboard shortcuts (when the they have no children).
       </p>
-   </div>
-   <div class="picturediv">
-      <img src="menu.png" alt="DBCode&rsquo;s menu">
-   </div>
-   <p>
-      The menu has XXX items: &ldquo;<u>F</u>ile&rdquo;; &ldquo;<u>E</u>dit&rdquo;; &ldquo;<u>V</u>iew&rdquo;;  &ldquo;Opt<u>i</u>ons&rdquo;; and &ldquo;<u>H</u>elp&rdquo;. All XXX of these items have accelerator keys. All menu items have either accelerator keys (when they have sub&ndash;subitems) and/or keyboard shortcuts.
-   </p>
-   <div class="smallsectiondiv" id="file">
-      <p>
-         The <u>F</u>ile Menu (<b>ALT+F</b>)
-      </p>
-   </div>
-   <div class="picturediv">
-      <img src="fileMenu.png" alt="Easy Pad&rsquo;s File menu">
-   </div>
-   <div class="lefttext">
-      <p id="new">
-         New (<b>CTRL+n</b>)
+      <div class="mediumsectiondiv" id="edit">
+         <p>
+            The <u>E</u>dit Menu (<b>ALT+e</b>)
+         </p>
+      </div>
+      <div class="picturediv">
+         <img src="EditMenu.png" alt="DBCode&rsquo;s Edit menu">
+      </div>
+      <div class="notediv">
+         <p>
+            The menu images reflect a current working version of the keyboard shortcuts. After the menu has completely stabilized these keyboard shortcuts will be updated in the code and documentation.
+         </p>
+      </div>
+      <div class="lefttext">
+         <p>
+            The <u>E</u>dit menu has nineteen subitems: <u>U</u>ndo; <u>R</u>edo; Select <u>A</u>ll; Select <u>N</u>one; Cu<u>t</u>; <u>D</u>elete; Trim To <u>B</u>eginning; Tr<u>i</u>m To End; <u>C</u>opy; Cop<u>y</u> All; C<u>o</u>py To Beginning; Copy To <u>E</u>nd; <u>P</u>aste; <u>F</u>ind; Find Ne<u>x</u>t; Find Pre<u>v</u>ious; Rep<u>l</u>ace; <u>G</u>oTo; and <u>W</u>ordwrap.
+         </p>
+         <p class="tab">
+            The &ldquo;<u>U</u>ndo&rdquo; (<b>CTRL+z</b>) subitem
+            <div class="tomatoSpan"> [TODO: finish out the rest of this page]</div>
+         </p>
+         <p class="tab">
+            The &ldquo;<u>R</u>edo&rdquo; (<b>CTRL+y</b>) subitem
+            <div class="tomatoSpan"> [TODO: finish out the rest of this page]</div>
+         </p>
+         <p class="tab">
+            The &ldquo;Select <u>A</u>ll&rdquo; (<b>CTRL+a</b>) subitem
+            <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+         </p>
+         <p class="tab">
+            The &ldquo;Select <u>N</u>one&rdquo; (<b>CTRL+SHIFT+a</b>) subitem
+            <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+         </p>
+         <p class="tab">
+            The &ldquo;Cu<u>t</u>&rdquo; (<b>CTRL+x</b>) subitem
+            <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+         </p>
+         <p class="tab">
+            The &ldquo;<u>D</u>elete&rdquo; (<b>Del</b>&nbsp;&mdash;&nbsp;the delete key) subitem
+            <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+         </p>
+         <p class="tab">
+            The &ldquo;Trim To <u>B</u>eginning&rdquo; (<b>CTRL+ALT+x</b>) subitem
+            <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+         </p>
+         <p class="tab">
+            The &ldquo;Tr<u>i</u>m To End&rdquo; (<b>CTRL+SHIFT+x</b>) subitem
+            <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+         </p>
+         <p class="tab">
+            The &ldquo;<u>C</u>opy&rdquo; (<b>CTRL+c</b>) subitem
+            <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+         </p>
+         <p class="tab">
+            The &ldquo;Cop<u>y</u> All&rdquo; (<b>CTRL+SHIFT+c</b>) subitem
+            <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+         </p>
+         <p class="tab">
+            The &ldquo;C<u>o</u>py To Beginning&rdquo; (<b>CTRL+SHIFT+Home</b>) subitem
+            <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+         </p>
+         <p class="tab">
+            The &ldquo;Copy To <u>E</u>nd&rdquo; (<b>CTRL+SHIFT+End</b>) subitem
+            <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+         </p>
+         <p class="tab">
+            The &ldquo;<u>P</u>aste&rdquo; (<b>CTRL+v</b>) subitem
+            <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+         </p>
+         <p class="tab">
+            The &ldquo;<u>F</u>ind&rdquo; (<b>CTRL+f</b>) subitem
+            <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+         </p>
+         <p class="tab">
+            The &ldquo;Find Ne<u>x</u>t&rdquo; (<b>CTRL+Alt+f</b>) subitem
+            <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+         </p>
+         <p class="tab">
+            The &ldquo;Find Pre<u>v</u>ious&rdquo; (<b>CTRL+SHIFT+Alt+f</b>) subitem
+            <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+         </p>
+         <p class="tab">
+            The &ldquo;Rep<u>l</u>ace&rdquo; (<b>CTRL+h</b>) subitem
+            <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+         </p>
+         <p class="tab">
+            The &ldquo;<u>G</u>oTo&rdquo; (<b>CTRL+g</b>) subitem
+            <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+         </p>
+         <p class="tab">
+            The &ldquo;<u>W</u>ordwrap&rdquo; (<b>CTRL+w</b>) subitem
+            <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+         </p>
+      </div>
+      <div class="picturediv">
+         <img src="TargetingMenu.png" alt="DBCode&rsquo;s Targeting menu">
+      </div>
+      <div class="lefttext">
+         <p id="targeting">
+            The <u>T</u>argeting menu controls transfers and has two subitems: <u>T</u>argeted and <u>R</u>etarget.
+         </p>
+         <p class="tab" id="targeted">
+            The &ldquo;<u>T</u>argeted&rdquo; (<b>CTRL+d</b>) subitem allows you to specify whether text transfer will
+            be targeted or untargeted.
+            <div class="tomatoSpan"> [TODO: finish out the details about targeted versus untargeted]</div>
+         </p>
+         <p class="tab" id="retarget">
+            The &ldquo;<u>R</u>etarget (<b>CTRL+e</b>) changes the targeting to  the window immediately behind
+            DB Code. This subitem will change the targeted status if targeting is not set.
+         </p>
+      </div>
+      <div class="tomatoSpan"> [TODO: finish out the rest of this page]</div>
+      <div class="largesectiondiv" id="mainBottomPanel">
+         <p>The Bottom Panel</p>
+      </div>
+      <div class="picturediv">
+         <img src="MainBottomPanel.png" alt="DBCode&rsquo;s main bottom panel">
+      </div>
+      <p class="tab">
+         <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
       </p>
       <p class="tab">
-         &ldquo;New&rdquo; clears all text from the text box; if there is any text already in the text box, you will be offered the chance to save it.
+         <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
       </p>
-   </div>
-   <div class="pageslinkdiv">
-      <h3 id="pageLinks">Other Pages</h3>
-      <p><a href="DBCodeThemes.html">Themes Help Page</a></p>
-      <p><a href="DBCodeColorPickerHelp.html">Color Picker Help Page</a>
-      <p><a href="DBCodeFontPickerHelp.html">Font Picker Help Page</a>
-      <p><a href="DBCodeShortcuts.html">Keyboard Shortcuts Help Page</a></p>
-   </div>
-</body>
+      <p class="tab">
+         <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+      </p>
+      <p class="tab">
+         <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+      </p>
+      <p class="tab">
+         <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+      </p>
+      <p class="tab">
+         <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+      </p>
+      <p class="tab">
+         <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+      </p>
+      <p class="tab">
+         <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+      </p>
+      <p class="tab">
+         <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+      </p>
+      <div class="pageslinkdiv">
+         <h3 id="pageLinks">Other Pages</h3>
+         <p> <a href="DBCodeHelp.html">DB Code Main Help Page</a> </p>
+         <p> <a href="DBCodeOptionsHelp.html">Options Help Page</a> </p>
+         <p> <a href="DBCodeThemesHelp.html">Themes Help Page</a> </p>
+         <p> <a href="DBCodeThemePickerHelp.html">Theme Picker Help Page</a> </p>
+         <p> <a href="DBCodeColorPickerHelp.html">Color Picker Help Page</a> </p>
+         <p> <a href="DBCodeFontPickerHelp.html">Font Picker Help Page</a> </p>
+         <p> <a href="DBCodeDialogsHelp.html">Dialogs Help Page</a> </p>
+         <p> <a href="DBCodeShortcuts.html">Keyboard Shortcuts Help Page</a> </p>
+      </div>
+   </body>
 </html>

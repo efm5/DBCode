@@ -18,8 +18,11 @@ namespace DBCode.Themes {
          if (!Directory.Exists(pFolderPath))
             Directory.CreateDirectory(pFolderPath);
 
-         foreach (Theme theme in pThemes)
+         foreach (Theme theme in pThemes) {
+            if (theme.mIsBuiltIn)
+               continue;
             SaveTheme(pFolderPath, theme);
+         }
       }
 
       [System.Diagnostics.CodeAnalysis.SuppressMessage(

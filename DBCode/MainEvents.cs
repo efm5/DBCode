@@ -2,6 +2,7 @@
    public sealed partial class MainForm : Form {
       #region main form
       private void MainForm_Load(object? pSender, EventArgs pEventArgs) {
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
          Size savedSize = mUiState.mFormSize;
          Point savedLocation = mUiState.mFormLocation;
          double savedOpacity = mUiState.mFormOpacity;
@@ -21,12 +22,15 @@
          UpdateTargetingStatusLabel();
          mActiveLayoutable?.LayoutControls();
          Opacity = mUiState.mFormOpacity;
+         ActiveControl = mRichTextBox;
          ClientSizeChanged += OnClientSizeChanged;
 #if DEBUG
-         //AddAccelerators(
+         //ProposeAccelerators(mMenuStrip, [mSendAllButton, mPasteSelectedButton, mRevertButton,
+         //mGetAllButton, mGetSelectedButton, mMainBottomPanel.mCancelButton, mMainBottomPanel.mCancelButton]);
          //RadioButtonClusterTestHarness.Show("RadioButton Cluster Test Harness");
 
-         //ClusterTestHarness.Show("Cluster Test Harness");
+         //ScalableCheckBoxClusterTestHarness.Show("Scalable CheckBox Cluster Test Harness");
+
          //GetString.Show("GetString Test", "Please enter any string to test the GetString harness:", string.Empty, TestGetStringCallback);
 
          //private void TestGetStringCallback(string? pResult, bool pWasCancelled) {
@@ -44,8 +48,11 @@
          mUiState.mFormOpacity = Opacity;
          mUiState.mLanguageKind = mCurrentLanguage;
          mUiState.mCurrentThemeName = mCurrentTheme.mName;
-         mUiState.WriteToSettings();
+         mUiState.Write();
          Settings.Default.Save();
+         if (!Directory.Exists(mDataFolder))
+            Directory.CreateDirectory(mDataFolder);
+         ThemeWriter.SaveAllThemes(mDataFolder, mThemes);
          mThemePanel?.Dispose();
          mMainBottomPanel?.Dispose();
          foreach (Themes.Theme theme in mThemes.OfType<Themes.Theme>()) {
@@ -124,6 +131,7 @@
             mIsTargetingEnabled = false;
             return;
          }
+         EnterTargetedMode();
          UpdateTargetingStatusLabel();
       }
 
@@ -160,6 +168,162 @@
          ThrowIfNull(mHighlighterEngine, nameof(mHighlighterEngine));
          mHighlighterEngine.SetLanguage(mCurrentLanguage);
          mHighlighterEngine.HighlightNow();
+      }
+
+      private void Undo_Click(object? pSender, EventArgs pEventArgs) {
+         Undo();
+      }
+
+      private void Redo_Click(object? pSender, EventArgs pEventArgs) {
+         Redo();
+      }
+
+      private void Find_Click(object? pSender, EventArgs pEventArgs) {
+         if (mFindPanel != null)
+            return;
+         FindPanel.ShowMe();
+      }
+
+      private void FindNext_Click(object? pSender, EventArgs pEventArgs) {
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
+         if (mCurrentFindRecord == null || mCurrentFindRecord.Count == 0) {
+            TimedMessage("No active find. Use Find to search first.", "Find Next");
+            return;
+         }
+         mCurrentFindRecord.mPosition++;
+         if (mCurrentFindRecord.mPosition >= mCurrentFindRecord.Count) {
+            mCurrentFindRecord.mPosition = mCurrentFindRecord.Count - 1;
+            TimedMessage("Sorry, there is nothing (going forward) left to find.", "Nothing To Find");
+            return;
+         }
+         mRichTextBox.SelectionStart = mCurrentFindRecord.GetIndex(mCurrentFindRecord.mPosition);
+         mRichTextBox.SelectionLength = mCurrentFindRecord.GetLength(mCurrentFindRecord.mPosition);
+         mRichTextBox.ScrollToCaret();
+      }
+
+      private void FindPrevious_Click(object? pSender, EventArgs pEventArgs) {
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
+         if (mCurrentFindRecord == null || mCurrentFindRecord.Count == 0) {
+            TimedMessage("No active find. Use Find to search first.", "Find Previous");
+            return;
+         }
+         mCurrentFindRecord.mPosition--;
+         if (mCurrentFindRecord.mPosition < 0) {
+            mCurrentFindRecord.mPosition = 0;
+            TimedMessage("Sorry, there is nothing (going backward) left to find.", "Nothing To Find");
+            return;
+         }
+         mRichTextBox.SelectionStart = mCurrentFindRecord.GetIndex(mCurrentFindRecord.mPosition);
+         mRichTextBox.SelectionLength = mCurrentFindRecord.GetLength(mCurrentFindRecord.mPosition);
+         mRichTextBox.ScrollToCaret();
+      }
+
+      private void Replace_Click(object? pSender, EventArgs pEventArgs) {
+         if (mSearchReplacePanel != null)
+            return;
+         SearchReplacePanel.ShowMe();
+      }
+
+      private void Copy_Click(object? pSender, EventArgs pEventArgs) {
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
+         mRichTextBox.Copy();
+      }
+
+      private void Cut_Click(object? pSender, EventArgs pEventArgs) {
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
+         mRichTextBox.Cut();
+      }
+
+      private void Delete_Click(object? pSender, EventArgs pEventArgs) {
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
+         if (mRichTextBox.SelectionLength > 0)
+            mRichTextBox.SelectedText = string.Empty;
+      }
+
+      private void Paste_Click(object? pSender, EventArgs pEventArgs) {
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
+         mRichTextBox.Paste();
+      }
+
+      private void SelectAll_Click(object? pSender, EventArgs pEventArgs) {
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
+         mRichTextBox.SelectAll();
+      }
+
+      private void SelectNone_Click(object? pSender, EventArgs pEventArgs) {
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
+         mRichTextBox.SelectionLength = 0;
+      }
+
+      private void GoTo_Click(object? pSender, EventArgs pEventArgs) { // go to line, ignoring word wrap
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
+         int lineCount = mRichTextBox.Lines.Length;
+         if (lineCount > 1) {
+            int currentLine = mRichTextBox.GetLineFromCharIndex(mRichTextBox.SelectionStart) + 1; // convert to one-based
+            GetInteger.ShowMe("Go To Line", $"Enter line number (1 – {lineCount}):",
+               currentLine, 1, lineCount, GoToCallback);
+         }
+      }
+
+      private void GoToCallback(int? pResult, bool pWasCancelled) {
+         GetInteger.Restore();
+         if (pWasCancelled || pResult == null)
+            return;
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
+         int charIndex = mRichTextBox.GetFirstCharIndexFromLine(pResult.Value - 1); // convert to zero-based
+         mRichTextBox.SelectionStart = charIndex;
+         mRichTextBox.SelectionLength = 0;
+         mRichTextBox.ScrollToCaret();
+         mRichTextBox.Focus();
+         ActiveControl = mRichTextBox;
+      }
+
+      private void TrimToBeginning_Click(object? pSender, EventArgs pEventArgs) {
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
+         if (mRichTextBox.SelectionStart == 0)
+            return;
+         mRichTextBox.Text = mRichTextBox.Text[mRichTextBox.SelectionStart..];
+         mRichTextBox.SelectionStart = 0;
+         mRichTextBox.SelectionLength = 0;
+      }
+
+      private void TrimToEnd_Click(object? pSender, EventArgs pEventArgs) {
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
+         int start = mRichTextBox.SelectionStart;
+         if (start >= mRichTextBox.TextLength)
+            return;
+         mRichTextBox.Text = mRichTextBox.Text[..start];
+         mRichTextBox.SelectionStart = mRichTextBox.TextLength;
+         mRichTextBox.SelectionLength = 0;
+      }
+
+      private void CopyAll_Click(object? pSender, EventArgs pEventArgs) {
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
+         Clipboard.SetText(mRichTextBox.Text);
+      }
+
+      private void CopyToBeginning_Click(object? pSender, EventArgs pEventArgs) {
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
+         int end = mRichTextBox.SelectionStart;
+         if (end == 0)
+            return;
+         Clipboard.SetText(mRichTextBox.Text[..end]);
+      }
+
+      private void CopyToEnd_Click(object? pSender, EventArgs pEventArgs) {
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
+         int start = mRichTextBox.SelectionStart;
+         if (start >= mRichTextBox.TextLength)
+            return;
+         Clipboard.SetText(mRichTextBox.Text[start..]);
+      }
+
+      private void WordWrap_Click(object? pSender, EventArgs pEventArgs) { // toggle word wrap
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
+         mRichTextBox.WordWrap = !mRichTextBox.WordWrap;
+         mRichTextBox.ScrollBars = mRichTextBox.WordWrap
+            ? RichTextBoxScrollBars.Vertical
+            : RichTextBoxScrollBars.Both;
       }
 
       public static void Help_Click(object? pSender, EventArgs pEventArgs) {
@@ -208,5 +372,6 @@
       private void ExitButton_Click(object? pSender, EventArgs pEventArgs) {
          Close();
       }
+
    }
 }

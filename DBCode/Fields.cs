@@ -1,4 +1,6 @@
-﻿namespace DBCode {
+﻿using PCRE;
+
+namespace DBCode {
    #region enumerations
    public enum PickMode { Use, Edit }
 
@@ -12,7 +14,7 @@
 
    public enum Icons { CurlyTargeted, CurlyUntargeted, StatusTargeted, StatusUntargeted }
 
-   public enum HelpContext { Main, Theme, ColorPicker, FontPicker, BottomPanel }
+   public enum HelpContext { Main, Options, ThemeEditor, ThemePicker, TargetPicker, ColorPicker, FontPicker }
 
    public enum LabelUsage : int { Interface, Title }
 
@@ -24,13 +26,15 @@
       Tiny = 100
    }
 
-   public enum PrimaryTabPageUsage : int { Interface, Color, Targeting, Examples }
-
-   public enum TargetingTabPageUsage : int { Include, Exclude }
+   public enum PrimaryTabPageUsage : int { Interface, Color, Examples }
 
    public enum HighlightTabPageUsage : int {
       Interface, CSharp, C, Cpp, Basic, FSharp, HTML, CSS, XML, JSON, PowerShell, Batch, SQL, Markdown, Python
    }
+
+   public enum TargetingTabPageUsage : int { Include, Exclude }
+
+   public enum OptionsTabPageUsage : int { General, Targeting }
 
    public enum FontUsage : int {
       [DisplayText("Interface Font")]
@@ -158,6 +162,32 @@
       }
    }
 
+   internal sealed class FindRecord {
+      internal int mPosition;
+      internal MatchCollection? mMatches;
+      internal List<PcreMatch>? mPcreMatches;
+      internal PcreRegex? mPcreRegex;
+      internal string mSearchText;
+      internal int Count => mPcreMatches != null ? mPcreMatches.Count : mMatches!.Count;
+      internal int GetIndex(int pIndex) => mPcreMatches != null ? mPcreMatches[pIndex].Index : mMatches![pIndex].Index;
+      internal int GetLength(int pIndex) => mPcreMatches != null ? mPcreMatches[pIndex].Length : mMatches![pIndex].Length;
+
+#pragma warning disable IDE0290
+      internal FindRecord(string pSearchText, MatchCollection pMatches) {
+         mSearchText = pSearchText;
+         mMatches = pMatches;
+         mPosition = 0;
+      }
+
+      internal FindRecord(string pSearchText, List<PcreMatch> pPcreMatches, PcreRegex pPcreRegex) {
+         mSearchText = pSearchText;
+         mPcreMatches = pPcreMatches;
+         mPcreRegex = pPcreRegex;
+         mPosition = 0;
+      }
+#pragma warning restore IDE0290
+   }
+
    internal sealed class HelpTag {
       public HelpContext Context;
       public string? Anchor;
@@ -181,41 +211,51 @@
          mAnchorTopLeftBottomRight =
          AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right,
          mAnchorTopRight = AnchorStyles.Top | AnchorStyles.Right;
-      public static bool mFirstGray = true, mForceActivation = true,
-         mIsTargetingEnabled = false, mPreMinimalControlBox = true,
-         mFirstColorPicker = true, mFirstFontPicker = true;
-      public static ContextMenuStrip? mContextMenuStrip = null;
+      public static bool mFirstGray = true, mForceActivation = true, mUseControlPasting,
+         mIsTargetingEnabled = false, mPreMinimalControlBox = true, mUsePCRE = false;
+      public static ColorPickerPanel? mColorPickerPanel = null;
       public static List<Control>? mBottomPanelExcluded = null;
+      public static FindPanel? mFindPanel = null;
+      public static FindRecord? mCurrentFindRecord = null;
+      public static FindRecord? mCurrentSearchRecord = null;
       public static float mFontWidthAdjustment = 0.5f;
+      public static FontPickerPanel? mFontPickerPanel = null;
       public static FontUsage mFontUsage = FontUsage.Text;
-      public static MainForm? mForm = null;
+      public static GetString? mGetStringPanel = null;
+      public static GetInteger? mGetIntegerPanel = null;
       public static HighlighterEngine? mHighlighterEngine = null;
       public static Icon[] mIcons = new Icon[4];
       public static ILayoutable? mActiveLayoutable = null;
       public static IntPtr mTargetWindow = IntPtr.Zero, mThisWindow = IntPtr.Zero;
       public static readonly IntPtr mInsertAfterWindow = new IntPtr(0);
       public static LanguageKind mCurrentLanguage = LanguageKind.CSharp;
-      public static MenuStrip? mMenuStrip = null;
-      public static ScrollablePanel? mScrollableMainPanel = null;
-      public static ThemePanel? mThemePanel = null;
-      public static ColorPickerPanel? mColorPickerPanel = null;
-      public static FontPickerPanel? mFontPickerPanel = null;
-      public static ThemePickerPanel? mThemePickerPanel = null;
-      public static GetString? mGetStringPanel = null;
+      public static MainForm? mForm = null;
       public static OptionsPanel? mOptionsPanel = null;
       public static readonly PropertyInfo[] mPredefinedColors =
          typeof(Color).GetProperties(BindingFlags.Public | BindingFlags.Static);
       public static RichTextBox? mRichTextBox = null;
+      public static ScrollablePanel? mScrollableMainPanel = null;
+      public static SearchReplacePanel? mSearchReplacePanel = null;
 #pragma warning disable CS0649
       public static Size mMonitorSize, mResolution;
 #pragma warning restore CS0649
+      public static TargetPickerPanel? mTargetPickerPanel = null;
+      public static ThemePanel? mThemePanel = null;
+      public static ThemePickerPanel? mThemePickerPanel = null;
       public static string mPreMinimalText = string.Empty, mTargetWindowName = "Under construction",
          mVersionString = "0.0.0.0", mUsingThemeName = string.Empty;
-      public static readonly string mAppFolder = AppDomain.CurrentDomain.BaseDirectory,
-        mMyDocumentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\",
-        mDataFolder = mMyDocumentsFolder + @"DBCode_Data\", mHelpFolder = mAppFolder + @"Help\",
+      public static readonly string mUnicodeSampleString = "Unicode test: ÀÑÇ ÿ ɱ ǵ ʰ ā̋ ȇ ō̱ ╭╯ 🜁",
+         mAppFolder = AppDomain.CurrentDomain.BaseDirectory,
+         mMyDocumentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\",
+         mDataFolder = mMyDocumentsFolder + @"DBCode_Data\", mHelpFolder = mAppFolder + @"Help\",
          mAllowedTargetWindows = mDataFolder + @"AllowedTargetWindows.txt",
          mDisallowedTargetWindows = mDataFolder + @"DisallowedTargetWindows.txt",
+         mFindSearchHistoryFile = mDataFolder + @"FindSearchHistory.txt",
+         mFindPcreSearchHistoryFile = mDataFolder + @"FindPcreSearchHistory.txt",
+         mSrSearchHistoryFile = mDataFolder + @"SrSearchHistory.txt",
+         mSrPcreSearchHistoryFile = mDataFolder + @"SrPcreSearchHistory.txt",
+         mSrReplaceHistoryFile = mDataFolder + @"SrReplaceHistory.txt",
+         mSrPcreReplaceHistoryFile = mDataFolder + @"SrPcreReplaceHistory.txt",
          mCurrently = "Currently:  ";
       public static readonly List<string> mDisallowed = [
          //efm5 these are case insensitive
@@ -226,13 +266,16 @@
          "SP Quick Panel", "SPQuickPanel", "SP Search", "SPSearch", "svchost", "SystemSettings", "TextInputHost",
          "Windows Explorer", "XboxApp" ],
          mAllowed = [//IDEs and other apps that are appropriate to paste into
-            //efm5 these are case insensitive; Uses Contains() – "Visual Studio" matches "Visual Studio Code"
+            //efm5 these are case insensitive; Uses Contains()
             //Appropriate target Windows to paste into
-            "Arduino", "Eclipse", "Emacs", "IntelliJ", "NetBeans", "Particle", "PSPad", "Visual Studio", "vim", "Xcode"  ];
-      public static readonly string mUnicodeSampleString = "Unicode test: ÀÑÇ ÿ ɱ ǵ ʰ ā̋ ȇ ō̱ ╭╯ 🜁";
+            "Arduino", "Claude",
+            "Code", //Visual Studio Code
+            "CurlyPad", "Eclipse", "Emacs", "IntelliJ", "NetBeans", "Particle", "PSPad", "Visual Studio",
+            "devenv", //Visual Studio
+            "vim", "Xcode"  ];
+      public static List<Target> mTargets = [];
       public static List<Theme> mThemes = [];//efm5 This line and the next must be before any code that uses mThemes – Such as the next line
       public static Theme? mCurrentTheme = ThemeBuiltIns.CreateDarkTheme(false);
-      public static readonly ToolStripSeparator toolStripSeparator1 = new ToolStripSeparator();
       public static HelpContext mUIContext = HelpContext.Main;
       public static UiState mUiState = null!;
       public static ViewMode mCurrentViewMode = ViewMode.Features;
@@ -242,20 +285,38 @@
          mGetAllButton = null, mGetSelectedButton = null;
       #endregion
 
-      #region main menu
+      #region main & context menus
+      public static MenuStrip? mMenuStrip = null;
+      public static ContextMenuStrip? mContextMenuStrip = null;
+      public static readonly ToolStripSeparator toolStripSeparator1 = new ToolStripSeparator(),
+         toolStripSeparator2 = new ToolStripSeparator(), toolStripSeparator3 = new ToolStripSeparator(),
+         toolStripSeparator4 = new ToolStripSeparator(), toolStripSeparator5 = new ToolStripSeparator(),
+         toolStripSeparator6 = new ToolStripSeparator(), toolStripSeparator7 = new ToolStripSeparator(),
+         toolStripSeparator8 = new ToolStripSeparator(), toolStripSeparator9 = new ToolStripSeparator(),
+         toolStripSeparator10 = new ToolStripSeparator();
       public static ToolStripMenuItem? mFeaturesTSMI = null, mFiftyTSMI = null, mHelpMenuItem = null,
-         mMinimalTSMI = null,
-         mModeMenuItem = null, mLanguageMenuItem = null, mOpaqueTSMI = null, mRetargetTSMI = null,
-         mSeventyFiveTSMI = null,
-         mTargetedTSMI = null, mTargetingMenuItem = null, mThemeDesignTSMI = null, mThemeEditTSMI = null,
-         mThemeEditCurrentTSMI = null, mThemeEditPickTSMI = null,
+         mMinimalTSMI = null, mModeMenuItem = null, mLanguageMenuItem = null, mOpaqueTSMI = null,
+         mRetargetTSMI = null, mSeventyFiveTSMI = null, mTargetedTSMI = null, mTargetingMenuItem = null,
+         mThemeDesignTSMI = null, mThemeEditTSMI = null, mThemeEditCurrentTSMI = null, mThemeEditPickTSMI = null,
          mThemeMenuItem = null, mThemePickTSMI = null, mThirtyTSMI = null, mTransparentTSMI = null,
-         mOptionsMenuItem = null,
-         mVisibilityMenuItem = null, mPlainTextTSMI = null, mCSharpTSMI = null, mCTSMI = null, mCppTSMI = null,
-         mBasicTSMI = null, mFSharpTSMI = null,
-         mHtmlTSMI = null, mCssTSMI = null, mXmlTSMI = null, mJsonTSMI = null, mPowerShellTSMI = null,
-         mBatchTSMI = null, mSqlTSMI = null,
-         mMarkdownTSMI = null, mPythonTSMI = null, mCurrentThemeIsTSMI = null;
+         mOptionsMenuItem = null, mVisibilityMenuItem = null, mPlainTextTSMI = null, mCSharpTSMI = null,
+         mCTSMI = null, mCppTSMI = null, mBasicTSMI = null, mFSharpTSMI = null, mHtmlTSMI = null, mCssTSMI = null,
+         mXmlTSMI = null, mJsonTSMI = null, mPowerShellTSMI = null, mBatchTSMI = null, mSqlTSMI = null,
+         mMarkdownTSMI = null, mPythonTSMI = null, mCurrentThemeIsTSMI = null,
+         mCommentTSMI = null, mCommentAddDoubleTSMI = null, mCommentAddNotImplementedTSMI = null, mCommentAddTripleTSMI = null,
+         mCommentCPlusPlusTSMI = null, mCommentExpressionBodiedMethodTSMI = null, mCommentGetTSMI = null,
+         mCommentMakeSummaryTSMI = null, mCommentOutTSMI = null, mCommentRemoveTSMI = null,
+         mCommentReplaceTSMI = null, mCommentReverseEqualityTSMI = null, mCommentUpdateTSMI = null, mCommentWrapTSMI = null,
+         mContextUndoTSMI = null, mContextRedoTSMI = null, mContextCopyAllTSMI = null,
+         mContextCopyTSMI = null, mContextCutTSMI = null, mContextDeleteTSMI = null, mContextPasteTSMI = null,
+         mContextSelectAllTSMI = null, mContextSelectNoneTSMI = null, mContextFindTSMI = null,
+         mContextFindNextTSMI = null, mContextFindPreviousTSMI = null, mContextReplaceTSMI = null,
+         mContextGoToTSMI = null,
+         mEditMenuItem = null, mEditUndoTSMI = null, mEditRedoTSMI = null, mEditCutTSMI = null, mEditDeleteTSMI = null,
+         mEditPasteTSMI = null, mEditSelectAllTSMI = null, mEditSelectNoneTSMI = null,
+         mEditTrimToBeginningTSMI = null, mEditTrimToEndTSMI = null, mEditCopyTSMI = null, mEditCopyAllTSMI = null,
+         mEditCopyToBeginningTSMI = null, mEditCopyToEndTSMI = null, mEditFindTSMI = null, mEditFindNextTSMI = null,
+         mEditFindPreviousTSMI = null, mEditReplaceTSMI = null, mEditGoToTSMI = null, mEditWordWrapTSMI = null;
       #endregion
    }
    #endregion

@@ -9,13 +9,16 @@
             ThrowIfNull(mThemePickerBottomPanel, nameof(mThemePickerBottomPanel));
             mForm.SuspendClientSizeChanged();
             mForm.Bounds = mUiState.ThemePickerBounds;
-            Size = new Size(mForm.Size.Width - 20, mForm.Size.Height - 20);// efm5 temporary seed, actually fills
-            PerformLayout();
+            if (mUiState.mThemePickerFirstShow) {
+               CenterFormOnMonitor(mForm);
+               mUiState.mThemePickerFirstShow = false;
+            }
+            Size = new Size(mForm.Size.Width - 20, mForm.Size.Height - 20);
             CreateLayout();
+            ApplyTheme();
             Controls.AddRange([mClusterContainer, mTitleLabel, mThemePickerBottomPanel]);
             mClusterContainer.PerformLayout();
             LayoutPanel();
-            mThemePickerBottomPanel.LayoutControls();
             mForm.ResumeClientSizeChanged();
          }
 

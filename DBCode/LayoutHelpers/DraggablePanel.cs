@@ -95,14 +95,15 @@
          public void Detach() {
             ThrowIfNull(mForm, nameof(mForm));
             ScrollablePanel? scrollablePanel = FindScrollablePanel();
+            // Re-enable before removing so Windows has a focusable target when focus leaves this panel.
+            if (scrollablePanel != null)
+               scrollablePanel.Enabled = true;
             mForm.SuspendLayout();
             Visible = false;
             SendToBack();
             if (mForm.Controls.Contains(this))
                mForm.Controls.Remove(this);
             mForm.ResumeLayout(true);
-            if (scrollablePanel != null)
-               scrollablePanel.Enabled = true;
             mForm = null;
          }
 

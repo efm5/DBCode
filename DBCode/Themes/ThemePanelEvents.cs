@@ -6,39 +6,31 @@ namespace DBCode {
          protected override void OnHandleCreated(EventArgs pEventArgs) {
             base.OnHandleCreated(pEventArgs);
             SuspendLayout();
-            ThrowIfNull(mThemeBottomPanel.mCancelButton, nameof(mThemeBottomPanel.mCancelButton));
-            ThrowIfNull(mThemeBottomPanel.mHelpButton, nameof(mThemeBottomPanel.mHelpButton));
-            mThemeBottomPanel.mCancelButton.Click += CancelButton_Click;
-            mThemeBottomPanel.mHelpButton.Click += MainForm.Help_Click;
+            ThrowIfNull(mBottomPanel.mCancelButton, nameof(mBottomPanel.mCancelButton));
+            ThrowIfNull(mBottomPanel.mHelpButton, nameof(mBottomPanel.mHelpButton));
+            mBottomPanel.mCancelButton.Click += CancelButton_Click;
+            mBottomPanel.mHelpButton.Click += MainForm.Help_Click;
             mApplyButton.Click += ApplyButton_Click;
             mNewButton.Click += NewButton_Click;
             mCloneButton.Click += CloneButton_Click;
             ThrowIfNull(mExampleScrollPanel, nameof(mExampleScrollPanel));
             mExampleScrollPanel.ClientSizeChanged += ExampleScrollPanel_ClientSizeChanged;
-            Controls.AddRange([mPrimaryTabControl, mThemeBottomPanel, mThemesHeaderCluster]);
+            Controls.AddRange([mPrimaryTabControl, mBottomPanel, mThemesHeaderCluster]);
             ResumeLayout(false);
          }
 
          private void PrimaryTabControl_DrawItem(object? pSender, DrawItemEventArgs pArgs) {
-            DrawTabControlItem(mPrimaryTabControl, pArgs);
-         }
-
-         private void IncludeExcludeTabControl_DrawItem(object? pSender, DrawItemEventArgs pArgs) {
-            DrawTabControlItem(mIncludeExcludeTabControl, pArgs);
+            MainForm.DrawTabControlItem(mPrimaryTabControl, pArgs, mTemporaryTheme);
          }
 
          private void HighlightTabControl_DrawItem(object? pSender, DrawItemEventArgs pArgs) {
-            DrawTabControlItem(mHighlightTabControl, pArgs);
+            MainForm.DrawTabControlItem(mHighlightTabControl, pArgs, mTemporaryTheme);
          }
 
          private void PrimaryTabControl_SelectedIndexChanged(object? pSender, EventArgs pArgs) {
             mUiState.mThemePrimaryTabPageIndex = mPrimaryTabControl.SelectedIndex;
             if (mPrimaryTabControl.SelectedIndex == (int)PrimaryTabPageUsage.Examples)
                HighlightAllExampleBoxes();
-         }
-
-         private void IncludeExcludeTabControl_SelectedIndexChanged(object? pSender, EventArgs pArgs) {
-            mUiState.mThemeTargetingTabIndexIndex = mIncludeExcludeTabControl.SelectedIndex;
          }
 
          private void HighlightTabControl_SelectedIndexChanged(object? pSender, EventArgs pArgs) {
@@ -73,7 +65,7 @@ namespace DBCode {
          }
 
          private void ApplyButton_Click(object? pSender, EventArgs pArgs) {
-            GetString.Show(
+            GetString.ShowMe(
                "Enter Theme Name",
                "Please enter a name for the new theme:",
                mTemporaryTheme.mName,
@@ -87,7 +79,7 @@ namespace DBCode {
             if (pWasCancelled || string.IsNullOrWhiteSpace(pResult))
                return;
             if (!ThemeNameIsUnique(pResult)) {
-               GetString.Show("Theme Name Collision",
+               GetString.ShowMe("Theme Name Collision",
                   $"A theme named \"{pResult}\" already exists. Please enter a different name:",
                   pResult, ThemeApplyCallback);
                return;

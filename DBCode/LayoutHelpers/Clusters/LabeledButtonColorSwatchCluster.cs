@@ -73,15 +73,6 @@
             LayoutControls();
          }
 
-         internal override void SetFontAndColor() {
-            Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
-            mLabel.Font = CreateNewFont(poFont);
-            mLabel.ForeColor = poForeColor;
-            mLabel.BackColor = poBackColor;
-            mButton.Font = CreateNewFont(poFont);
-            mButton.ForeColor = poForeColor;
-         }
-
          private void OnClusterClicked(object? pSender, EventArgs pArgs) {
             ThrowIfNull(SwatchClicked, nameof(SwatchClicked));
             SwatchClicked.Invoke(this);
@@ -99,6 +90,16 @@
 
          internal override void LayoutCluster() {
             SetFontAndColor();
+            ApplyLabelPosition(mLabel, mButton);
+            GlueControlsHorizontally(mButton, mSwatch, mEm);
+            if (mButton.Tag is ColorSwatchUsage usage)
+               mSwatch.BackColor = mTheme.mInterfaceColors[(int)usage];
+            mLabel.Invalidate();
+            mButton.Invalidate();
+            mSwatch.Invalidate();
+         }
+
+         internal override void LayoutControlsOnly() {
             ApplyLabelPosition(mLabel, mButton);
             GlueControlsHorizontally(mButton, mSwatch, mEm);
             if (mButton.Tag is ColorSwatchUsage usage)
@@ -151,11 +152,23 @@
             return mSwatch.BackColor;
          }
 
+         internal override void SetFontAndColor() {
+            Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
+            UpdateFont(mLabel, CreateNewFont(poFont));
+            mLabel.ForeColor = poForeColor;
+            mLabel.BackColor = poBackColor;
+            UpdateFont(mButton, CreateNewFont(poFont));
+            mButton.ForeColor = poForeColor;
+            mButton.BackColor = poBackColor;
+         }
+
          protected override void Dispose(bool pDisposing) {
             if (pDisposing) {
                mButton.Click -= OnClusterClicked;
                mSwatch.ColorSwatchClicked -= OnSwatchClicked;
                mSwatch.SyntaxSwatchClicked -= OnSyntaxSwatchClicked;
+               MainForm.DisposeFontIfOwned(mLabel.Font);
+               MainForm.DisposeFontIfOwned(mButton.Font);
             }
             base.Dispose(pDisposing);
          }

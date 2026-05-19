@@ -26,6 +26,7 @@ namespace DBCode {
          // GWL_  (GetWindowLong Indexes)
          public const int GWL_EXSTYLE = unchecked((int)0xFFFFFFEC),   // -20
                           GWL_STYLE = unchecked((int)0xFFFFFFF0);   // -16
+         public const uint GW_OWNER = 0x00000004;
          // HWND_  (Special Window Handles)
          internal static readonly IntPtr HWND_BROADCAST = (IntPtr)0x0000FFFF;
          // IOCTL_  (Device I/O Control Codes)
@@ -74,6 +75,7 @@ namespace DBCode {
          // WS_ / WS_EX_  (Window Styles)
          public const int WS_EX_LAYERED = 0x00080000,
                           WS_EX_NOACTIVATE = 0x08000000,
+                          WS_EX_NOREDIRECTIONBITMAP = 0x00200000,
                           WS_EX_TOOLWINDOW = 0x00000080,
                           WS_VISIBLE = 0x10000000;
          #endregion

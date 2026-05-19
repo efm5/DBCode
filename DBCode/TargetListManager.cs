@@ -1,7 +1,7 @@
 ﻿namespace DBCode {
    internal static class TargetListManager {
-      private static List<string>? mCachedAllowed = null;
-      private static List<string>? mCachedDisallowed = null;
+      public static List<string>? mCachedAllowed = null;
+      public static List<string>? mCachedDisallowed = null;
 
       public static void EnsureDataFiles() {
          try {
@@ -64,17 +64,19 @@
       }
 
       public static void InvalidateCache() {
+         mCachedAllowed?.Clear();
+         mCachedDisallowed?.Clear();
          mCachedAllowed = null;
          mCachedDisallowed = null;
       }
 
-      private static List<string> GetAllowed() {
+      public static List<string> GetAllowed() {
          if (mCachedAllowed == null)
             mCachedAllowed = LoadList(mAllowedTargetWindows);
          return mCachedAllowed;
       }
 
-      private static List<string> GetDisallowed() {
+      public static List<string> GetDisallowed() {
          if (mCachedDisallowed == null)
             mCachedDisallowed = LoadList(mDisallowedTargetWindows);
          return mCachedDisallowed;

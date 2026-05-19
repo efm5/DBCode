@@ -4,7 +4,8 @@ namespace DBCode.Themes {
    public static class ThemeBuiltIns {
       public static Theme CreateLightTheme(bool pAdd = true) {
          Theme theme = new Theme("Light", true) {
-            mBrightness = ThemeBrightness.Light
+            mBrightness = ThemeBrightness.Light,
+            mIsBuiltIn = true
          };
          theme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground] = ColorTranslator.FromHtml("#F3F3F3");
          theme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxFont] = ColorTranslator.FromHtml("#1E1E1E");
@@ -29,7 +30,8 @@ namespace DBCode.Themes {
 
       public static Theme CreateDarkTheme(bool pAdd = true) {
          Theme theme = new Theme("Dark", true) {
-            mBrightness = ThemeBrightness.Dark
+            mBrightness = ThemeBrightness.Dark,
+            mIsBuiltIn = true
          };
          theme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground] = ColorTranslator.FromHtml("#252526");
          theme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxFont] = ColorTranslator.FromHtml("#D4D4D4");
@@ -54,7 +56,8 @@ namespace DBCode.Themes {
 
       public static Theme CreateClassicTheme(bool pAdd = true) {
          Theme theme = new Theme("Classic", true) {
-            mBrightness = ThemeBrightness.Light
+            mBrightness = ThemeBrightness.Light,
+            mIsBuiltIn = true
          };
          theme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground] = SystemColors.Control;
          theme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxFont] = SystemColors.ControlText;
@@ -79,7 +82,8 @@ namespace DBCode.Themes {
 
       public static Theme CreateHighContrastLightTheme(bool pAdd = true) {
          Theme theme = new Theme("High Contrast Light", true) {
-            mBrightness = ThemeBrightness.Light
+            mBrightness = ThemeBrightness.Light,
+            mIsBuiltIn = true
          };
          theme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground] = Color.White;
          theme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxFont] = Color.Black;
@@ -104,7 +108,8 @@ namespace DBCode.Themes {
 
       public static Theme CreateHighContrastDarkTheme(bool pAdd = true) {
          Theme theme = new Theme("High Contrast Dark", true) {
-            mBrightness = ThemeBrightness.Dark
+            mBrightness = ThemeBrightness.Dark,
+            mIsBuiltIn = true
          };
          theme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground] = Color.Black;
          theme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxFont] = Color.White;
@@ -129,7 +134,8 @@ namespace DBCode.Themes {
 
       public static Theme CreateLightPastelTheme(bool pAdd = true) {
          Theme theme = new Theme("Light Pastel", true) {
-            mBrightness = ThemeBrightness.Light
+            mBrightness = ThemeBrightness.Light,
+            mIsBuiltIn = true
          };
          theme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground] = ColorTranslator.FromHtml("#E8E6F2");   // lavender-gray
          theme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxFont] = ColorTranslator.FromHtml("#3A3A3A");         // charcoal
@@ -154,7 +160,8 @@ namespace DBCode.Themes {
 
       public static Theme CreateDarkPastelTheme(bool pAdd = true) {
          Theme theme = new Theme("Dark Pastel", true) {
-            mBrightness = ThemeBrightness.Dark
+            mBrightness = ThemeBrightness.Dark,
+            mIsBuiltIn = true
          };
          theme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground] = ColorTranslator.FromHtml("#2D2B3A");   // dark lavender-gray
          theme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxFont] = ColorTranslator.FromHtml("#C8C4D8");         // light lavender

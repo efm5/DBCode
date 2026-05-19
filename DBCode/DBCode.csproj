@@ -16,12 +16,19 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>1701;1702;IDE0018;IDE0031;IDE0044;IDE0059;IDE0079;IDE0074;IDE0305;CA1822;NETSDK1138</NoWarn>
+    <NoWarn>1701;1702;IDE0018;IDE0031;IDE0044;IDE0059;IDE0079;IDE0074;IDE0305;NETSDK1138</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <NoWarn>1701;1702;IDE0018;IDE0031;IDE0044;IDE0059;IDE0079;IDE0074;IDE0305;CA1822;NETSDK1138</NoWarn>
+    <NoWarn>1701;1702;IDE0018;IDE0031;IDE0044;IDE0059;IDE0079;IDE0074;IDE0305;NETSDK1138</NoWarn>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="ProjectAssets\Help\DBCodeMainTargeted.png" />
+    <None Remove="ProjectAssets\Help\DBCodeMainUntargeted.png" />
+    <None Remove="ProjectAssets\Help\DBCodeOptions.png" />
+    <None Remove="ProjectAssets\Help\Menu.png" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Include="Icons\DBCodeIcon.ico" />
@@ -50,11 +57,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Help\" />
+    <Folder Include="ProjectAssets\Help\" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="ProjectAssets\DBCode.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PCRE.NET" Version="1.4.1" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

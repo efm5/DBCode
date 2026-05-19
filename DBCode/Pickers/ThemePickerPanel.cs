@@ -28,13 +28,12 @@
             ThrowIfNull(mTitleLabel, nameof(mTitleLabel));
             SuspendLayout();
             mTitleLabel.SuspendLayout();
-            ApplyTheme();
             mTitleLabel.LayoutCluster();
             mThemePickerBottomPanel.LayoutControls();
+            mClusterContainer.AutoSize = false;
             mClusterContainer.Size = new Size(ClientSize.Width - mIndent,
                ClientSize.Height - mTitleLabel.Height - mThemePickerBottomPanel.Height - mEm4);
             mClusterContainer.Location = new Point(mIndent, mTitleLabel.Bottom + mEm);
-            mTitleLabel.LayoutCluster();
             mClusterContainer.LayoutClusters();
             mClusterContainer.AutoSize = true;
             mTitleLabel.ResumeLayout(true);
@@ -49,6 +48,7 @@
             CreateButtons();
             ThrowIfNull(mThemePickerBottomPanel.mCancelButton, nameof(mThemePickerBottomPanel.mCancelButton));
             ThrowIfNull(mThemePickerBottomPanel.mHelpButton, nameof(mThemePickerBottomPanel.mHelpButton));
+            mThemePickerBottomPanel.mHelpButton.Tag = new HelpTag(HelpContext.ThemePicker);
             mThemePickerBottomPanel.mCancelButton.Click += CancelButton_Click;
             mThemePickerBottomPanel.mHelpButton.Click += MainForm.Help_Click;
             mClusterContainer.Invalidate(true);
@@ -85,7 +85,7 @@
             mTitleLabel.SetFontAndColor();
          }
 
-         private void CloseThemePickerPanel() {
+         private static void CloseThemePickerPanel() {
             ThrowIfNull(mForm, nameof(mForm));
             mForm.RestoreFromThemePickerPanel();
          }

@@ -2,19 +2,13 @@ namespace DBCode {
    namespace Themes {
       internal sealed partial class FontPickerPanel : Panel {
          protected override void OnHandleCreated(EventArgs pEventArgs) {
+            ThrowIfNull(mForm, nameof(mForm));
             base.OnHandleCreated(pEventArgs);
             Dock = DockStyle.Fill;
-            ThrowIfNull(mForm, nameof(mForm));
-            mOriginalOpacity = mForm.Opacity;
             mForm.Opacity = 0;
             mForm.Location = new Point(-32000, -32000);
             LayoutControls();
             PerformLayout();
-         }
-
-         private void FamilyPrefixButton_Click(object? pSender, EventArgs pEventArguments) {
-            ThrowIfNull(mFontFamilyNameTextBox, nameof(mFontFamilyNameTextBox));
-            TextBoxSelectAll(mFontFamilyNameTextBox);
          }
 
          private void FontFamilyNameTextBox_TextChanged(object? pSender, EventArgs pEventArguments) {
@@ -28,7 +22,7 @@ namespace DBCode {
                   StringComparison.OrdinalIgnoreCase)) {
                   RemoveEventHandlers();
                   mFontFamilyComboBox.SelectedIndex = i;
-                  RestoreFontPickerHandlers();
+                  AttachEventHandlers();
                   UpdateFontDescription();
                   return;
                }
@@ -53,12 +47,6 @@ namespace DBCode {
             }
          }
 
-         private void FontDropDownPrefixButton_Click(object? pSender, EventArgs pEventArguments) {
-            ThrowIfNull(mFontFamilyComboBox, nameof(mFontFamilyComboBox));
-            mFontFamilyComboBox.Focus();
-            mFontFamilyComboBox.DroppedDown = true;
-         }
-
          private void FontFamilyComboBox_SelectedIndexChanged(object? pSender, EventArgs pEventArguments) {
             ThrowIfNull(mFontFamilyComboBox, nameof(mFontFamilyComboBox));
             ThrowIfNull(mFontFamilyNameTextBox, nameof(mFontFamilyNameTextBox));
@@ -66,7 +54,7 @@ namespace DBCode {
                string familyName = (string)mFontFamilyComboBox.SelectedItem!;
                RemoveEventHandlers();
                mFontFamilyNameTextBox.Text = familyName;
-               RestoreFontPickerHandlers();
+               AttachEventHandlers();
                UpdateFontDescription();
             }
          }
@@ -76,89 +64,71 @@ namespace DBCode {
                return; // legitimate defensive guard: DrawItem fires during control teardown
             ComboBox comboBox = (ComboBox)pSender;
             string fontFamily = (string)comboBox.Items[pEventArguments.Index]!;
+            pEventArguments.DrawBackground();
             try {
-               Font font = new Font(fontFamily, comboBox.Font.SizeInPoints);
-               pEventArguments.DrawBackground();
-               pEventArguments.Graphics.DrawString(font.Name, font,
-                  new SolidBrush(pEventArguments.ForeColor),
+               using Font font = new Font(fontFamily, comboBox.Font.SizeInPoints);
+               using SolidBrush brush = new SolidBrush(pEventArguments.ForeColor);
+               pEventArguments.Graphics.DrawString(font.Name, font, brush,
                   pEventArguments.Bounds.X, pEventArguments.Bounds.Y);
             }
             catch {
-               pEventArguments.DrawBackground();
-               pEventArguments.Graphics.DrawString(fontFamily, comboBox.Font,
-                  new SolidBrush(pEventArguments.ForeColor),
+               using SolidBrush brush = new SolidBrush(pEventArguments.ForeColor);
+               pEventArguments.Graphics.DrawString(fontFamily, comboBox.Font, brush,
                   pEventArguments.Bounds.X, pEventArguments.Bounds.Y);
             }
          }
 
          private void NormalStyleCheckBox_Click(object? pSender, EventArgs pEventArguments) {
-            ThrowIfNull(mNormalStyleCheckBox, nameof(mNormalStyleCheckBox));
-            ThrowIfNull(mBoldStyleCheckBox, nameof(mBoldStyleCheckBox));
-            ThrowIfNull(mItalicsStyleCheckBox, nameof(mItalicsStyleCheckBox));
-            ThrowIfNull(mUnderlineStyleCheckBox, nameof(mUnderlineStyleCheckBox));
-            ThrowIfNull(mStrikethroughStyleCheckBox, nameof(mStrikethroughStyleCheckBox));
-            if (mNormalStyleCheckBox.Checked) {
+            ThrowIfNull(mNormalStyleCluster, nameof(mNormalStyleCluster));
+            if (mNormalStyleCluster.mScalableCheckBox.Checked) {
                RemoveEventHandlers();
-               mBoldStyleCheckBox.Checked = false;
-               mItalicsStyleCheckBox.Checked = false;
-               mUnderlineStyleCheckBox.Checked = false;
-               mStrikethroughStyleCheckBox.Checked = false;
-               RestoreFontPickerHandlers();
+               mBoldStyleCluster.mScalableCheckBox.Checked = false;
+               mItalicsStyleCluster.mScalableCheckBox.Checked = false;
+               mUnderlineStyleCluster.mScalableCheckBox.Checked = false;
+               mStrikethroughStyleCluster.mScalableCheckBox.Checked = false;
+               AttachEventHandlers();
             }
             UpdateFontDescription();
          }
 
          private void BoldStyleCheckBox_Click(object? pSender, EventArgs pEventArguments) {
-            ThrowIfNull(mBoldStyleCheckBox, nameof(mBoldStyleCheckBox));
-            ThrowIfNull(mNormalStyleCheckBox, nameof(mNormalStyleCheckBox));
             RemoveEventHandlers();
-            if (mBoldStyleCheckBox.Checked)
-               mNormalStyleCheckBox.Checked = false;
+            if (mBoldStyleCluster.mScalableCheckBox.Checked)
+               mNormalStyleCluster.mScalableCheckBox.Checked = false;
             else
                MaybeRegularStyle();
-            RestoreFontPickerHandlers();
+            AttachEventHandlers();
             UpdateFontDescription();
          }
 
          private void ItalicsStyleCheckBox_Click(object? pSender, EventArgs pEventArguments) {
-            ThrowIfNull(mItalicsStyleCheckBox, nameof(mItalicsStyleCheckBox));
-            ThrowIfNull(mNormalStyleCheckBox, nameof(mNormalStyleCheckBox));
             RemoveEventHandlers();
-            if (mItalicsStyleCheckBox.Checked)
-               mNormalStyleCheckBox.Checked = false;
+            if (mItalicsStyleCluster.mScalableCheckBox.Checked)
+               mNormalStyleCluster.mScalableCheckBox.Checked = false;
             else
                MaybeRegularStyle();
-            RestoreFontPickerHandlers();
+            AttachEventHandlers();
             UpdateFontDescription();
          }
 
          private void UnderlineStyleCheckBox_Click(object? pSender, EventArgs pEventArguments) {
-            ThrowIfNull(mUnderlineStyleCheckBox, nameof(mUnderlineStyleCheckBox));
-            ThrowIfNull(mNormalStyleCheckBox, nameof(mNormalStyleCheckBox));
             RemoveEventHandlers();
-            if (mUnderlineStyleCheckBox.Checked)
-               mNormalStyleCheckBox.Checked = false;
+            if (mUnderlineStyleCluster.mScalableCheckBox.Checked)
+               mNormalStyleCluster.mScalableCheckBox.Checked = false;
             else
                MaybeRegularStyle();
-            RestoreFontPickerHandlers();
+            AttachEventHandlers();
             UpdateFontDescription();
          }
 
          private void StrikethroughStyleCheckBox_Click(object? pSender, EventArgs pEventArguments) {
-            ThrowIfNull(mStrikethroughStyleCheckBox, nameof(mStrikethroughStyleCheckBox));
-            ThrowIfNull(mNormalStyleCheckBox, nameof(mNormalStyleCheckBox));
             RemoveEventHandlers();
-            if (mStrikethroughStyleCheckBox.Checked)
-               mNormalStyleCheckBox.Checked = false;
+            if (mStrikethroughStyleCluster.mScalableCheckBox.Checked)
+               mNormalStyleCluster.mScalableCheckBox.Checked = false;
             else
                MaybeRegularStyle();
-            RestoreFontPickerHandlers();
+            AttachEventHandlers();
             UpdateFontDescription();
-         }
-
-         private void FontSizePrefixButton_Click(object? pSender, EventArgs pEventArguments) {
-            ThrowIfNull(mFontSizeTextBox, nameof(mFontSizeTextBox));
-            TextBoxSelectAll(mFontSizeTextBox);
          }
 
          private void FontSizeTextBox_TextChanged(object? pSender, EventArgs pEventArguments) {
@@ -179,7 +149,7 @@ namespace DBCode {
             }
             if (!found)
                mFontSizeComboBox.SelectedIndex = -1;
-            RestoreFontPickerHandlers();
+            AttachEventHandlers();
             UpdateFontDescription();
          }
 
@@ -191,12 +161,6 @@ namespace DBCode {
             }
          }
 
-         private void FontSizeDropDownPrefixButton_Click(object? pSender, EventArgs pEventArguments) {
-            ThrowIfNull(mFontSizeComboBox, nameof(mFontSizeComboBox));
-            mFontSizeComboBox.Focus();
-            mFontSizeComboBox.DroppedDown = true;
-         }
-
          private void FontSizeComboBox_SelectedIndexChanged(object? pSender, EventArgs pEventArguments) {
             ThrowIfNull(mFontSizeComboBox, nameof(mFontSizeComboBox));
             ThrowIfNull(mFontSizeTextBox, nameof(mFontSizeTextBox));
@@ -204,13 +168,9 @@ namespace DBCode {
                string sizeText = (string)mFontSizeComboBox.SelectedItem!;
                RemoveEventHandlers();
                mFontSizeTextBox.Text = sizeText;
-               RestoreFontPickerHandlers();
+               AttachEventHandlers();
                UpdateFontDescription();
             }
-         }
-
-         private void HelpButton_Click(object? pSender, EventArgs pEventArguments) {
-            TimedMessage("Select a font family, size, and style for the selected usage.", "Font Picker Help");
          }
 
          private void OkButton_Click(object? pSender, EventArgs pEventArguments) {

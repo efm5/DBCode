@@ -53,6 +53,18 @@
             mExampleTextBox.Refresh();
          }
 
+         internal override void LayoutControlsOnly() {
+            ApplyLabelPosition(mLabel, mButton, mExampleTextBox);
+            mLabel.Invalidate();
+            mButton.Invalidate();
+            mExampleTextBox.Invalidate();
+         }
+
+         public void UpdateLabel(string pNewText) {
+            mLabel.Text = pNewText;
+            mLabel.Refresh();
+         }
+
          internal override void SetFontAndColor() {
             object? tag = Tag;
             ThrowIfNull(tag, $"Tag was null for {nameof(LabeledButtonTextBoxCluster)}.");
@@ -77,21 +89,16 @@
                      Theme.ThemeTextBoxThings(mTheme, out poFont, out poForeColor, out poBackColor);
                      break;
                }
-               mLabel.Font = CreateNewFont(poFont);
+               UpdateFont(mLabel, CreateNewFont(poFont));
                mLabel.ForeColor = poForeColor;
                mLabel.BackColor = poBackColor;
-               mButton.Font = CreateNewFont(poFont);
+               UpdateFont(mButton, CreateNewFont(poFont));
                mButton.ForeColor = poForeColor;
                mButton.BackColor = poBackColor;
-               mExampleTextBox.Font = CreateNewFont(poFont);
+               UpdateFont(mExampleTextBox, CreateNewFont(poFont));
                mExampleTextBox.ForeColor = poForeColor;
                mExampleTextBox.BackColor = poBackColor;
             }
-         }
-
-         public void UpdateLabel(string pNewText) {
-            mLabel.Text = pNewText;
-            mLabel.Refresh();
          }
 
          protected override void Dispose(bool pDisposing) {

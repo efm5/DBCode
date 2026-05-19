@@ -78,12 +78,11 @@ All generated code must follow these rules without exception.
   names that make each level's purpose unambiguous.
 
 1.8 Static Fields
-Static fields that serve as class-wide shared state use sCamelCase. This mirrors the instance 
-field mCamelCase convention but signals static lifetime. No underscores. 
-No Hungarian notation beyond the prefix.
-Example: private static bool sIsCntrolKeyDown = false;
+Static fields that serve as class-wide shared state use mSCamelCase. This mirrors the instance 
+field mCamelCase convention but signals static lifetime. No underscores.
+Example: private static bool mSIsCntrolKeyDown = false;
 Note: In DBCode, the preferred pattern is to eliminate static shared state entirely by moving 
-it into a dedicated fields class with instance fields using mCamelCase. 
+it into a dedicated Fields class with instance fields using mCamelCase. 
 The s prefix is retained in CurlyPad, EasyPad and other applications for historical continuity.
 
 ===========================================
@@ -167,7 +166,24 @@ To maintain vertical compactness:
 
 4.1 No LINQ in subsystem code.
 4.2 No cleverness; clarity always wins.
-4.3 No expression‑bodied members in subsystem code.
+4.3 Expression-Bodied Members and Lambda Expressions
+• Expression-bodied members are not permitted.
+• Single-expression lambdas are permitted where they cleanly replace a one-statement method or delegate.
+• Multi-statement lambdas (block-body lambdas using `{ }`) are not permitted; extract to a named method instead.
+• Lambda parameters must follow standard naming rules (p-prefix, PascalCase).
+• If the expression requires explanation, prefer a named method over a lambda.
+  Examples:
+    Permitted (single-expression lambda):
+      button.Click += (pSender, pEventArguments) => HandleClick(pEventArguments);
+      mControls.Sort((pA, pB) => string.Compare(pA.Name, pB.Name, StringComparison.Ordinal));
+    Not permitted (block body — extract to a named method instead):
+      button.Click += (pSender, pEventArguments) => {
+         PrepareState();
+         HandleClick(pEventArguments);
+      };
+    Not permitted (expression-bodied member):
+      public int Count => mTotalCount;
+      public void Refresh() => DoRefresh();
 4.4 No implicit typing.
   Example:
     Prefer:
@@ -177,32 +193,31 @@ To maintain vertical compactness:
             foreach (Control control in Controls)
             var windowTitle = GetWindowTitle(pWindowHandle);
     even where in the type is unmistakable.
-4.5 No nullable reference types in subsystem code.
-4.6 Enumerations
+4.5 Enumerations
 • Short enums are collapsed onto a single line when they fit comfortably within the ~130 letter maximum line length rule.
 • Multi‑line enums are preserved when they include attributes or descriptive metadata.
 • Enum members are not reordered unless explicitly instructed.
 
 ===========================================
-4. INTEROP RULES
+5. INTEROP RULES
 ===========================================
 
-4.1 LibraryImport Usage
+5.1 LibraryImport Usage
 • Always use explicit W‑entry points (FindWindowW, GetWindowTextW, etc.).
 • NEVER specify CharSet — LibraryImport does not support it.
 • All parameters must follow naming rules.
 • All out parameters must use blittable wrapper structs when required.
-4.2 Blittable Wrapper Types
+5.2 Blittable Wrapper Types
 • INT32, UINT32, BOOL, etc. must be used for byref primitives.
 • RECT, POINT, SIZE must remain blittable.
-4.3 No overloads for LibraryImport
+5.3 No overloads for LibraryImport
 • If multiple output types are needed, use distinct method names:
     DwmGetWindowAttribute
     DwmGetWindowAttributeInt
     DwmGetWindowAttributeBool
 
 ===========================================
-5. STRUCTURE & ARCHITECTURE RULES
+6. STRUCTURE & ARCHITECTURE RULES
 ===========================================
 
 WinForms context is assumed unless explicitly stated otherwise.
@@ -211,21 +226,24 @@ Existing naming conventions for controls and UI elements are respected.
 Monolithic panels with overlapping responsibilities are avoided.
 UI components do not persist state.
 
-5.1 Subsystem Layout
+6.1 Subsystem Layout
 • Each subsystem must be self‑contained.
 • No cross‑subsystem namespace drift.
 • No ghost files or stale partials.
 
-5.2 UI Subsystem Rules
+6.2 UI Subsystem Rules
 • Modular, no monolithic panels.
 • Clear boundaries between helpers, layout, and rendering.
 
-5.3 Analyzer Hygiene
-• All suppressions must be centralized in .editorconfig.
-• No inline suppressions except temporary debugging cases.
+6.3 Analyzer Hygiene
+• Most suppressions will be centralized in .editorconfig.
+• Occasionally inline suppressions are used when I do not want to change the code to satisfy the analyzer's rule. 
+   This is also useful when the warning is too general or broad and the specific instance is not actually improved 
+   by changing the code. I also make exceptions for temporary debugging cases or when postponing a code change;
+   these will be explained in comments.
 
 ===========================================
-6. UI STATE AND PERSISTENCE ARCHITECTURE
+7. UI STATE AND PERSISTENCE ARCHITECTURE
 ===========================================
 
 • Settings.Default is used for serialization only.
@@ -235,14 +253,14 @@ UI components do not persist state.
 • First‑launch initialization logic is not part of UiState.
 
 ===========================================
-7. LANGUAGE AND STYLE RULES
+8. LANGUAGE AND STYLE RULES
 ===========================================
 
 • Variable initialization is explicit.
 • Local variables are declared at the top of methods.
 • Clever or minimalist constructs that sacrifice clarity are avoided.
 
-7.1 Collection Initialization
+8.1 Collection Initialization
 • Prefer new‑style AddRange(...) over multiple Add(...) statements.
 • Use single‑line AddRange calls when the line fits within the ~130 letter maximum line length.
 • When wrapping is necessary, wrap at comma boundaries with continuation indentation.
@@ -255,7 +273,7 @@ UI components do not persist state.
       Controls.Add(mStatusStrip);
       Controls.Add(mInputTextBox);
 
-7.2 Named Arguments
+8.2 Named Arguments
 • Do not use named arguments in method calls.
 • Pass all arguments positionally.
   Examples:
@@ -264,20 +282,33 @@ UI components do not persist state.
     Discouraged:
       EnsureWindowFitsMonitor(mForm, pControlBox: false);
 
+8.3 Object Initialization
+• Use object initializers to set properties at construction whenever the value is known at that point.
+• Do not follow a constructor call with immediate property assignments that could be included in the initializer.
+• IDE0017 (Object initialization can be simplified) is honored — do not suppress it.
+  Examples:
+    Preferred:
+      mCurrentFindRecord = new FindRecord(pSearchText, matches) {
+         mPosition = index
+      };
+    Discouraged:
+      mCurrentFindRecord = new FindRecord(pSearchText, matches);
+      mCurrentFindRecord.mPosition = index;
+
 ===========================================
-8. DRAGON DICTATION RULES
+9. DRAGON DICTATION RULES
 ===========================================
 
-8.1 Identifier Pronounceability
+9.1 Identifier Pronounceability
 • All identifiers must be easily dictated.
 • No abbreviations.
 • No multi‑step dictation sequences.
-8.2 Loop Variables
+9.2 Loop Variables
 • Use full English names:
     currentIndex
     currentControl
     nextControl
-8.3 Method Names
+9.3 Method Names
 • Full English words.
 • Verb‑first by default for clarity and action‑oriented naming.
 • Noun‑first (military nomenclature) when disambiguation is necessary across similar methods in different contexts.
@@ -295,7 +326,7 @@ UI components do not persist state.
       • Use noun‑first when multiple similar methods exist across different subsystems or panels.
 
 ===========================================
-9. WORKFLOW ASSUMPTIONS
+10. WORKFLOW ASSUMPTIONS
 ===========================================
 
 • The codebase is written and maintained using a hands‑free, dictation‑driven workflow.
@@ -303,7 +334,7 @@ UI components do not persist state.
 • Predictability and consistency are more important than stylistic novelty.
 
 ===========================================
-10. APPLYING THE STYLE GUIDE
+11. APPLYING THE STYLE GUIDE
 ===========================================
 
 • When instructed to apply the style guide, all rules above are assumed without restatement.
