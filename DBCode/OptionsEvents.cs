@@ -1,9 +1,22 @@
 ﻿namespace DBCode {
    internal partial class OptionsPanel : Panel {
       protected override void OnHandleCreated(EventArgs pEventArgs) {
+         ThrowIfNull(mCFamilyTitleLabel, nameof(mCFamilyTitleLabel));
+         ThrowIfNull(mBasicTitleLabel, nameof(mBasicTitleLabel));
+         ThrowIfNull(mFSharpTitleLabel, nameof(mFSharpTitleLabel));
+         ThrowIfNull(mHTMLTitleLabel, nameof(mHTMLTitleLabel));
+         ThrowIfNull(mCSSTitleLabel, nameof(mCSSTitleLabel));
+         ThrowIfNull(mXMLTitleLabel, nameof(mXMLTitleLabel));
+         ThrowIfNull(mJSONTitleLabel, nameof(mJSONTitleLabel));
+         ThrowIfNull(mPowerShellTitleLabel, nameof(mPowerShellTitleLabel));
+         ThrowIfNull(mBatchTitleLabel, nameof(mBatchTitleLabel));
+         ThrowIfNull(mSQLTitleLabel, nameof(mSQLTitleLabel));
+         ThrowIfNull(mMarkdownTitleLabel, nameof(mMarkdownTitleLabel));
+         ThrowIfNull(mPythonTitleLabel, nameof(mPythonTitleLabel));
+         ThrowIfNull(mBottomPanel, nameof(mBottomPanel));
          base.OnHandleCreated(pEventArgs);
          Dock = DockStyle.Fill;
-         LayoutControls(pApplyFonts: false);
+         LayoutControls(false);
       }
 
       private void GeneralTabControl_DrawItem(object? pSender, DrawItemEventArgs pArgs) {
@@ -18,6 +31,12 @@
          MainForm.DrawTabControlItem(mIncludeExcludeTabControl, pArgs, mCurrentTheme);
       }
 
+      private void CodingTabControl_DrawItem(object? pSender, DrawItemEventArgs pArgs) {
+         ThrowIfNull(mCodingTabControl, nameof(mCodingTabControl));
+         ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
+         MainForm.DrawTabControlItem(mCodingTabControl, pArgs, mCurrentTheme);
+      }
+
       private void GeneralTabControl_SelectedIndexChanged(object? pSender, EventArgs pArgs) {
          ThrowIfNull(mUiState, nameof(mUiState));
          ThrowIfNull(mGeneralTabControl, nameof(mGeneralTabControl));
@@ -28,6 +47,12 @@
          ThrowIfNull(mUiState, nameof(mUiState));
          ThrowIfNull(mIncludeExcludeTabControl, nameof(mIncludeExcludeTabControl));
          mUiState.mOptionsIncludeExcludeTabControlPageIndex = mIncludeExcludeTabControl.SelectedIndex;
+      }
+
+      private void CodingTabControl_SelectedIndexChanged(object? pSender, EventArgs pArgs) {
+         ThrowIfNull(mUiState, nameof(mUiState));
+         ThrowIfNull(mCodingTabControl, nameof(mCodingTabControl));
+         mUiState.mOptionsCodingTabControlPageIndex = mCodingTabControl.SelectedIndex;
       }
 
       private void TabRadioButton_Click(object? pSender, EventArgs pEventArguments) {
@@ -46,7 +71,8 @@
 
       private void CtrlVAltV_Click(object? pSender, EventArgs pEventArguments) {
          ScalableRadioButtons.ScalableRadioButton? button = pSender as ScalableRadioButtons.ScalableRadioButton;
-         if (button == null) return;
+         if (button == null)
+            return;
          mUseControlPasting = button.mReturnValue == 1;
       }
 
@@ -85,6 +111,7 @@
          ThrowIfNull(mSearchUpDownCluster.mNumericUpDown, nameof(mSearchUpDownCluster.mNumericUpDown));
          ThrowIfNull(mReplaceUpDownCluster, nameof(mReplaceUpDownCluster));
          ThrowIfNull(mReplaceUpDownCluster.mNumericUpDown, nameof(mReplaceUpDownCluster.mNumericUpDown));
+         ThrowIfNull(mAllIfNothingCheckBoxCluster, nameof(mAllIfNothingCheckBoxCluster));
          mUiState.mTopDraggerHeight = (int)mTopDraggerHeightUpDownCluster.mNumericUpDown.Value;
          mUiState.mTopDraggerEdge = (int)mTopDraggerEdgeUpDownCluster.mNumericUpDown.Value;
          mUiState.mActivationDelayMs = (int)mActivationDelayUpDownCluster.mNumericUpDown.Value;
@@ -92,6 +119,7 @@
          mUiState.mReactivationDelayMs = (int)mReactivationRateUpDownCluster.mNumericUpDown.Value;
          mUiState.mUseTabs = mTabCheckBoxCluster.mScalableCheckBox.Checked;
          mUiState.mUseSpaces = mSpaceCheckBoxCluster.mScalableCheckBox.Checked;
+         mUiState.mAllIfNothing = mAllIfNothingCheckBoxCluster.mScalableCheckBox.Checked;
          mWhitespaceRadioCluster.mRadioPanel.GetReturnValue(out int whitespaceValue);
          mUiState.mWhitespace = whitespaceValue;
          mUiState.mSpacesPerTab = (int)mTabUpDownCluster.mNumericUpDown.Value;

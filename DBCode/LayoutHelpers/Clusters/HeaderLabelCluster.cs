@@ -39,6 +39,17 @@
             }
          }
 
+         public void CenterTitle() {
+            if (mLabel != null) {
+               int x = (Width - mLabel.Width) / 2;
+               if (x < 0)
+                  x = 0;
+               mLabel.Left = x;
+               mLabel.Invalidate();
+               mLabel.Refresh();
+            }
+         }
+
          internal override void LayoutControlsOnly() {
             if (mLabel != null) {
                int x = (Width - mLabel.Width) / 2;

@@ -24,8 +24,7 @@
          float cellHeight = pFont.Size * (ascent + descent) / emHeight;
          int tabHeight = (int)Math.Ceiling(cellHeight) + 12;
          SendMessage(Handle, TCM_SETPADDING, 0, MakeLParam(20, 0));
-         if (ItemSize.Height != tabHeight)
-            ItemSize = new Size(ItemSize.Width, tabHeight);
+         ItemSize = new Size(ItemSize.Width, tabHeight);
          TabHeaderWidths.Clear();
          for (int i = 0; i < TabCount; i++)
             TabHeaderWidths.Add(GetTabRect(i).Width);

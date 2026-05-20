@@ -6,7 +6,7 @@
             ThrowIfNull(mClusterContainer, nameof(mClusterContainer));
             ThrowIfNull(mForm, nameof(mForm));
             ThrowIfNull(mTitleLabel, nameof(mTitleLabel));
-            ThrowIfNull(mThemePickerBottomPanel, nameof(mThemePickerBottomPanel));
+            ThrowIfNull(mBottomPanel, nameof(mBottomPanel));
             mForm.SuspendClientSizeChanged();
             mForm.Bounds = mUiState.ThemePickerBounds;
             if (mUiState.mThemePickerFirstShow) {
@@ -16,7 +16,7 @@
             Size = new Size(mForm.Size.Width - 20, mForm.Size.Height - 20);
             CreateLayout();
             ApplyTheme();
-            Controls.AddRange([mClusterContainer, mTitleLabel, mThemePickerBottomPanel]);
+            Controls.AddRange([mClusterContainer, mTitleLabel, mBottomPanel]);
             mClusterContainer.PerformLayout();
             LayoutPanel();
             mForm.ResumeClientSizeChanged();

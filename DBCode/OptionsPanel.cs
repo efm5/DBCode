@@ -5,15 +5,21 @@
       private readonly Button? mOKButton, mClearSearchButton, mClearReplaceButton;
       internal readonly DataGridView mIncludeDataGridView, mExcludeDataGridView;
       private readonly List<Font> mOwnedFonts = [];
-      internal readonly GroupBox? mMagicNumbersGroupBox, mWhitespaceGroupBox, mPastingGroupBox, mHistoryGroupBox;
+      internal readonly GroupBox? mMagicNumbersGroupBox, mWhitespaceGroupBox, mPastingGroupBox, mHistoryGroupBox,
+         mCodingGroupBox;
       internal readonly HeaderLabelCluster? mTitleLabel;
-      private Panel? mScrollPanel, mGeneralScrollPanel, mIncludeScrollPanel, mExcludeScrollPanel;
-      private readonly ScalableCheckBoxCluster? mTabCheckBoxCluster, mSpaceCheckBoxCluster;
+      private Panel? mScrollPanel, mGeneralScrollPanel, mIncludeScrollPanel, mExcludeScrollPanel, mCFamilyScrollablePanel, mBasicScrollablePanel,
+         mFSharpScrollablePanel, mHTMLScrollablePanel, mCSSScrollablePanel, mXMLScrollablePanel, mJSONScrollablePanel, mPowerShellScrollablePanel,
+         mBatchScrollablePanel, mSQLScrollablePanel, mMarkdownScrollablePanel, mPythonScrollablePanel;
+      private readonly ScalableCheckBoxCluster? mTabCheckBoxCluster, mSpaceCheckBoxCluster, mAllIfNothingCheckBoxCluster,
+         mCommentConcatenateFirstCheckBoxCluster;
       private readonly ScalableRadioButtonCluster? mWhitespaceRadioCluster, mPastingRadioCluster;
+      internal readonly TwoLineHeaderLabelCluster? mCFamilyTitleLabel, mBasicTitleLabel, mFSharpTitleLabel, mHTMLTitleLabel, mCSSTitleLabel,
+         mXMLTitleLabel, mJSONTitleLabel, mPowerShellTitleLabel, mBatchTitleLabel, mSQLTitleLabel, mMarkdownTitleLabel, mPythonTitleLabel;
       private readonly UpDownCluster? mTopDraggerHeightUpDownCluster, mTopDraggerEdgeUpDownCluster,
          mActivationDelayUpDownCluster, mReactivationRateUpDownCluster, mClipboardDelayUpDownCluster,
-         mSearchUpDownCluster, mReplaceUpDownCluster, mTabUpDownCluster, mSpaceUpDownCluster;
-      private readonly VariableWidthTabControl? mGeneralTabControl, mIncludeExcludeTabControl;
+         mSearchUpDownCluster, mReplaceUpDownCluster, mTabUpDownCluster, mSpaceUpDownCluster, mCommentWidthUpDownCluster;
+      private readonly VariableWidthTabControl? mGeneralTabControl, mIncludeExcludeTabControl, mCodingTabControl;
 
       private Font TrackFont(Font pFont) {
          mOwnedFonts.Add(pFont);
@@ -23,6 +29,7 @@
       public OptionsPanel() {
          ThrowIfNull(mUiState, nameof(mUiState));
          ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
+         Color groupBoxBackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground];
          Name = "optionsPanel";
          TabIndex = mTabIndex++;
          BackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.PanelBackground];
@@ -50,6 +57,90 @@
             Dock = DockStyle.Fill,
             AutoScroll = true
          };
+         mCFamilyScrollablePanel = new Panel {
+            Name = $"OptionsCFamilyTabControlTabPageScrollPanel{mTabIndex}",
+            TabIndex = mTabIndex++,
+            BackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground],
+            Dock = DockStyle.Fill,
+            AutoScroll = true
+         };
+         mBasicScrollablePanel = new Panel {
+            Name = $"OptionsBasicTabControlTabPageScrollPanel{mTabIndex}",
+            TabIndex = mTabIndex++,
+            BackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground],
+            Dock = DockStyle.Fill,
+            AutoScroll = true
+         };
+         mFSharpScrollablePanel = new Panel {
+            Name = $"OptionsFSharpTabControlTabPageScrollPanel{mTabIndex}",
+            TabIndex = mTabIndex++,
+            BackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground],
+            Dock = DockStyle.Fill,
+            AutoScroll = true
+         };
+         mHTMLScrollablePanel = new Panel {
+            Name = $"OptionsHTMLTabControlTabPageScrollPanel{mTabIndex}",
+            TabIndex = mTabIndex++,
+            BackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground],
+            Dock = DockStyle.Fill,
+            AutoScroll = true
+         };
+         mCSSScrollablePanel = new Panel {
+            Name = $"OptionsCSSTabControlTabPageScrollPanel{mTabIndex}",
+            TabIndex = mTabIndex++,
+            BackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground],
+            Dock = DockStyle.Fill,
+            AutoScroll = true
+         };
+         mXMLScrollablePanel = new Panel {
+            Name = $"OptionsXMLTabControlTabPageScrollPanel{mTabIndex}",
+            TabIndex = mTabIndex++,
+            BackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground],
+            Dock = DockStyle.Fill,
+            AutoScroll = true
+         };
+         mJSONScrollablePanel = new Panel {
+            Name = $"OptionsJSONTabControlTabPageScrollPanel{mTabIndex}",
+            TabIndex = mTabIndex++,
+            BackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground],
+            Dock = DockStyle.Fill,
+            AutoScroll = true
+         };
+         mPowerShellScrollablePanel = new Panel {
+            Name = $"OptionsPowerShellTabControlTabPageScrollPanel{mTabIndex}",
+            TabIndex = mTabIndex++,
+            BackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground],
+            Dock = DockStyle.Fill,
+            AutoScroll = true
+         };
+         mBatchScrollablePanel = new Panel {
+            Name = $"OptionsBatchTabControlTabPageScrollPanel{mTabIndex}",
+            TabIndex = mTabIndex++,
+            BackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground],
+            Dock = DockStyle.Fill,
+            AutoScroll = true
+         };
+         mSQLScrollablePanel = new Panel {
+            Name = $"OptionsSQLTabControlTabPageScrollPanel{mTabIndex}",
+            TabIndex = mTabIndex++,
+            BackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground],
+            Dock = DockStyle.Fill,
+            AutoScroll = true
+         };
+         mMarkdownScrollablePanel = new Panel {
+            Name = $"OptionsMarkdownTabControlTabPageScrollPanel{mTabIndex}",
+            TabIndex = mTabIndex++,
+            BackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground],
+            Dock = DockStyle.Fill,
+            AutoScroll = true
+         };
+         mPythonScrollablePanel = new Panel {
+            Name = $"OptionsPythonTabControlTabPageScrollPanel{mTabIndex}",
+            TabIndex = mTabIndex++,
+            BackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground],
+            Dock = DockStyle.Fill,
+            AutoScroll = true
+         };
          mGeneralTabControl = new VariableWidthTabControl {
             Name = $"OptionsGeneralTabControl{mTabIndex}",
             TabIndex = mTabIndex++,
@@ -59,7 +150,7 @@
          mGeneralTabControl.DrawItem += GeneralTabControl_DrawItem;
          mGeneralTabControl.SetStripBackColor(mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground]);
          mGeneralTabControl.SelectedIndexChanged += GeneralTabControl_SelectedIndexChanged;
-         mGeneralTabControl.TabPages.AddRange([new TabPage("General"), new TabPage("Targeting")]);
+         mGeneralTabControl.TabPages.AddRange([new TabPage("General"), new TabPage("Targeting"), new TabPage("Coding")]);
          mIncludeExcludeTabControl = new VariableWidthTabControl {
             Name = $"OptionsIncludeExcludeTabControl{mTabIndex}",
             TabIndex = mTabIndex++,
@@ -110,6 +201,19 @@
          });
          ApplyThemeToDataGridView(mIncludeDataGridView, mOwnedFonts);
          ApplyThemeToDataGridView(mExcludeDataGridView, mOwnedFonts);
+         mCodingTabControl = new VariableWidthTabControl {
+            Name = $"OptionsCodingTabControl{mTabIndex}",
+            TabIndex = mTabIndex++,
+            DrawMode = TabDrawMode.OwnerDrawFixed,
+            Dock = DockStyle.Fill
+         };
+         mCodingTabControl.DrawItem += CodingTabControl_DrawItem;
+         mCodingTabControl.SetStripBackColor(mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground]);
+         mCodingTabControl.SelectedIndexChanged += CodingTabControl_SelectedIndexChanged;
+         mCodingTabControl.TabPages.AddRange([new TabPage("C Family"), new TabPage("Basic"),
+            new TabPage("F#"), new TabPage("HTML"), new TabPage("CSS"), new TabPage("XML"), new TabPage("JSON"),
+            new TabPage("Power Shell"), new TabPage("Batch"), new TabPage("SQL"), new TabPage("Markdown"),
+            new TabPage("Python")]);
          mTopDraggerHeightUpDownCluster = new UpDownCluster(mCurrentTheme, "Top &Dragger Height", 3, 50,
             mUiState.mTopDraggerHeight, 1, mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground],
             "3–50");
@@ -165,7 +269,27 @@
             ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxFont],
             BackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground]
          };
-         Color groupBoxBackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground];
+         mCodingGroupBox = new GroupBox() {
+            Name = "codingGroupBox",
+            TabIndex = mTabIndex++,
+            Text = "Coding Settings",
+            Font = TrackFont(CreateNewBoldFont(mCurrentTheme.mFonts[(int)FontUsage.Interface])),
+            ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxFont],
+            BackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground]
+         };
+         mCFamilyTitleLabel = new TwoLineHeaderLabelCluster(mCurrentTheme, "C Family-Specific Options", "C, C++, C#", HeaderLabelSize.Normal,
+            HeaderLabelSize.Small);
+         mBasicTitleLabel = new TwoLineHeaderLabelCluster(mCurrentTheme, "Basic Options", "Basic-based Scripting Languages", HeaderLabelSize.Normal, HeaderLabelSize.Small);
+         mFSharpTitleLabel = new TwoLineHeaderLabelCluster(mCurrentTheme, "F# Options", "Functional Programming", HeaderLabelSize.Normal, HeaderLabelSize.Small);
+         mHTMLTitleLabel = new TwoLineHeaderLabelCluster(mCurrentTheme, "HTML Options", "Web Markup", HeaderLabelSize.Normal, HeaderLabelSize.Small);
+         mCSSTitleLabel = new TwoLineHeaderLabelCluster(mCurrentTheme, "CSS Options", "Web Stylesheet", HeaderLabelSize.Normal, HeaderLabelSize.Small);
+         mXMLTitleLabel = new TwoLineHeaderLabelCluster(mCurrentTheme, "XML Options", "Structured Data Markup", HeaderLabelSize.Normal, HeaderLabelSize.Small);
+         mJSONTitleLabel = new TwoLineHeaderLabelCluster(mCurrentTheme, "JSON Options", "Structured Data", HeaderLabelSize.Normal, HeaderLabelSize.Small);
+         mPowerShellTitleLabel = new TwoLineHeaderLabelCluster(mCurrentTheme, "PowerShell Options", "Power Shell Scripting", HeaderLabelSize.Normal, HeaderLabelSize.Small);
+         mBatchTitleLabel = new TwoLineHeaderLabelCluster(mCurrentTheme, "Batch Options", "Command Prompt Scripting", HeaderLabelSize.Normal, HeaderLabelSize.Small);
+         mSQLTitleLabel = new TwoLineHeaderLabelCluster(mCurrentTheme, "SQL Options", "Database Querying", HeaderLabelSize.Normal, HeaderLabelSize.Small);
+         mMarkdownTitleLabel = new TwoLineHeaderLabelCluster(mCurrentTheme, "Markdown Options", "Text Formatting", HeaderLabelSize.Normal, HeaderLabelSize.Small);
+         mPythonTitleLabel = new TwoLineHeaderLabelCluster(mCurrentTheme, "Python Options", "Python-based Scripting Languages", HeaderLabelSize.Normal, HeaderLabelSize.Small);
          mWhitespaceRadioCluster = new ScalableRadioButtonCluster(mCurrentTheme, [
             new ScalableRadioButtons.RadioButtonQuad("&Both", "", mUiState.mWhitespace == (int)Whitespace.Both, (int)Whitespace.Both),
             new ScalableRadioButtons.RadioButtonQuad("&Tabs", "", mUiState.mWhitespace == (int)Whitespace.Tabs, (int)Whitespace.Tabs),
@@ -179,8 +303,14 @@
          mTabCheckBoxCluster.mScalableCheckBox.Checked = mUiState.mUseTabs;
          mSpaceUpDownCluster = new UpDownCluster(mCurrentTheme, "Spaces per tab", 2, 12,
             mUiState.mSpacesToBecomeTab, 1, groupBoxBackColor, "2–12");
+         mCommentWidthUpDownCluster = new UpDownCluster(mCurrentTheme, "Maximum Line Width:", 40, 300,
+            mUiState.mCommentWidth, 1, groupBoxBackColor, "40–300");
          mSpaceCheckBoxCluster = new ScalableCheckBoxCluster(mCurrentTheme, "Kee&p Spaces", false, groupBoxBackColor);
          mSpaceCheckBoxCluster.mScalableCheckBox.Checked = mUiState.mUseSpaces;
+         mAllIfNothingCheckBoxCluster = new ScalableCheckBoxCluster(mCurrentTheme, "All if &Nothing", false, groupBoxBackColor);
+         mAllIfNothingCheckBoxCluster.mScalableCheckBox.Checked = mUiState.mAllIfNothing;
+         mCommentConcatenateFirstCheckBoxCluster = new ScalableCheckBoxCluster(mCurrentTheme, "Concatenate First", false, groupBoxBackColor);
+         mCommentConcatenateFirstCheckBoxCluster.mScalableCheckBox.Checked = mUiState.mCommentConcatenateFirst;
          mWhitespaceGroupBox.Controls.AddRange([mWhitespaceRadioCluster, mTabUpDownCluster, mTabCheckBoxCluster,
             mSpaceUpDownCluster, mSpaceCheckBoxCluster]);
          mBottomPanel = new BottomPanel(mCurrentTheme) {
@@ -229,14 +359,17 @@
             mClipboardDelayUpDownCluster]);
          mHistoryGroupBox.Controls.AddRange([mSearchUpDownCluster, mReplaceUpDownCluster,
             mClearSearchButton, mClearReplaceButton]);
+         mCodingGroupBox.Controls.AddRange([mAllIfNothingCheckBoxCluster, mCommentWidthUpDownCluster,
+            mCommentConcatenateFirstCheckBoxCluster]);
          mGeneralScrollPanel.Controls.AddRange([mMagicNumbersGroupBox, mWhitespaceGroupBox, mPastingGroupBox,
-            mHistoryGroupBox]);
+            mHistoryGroupBox, mCodingGroupBox]);
          mGeneralTabControl.TabPages[(int)OptionsTabPageUsage.General].Controls.Add(mGeneralScrollPanel);
          mIncludeExcludeTabControl.TabPages[(int)TargetingTabPageUsage.Include].Controls.Add(mIncludeScrollPanel);
          mIncludeScrollPanel.Controls.Add(mIncludeDataGridView);
          mIncludeExcludeTabControl.TabPages[(int)TargetingTabPageUsage.Exclude].Controls.Add(mExcludeScrollPanel);
          mExcludeScrollPanel.Controls.Add(mExcludeDataGridView);
          mGeneralTabControl.TabPages[(int)OptionsTabPageUsage.Targeting].Controls.Add(mIncludeExcludeTabControl);
+         mGeneralTabControl.TabPages[(int)OptionsTabPageUsage.Coding].Controls.Add(mCodingTabControl);
          mScrollPanel = new Panel {
             Name = $"OptionsScrollPanel{mTabIndex}",
             TabIndex = mTabIndex++,
@@ -244,6 +377,30 @@
             Dock = DockStyle.Fill
          };
          mScrollPanel.Controls.Add(mGeneralTabControl);
+         mCodingTabControl.TabPages[(int)CodingTabPageUsage.CFamily].Controls.Add(mCFamilyScrollablePanel);
+         mCodingTabControl.TabPages[(int)CodingTabPageUsage.Basic].Controls.Add(mBasicScrollablePanel);
+         mCodingTabControl.TabPages[(int)CodingTabPageUsage.FSharp].Controls.Add(mFSharpScrollablePanel);
+         mCodingTabControl.TabPages[(int)CodingTabPageUsage.HTML].Controls.Add(mHTMLScrollablePanel);
+         mCodingTabControl.TabPages[(int)CodingTabPageUsage.CSS].Controls.Add(mCSSScrollablePanel);
+         mCodingTabControl.TabPages[(int)CodingTabPageUsage.XML].Controls.Add(mXMLScrollablePanel);
+         mCodingTabControl.TabPages[(int)CodingTabPageUsage.JSON].Controls.Add(mJSONScrollablePanel);
+         mCodingTabControl.TabPages[(int)CodingTabPageUsage.PowerShell].Controls.Add(mPowerShellScrollablePanel);
+         mCodingTabControl.TabPages[(int)CodingTabPageUsage.Batch].Controls.Add(mBatchScrollablePanel);
+         mCodingTabControl.TabPages[(int)CodingTabPageUsage.SQL].Controls.Add(mSQLScrollablePanel);
+         mCodingTabControl.TabPages[(int)CodingTabPageUsage.Markdown].Controls.Add(mMarkdownScrollablePanel);
+         mCodingTabControl.TabPages[(int)CodingTabPageUsage.Python].Controls.Add(mPythonScrollablePanel);
+         mCFamilyScrollablePanel.Controls.Add(mCFamilyTitleLabel);
+         mBasicScrollablePanel.Controls.Add(mBasicTitleLabel);
+         mFSharpScrollablePanel.Controls.Add(mFSharpTitleLabel);
+         mHTMLScrollablePanel.Controls.Add(mHTMLTitleLabel);
+         mCSSScrollablePanel.Controls.Add(mCSSTitleLabel);
+         mXMLScrollablePanel.Controls.Add(mXMLTitleLabel);
+         mJSONScrollablePanel.Controls.Add(mJSONTitleLabel);
+         mPowerShellScrollablePanel.Controls.Add(mPowerShellTitleLabel);
+         mBatchScrollablePanel.Controls.Add(mBatchTitleLabel);
+         mSQLScrollablePanel.Controls.Add(mSQLTitleLabel);
+         mMarkdownScrollablePanel.Controls.Add(mMarkdownTitleLabel);
+         mPythonScrollablePanel.Controls.Add(mPythonTitleLabel);
          Controls.AddRange([mScrollPanel, mBottomPanel, mTitleLabel]);
          ThrowIfNull(mBottomPanel.mHelpButton, nameof(mBottomPanel.mHelpButton));
          ThrowIfNull(mBottomPanel.mCancelButton, nameof(mBottomPanel.mCancelButton));
@@ -286,6 +443,23 @@
          ThrowIfNull(mClearReplaceButton, nameof(mClearReplaceButton));
          ThrowIfNull(mGeneralTabControl, nameof(mGeneralTabControl));
          ThrowIfNull(mIncludeExcludeTabControl, nameof(mIncludeExcludeTabControl));
+         ThrowIfNull(mCodingTabControl, nameof(mCodingTabControl));
+         ThrowIfNull(mCodingGroupBox, nameof(mCodingGroupBox));
+         ThrowIfNull(mAllIfNothingCheckBoxCluster, nameof(mAllIfNothingCheckBoxCluster));
+         ThrowIfNull(mCommentWidthUpDownCluster, nameof(mCommentWidthUpDownCluster));
+         ThrowIfNull(mCommentConcatenateFirstCheckBoxCluster, nameof(mCommentConcatenateFirstCheckBoxCluster));
+         ThrowIfNull(mCFamilyTitleLabel, nameof(mCFamilyTitleLabel));
+         ThrowIfNull(mBasicTitleLabel, nameof(mBasicTitleLabel));
+         ThrowIfNull(mFSharpTitleLabel, nameof(mFSharpTitleLabel));
+         ThrowIfNull(mHTMLTitleLabel, nameof(mHTMLTitleLabel));
+         ThrowIfNull(mCSSTitleLabel, nameof(mCSSTitleLabel));
+         ThrowIfNull(mXMLTitleLabel, nameof(mXMLTitleLabel));
+         ThrowIfNull(mJSONTitleLabel, nameof(mJSONTitleLabel));
+         ThrowIfNull(mPowerShellTitleLabel, nameof(mPowerShellTitleLabel));
+         ThrowIfNull(mBatchTitleLabel, nameof(mBatchTitleLabel));
+         ThrowIfNull(mSQLTitleLabel, nameof(mSQLTitleLabel));
+         ThrowIfNull(mMarkdownTitleLabel, nameof(mMarkdownTitleLabel));
+         ThrowIfNull(mPythonTitleLabel, nameof(mPythonTitleLabel));
          SuspendLayout();
          mTitleLabel.LayoutCluster(pApplyFonts);
          foreach (BaseCluster cluster in mBaseClusters)
@@ -297,21 +471,30 @@
          mGeneralTabControl.DrawItem -= GeneralTabControl_DrawItem;
          mIncludeExcludeTabControl.SelectedIndexChanged -= IncludeExcludeTabControl_SelectedIndexChanged;
          mIncludeExcludeTabControl.DrawItem -= IncludeExcludeTabControl_DrawItem;
+         mCodingTabControl.SelectedIndexChanged -= CodingTabControl_SelectedIndexChanged;
+         mCodingTabControl.DrawItem -= CodingTabControl_DrawItem;
          int savedGeneral = mUiState.mOptionsGeneralTabControlPageIndex;
          int savedIncludeExclude = mUiState.mOptionsIncludeExcludeTabControlPageIndex;
+         int savedCoding = mUiState.mOptionsCodingTabControlPageIndex;
          mGeneralTabControl.SelectedIndex = (int)OptionsTabPageUsage.General;
          mIncludeExcludeTabControl.SelectedIndex = (int)OptionsTabPageUsage.Targeting;
+         mCodingTabControl.SelectedIndex = 0;
          for (int i = 0; i < mGeneralTabControl.TabPages.Count; i++)
             mGeneralTabControl.SelectedIndex = i;
          for (int i = 0; i < mIncludeExcludeTabControl.TabPages.Count; i++)
             mIncludeExcludeTabControl.SelectedIndex = i;
+         for (int i = 0; i < mCodingTabControl.TabPages.Count; i++)
+            mCodingTabControl.SelectedIndex = i;
          //efm5 - now that all controls have been visited, restore the persisted selections
          mGeneralTabControl.SelectedIndex = savedGeneral;
          mIncludeExcludeTabControl.SelectedIndex = savedIncludeExclude;
+         mCodingTabControl.SelectedIndex = savedCoding;
          mGeneralTabControl.SelectedIndexChanged += GeneralTabControl_SelectedIndexChanged;
          mGeneralTabControl.DrawItem += GeneralTabControl_DrawItem;
          mIncludeExcludeTabControl.SelectedIndexChanged += IncludeExcludeTabControl_SelectedIndexChanged;
          mIncludeExcludeTabControl.DrawItem += IncludeExcludeTabControl_DrawItem;
+         mCodingTabControl.SelectedIndexChanged += CodingTabControl_SelectedIndexChanged;
+         mCodingTabControl.DrawItem += CodingTabControl_DrawItem;
          mTopDraggerHeightUpDownCluster.Location = GetGroupBoxFirstLineOffset(mMagicNumbersGroupBox);
          mTopDraggerEdgeUpDownCluster.Location =
             new Point(mTopDraggerHeightUpDownCluster.Left, mTopDraggerHeightUpDownCluster.Bottom + mEm);
@@ -346,6 +529,11 @@
             new Point(mSearchUpDownCluster.Left, mSearchUpDownCluster.Bottom + mEm);
          mClearReplaceButton.Location = new Point(mReplaceUpDownCluster.Right + mEm, mReplaceUpDownCluster.Top);
          SizeGroupBox(mHistoryGroupBox);
+         mCodingGroupBox.Location = new Point(mWhitespaceGroupBox.Right + mEm, mHistoryGroupBox.Bottom + mEm);
+         mAllIfNothingCheckBoxCluster.Location = GetGroupBoxFirstLineOffset(mCodingGroupBox);
+         mCommentWidthUpDownCluster.Location = new Point(mAllIfNothingCheckBoxCluster.Left, mAllIfNothingCheckBoxCluster.Bottom + mEm);
+         mCommentConcatenateFirstCheckBoxCluster.Location = new Point(mAllIfNothingCheckBoxCluster.Left, mCommentWidthUpDownCluster.Bottom + mEm);
+         SizeGroupBox(mCodingGroupBox);
          mBottomPanel.LayoutControls();
          mGeneralTabControl.SelectedIndexChanged -= GeneralTabControl_SelectedIndexChanged;
          mGeneralTabControl.DrawItem -= GeneralTabControl_DrawItem;
@@ -373,6 +561,18 @@
          else {
             mUiState.mOptionsBounds = new Rectangle(mUiState.mOptionsBounds.Location, wantedSize);
          }
+         mCFamilyTitleLabel.LayoutCluster();
+         mBasicTitleLabel.LayoutCluster();
+         mFSharpTitleLabel.LayoutCluster();
+         mHTMLTitleLabel.LayoutCluster();
+         mCSSTitleLabel.LayoutCluster();
+         mXMLTitleLabel.LayoutCluster();
+         mJSONTitleLabel.LayoutCluster();
+         mPowerShellTitleLabel.LayoutCluster();
+         mBatchTitleLabel.LayoutCluster();
+         mSQLTitleLabel.LayoutCluster();
+         mMarkdownTitleLabel.LayoutCluster();
+         mPythonTitleLabel.LayoutCluster();
          ResumeLayout(true);
       }
 
@@ -422,6 +622,7 @@
             ThrowIfNull(mBottomPanel.mHelpButton, nameof(mBottomPanel.mHelpButton));
             ThrowIfNull(mGeneralTabControl, nameof(mGeneralTabControl));
             ThrowIfNull(mIncludeExcludeTabControl, nameof(mIncludeExcludeTabControl));
+            ThrowIfNull(mCodingTabControl, nameof(mCodingTabControl));
             mOKButton?.Click -= OKButton_Click;
             mClearSearchButton?.Click -= ClearSearchButton_Click;
             mClearReplaceButton?.Click -= ClearReplaceButton_Click;
@@ -436,11 +637,14 @@
             mBottomPanel.mHelpButton.Click -= MainForm.Help_Click;
             mGeneralTabControl.DrawItem -= GeneralTabControl_DrawItem;
             mIncludeExcludeTabControl.DrawItem -= IncludeExcludeTabControl_DrawItem;
+            mCodingTabControl.DrawItem -= CodingTabControl_DrawItem;
             mGeneralTabControl.SelectedIndexChanged -= GeneralTabControl_SelectedIndexChanged;
             mIncludeExcludeTabControl.SelectedIndexChanged -= IncludeExcludeTabControl_SelectedIndexChanged;
+            mCodingTabControl.SelectedIndexChanged -= CodingTabControl_SelectedIndexChanged;
             foreach (Font font in mOwnedFonts)
                font.Dispose();
             mOwnedFonts.Clear();
+            mCodingTabControl.Dispose();
             mIncludeExcludeTabControl.Dispose();
             mGeneralTabControl.Dispose();
          }

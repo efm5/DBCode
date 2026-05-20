@@ -56,6 +56,28 @@
             }
          }
 
+         public void CenterTitle() {
+            ThrowIfNull(Parent, nameof(Parent));
+            ThrowIfNull(mTopLabel, nameof(mTopLabel));
+            int x = (Parent.ClientSize.Width - mTopLabel.Width) / 2;
+            if (x < 0)
+               x = 0;
+            mTopLabel.Left = x;
+            mTopLabel.Invalidate();
+            mTopLabel.Refresh();
+         }
+
+         public void CenterTitle(Panel pPanel) {
+            ThrowIfNull(pPanel, nameof(pPanel));
+            ThrowIfNull(mTopLabel, nameof(mTopLabel));
+            int x = (pPanel.ClientSize.Width - mTopLabel.Width) / 2;
+            if (x < 0)
+               x = 0;
+            mTopLabel.Left = x;
+            mTopLabel.Invalidate();
+            mTopLabel.Refresh();
+         }
+
          internal override void LayoutControlsOnly() {
             if ((Parent != null) && (mTopLabel != null) && (mBottomLabel != null)) {
                int x = (Parent.ClientSize.Width - mTopLabel.Width) / 2;

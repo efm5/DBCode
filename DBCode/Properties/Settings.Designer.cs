@@ -478,5 +478,173 @@ namespace DBCode.Properties {
                 this["SRScopeSelection"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AllIfNothing {
+            get {
+                return ((bool)(this["AllIfNothing"]));
+            }
+            set {
+                this["AllIfNothing"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CommentConcatenateFirst {
+            get {
+                return ((bool)(this["CommentConcatenateFirst"]));
+            }
+            set {
+                this["CommentConcatenateFirst"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("80")]
+        public int CommentWidth {
+            get {
+                return ((int)(this["CommentWidth"]));
+            }
+            set {
+                this["CommentWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int OptionsCodingTabControlPageIndex {
+            get {
+                return ((int)(this["OptionsCodingTabControlPageIndex"]));
+            }
+            set {
+                this["OptionsCodingTabControlPageIndex"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("196, 160, 16")]
+        public global::System.Drawing.Color BracePairColor0 {
+            get {
+                return ((global::System.Drawing.Color)(this["BracePairColor0"]));
+            }
+            set {
+                this["BracePairColor0"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("196, 98, 0")]
+        public global::System.Drawing.Color BracePairColor8 {
+            get {
+                return ((global::System.Drawing.Color)(this["BracePairColor8"]));
+            }
+            set {
+                this["BracePairColor8"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("196, 32, 48")]
+        public global::System.Drawing.Color BracePairColor2 {
+            get {
+                return ((global::System.Drawing.Color)(this["BracePairColor2"]));
+            }
+            set {
+                this["BracePairColor2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("168, 32, 192")]
+        public global::System.Drawing.Color BracePairColor4 {
+            get {
+                return ((global::System.Drawing.Color)(this["BracePairColor4"]));
+            }
+            set {
+                this["BracePairColor4"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("80, 32, 192")]
+        public global::System.Drawing.Color BracePairColor3 {
+            get {
+                return ((global::System.Drawing.Color)(this["BracePairColor3"]));
+            }
+            set {
+                this["BracePairColor3"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("32, 80, 192")]
+        public global::System.Drawing.Color BracePairColor7 {
+            get {
+                return ((global::System.Drawing.Color)(this["BracePairColor7"]));
+            }
+            set {
+                this["BracePairColor7"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("32, 138, 138")]
+        public global::System.Drawing.Color BracePairColor1 {
+            get {
+                return ((global::System.Drawing.Color)(this["BracePairColor1"]));
+            }
+            set {
+                this["BracePairColor1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("32, 138, 68")]
+        public global::System.Drawing.Color BracePairColor5 {
+            get {
+                return ((global::System.Drawing.Color)(this["BracePairColor5"]));
+            }
+            set {
+                this["BracePairColor5"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("106, 138, 28")]
+        public global::System.Drawing.Color BracePairColor9 {
+            get {
+                return ((global::System.Drawing.Color)(this["BracePairColor9"]));
+            }
+            set {
+                this["BracePairColor9"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("138, 80, 48")]
+        public global::System.Drawing.Color BracePairColor6 {
+            get {
+                return ((global::System.Drawing.Color)(this["BracePairColor6"]));
+            }
+            set {
+                this["BracePairColor6"] = value;
+            }
+        }
     }
 }

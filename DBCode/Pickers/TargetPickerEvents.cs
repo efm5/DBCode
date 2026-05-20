@@ -5,7 +5,7 @@
          ThrowIfNull(mClusterContainer, nameof(mClusterContainer));
          ThrowIfNull(mForm, nameof(mForm));
          ThrowIfNull(mTitleLabel, nameof(mTitleLabel));
-         ThrowIfNull(mTargetPickerBottomPanel, nameof(mTargetPickerBottomPanel));
+         ThrowIfNull(mBottomPanel, nameof(mBottomPanel));
          mForm.SuspendClientSizeChanged();
          mForm.Bounds = mUiState.mTargetPickerBounds;
          if (mUiState.mTargetPickerFirstShow) {
@@ -15,7 +15,7 @@
          Size = new Size(mForm.Size.Width - 20, mForm.Size.Height - 20);
          CreateLayout();
          ApplyTarget();
-         Controls.AddRange([mClusterContainer, mTitleLabel, mTargetPickerBottomPanel]);
+         Controls.AddRange([mClusterContainer, mTitleLabel, mBottomPanel]);
          mClusterContainer.PerformLayout();
          LayoutPanel();
          mForm.ResumeClientSizeChanged();

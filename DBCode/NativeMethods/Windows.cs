@@ -24,6 +24,17 @@ namespace DBCode {
          [return: MarshalAs(UnmanagedType.Bool)]
          internal static extern bool BringWindowToTop(nint pWindowHandle);
 
+         // Forces an immediate repaint of the specified window and, optionally, its non-client
+         // area and children. Pass IntPtr.Zero for pUpdateRect and pUpdateRegion to repaint
+         // the entire window. Flags: RDW_INVALIDATE | RDW_ERASE | RDW_FRAME | RDW_UPDATENOW.
+         [DllImport("user32.dll")]
+         [return: MarshalAs(UnmanagedType.Bool)]
+         internal static extern bool RedrawWindow(
+            IntPtr pWindowHandle,
+            IntPtr pUpdateRect,
+            IntPtr pUpdateRegion,
+            uint pFlags);
+
          // Retrieves the DPI for the specified monitor.
          [LibraryImport("Shcore.dll", EntryPoint = "GetDpiForMonitor")]
          internal static partial int GetDpiForMonitor(nint pMonitorHandle, DPIType pDpiType, out uint pDpiX, out uint pDpiY);

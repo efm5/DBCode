@@ -1,6 +1,8 @@
 namespace DBCode {
    internal class ScalableCheckBox : Button {
+#pragma warning disable IDE0032
       private bool mChecked = false;
+#pragma warning restore IDE0032
       private bool mInterface = false;
       private Theme mTheme;
       private readonly string mLabel;

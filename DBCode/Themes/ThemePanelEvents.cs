@@ -15,7 +15,7 @@ namespace DBCode {
             mCloneButton.Click += CloneButton_Click;
             ThrowIfNull(mExampleScrollPanel, nameof(mExampleScrollPanel));
             mExampleScrollPanel.ClientSizeChanged += ExampleScrollPanel_ClientSizeChanged;
-            Controls.AddRange([mPrimaryTabControl, mBottomPanel, mThemesHeaderCluster]);
+            Controls.AddRange([mPrimaryTabControl, mBottomPanel, mTitleLabel]);
             ResumeLayout(false);
          }
 

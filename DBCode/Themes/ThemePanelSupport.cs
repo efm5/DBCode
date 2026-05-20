@@ -32,7 +32,7 @@
                }
             }
             wantedWidth = maxWidth + mEm3 + SystemInformation.VerticalScrollBarWidth;
-            wantedHeight = maxHeight + SystemInformation.HorizontalScrollBarHeight + mThemesHeaderCluster.Height +
+            wantedHeight = maxHeight + SystemInformation.HorizontalScrollBarHeight + mTitleLabel.Height +
                mBottomPanel.Height + primaryTabStripHeight + highlightTabStripHeight + mEm3;
             if (wantedWidth < 300)
                wantedWidth = 300;
@@ -73,9 +73,9 @@
             mExampleGroupBox.Location = new Point(mIndent, mExampleMenuStrip.Bottom + mEmHalf);
             mExampleBottomPanel.Location = new Point(mIndent, mExampleGroupBox.Bottom + mEmHalf);
             mExamplesContainer.Location = new Point(mIndent, mExampleBottomPanel.Bottom + mEmHalf);
-            mPrimaryTabControl.Location = new Point(mIndent, mThemesHeaderCluster.Bottom + mEmHalf);
+            mPrimaryTabControl.Location = new Point(mIndent, mTitleLabel.Bottom + mEmHalf);
             mPrimaryTabControl.Width = ClientSize.Width - (2 * mIndent);
-            mPrimaryTabControl.Height = ClientSize.Height - (mBottomPanel.Height + mThemesHeaderCluster.Height + mEm);
+            mPrimaryTabControl.Height = ClientSize.Height - (mBottomPanel.Height + mTitleLabel.Height + mEm);
             mPrimaryTabControl.Anchor = mAnchorTopLeftBottomRight;
             ResumeLayout(true);
          }
@@ -339,6 +339,8 @@
             if (!mForm.Controls.Contains(mColorPickerPanel))
                mForm.Controls.Add(mColorPickerPanel);
             mActiveLayoutable = mColorPickerPanel.mBottomPanel;
+            mColorPickerPanel.mTitleLabel.CenterTitle();
+            mColorPickerPanel.mBottomPanel.PositionRightControls();
             mColorPickerPanel.Dock = DockStyle.Fill;
             mColorPickerPanel.Visible = true;
             mColorPickerPanel.BringToFront();
@@ -392,6 +394,8 @@
             if (!mForm.Controls.Contains(mFontPickerPanel))
                mForm.Controls.Add(mFontPickerPanel);
             mActiveLayoutable = mFontPickerPanel.mBottomPanel;
+            mFontPickerPanel.mTitleLabel.CenterTitle();
+            mFontPickerPanel.mBottomPanel.PositionRightControls();
             mFontPickerPanel.Dock = DockStyle.Fill;
             mFontPickerPanel.Visible = true;
             mFontPickerPanel.BringToFront();

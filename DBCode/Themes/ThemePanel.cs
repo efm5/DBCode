@@ -22,7 +22,8 @@ namespace DBCode {
             mCSSColorsContainer, mXMLColorsContainer, mJSONColorsContainer, mPowerShellColorsContainer,
             mBatchColorsContainer, mSQLColorsContainer, mMarkdownColorsContainer, mPythonColorsContainer;
          private readonly List<ClusterContainer> mClusterContainers = [];
-         private readonly HeaderLabelCluster mInterfaceHeaderCluster, mThemesHeaderCluster, mCSharpHeaderCluster,
+         internal readonly HeaderLabelCluster mTitleLabel;
+         private readonly HeaderLabelCluster mInterfaceHeaderCluster, mCSharpHeaderCluster,
             mCHeaderCluster, mCppHeaderCluster, mBasicHeaderCluster, mFSharpHeaderCluster, mHTMLHeaderCluster,
             mCSSHeaderCluster, mXMLHeaderCluster, mJSONHeaderCluster, mPowerShellHeaderCluster, mBatchHeaderCluster,
             mSQLHeaderCluster, mMarkdownHeaderCluster, mPythonHeaderCluster, mExamplesHeaderCluster;
@@ -305,7 +306,7 @@ All text appears in the default foreground color."
                AutoSize = true,
                AutoSizeMode = AutoSizeMode.GrowAndShrink
             };
-            mThemesHeaderCluster = new HeaderLabelCluster(mTemporaryTheme,
+            mTitleLabel = new HeaderLabelCluster(mTemporaryTheme,
                $"Current Theme's Name: \u201c{mCurrentTheme.mName}\u201d", HeaderLabelSize.Normal);
             mInterfaceHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "Interface Colors", HeaderLabelSize.Small);
             mExamplesHeaderCluster = new HeaderLabelCluster(mTemporaryTheme, "Examples", HeaderLabelSize.Small);
@@ -868,7 +869,7 @@ All text appears in the default foreground color."
                foreach (ClusterContainer container in mClusterContainers)
                   container.Dispose();
                mInterfaceHeaderCluster.Dispose();
-               mThemesHeaderCluster.Dispose();
+               mTitleLabel.Dispose();
                mExamplesHeaderCluster.Dispose();
                mCSharpHeaderCluster.Dispose();
                mCHeaderCluster.Dispose();

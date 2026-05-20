@@ -1,8 +1,8 @@
 ﻿namespace DBCode {
    namespace Themes {
       internal sealed partial class ThemePickerPanel : ScrollablePanel {
-         private readonly TwoLineHeaderLabelCluster? mTitleLabel;
-         internal readonly BottomPanel? mThemePickerBottomPanel;
+         internal readonly TwoLineHeaderLabelCluster? mTitleLabel;
+         internal readonly BottomPanel? mBottomPanel;
          internal ClusterContainer? mClusterContainer;
          private List<BaseCluster>? mButtonBaseClusters;
          private readonly PickMode mPickMode;
@@ -19,20 +19,20 @@
                Dock = DockStyle.None,
                AutoSize = false
             };
-            mThemePickerBottomPanel = new BottomPanel(mCurrentTheme);
+            mBottomPanel = new BottomPanel(mCurrentTheme);
          }
 
          public void LayoutPanel() {
-            ThrowIfNull(mThemePickerBottomPanel, nameof(mThemePickerBottomPanel));
+            ThrowIfNull(mBottomPanel, nameof(mBottomPanel));
             ThrowIfNull(mClusterContainer, nameof(mClusterContainer));
             ThrowIfNull(mTitleLabel, nameof(mTitleLabel));
             SuspendLayout();
             mTitleLabel.SuspendLayout();
             mTitleLabel.LayoutCluster();
-            mThemePickerBottomPanel.LayoutControls();
+            mBottomPanel.LayoutControls();
             mClusterContainer.AutoSize = false;
             mClusterContainer.Size = new Size(ClientSize.Width - mIndent,
-               ClientSize.Height - mTitleLabel.Height - mThemePickerBottomPanel.Height - mEm4);
+               ClientSize.Height - mTitleLabel.Height - mBottomPanel.Height - mEm4);
             mClusterContainer.Location = new Point(mIndent, mTitleLabel.Bottom + mEm);
             mClusterContainer.LayoutClusters();
             mClusterContainer.AutoSize = true;
@@ -43,14 +43,14 @@
          private void CreateLayout() {
             ThrowIfNull(mClusterContainer, nameof(mClusterContainer));
             ThrowIfNull(mTitleLabel, nameof(mTitleLabel));
-            ThrowIfNull(mThemePickerBottomPanel, nameof(mThemePickerBottomPanel));
+            ThrowIfNull(mBottomPanel, nameof(mBottomPanel));
             ThrowIfNull(mButtonBaseClusters, nameof(mCurrentTheme));
             CreateButtons();
-            ThrowIfNull(mThemePickerBottomPanel.mCancelButton, nameof(mThemePickerBottomPanel.mCancelButton));
-            ThrowIfNull(mThemePickerBottomPanel.mHelpButton, nameof(mThemePickerBottomPanel.mHelpButton));
-            mThemePickerBottomPanel.mHelpButton.Tag = new HelpTag(HelpContext.ThemePicker);
-            mThemePickerBottomPanel.mCancelButton.Click += CancelButton_Click;
-            mThemePickerBottomPanel.mHelpButton.Click += MainForm.Help_Click;
+            ThrowIfNull(mBottomPanel.mCancelButton, nameof(mBottomPanel.mCancelButton));
+            ThrowIfNull(mBottomPanel.mHelpButton, nameof(mBottomPanel.mHelpButton));
+            mBottomPanel.mHelpButton.Tag = new HelpTag(HelpContext.ThemePicker);
+            mBottomPanel.mCancelButton.Click += CancelButton_Click;
+            mBottomPanel.mHelpButton.Click += MainForm.Help_Click;
             mClusterContainer.Invalidate(true);
          }
 
@@ -76,12 +76,12 @@
          public void ApplyTheme() {
             ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
             ThrowIfNull(mButtonBaseClusters, nameof(mButtonBaseClusters));
-            ThrowIfNull(mThemePickerBottomPanel, nameof(mThemePickerBottomPanel));
+            ThrowIfNull(mBottomPanel, nameof(mBottomPanel));
             ThrowIfNull(mTitleLabel, nameof(mTitleLabel));
             BackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.PanelBackground];
             foreach (BaseCluster cluster in mButtonBaseClusters)
                cluster.SetFontAndColor();
-            mThemePickerBottomPanel.SetFontAndColor();
+            mBottomPanel.SetFontAndColor();
             mTitleLabel.SetFontAndColor();
          }
 
@@ -94,12 +94,12 @@
             if (pDisposing) {
                ThrowIfNull(mTitleLabel, nameof(mTitleLabel));
                ThrowIfNull(mClusterContainer, nameof(mClusterContainer));
-               ThrowIfNull(mThemePickerBottomPanel, nameof(mThemePickerBottomPanel));
+               ThrowIfNull(mBottomPanel, nameof(mBottomPanel));
                ThrowIfNull(mButtonBaseClusters, nameof(mButtonBaseClusters));
-               ThrowIfNull(mThemePickerBottomPanel.mCancelButton, nameof(mThemePickerBottomPanel.mCancelButton));
-               ThrowIfNull(mThemePickerBottomPanel.mHelpButton, nameof(mThemePickerBottomPanel.mHelpButton));
-               mThemePickerBottomPanel.mCancelButton.Click -= CancelButton_Click;
-               mThemePickerBottomPanel.mHelpButton.Click -= MainForm.Help_Click;
+               ThrowIfNull(mBottomPanel.mCancelButton, nameof(mBottomPanel.mCancelButton));
+               ThrowIfNull(mBottomPanel.mHelpButton, nameof(mBottomPanel.mHelpButton));
+               mBottomPanel.mCancelButton.Click -= CancelButton_Click;
+               mBottomPanel.mHelpButton.Click -= MainForm.Help_Click;
                foreach (BaseCluster cluster in mButtonBaseClusters) {
                   ThrowIfNull(cluster, nameof(cluster));
                   if (cluster is ButtonCluster buttonCluster) {
@@ -109,7 +109,7 @@
                }
                mTitleLabel.Dispose();
                mClusterContainer.Dispose();
-               mThemePickerBottomPanel.Dispose();
+               mBottomPanel.Dispose();
             }
             base.Dispose(pDisposing);
          }

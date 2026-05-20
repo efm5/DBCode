@@ -30,6 +30,8 @@
          EnsureWindowFitsMonitor(mForm);
          mThemePanel.LayoutControls();
          mActiveLayoutable = mThemePanel.mBottomPanel;
+         mThemePanel.mTitleLabel.CenterTitle();
+         mThemePanel.mBottomPanel.PositionRightControls();
          mThemePanel.BringToFront();
          mThemePanel.Visible = true;
          mThemePanel.Show();
@@ -80,6 +82,8 @@
          ThrowIfNull(mThemePickerPanel, nameof(mThemePickerPanel));
          ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
          ThrowIfNull(mThemePickerPanel.mClusterContainer, nameof(mThemePickerPanel.mClusterContainer));
+         ThrowIfNull(mThemePickerPanel.mTitleLabel, nameof(mThemePickerPanel.mTitleLabel));
+         ThrowIfNull(mThemePickerPanel.mBottomPanel, nameof(mThemePickerPanel.mBottomPanel));
          double savedOpacity = mForm.Opacity;
          mForm.Opacity = 0;
          mForm.ControlBox = false;
@@ -89,7 +93,9 @@
             mForm.Controls.Remove(mScrollableMainPanel);
          }
          mForm.Controls.Add(mThemePickerPanel);
-         mActiveLayoutable = mThemePickerPanel.mThemePickerBottomPanel;
+         mActiveLayoutable = mThemePickerPanel.mBottomPanel;
+         mThemePickerPanel.mTitleLabel.CenterTitle();
+         mThemePickerPanel.mBottomPanel.PositionRightControls();
          mThemePickerPanel.BringToFront();
          mThemePickerPanel.Visible = true;
          mThemePickerPanel.Show();
@@ -141,6 +147,18 @@
          ThrowIfNull(mOptionsPanel.mBottomPanel, nameof(mOptionsPanel.mBottomPanel));
          ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
          ThrowIfNull(mOptionsPanel.mMagicNumbersGroupBox, nameof(mOptionsPanel.mMagicNumbersGroupBox));
+         ThrowIfNull(mOptionsPanel.mCFamilyTitleLabel, nameof(mOptionsPanel.mCFamilyTitleLabel));
+         ThrowIfNull(mOptionsPanel.mBasicTitleLabel, nameof(mOptionsPanel.mBasicTitleLabel));
+         ThrowIfNull(mOptionsPanel.mFSharpTitleLabel, nameof(mOptionsPanel.mFSharpTitleLabel));
+         ThrowIfNull(mOptionsPanel.mHTMLTitleLabel, nameof(mOptionsPanel.mHTMLTitleLabel));
+         ThrowIfNull(mOptionsPanel.mCSSTitleLabel, nameof(mOptionsPanel.mCSSTitleLabel));
+         ThrowIfNull(mOptionsPanel.mXMLTitleLabel, nameof(mOptionsPanel.mXMLTitleLabel));
+         ThrowIfNull(mOptionsPanel.mJSONTitleLabel, nameof(mOptionsPanel.mJSONTitleLabel));
+         ThrowIfNull(mOptionsPanel.mPowerShellTitleLabel, nameof(mOptionsPanel.mPowerShellTitleLabel));
+         ThrowIfNull(mOptionsPanel.mBatchTitleLabel, nameof(mOptionsPanel.mBatchTitleLabel));
+         ThrowIfNull(mOptionsPanel.mSQLTitleLabel, nameof(mOptionsPanel.mSQLTitleLabel));
+         ThrowIfNull(mOptionsPanel.mMarkdownTitleLabel, nameof(mOptionsPanel.mMarkdownTitleLabel));
+         ThrowIfNull(mOptionsPanel.mPythonTitleLabel, nameof(mOptionsPanel.mPythonTitleLabel));
          double savedOpacity = mForm.Opacity;
          mForm.Opacity = 0;
          mForm.ControlBox = false;
@@ -150,13 +168,27 @@
             mForm.Controls.Remove(mScrollableMainPanel);
          }
          mForm.Controls.Add(mOptionsPanel);
+         mOptionsPanel.ApplyFontsAndColors();
          mForm.SuspendClientSizeChanged();
          mActiveLayoutable = mOptionsPanel.mBottomPanel;
-         mOptionsPanel.LayoutControls();
          mForm.Bounds = mUiState.mOptionsBounds;
          EnsureWindowFitsMonitor(mForm);
          TargetListManager.PopulateGrid(mOptionsPanel.mIncludeDataGridView, mAllowedTargetWindows);
          TargetListManager.PopulateGrid(mOptionsPanel.mExcludeDataGridView, mDisallowedTargetWindows);
+         mOptionsPanel.mTitleLabel.CenterTitle();
+         mOptionsPanel.mBottomPanel.PositionRightControls();
+         mOptionsPanel.mCFamilyTitleLabel.CenterTitle(mOptionsPanel);
+         mOptionsPanel.mBasicTitleLabel.CenterTitle(mOptionsPanel);
+         mOptionsPanel.mFSharpTitleLabel.CenterTitle(mOptionsPanel);
+         mOptionsPanel.mHTMLTitleLabel.CenterTitle(mOptionsPanel);
+         mOptionsPanel.mCSSTitleLabel.CenterTitle(mOptionsPanel);
+         mOptionsPanel.mXMLTitleLabel.CenterTitle(mOptionsPanel);
+         mOptionsPanel.mJSONTitleLabel.CenterTitle(mOptionsPanel);
+         mOptionsPanel.mPowerShellTitleLabel.CenterTitle(mOptionsPanel);
+         mOptionsPanel.mBatchTitleLabel.CenterTitle(mOptionsPanel);
+         mOptionsPanel.mSQLTitleLabel.CenterTitle(mOptionsPanel);
+         mOptionsPanel.mMarkdownTitleLabel.CenterTitle(mOptionsPanel);
+         mOptionsPanel.mPythonTitleLabel.CenterTitle(mOptionsPanel);
          mForm.ResumeClientSizeChanged();
          mOptionsPanel.BringToFront();
          mOptionsPanel.Visible = true;
@@ -211,6 +243,8 @@
          ThrowIfNull(mTargetPickerPanel, nameof(mTargetPickerPanel));
          ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
          ThrowIfNull(mTargetPickerPanel.mClusterContainer, nameof(mTargetPickerPanel.mClusterContainer));
+         ThrowIfNull(mTargetPickerPanel.mTitleLabel, nameof(mTargetPickerPanel.mTitleLabel));
+         ThrowIfNull(mTargetPickerPanel.mBottomPanel, nameof(mTargetPickerPanel.mBottomPanel));
          double savedOpacity = mForm.Opacity;
          mForm.Opacity = 0;
          mForm.ControlBox = false;
@@ -220,7 +254,9 @@
             mForm.Controls.Remove(mScrollableMainPanel);
          }
          mForm.Controls.Add(mTargetPickerPanel);
-         mActiveLayoutable = mTargetPickerPanel.mTargetPickerBottomPanel;
+         mActiveLayoutable = mTargetPickerPanel.mBottomPanel;
+         mTargetPickerPanel.mTitleLabel.CenterTitle();
+         mTargetPickerPanel.mBottomPanel.PositionRightControls();
          mTargetPickerPanel.BringToFront();
          mTargetPickerPanel.Visible = true;
          mTargetPickerPanel.Show();

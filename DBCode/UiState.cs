@@ -3,16 +3,19 @@ namespace DBCode {
       // ───── Persisted via Settings.Default ─────
       internal bool mFirstTheme, mFirstLaunch, mUseTabs, mUseSpaces, mUsePCRE,
          mFindMatchCase, mFindWholeWord, mFindRegularExpressions, mFindScopeSelection,
-         mSRMatchCase, mSRWholeWord, mSRRegularExpressions, mSRScopeSelection;
+         mSRMatchCase, mSRWholeWord, mSRRegularExpressions, mSRScopeSelection, mAllIfNothing, mCommentConcatenateFirst;
       internal double mFormOpacity;
       internal Point mFormLocation, mThemeLocation, mThemePickerLocation;
       internal Size mFormSize, mThemeSize, mThemePickerSize;
-      internal int mThemePrimaryTabPageIndex, mThemeTargetingTabIndexIndex, mThemeHighlightTabPageIndex,
+      internal int mThemePrimaryTabPageIndex, mThemeTargetingTabIndexIndex, mThemeHighlightTabPageIndex, mOptionsCodingTabControlPageIndex,
          mTopDraggerHeight, mTopDraggerEdge, mActivationDelayMs, mClipboardDelayMs, mReactivationDelayMs,
          mWhitespace, mSpacesPerTab, mSpacesToBecomeTab, mOptionsGeneralTabControlPageIndex,
-         mOptionsIncludeExcludeTabControlPageIndex, mSearchHistoryMaxEntries, mReplaceHistoryMaxEntries;
+         mOptionsIncludeExcludeTabControlPageIndex, mSearchHistoryMaxEntries, mReplaceHistoryMaxEntries, mCommentWidth;
       internal LanguageKind mLanguageKind;
       internal string mCurrentThemeName;
+      internal Color mBracePairColor0, mBracePairColor1, mBracePairColor2, mBracePairColor3,
+                     mBracePairColor4, mBracePairColor5, mBracePairColor6, mBracePairColor7,
+                     mBracePairColor8, mBracePairColor9;
       // ───── Persisted as text files ─────
       internal List<string> mFindSearchHistory = [];
       internal List<string> mFindPcreSearchHistory = [];
@@ -58,6 +61,7 @@ namespace DBCode {
          mThemeHighlightTabPageIndex = 0;
          mOptionsGeneralTabControlPageIndex = 0;
          mOptionsIncludeExcludeTabControlPageIndex = 0;
+         mOptionsCodingTabControlPageIndex = 0;
          mLanguageKind = LanguageKind.CSharp;
          mCurrentThemeName = string.Empty;
          mFirstTheme = true;
@@ -83,6 +87,19 @@ namespace DBCode {
          mSRWholeWord = false;
          mSRRegularExpressions = false;
          mSRScopeSelection = false;
+         mAllIfNothing = false;
+         mCommentConcatenateFirst = true;
+         mCommentWidth = 80;
+         mBracePairColor0 = Color.FromArgb(196, 160, 16);   // gold
+         mBracePairColor1 = Color.FromArgb(32, 138, 138);   // teal
+         mBracePairColor2 = Color.FromArgb(196, 32, 48);    // crimson
+         mBracePairColor3 = Color.FromArgb(80, 32, 192);    // indigo
+         mBracePairColor4 = Color.FromArgb(168, 32, 192);   // magenta
+         mBracePairColor5 = Color.FromArgb(32, 138, 68);    // forest green
+         mBracePairColor6 = Color.FromArgb(138, 80, 48);    // sienna
+         mBracePairColor7 = Color.FromArgb(32, 80, 192);    // cobalt
+         mBracePairColor8 = Color.FromArgb(196, 98, 0);     // amber
+         mBracePairColor9 = Color.FromArgb(106, 138, 28);   // olive
       }
 
       public void Read() {
@@ -116,6 +133,7 @@ namespace DBCode {
          mThemeHighlightTabPageIndex = Settings.Default.ThemeHighlightTabPageIndex;
          mOptionsGeneralTabControlPageIndex = Settings.Default.OptionsGeneralTabControlPageIndex;
          mOptionsIncludeExcludeTabControlPageIndex = Settings.Default.OptionsIncludeExcludeTabControlPageIndex;
+         mOptionsCodingTabControlPageIndex = Settings.Default.OptionsCodingTabControlPageIndex;
          mUsingThemeName = Settings.Default.CurrentThemeName;
          mThemePickerSize = Settings.Default.ThemePickerSize;
          mThemePickerLocation = Settings.Default.ThemePickerLocation;
@@ -144,6 +162,19 @@ namespace DBCode {
          mSRWholeWord = Settings.Default.SRWholeWord;
          mSRRegularExpressions = Settings.Default.SRRegularExpressions;
          mSRScopeSelection = Settings.Default.SRScopeSelection;
+         mAllIfNothing = Settings.Default.AllIfNothing;
+         mCommentConcatenateFirst = Settings.Default.CommentConcatenateFirst;
+         mCommentWidth = Settings.Default.CommentWidth;
+         mBracePairColor0 = Settings.Default.BracePairColor0;
+         mBracePairColor1 = Settings.Default.BracePairColor1;
+         mBracePairColor2 = Settings.Default.BracePairColor2;
+         mBracePairColor3 = Settings.Default.BracePairColor3;
+         mBracePairColor4 = Settings.Default.BracePairColor4;
+         mBracePairColor5 = Settings.Default.BracePairColor5;
+         mBracePairColor6 = Settings.Default.BracePairColor6;
+         mBracePairColor7 = Settings.Default.BracePairColor7;
+         mBracePairColor8 = Settings.Default.BracePairColor8;
+         mBracePairColor9 = Settings.Default.BracePairColor9;
       }
 
       private void WriteSettings() {
@@ -159,6 +190,7 @@ namespace DBCode {
          Settings.Default.ThemeHighlightTabPageIndex = mThemeHighlightTabPageIndex;
          Settings.Default.OptionsGeneralTabControlPageIndex = mOptionsGeneralTabControlPageIndex;
          Settings.Default.OptionsIncludeExcludeTabControlPageIndex = mOptionsIncludeExcludeTabControlPageIndex;
+         Settings.Default.OptionsCodingTabControlPageIndex = mOptionsCodingTabControlPageIndex;
          Settings.Default.CurrentLanguage = (int)mCurrentLanguage;
          Settings.Default.CurrentThemeName = mCurrentThemeName;
          Settings.Default.FirstTheme = mFirstTheme;
@@ -184,6 +216,19 @@ namespace DBCode {
          Settings.Default.SRWholeWord = mSRWholeWord;
          Settings.Default.SRRegularExpressions = mSRRegularExpressions;
          Settings.Default.SRScopeSelection = mSRScopeSelection;
+         Settings.Default.AllIfNothing = mAllIfNothing;
+         Settings.Default.CommentConcatenateFirst = mCommentConcatenateFirst;
+         Settings.Default.CommentWidth = mCommentWidth;
+         Settings.Default.BracePairColor0 = mBracePairColor0;
+         Settings.Default.BracePairColor1 = mBracePairColor1;
+         Settings.Default.BracePairColor2 = mBracePairColor2;
+         Settings.Default.BracePairColor3 = mBracePairColor3;
+         Settings.Default.BracePairColor4 = mBracePairColor4;
+         Settings.Default.BracePairColor5 = mBracePairColor5;
+         Settings.Default.BracePairColor6 = mBracePairColor6;
+         Settings.Default.BracePairColor7 = mBracePairColor7;
+         Settings.Default.BracePairColor8 = mBracePairColor8;
+         Settings.Default.BracePairColor9 = mBracePairColor9;
       }
 
       private static void LoadHistory(List<string> pList, string pFile, int pMax) {

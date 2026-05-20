@@ -16,7 +16,7 @@ namespace DBCode {
             mStrikethroughStyleCluster, mUnderlineStyleCluster;
          private TextBox mFontFamilyNameTextBox, mFontSizeTextBox;
          private Theme? mTheme;
-         private TwoLineHeaderLabelCluster mTitleLabel;
+         internal TwoLineHeaderLabelCluster mTitleLabel;
 
          public FontPickerPanel(Theme pTheme, FontUsage pFontUsage, Font pInitialFont) {
             ThrowIfNull(pTheme, nameof(pTheme));

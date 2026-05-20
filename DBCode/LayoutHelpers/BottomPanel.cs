@@ -89,6 +89,14 @@
                leftEdge += control.Width + mEm;
             }
             // Right pass: Cancel at far right, then mRightControls leftward
+            PositionRightControls();
+            int centerY = Height / 2;
+            foreach (Control control in Controls)
+               control.Top = centerY - (control.Height / 2);
+         }
+
+         public void PositionRightControls() {
+            ThrowIfNull(mCancelButton, nameof(mCancelButton));
             mCancelButton.Left = Width - mCancelButton.Width - mCancelOffset;
             int rightEdge = mCancelButton.Left - mCancelOffset;
             for (int i = mRightControls.Count - 1; i >= 0; i--) {
@@ -96,9 +104,6 @@
                control.Left = rightEdge - control.Width;
                rightEdge = control.Left - mEm;
             }
-            int centerY = Height / 2;
-            foreach (Control control in Controls)
-               control.Top = centerY - (control.Height / 2);
          }
 
          internal void SetFontAndColor() {

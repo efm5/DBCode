@@ -373,5 +373,151 @@
          Close();
       }
 
+      #region coding menu
+      private void CFamilyAddDoubleTSMI_Click(object? pSender, EventArgs pE) {
+         CFamilyAddDouble();
+      }
+
+      private void CSharpAddTripleTSMI_Click(object? pSender, EventArgs pE) {
+         CSharpAddTriple();
+      }
+
+      private void CFamilyBlockCommentTSMI_Click(object? pSender, EventArgs pE) {
+         CFamilyBlockComment();
+      }
+
+      private void CFamilyCommentOutTSMI_Click(object? pSender, EventArgs pE) {
+         CFamilyCommentOut();
+      }
+
+      private void CFamilyCommentRemoveTSMI_Click(object? pSender, EventArgs pE) {
+         CFamilyCommentRemove();
+      }
+
+      private void CFamilyWrapCommentTSMI_Click(object? pSender, EventArgs pE) {
+         CFamilyWrapComment();
+      }
+
+      private void CSharpAddNotImplementedTSMI_Click(object? pSender, EventArgs pE) {
+         CSharpAddNotImplemented();
+      }
+
+      private void CSharpReverseEqualityTSMI_Click(object? pSender, EventArgs pE) {
+         CSharpReverseEquality();
+      }
+
+      private void CSharpExpressionBodiedMethodTSMI_Click(object? pSender, EventArgs pE) =>
+         CSharpExpressionBodiedMethod();
+      private void ConvertVBToCSharpCommentTSMI_Click(object? pSender, EventArgs pE) =>
+         ConvertVBToCSharpComment();
+
+      #region F# coding menu
+      private void FSharpBlockCommentTSMI_Click(object? pSender, EventArgs pE) => FSharpBlockComment();
+      private void FSharpAddCommentTSMI_Click(object? pSender, EventArgs pE) => FSharpAddComment();
+      private void FSharpAddMutableTSMI_Click(object? pSender, EventArgs pE) => FSharpAddMutable();
+      private void FSharpAddIgnoreTSMI_Click(object? pSender, EventArgs pE) => FSharpAddIgnore();
+      private void FSharpConvertNullNoneTSMI_Click(object? pSender, EventArgs pE) => FSharpConvertNullNone();
+      #endregion
+
+      #region basic coding menu
+      private void BasicAddSingleQuoteTSMI_Click(object? pSender, EventArgs pE) =>
+         BasicAddSingleQuote();
+      private void BasicConvertCSharpToVBCommentTSMI_Click(object? pSender, EventArgs pE) =>
+         ConvertCSharpToVBComment();
+      private void BasicReverseEqualityTSMI_Click(object? pSender, EventArgs pE) =>
+         ReverseEqualityVB();
+      private void BasicRemoveLineContinuationTSMI_Click(object? pSender, EventArgs pE) =>
+         RemoveLineContinuation();
+      private void BasicConvertBooleansTSMI_Click(object? pSender, EventArgs pE) =>
+         ConvertBooleans();
+      private void BasicConvertNullNothingTSMI_Click(object? pSender, EventArgs pE) =>
+         ConvertNullNothing();
+      private void BasicConvertLogicalOperatorsTSMI_Click(object? pSender, EventArgs pE) =>
+         ConvertLogicalOperators();
+      #endregion
+
+      #region JSON coding menu
+      private void JSONAddCommentTSMI_Click(object? pSender, EventArgs pE) => JSONAddComment();
+      private void JSONBlockCommentTSMI_Click(object? pSender, EventArgs pE) => JSONBlockComment();
+      private void JSONRemoveCommentTSMI_Click(object? pSender, EventArgs pE) => JSONRemoveComment();
+      private void JSONToggleQuotesTSMI_Click(object? pSender, EventArgs pE) => JSONToggleQuotes();
+      private void JSONEscapeStringTSMI_Click(object? pSender, EventArgs pE) => JSONEscapeString();
+      private void JSONRemoveTrailingCommasTSMI_Click(object? pSender, EventArgs pE) => JSONRemoveTrailingCommas();
+      #endregion
+
+      #region XML coding menu
+      private void XMLCommentTSMI_Click(object? pSender, EventArgs pE) => XMLComment();
+      private void XMLRemoveCommentTSMI_Click(object? pSender, EventArgs pE) => XMLRemoveComment();
+      private void XMLEscapeEntitiesTSMI_Click(object? pSender, EventArgs pE) => XMLEscapeEntities();
+      private void XMLWrapCDataTSMI_Click(object? pSender, EventArgs pE) => XMLWrapCData();
+      private void XMLToggleSelfCloseTSMI_Click(object? pSender, EventArgs pE) => XMLToggleSelfClose();
+      #endregion
+
+      #region PowerShell coding menu
+      private void PowerShellAddCommentTSMI_Click(object? pSender, EventArgs pE) => PowerShellAddComment();
+      private void PowerShellBlockCommentTSMI_Click(object? pSender, EventArgs pE) => PowerShellBlockComment();
+      private void PowerShellRemoveCommentTSMI_Click(object? pSender, EventArgs pE) => PowerShellRemoveComment();
+      private void PowerShellToggleBooleanTSMI_Click(object? pSender, EventArgs pE) => PowerShellToggleBoolean();
+      private void PowerShellToggleQuotesTSMI_Click(object? pSender, EventArgs pE) => PowerShellToggleQuotes();
+      #endregion
+
+      #region Batch coding menu
+      private void BatchAddCommentTSMI_Click(object? pSender, EventArgs pE) => BatchAddComment();
+      private void BatchAddColonCommentTSMI_Click(object? pSender, EventArgs pE) => BatchAddColonComment();
+      private void BatchRemoveCommentTSMI_Click(object? pSender, EventArgs pE) => BatchRemoveComment();
+      private void BatchToggleCommentStyleTSMI_Click(object? pSender, EventArgs pE) => BatchToggleCommentStyle();
+      #endregion
+
+      #region SQL coding menu
+      private void SQLAddCommentTSMI_Click(object? pSender, EventArgs pE) => SQLAddComment();
+      private void SQLBlockCommentTSMI_Click(object? pSender, EventArgs pE) => SQLBlockComment();
+      private void SQLRemoveCommentTSMI_Click(object? pSender, EventArgs pE) => SQLRemoveComment();
+      private void SQLToggleNullCheckTSMI_Click(object? pSender, EventArgs pE) => SQLToggleNullCheck();
+      private void SQLToggleBooleanTSMI_Click(object? pSender, EventArgs pE) => SQLToggleBoolean();
+      #endregion
+
+      #region Markdown coding menu
+      private void MarkdownCommentTSMI_Click(object? pSender, EventArgs pE) => MarkdownComment();
+      private void MarkdownBoldTSMI_Click(object? pSender, EventArgs pE) => MarkdownBold();
+      private void MarkdownItalicTSMI_Click(object? pSender, EventArgs pE) => MarkdownItalic();
+      private void MarkdownBoldItalicTSMI_Click(object? pSender, EventArgs pE) => MarkdownBoldItalic();
+      private void MarkdownStrikethroughTSMI_Click(object? pSender, EventArgs pE) => MarkdownStrikethrough();
+      private void MarkdownCodeTSMI_Click(object? pSender, EventArgs pE) => MarkdownCode();
+      private void MarkdownCodeBlockTSMI_Click(object? pSender, EventArgs pE) => MarkdownCodeBlock();
+      #endregion
+
+      #region Python coding menu
+      private void PythonAddCommentTSMI_Click(object? pSender, EventArgs pE) => PythonAddComment();
+      private void PythonBlockCommentTSMI_Click(object? pSender, EventArgs pE) => PythonBlockComment();
+      private void PythonRemoveCommentTSMI_Click(object? pSender, EventArgs pE) => PythonRemoveComment();
+      private void PythonToggleBooleanTSMI_Click(object? pSender, EventArgs pE) => PythonToggleBoolean();
+      private void PythonConvertNullNoneTSMI_Click(object? pSender, EventArgs pE) => PythonConvertNullNone();
+      #endregion
+
+      #region CSS coding menu
+      private void CSSBlockCommentTSMI_Click(object? pSender, EventArgs pE) => CSSBlockComment();
+      private void CSSCommentRemoveTSMI_Click(object? pSender, EventArgs pE) => CSSCommentRemove();
+      private void CSSToggleImportantTSMI_Click(object? pSender, EventArgs pE) => CSSToggleImportant();
+      private void CSSConvertColorFormatTSMI_Click(object? pSender, EventArgs pE) => CSSConvertColorFormat();
+      #endregion
+
+      #region HTML coding menu
+      private void HTMLCommentTSMI_Click(object? pSender, EventArgs pE) => HTMLComment();
+      private void HTMLBoldTSMI_Click(object? pSender, EventArgs pE) => HTMLBold();
+      private void HTMLItalicTSMI_Click(object? pSender, EventArgs pE) => HTMLItalic();
+      private void HTMLUnderlineTSMI_Click(object? pSender, EventArgs pE) => HTMLUnderline();
+      private void HTMLStrikethroughTSMI_Click(object? pSender, EventArgs pE) => HTMLStrikethrough();
+      private void HTMLBigTSMI_Click(object? pSender, EventArgs pE) => HTMLBig();
+      private void HTMLBigBigTSMI_Click(object? pSender, EventArgs pE) => HTMLBigBig();
+      private void HTMLSmallTSMI_Click(object? pSender, EventArgs pE) => HTMLSmall();
+      private void HTMLSmallSmallTSMI_Click(object? pSender, EventArgs pE) => HTMLSmallSmall();
+      private void HTMLMarkTSMI_Click(object? pSender, EventArgs pE) => HTMLMark();
+      private void HTMLSuperscriptTSMI_Click(object? pSender, EventArgs pE) => HTMLSuperscript();
+      private void HTMLSubscriptTSMI_Click(object? pSender, EventArgs pE) => HTMLSubscript();
+      private void HTMLCodeTSMI_Click(object? pSender, EventArgs pE) => HTMLCode();
+      private void HTMLPreformattedTSMI_Click(object? pSender, EventArgs pE) => HTMLPreformatted();
+      private void HTMLColorizeTSMI_Click(object? pSender, EventArgs pE) => HTMLColorize();
+      #endregion
+      #endregion
    }
 }

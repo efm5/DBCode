@@ -19,7 +19,7 @@ namespace DBCode {
          internal Theme mTheme;
          private TokenKind mTokenKind;
          private TrackBar mBlueSlider, mGraySlider, mGreenSlider, mRedSlider;
-         private TwoLineHeaderLabelCluster mTitleLabel;
+         internal TwoLineHeaderLabelCluster mTitleLabel;
 
          public ColorPickerPanel(Theme pTheme, ColorSwatchUsage pColorSwatchUsage, Color pInitialColor) {
             mInitialColor = pInitialColor;

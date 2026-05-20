@@ -116,5 +116,47 @@
     <Setting Name="SRScopeSelection" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="AllIfNothing" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="CommentConcatenateFirst" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="CommentWidth" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">80</Value>
+    </Setting>
+    <Setting Name="OptionsCodingTabControlPageIndex" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="BracePairColor0" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">196, 160, 16</Value>
+    </Setting>
+    <Setting Name="BracePairColor8" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">196, 98, 0</Value>
+    </Setting>
+    <Setting Name="BracePairColor2" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">196, 32, 48</Value>
+    </Setting>
+    <Setting Name="BracePairColor4" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">168, 32, 192</Value>
+    </Setting>
+    <Setting Name="BracePairColor3" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">80, 32, 192</Value>
+    </Setting>
+    <Setting Name="BracePairColor7" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">32, 80, 192</Value>
+    </Setting>
+    <Setting Name="BracePairColor1" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">32, 138, 138</Value>
+    </Setting>
+    <Setting Name="BracePairColor5" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">32, 138, 68</Value>
+    </Setting>
+    <Setting Name="BracePairColor9" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">106, 138, 28</Value>
+    </Setting>
+    <Setting Name="BracePairColor6" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">138, 80, 48</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

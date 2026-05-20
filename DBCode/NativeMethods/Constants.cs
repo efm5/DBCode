@@ -65,11 +65,17 @@ namespace DBCode {
          // TIMED_MESSAGEBOX_FLAGS  (Composite Flags)
          public const uint TIMED_MESSAGEBOX_FLAGS =
             0x00000000 | 0x00010000 | 0x00001000 | 0x00000030;
+         // RDW_  (RedrawWindow Flags)
+         public const uint RDW_ERASE = 0x00000004,
+                           RDW_FRAME = 0x00000400,
+                           RDW_INVALIDATE = 0x00000001,
+                           RDW_UPDATENOW = 0x00000100;
          // WM_  (Window Messages)
          public const int WM_COPYDATA = 0x0000004A,
                           WM_LBUTTONDBLCLK = 0x00000203,
                           WM_PASTE = 0x00000302,
                           WM_SCROLL = 0x00000114,
+                          WM_SETREDRAW = 0x0000000B,
                           WM_USER = 0x00000400,
                           WM_VSCROLL = 0x00000115;
          // WS_ / WS_EX_  (Window Styles)

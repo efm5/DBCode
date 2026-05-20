@@ -1194,54 +1194,5 @@
          if (mRichTextBox.CanRedo)
             mRichTextBox.Redo();
       }
-
-      private static void AllIfNothing() {
-         //DEBUG efm5 2026 05 18 implement
-         //if ((Settings.Default.AllIfNothing) && string.IsNullOrEmpty(mRichTextBox..SelectedText))
-         //   mRichTextBox..SelectAll();
-      }
-
-      private static void ActivateVisualStudio() {
-         try {
-            Process process = null;
-            IntPtr vsHandle = IntPtr.Zero;
-            Process[] processList = Process.GetProcesses();
-
-            foreach (Process theprocess in processList) {
-               if (string.Equals(theprocess.ProcessName, "devenv", StringComparison.OrdinalIgnoreCase)) {
-                  process = theprocess;
-                  break;
-               }
-            }
-            if (process != null) {
-               vsHandle = process.MainWindowHandle;
-               if (!SetForegroundWindow(vsHandle))
-                  TimedMessage("SetForegroundWindow failed", "ERROR", 3000);
-               Thread.Sleep(50);
-               _ = SetActiveWindow(vsHandle);
-               Thread.Sleep(20);//efm5 Possibly unnecessary
-            }
-            else
-               TimedMessage("GetProcessesByName failed", "ERROR", 3000);
-         }
-         catch (Exception pException) {
-            TimedMessage("Exception caught; the error message is:" + Environment.NewLine + pException.ToString(),
-               "EXCEPTION CAUGHT", 0);
-         }
-      }
-
-      private void HardFocus() {
-         TopMost = true;
-         Show();
-         BringToFront();
-         Activate();
-         mRichTextBox.Show();
-         mRichTextBox.BringToFront();
-         mRichTextBox.Enabled = true;
-         _ = mRichTextBox.Focus();
-         mRichTextBox.Refresh();
-         ActiveControl = mRichTextBox;
-         //DEBUG efm5 2026 05 18 briefly top
-      }
    }
 }
