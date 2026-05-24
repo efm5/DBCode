@@ -216,6 +216,23 @@ To maintain vertical compactness:
     DwmGetWindowAttributeInt
     DwmGetWindowAttributeBool
 
+5.4 DllImport vs LibraryImport Selection
+• Use LibraryImport when ALL parameters are blittable (nint, int, bool, structs, etc.).
+• Use DllImport with CharSet = CharSet.Unicode when ANY parameter is a string type.
+  LibraryImport source generation does not handle string parameters and will produce
+  CS8795 ("partial method must have an implementation part").
+• The file-level #pragma disable SYSLIB1054 already present in all NativeMethods
+  files suppresses the "prefer LibraryImport" analyzer warning for DllImport methods.
+
+5.5 Win32 Return Value Handling
+• Explicitly discard with _ = when a call is best-effort and failure is non-actionable
+  (cosmetic or visual operations such as SetWindowTheme, where falling back to the
+  default appearance is acceptable).
+• Check or handle the return value when failure has consequences — file operations,
+  device control, security boundaries, or data integrity.
+• Never silently ignore a return value without conscious intent. _ = makes the
+  discard visible and reviewable; it is not a suppression mechanism.
+
 ===========================================
 6. STRUCTURE & ARCHITECTURE RULES
 ===========================================
@@ -294,6 +311,26 @@ UI components do not persist state.
     Discouraged:
       mCurrentFindRecord = new FindRecord(pSearchText, matches);
       mCurrentFindRecord.mPosition = index;
+
+8.4 Guard Clauses (ThrowIfNull)
+• `ThrowIfNull` calls signal fatal programming errors — a null that should never occur.
+• They must appear at the very top of the method body, before any logic or local variable declarations.
+• All guards for a given method are grouped together with no blank lines between them.
+• No other statements may precede them except other `ThrowIfNull` calls.
+  Examples:
+    Correct:
+      private void Apply(Theme pTheme) {
+         ThrowIfNull(mForm, nameof(mForm));
+         ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
+         int width = mForm.ClientSize.Width;
+         ...
+      }
+    Incorrect:
+      private void Apply(Theme pTheme) {
+         int width = mForm.ClientSize.Width;
+         ThrowIfNull(mForm, nameof(mForm));   // guard is too late
+         ...
+      }
 
 ===========================================
 9. DRAGON DICTATION RULES

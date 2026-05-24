@@ -17,8 +17,10 @@
          base.OnHandleCreated(pEventArgs);
          Dock = DockStyle.Fill;
          LayoutControls(false);
+         GeneralTabControl_SelectedIndexChanged(null, EventArgs.Empty);
+         if (mUiState.mShortcutsDgvAutoSize)
+            mShortcutsDgv.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
       }
-
       private void GeneralTabControl_DrawItem(object? pSender, DrawItemEventArgs pArgs) {
          ThrowIfNull(mGeneralTabControl, nameof(mGeneralTabControl));
          ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
@@ -40,7 +42,27 @@
       private void GeneralTabControl_SelectedIndexChanged(object? pSender, EventArgs pArgs) {
          ThrowIfNull(mUiState, nameof(mUiState));
          ThrowIfNull(mGeneralTabControl, nameof(mGeneralTabControl));
+         ThrowIfNull(mBottomPanel, nameof(mBottomPanel));
+         ThrowIfNull(mShortcutsResetButton, nameof(mShortcutsResetButton));
+         ThrowIfNull(mShortcutsAutoSizeCheckBox, nameof(mShortcutsAutoSizeCheckBox));
+         ThrowIfNull(mShortcutsSortCheckBox, nameof(mShortcutsSortCheckBox));
+         ThrowIfNull(mShortcutsAllCheckBox, nameof(mShortcutsAllCheckBox));
          mUiState.mOptionsGeneralTabControlPageIndex = mGeneralTabControl.SelectedIndex;
+         bool onShortcuts = mGeneralTabControl.SelectedIndex == (int)OptionsTabPageUsage.Shortcuts;
+         if (onShortcuts) {
+            mBottomPanel.ShowLeftControl(mShortcutsResetButton);
+            mBottomPanel.ShowLeftControl(mShortcutsAutoSizeCheckBox);
+            mBottomPanel.ShowLeftControl(mShortcutsSortCheckBox);
+            mBottomPanel.ShowLeftControl(mShortcutsAllCheckBox);
+            mBottomPanel.LayoutControls();
+         }
+         else {
+            mBottomPanel.HideLeftControl(mShortcutsResetButton);
+            mBottomPanel.HideLeftControl(mShortcutsAutoSizeCheckBox);
+            mBottomPanel.HideLeftControl(mShortcutsSortCheckBox);
+            mBottomPanel.HideLeftControl(mShortcutsAllCheckBox);
+            mBottomPanel.Refresh();
+         }
       }
 
       private void IncludeExcludeTabControl_SelectedIndexChanged(object? pSender, EventArgs pArgs) {
@@ -112,6 +134,11 @@
          ThrowIfNull(mReplaceUpDownCluster, nameof(mReplaceUpDownCluster));
          ThrowIfNull(mReplaceUpDownCluster.mNumericUpDown, nameof(mReplaceUpDownCluster.mNumericUpDown));
          ThrowIfNull(mAllIfNothingCheckBoxCluster, nameof(mAllIfNothingCheckBoxCluster));
+         ThrowIfNull(mCommentWidthUpDownCluster, nameof(mCommentWidthUpDownCluster));
+         ThrowIfNull(mCommentWidthUpDownCluster.mNumericUpDown, nameof(mCommentWidthUpDownCluster.mNumericUpDown));
+         ThrowIfNull(mCommentConcatenateFirstCheckBoxCluster, nameof(mCommentConcatenateFirstCheckBoxCluster));
+         ThrowIfNull(mCommentOutBlankLinesCheckBoxCluster, nameof(mCommentOutBlankLinesCheckBoxCluster));
+         ThrowIfNull(mUseThreeSpacesCheckBoxCluster, nameof(mUseThreeSpacesCheckBoxCluster));
          mUiState.mTopDraggerHeight = (int)mTopDraggerHeightUpDownCluster.mNumericUpDown.Value;
          mUiState.mTopDraggerEdge = (int)mTopDraggerEdgeUpDownCluster.mNumericUpDown.Value;
          mUiState.mActivationDelayMs = (int)mActivationDelayUpDownCluster.mNumericUpDown.Value;
@@ -120,16 +147,176 @@
          mUiState.mUseTabs = mTabCheckBoxCluster.mScalableCheckBox.Checked;
          mUiState.mUseSpaces = mSpaceCheckBoxCluster.mScalableCheckBox.Checked;
          mUiState.mAllIfNothing = mAllIfNothingCheckBoxCluster.mScalableCheckBox.Checked;
+         mUiState.mMaximumCommentWidth = (int)mCommentWidthUpDownCluster.mNumericUpDown.Value;
+         mUiState.mConcatenateCommentFirst = mCommentConcatenateFirstCheckBoxCluster.mScalableCheckBox.Checked;
+         mUiState.mCommentOutBlankLines = mCommentOutBlankLinesCheckBoxCluster.mScalableCheckBox.Checked;
+         mUiState.mUseThreeSpaces = mUseThreeSpacesCheckBoxCluster.mScalableCheckBox.Checked;
          mWhitespaceRadioCluster.mRadioPanel.GetReturnValue(out int whitespaceValue);
          mUiState.mWhitespace = whitespaceValue;
          mUiState.mSpacesPerTab = (int)mTabUpDownCluster.mNumericUpDown.Value;
          mUiState.mSpacesToBecomeTab = (int)mSpaceUpDownCluster.mNumericUpDown.Value;
          mUiState.mSearchHistoryMaxEntries = (int)mSearchUpDownCluster.mNumericUpDown.Value;
          mUiState.mReplaceHistoryMaxEntries = (int)mReplaceUpDownCluster.mNumericUpDown.Value;
+         mUiState.mBracePairColor0 = mBracePairColors[0];
+         mUiState.mBracePairColor1 = mBracePairColors[1];
+         mUiState.mBracePairColor2 = mBracePairColors[2];
+         mUiState.mBracePairColor3 = mBracePairColors[3];
+         mUiState.mBracePairColor4 = mBracePairColors[4];
+         mUiState.mBracePairColor5 = mBracePairColors[5];
+         mUiState.mBracePairColor6 = mBracePairColors[6];
+         mUiState.mBracePairColor7 = mBracePairColors[7];
+         mUiState.mBracePairColor8 = mBracePairColors[8];
+         mUiState.mBracePairColor9 = mBracePairColors[9];
+         if (mShortcutEntries.Any(x => x.HasConflict)) {
+            MessageBox.Show("Please resolve all shortcut conflicts before saving.",
+               "Shortcut Conflicts", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+         }
+         ThrowIfNull(mMenuStrip, nameof(mMenuStrip));
+         ThrowIfNull(mContextMenuStrip, nameof(mContextMenuStrip));
+         ShortcutManager.Save(ShortcutManager.DefaultFilePath, mShortcutEntries);
+         Dictionary<string, ToolStripMenuItem> menuDictionary = ShortcutManager.BuildMenuDictionary(mMenuStrip!, mContextMenuStrip!);
+         ShortcutManager.Apply(mShortcutEntries, menuDictionary);
+         ShortcutManager.SyncContextMenuShortcutDisplays();
+         SaveColumnWidths();
          CloseOptionsPanel();
       }
 
-      private void CancelButton_Click(object? pSender, EventArgs pEventArguments) =>
+      private void OnBracePairSwatchClicked(LabeledButtonColorSwatchCluster pSender) {
+         ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
+         if (pSender.Tag is not int index)
+            ThrowBadCode($"Tag was not an int in {nameof(OnBracePairSwatchClicked)}.");
+         else
+            ThemePanel.EnsureColorPickerPanel(mCurrentTheme, mBracePairColors[index],
+               pPickedColor => ApplyBracePairColor(pSender, index, pPickedColor));
+      }
+
+      private void ApplyBracePairColor(LabeledButtonColorSwatchCluster pCluster, int pIndex, Color pColor) {
+         pCluster.SetColor(pColor);
+         mBracePairColors[pIndex] = pColor;
+      }
+
+      private void ShortcutsDgv_CurrentCellDirtyStateChanged(object? sender, EventArgs e) {
+         if (mShortcutsDgv == null)
+            return;
+         if (mShortcutsDgv.IsCurrentCellDirty && mShortcutsDgv.CurrentCell is DataGridViewCheckBoxCell)
+            mShortcutsDgv.CommitEdit(DataGridViewDataErrorContexts.Commit);
+      }
+
+      private void ShortcutsDgv_CellValueChanged(object? sender, DataGridViewCellEventArgs e) {
+         if (mShortcutsDgv == null || e.RowIndex < 0)
+            return;
+         DataGridViewRow row = mShortcutsDgv.Rows[e.RowIndex];
+         if (row.Tag is not ShortcutEntry entry)
+            return;
+         switch (e.ColumnIndex) {
+            case ShortColTop:
+               entry.Top = row.Cells[ShortColTop].Value?.ToString() ?? "";
+               break;
+            case ShortColChild:
+               entry.Child = row.Cells[ShortColChild].Value?.ToString() ?? "";
+               break;
+            case ShortColGrandchild:
+               entry.Grandchild = row.Cells[ShortColGrandchild].Value?.ToString() ?? "";
+               break;
+            case ShortColCtrl:
+               entry.Ctrl = row.Cells[ShortColCtrl].Value is true;
+               break;
+            case ShortColShift:
+               entry.Shift = row.Cells[ShortColShift].Value is true;
+               break;
+            case ShortColAlt:
+               entry.Alt = row.Cells[ShortColAlt].Value is true;
+               break;
+            case ShortColKey:
+               entry.Key = row.Cells[ShortColKey].Value?.ToString() ?? "";
+               break;
+            case ShortColDisplayString:
+               entry.DisplayString = row.Cells[ShortColDisplayString].Value?.ToString() ?? "";
+               break;
+            case ShortColNotes:
+               entry.Notes = row.Cells[ShortColNotes].Value?.ToString() ?? "";
+               break;
+         }
+         if (e.ColumnIndex >= ShortColCtrl && e.ColumnIndex <= ShortColKey) {
+            ShortcutManager.CheckConflicts(mShortcutEntries);
+            mShortcutsDgv.Invalidate();
+         }
+      }
+
+      private void ShortcutsDgv_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e) {
+         if (mShortcutsDgv == null || e.RowIndex < 0)
+            return;
+         DataGridViewRow row = mShortcutsDgv.Rows[e.RowIndex];
+         if (row.Tag is not ShortcutEntry entry)
+            return;
+         if (e.CellStyle == null)
+            return;
+         if (entry.HasConflict && e.ColumnIndex >= ShortColCtrl && e.ColumnIndex <= ShortColKey) {
+            e.CellStyle.BackColor = Color.Salmon;
+            e.CellStyle.ForeColor = Color.Black;
+            e.FormattingApplied = true;
+         }
+         else if (entry.ShortcutLocked && e.ColumnIndex >= ShortColCtrl && e.ColumnIndex <= ShortColKey) {
+            ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
+            e.CellStyle.BackColor = mCurrentTheme!.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground];
+            e.FormattingApplied = true;
+         }
+         if (!entry.ItemText.Contains('&')) {
+            int ownCol = !string.IsNullOrEmpty(entry.Grandchild) ? ShortColGrandchild
+               : !string.IsNullOrEmpty(entry.Child) ? ShortColChild
+               : ShortColTop;
+            if (e.ColumnIndex == ownCol) {
+               e.CellStyle.BackColor = ContrastingColor(e.CellStyle.BackColor);
+               e.CellStyle.ForeColor = ContrastingColor(e.CellStyle.ForeColor);
+               e.FormattingApplied = true;
+            }
+         }
+         if (string.IsNullOrEmpty(entry.Key) && !entry.ShortcutLocked && e.ColumnIndex == ShortColId) {
+            e.CellStyle.BackColor = ContrastingColor(e.CellStyle.BackColor);
+            e.CellStyle.ForeColor = ContrastingColor(e.CellStyle.ForeColor);
+            e.FormattingApplied = true;
+         }
+      }
+
+      private void ShortcutsResetButton_Click(object? sender, EventArgs e) {
+         ConfirmationDialog.ShowMe(
+            "Reset Shortcuts",
+            "Reset all shortcuts and menu text to shipped defaults?",
+            "&Yes, Reset", "&No, Keep",
+            ShortcutsResetCallback);
+      }
+
+      private void ShortcutsResetCallback(bool pConfirmed) {
+         ConfirmationDialog.Restore();
+         if (!pConfirmed)
+            return;
+         string defaultPath = ShortcutManager.DefaultFilePath;
+         if (File.Exists(defaultPath))
+            File.Delete(defaultPath);
+         mShortcutEntries = ShortcutManager.LoadWithFallback();
+         LoadShortcutEntries();
+      }
+
+      private void ShortcutsAutoSizeCheckBox_CheckedChanged(object? sender, EventArgs e) {
+         ThrowIfNull(mUiState, nameof(mUiState));
+         ThrowIfNull(mShortcutsAutoSizeCheckBox, nameof(mShortcutsAutoSizeCheckBox));
+         mUiState.mShortcutsDgvAutoSize = mShortcutsAutoSizeCheckBox.Checked;
+         if (mShortcutsAutoSizeCheckBox.Checked)
+            mShortcutsDgv?.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
+      }
+
+      private void ShortcutsSortCheckBox_CheckedChanged(object? sender, EventArgs e) {
+         LoadShortcutEntries();
+      }
+
+      private void ShortcutsAllCheckBox_CheckedChanged(object? sender, EventArgs e) {
+         LoadShortcutEntries();
+      }
+
+      private void CancelButton_Click(object? pSender, EventArgs pEventArguments) {
+         SaveColumnWidths();
          CloseOptionsPanel();
+      }
    }
 }

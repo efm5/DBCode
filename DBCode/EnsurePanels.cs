@@ -24,6 +24,7 @@
             mScrollableMainPanel.Visible = false;
             mScrollableMainPanel.SendToBack();
             mForm.Controls.Remove(mScrollableMainPanel);
+            mActiveScrollablePanel = null;
          }
          mThemePanel.SetThemeUsage(pThemeUsage);
          mForm.Controls.Add(mThemePanel);
@@ -63,6 +64,7 @@
          mScrollableMainPanel.BringToFront();
          mScrollableMainPanel.Visible = true;
          mScrollableMainPanel.Show();
+         mActiveScrollablePanel = mScrollableMainPanel;
          mForm.ControlBox = true;
          mForm.Opacity = savedOpacity;
          mActiveLayoutable = mMainBottomPanel;
@@ -91,6 +93,7 @@
             mScrollableMainPanel.Visible = false;
             mScrollableMainPanel.SendToBack();
             mForm.Controls.Remove(mScrollableMainPanel);
+            mActiveScrollablePanel = null;
          }
          mForm.Controls.Add(mThemePickerPanel);
          mActiveLayoutable = mThemePickerPanel.mBottomPanel;
@@ -124,6 +127,7 @@
          mScrollableMainPanel.BringToFront();
          mScrollableMainPanel.Visible = true;
          mScrollableMainPanel.Show();
+         mActiveScrollablePanel = mScrollableMainPanel;
          mForm.ControlBox = true;
          mForm.Activate();
          mScrollableMainPanel.Focus();
@@ -159,6 +163,9 @@
          ThrowIfNull(mOptionsPanel.mSQLTitleLabel, nameof(mOptionsPanel.mSQLTitleLabel));
          ThrowIfNull(mOptionsPanel.mMarkdownTitleLabel, nameof(mOptionsPanel.mMarkdownTitleLabel));
          ThrowIfNull(mOptionsPanel.mPythonTitleLabel, nameof(mOptionsPanel.mPythonTitleLabel));
+         ThrowIfNull(mOptionsPanel.mBraceMatchingTitleLabel, nameof(mOptionsPanel.mBraceMatchingTitleLabel));
+         ThrowIfNull(mOptionsPanel.mBraceMatchingContainer, nameof(mOptionsPanel.mBraceMatchingContainer));
+         ThrowIfNull(mOptionsPanel.mBraceExampleGroupBox, nameof(mOptionsPanel.mBraceExampleGroupBox));
          double savedOpacity = mForm.Opacity;
          mForm.Opacity = 0;
          mForm.ControlBox = false;
@@ -166,6 +173,7 @@
             mScrollableMainPanel.Visible = false;
             mScrollableMainPanel.SendToBack();
             mForm.Controls.Remove(mScrollableMainPanel);
+            mActiveScrollablePanel = null;
          }
          mForm.Controls.Add(mOptionsPanel);
          mOptionsPanel.ApplyFontsAndColors();
@@ -189,6 +197,9 @@
          mOptionsPanel.mSQLTitleLabel.CenterTitle(mOptionsPanel);
          mOptionsPanel.mMarkdownTitleLabel.CenterTitle(mOptionsPanel);
          mOptionsPanel.mPythonTitleLabel.CenterTitle(mOptionsPanel);
+         mOptionsPanel.mBraceMatchingTitleLabel.CenterTitle(mOptionsPanel);
+         mOptionsPanel.mBraceMatchingContainer.Location = new Point(mIndent, mOptionsPanel.mTitleLabel.Bottom);
+         mOptionsPanel.mBraceExampleGroupBox.Location = new Point(mOptionsPanel.mBraceMatchingContainer.Right + mEm, mOptionsPanel.mBraceMatchingContainer.Top);
          mForm.ResumeClientSizeChanged();
          mOptionsPanel.BringToFront();
          mOptionsPanel.Visible = true;
@@ -220,6 +231,7 @@
          mScrollableMainPanel.BringToFront();
          mScrollableMainPanel.Visible = true;
          mScrollableMainPanel.Show();
+         mActiveScrollablePanel = mScrollableMainPanel;
          mForm.ControlBox = true;
          mForm.Activate();
          mScrollableMainPanel.Focus();
@@ -252,6 +264,7 @@
             mScrollableMainPanel.Visible = false;
             mScrollableMainPanel.SendToBack();
             mForm.Controls.Remove(mScrollableMainPanel);
+            mActiveScrollablePanel = null;
          }
          mForm.Controls.Add(mTargetPickerPanel);
          mActiveLayoutable = mTargetPickerPanel.mBottomPanel;
@@ -277,8 +290,8 @@
          mForm.Controls.Remove(mTargetPickerPanel);
          mTargetPickerPanel.Dispose();
          mTargetPickerPanel = null;
-         if (mTargetedTSMI != null)
-            mTargetedTSMI.Checked = targetSelected;
+         if (mTargetingTargetedTSMI != null)
+            mTargetingTargetedTSMI.Checked = targetSelected;
          if (!targetSelected)
             EnterUntargetedMode();
          SuspendClientSizeChanged();
@@ -290,6 +303,7 @@
          mScrollableMainPanel.BringToFront();
          mScrollableMainPanel.Visible = true;
          mScrollableMainPanel.Show();
+         mActiveScrollablePanel = mScrollableMainPanel;
          mForm.ControlBox = true;
          mForm.Activate();
          mScrollableMainPanel.Focus();

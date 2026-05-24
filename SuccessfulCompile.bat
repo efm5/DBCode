@@ -30,4 +30,14 @@ if exist "E:\DBCode\DBCode\Help" (
       xcopy /c /h /k /y "E:\DBCode\DBCode\Help\*.*"
    )
 )
+if exist "E:\DBCode\shortcuts.tsv" (
+   if exist "E:\DBCode\DBCode\bin\Debug\net7.0-windows7.0" (
+      CD /D "E:\DBCode\DBCode\bin\Debug\net7.0-windows7.0"
+      xcopy /c /h /k /y "E:\DBCode\shortcuts.tsv"
+   )
+   if exist "E:\DBCode\DBCode\bin\Release\net7.0-windows7.0" (
+      CD /D "E:\DBCode\DBCode\bin\Release\net7.0-windows7.0"
+      xcopy /c /h /k /y "E:\DBCode\shortcuts.tsv"
+   )
+)
 Exit 0

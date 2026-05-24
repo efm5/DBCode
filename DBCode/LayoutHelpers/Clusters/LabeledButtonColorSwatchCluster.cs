@@ -90,8 +90,7 @@
 
          internal override void LayoutCluster() {
             SetFontAndColor();
-            ApplyLabelPosition(mLabel, mButton);
-            GlueControlsHorizontally(mButton, mSwatch, mEm);
+            ApplyLabelPosition(mLabel, mButton, mSwatch);
             if (mButton.Tag is ColorSwatchUsage usage)
                mSwatch.BackColor = mTheme.mInterfaceColors[(int)usage];
             mLabel.Invalidate();
@@ -100,8 +99,7 @@
          }
 
          internal override void LayoutControlsOnly() {
-            ApplyLabelPosition(mLabel, mButton);
-            GlueControlsHorizontally(mButton, mSwatch, mEm);
+            ApplyLabelPosition(mLabel, mButton, mSwatch);
             if (mButton.Tag is ColorSwatchUsage usage)
                mSwatch.BackColor = mTheme.mInterfaceColors[(int)usage];
             mLabel.Invalidate();
@@ -144,12 +142,20 @@
             }
          }
 
+         public void SetButtonText(string pButtonText) {
+            mButton.Text = pButtonText;
+         }
+
          public void SetSize(int pSize) {
             mSwatch.SetSize(pSize);
          }
 
          public Color GetColor() {
             return mSwatch.BackColor;
+         }
+
+         public void SetColor(Color pColor) {
+            mSwatch.SetColor(pColor);
          }
 
          internal override void SetFontAndColor() {

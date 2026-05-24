@@ -1,16 +1,10 @@
-﻿//namespace DBCode {
+//namespace DBCode {
 //   internal sealed class ClusterTestHarness : Form {
-//      private ButtonCluster? mButtonClusterNoOp;
-//      private ButtonCluster? mButtonClusterWithClick;
-//      private FlattenedButtonCluster? mFlattenedNoColon;
-//      private FlattenedButtonCluster? mFlattenedWithColon;
-//      private FlattenedButtonCluster? mFlattenedNullBackground;
-//      private TextBox? mTextBox;
-//      private Label? mAssocLabel1;
-//      private Label? mAssocLabel3;
-//      private Panel? mContentPanel;
-//      private Label? mResultLabel;
-//      private Button? mCloseButton;
+//      private readonly List<ClusterContainer> mContainers = [];
+//      private readonly List<GroupBox> mGroupBoxes = [];
+//      private readonly List<Font> mOwnedFonts = [];
+//      private Panel mContentPanel;
+//      private Button mCloseButton;
 
 //      internal static void Show(string pCaption) {
 //         using ClusterTestHarness harness = new ClusterTestHarness(pCaption);
@@ -20,9 +14,9 @@
 //      private ClusterTestHarness(string pCaption) {
 //         ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
 //         Text = pCaption;
-//         AutoSize = false;
+//         AutoScaleMode = AutoScaleMode.None;
 //         StartPosition = FormStartPosition.CenterScreen;
-//         MinimumSize = new Size(480, 380);
+//         MinimumSize = new Size(600, 400);
 //         MakeControls();
 //         WireEvents();
 //         LayoutControls();
@@ -30,247 +24,170 @@
 
 //      private void MakeControls() {
 //         ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
+//         Color groupBoxBackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground];
+//         Color groupBoxForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxFont];
+//         Font groupBoxFont = CreateNewBoldFont(mCurrentTheme.mFonts[(int)FontUsage.Interface]);
+//         mOwnedFonts.Add(groupBoxFont);
+//         BackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.PanelBackground];
 //         mContentPanel = new Panel {
-//            AutoSize = false,
+//            Name = $"ClusterTestHarnessContentPanel{mTabIndex}",
+//            TabIndex = mTabIndex++,
 //            AutoScroll = true,
-//            BackColor = Color.BlueViolet,
-//            Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom
+//            BackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.PanelBackground]
 //         };
-//         Controls.Add(mContentPanel);
-//         mButtonClusterNoOp = new ButtonCluster(mCurrentTheme!, "No-Op Button");
-//         mButtonClusterWithClick = new ButtonCluster(mCurrentTheme!, "Click Me");
-//         mAssocLabel1 = new Label {
-//            Name = $"ClusterTestHarnessAssoc1{mTabIndex}",
-//            TabIndex = TAB_INDEX_IGNORED,
-//            Text = "(assoc label)",
-//            AutoSize = true,
-//            Font = CreateNewFont(),
-//            ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
-//            BackColor = Color.Transparent
-//         };
-//         mFlattenedWithColon = new FlattenedButtonCluster(mCurrentTheme!, "Already has colon:", mAssocLabel1, BackColor);
-//         mTextBox = new TextBox {
-//            Size = new Size(200, 30),
-//            BackColor = Color.Aquamarine
-//         };
-//         mFlattenedNoColon = new FlattenedButtonCluster(mCurrentTheme!, "No colon", mTextBox, BackColor);
-//         mAssocLabel3 = new Label {
-//            Name = $"ClusterTestHarnessAssoc3{mTabIndex}",
-//            TabIndex = TAB_INDEX_IGNORED,
-//            Text = "(assoc label)",
-//            AutoSize = true,
-//            Font = CreateNewFont(),
-//            ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
-//            BackColor = Color.Transparent
-//         };
-//         mFlattenedNullBackground = new FlattenedButtonCluster(mCurrentTheme!, "Null bg (not flat)", mAssocLabel3, null);
-//         mResultLabel = new Label {
-//            Name = $"ClusterTestHarnessResult{mTabIndex}",
-//            TabIndex = TAB_INDEX_IGNORED,
-//            Text = "Click a cluster button to see output here.",
-//            AutoSize = true,
-//            Font = CreateNewFont(),
-//            ForeColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont],
-//            BackColor = Color.Transparent
-//         };
-//         mContentPanel.Controls.AddRange([
-//            mButtonClusterNoOp,
-//            mButtonClusterWithClick,
-//            mFlattenedWithColon,
-//            mFlattenedNoColon,
-//            mFlattenedNullBackground,
-//            mResultLabel
-//         ]);
 //         mCloseButton = new Button {
-//            Name = $"ClusterTestHarnessClose{mTabIndex}",
+//            Name = $"ClusterTestHarnessCloseButton{mTabIndex}",
 //            TabIndex = mTabIndex++,
 //            Text = "&Close",
 //            AutoSize = true,
-//            AutoSizeMode = AutoSizeMode.GrowAndShrink,
-//            Font = CreateNewFont()
+//            AutoSizeMode = AutoSizeMode.GrowAndShrink
 //         };
-//         Controls.Add(mCloseButton);
+//         Color[] swatchColors = [
+//            Color.FromArgb(200, 60, 60),
+//            Color.FromArgb(60, 160, 60),
+//            Color.FromArgb(60, 60, 200),
+//            Color.FromArgb(200, 160, 20),
+//            Color.FromArgb(60, 170, 170),
+//            Color.FromArgb(170, 60, 170),
+//            Color.FromArgb(200, 100, 60),
+//            Color.FromArgb(100, 200, 60),
+//            Color.FromArgb(60, 100, 200)
+//         ];
+//         LabelPosition[] positions = [
+//            LabelPosition.Left, LabelPosition.Right, LabelPosition.Top, LabelPosition.Bottom
+//         ];
+//         ClusterLayoutMode[] modes = [
+//            ClusterLayoutMode.MaxWidth, ClusterLayoutMode.MaxHeight,
+//            ClusterLayoutMode.FixedColumns, ClusterLayoutMode.FixedRows,
+//            ClusterLayoutMode.AutoSquareGrid, ClusterLayoutMode.FlowLayout
+//         ];
+//         foreach (ClusterLayoutMode mode in modes) {
+//            foreach (LabelPosition position in positions) {
+//               List<BaseCluster> clusters = [];
+//               for (int i = 0; i < 9; i++) {
+//                  LabeledButtonColorSwatchCluster cluster = new LabeledButtonColorSwatchCluster(
+//                     mCurrentTheme, $"Pair {i + 1}", $"&{i + 1}",
+//                     ColorSwatchUsage.InterfaceBackground, position, swatchColors[i], groupBoxBackColor);
+//                  cluster.SwatchClicked += OnSwatchClicked;
+//                  clusters.Add(cluster);
+//               }
+//               int fixedColumns = 0, fixedRows = 0;
+//               if (mode == ClusterLayoutMode.FixedColumns)
+//                  fixedColumns = 3;
+//               else if (mode == ClusterLayoutMode.FixedRows)
+//                  fixedRows = 3;
+//               ClusterContainer container = new ClusterContainer(mContentPanel, clusters, mode,
+//                  0, 0, fixedColumns, fixedRows) {
+//                  BackColor = groupBoxBackColor,
+//                  AutoSize = false
+//               };
+//               mContainers.Add(container);
+//               GroupBox groupBox = new GroupBox {
+//                  Name = $"ClusterTestHarnessGroupBox{mTabIndex}",
+//                  TabIndex = mTabIndex++,
+//                  Text = $"{position} + {mode}",
+//                  Font = groupBoxFont,
+//                  ForeColor = groupBoxForeColor,
+//                  BackColor = groupBoxBackColor
+//               };
+//               groupBox.Controls.Add(container);
+//               mGroupBoxes.Add(groupBox);
+//               mContentPanel.Controls.Add(groupBox);
+//            }
+//         }
+//         Controls.AddRange([mContentPanel, mCloseButton]);
 //      }
 
-//      private void WireEvents() {
-//         ThrowIfNull(mButtonClusterNoOp, nameof(mButtonClusterNoOp));
-//         ThrowIfNull(mButtonClusterWithClick, nameof(mButtonClusterWithClick));
-//         ThrowIfNull(mFlattenedWithColon, nameof(mFlattenedWithColon));
-//         ThrowIfNull(mFlattenedNoColon, nameof(mFlattenedNoColon));
-//         ThrowIfNull(mFlattenedNullBackground, nameof(mFlattenedNullBackground));
-//         ThrowIfNull(mCloseButton, nameof(mCloseButton));
-//         ThrowIfNull(mButtonClusterNoOp.mButton, nameof(mButtonClusterNoOp.mButton));
-//         ThrowIfNull(mButtonClusterWithClick.mButton, nameof(mButtonClusterWithClick.mButton));
-//         ThrowIfNull(mFlattenedWithColon.mButton, nameof(mFlattenedWithColon.mButton));
-//         ThrowIfNull(mFlattenedNoColon.mButton, nameof(mFlattenedNoColon.mButton));
-//         ThrowIfNull(mFlattenedNullBackground.mButton, nameof(mFlattenedNullBackground.mButton));
+//      private static void OnSwatchClicked(LabeledButtonColorSwatchCluster pSender) { }
 
-//         Load += OnLoad;
-//         ClientSizeChanged += OnClientSizeChanged;
+//      private void WireEvents() {
 //         mCloseButton.Click += OnCloseClick;
-//         mButtonClusterNoOp.mButton.Click += OnNoOpButtonClick;
-//         mButtonClusterWithClick.mButton.Click += OnClickMeClick;
-//         mFlattenedWithColon.mButton.Click += OnFlattenedWithColonClick;
-//         mFlattenedNoColon.mButton.Click += OnFlattenedNoColonClick;
-//         mFlattenedNullBackground.mButton.Click += OnFlattenedNullBgClick;
 //      }
 
 //      private void LayoutControls() {
-//         ThrowIfNull(mContentPanel, nameof(mContentPanel));
-//         ThrowIfNull(mCloseButton, nameof(mCloseButton));
-//         ThrowIfNull(mResultLabel, nameof(mResultLabel));
-//         const int padding = 12, rowSpacing = 8, closeMargin = 8;
-//         int closeHeight = mCloseButton.Height + closeMargin * 2;
-//         mContentPanel.Location = new Point(padding, padding);
-//         mContentPanel.Size = new Size(
-//            ClientSize.Width - padding * 2,
-//            ClientSize.Height - padding - closeHeight - padding);
-//         int y = padding;
-//         LayoutClusterRow(mButtonClusterNoOp!, ref y, rowSpacing);
-//         LayoutClusterRow(mButtonClusterWithClick!, ref y, rowSpacing);
-//         LayoutClusterRow(mFlattenedWithColon!, ref y, rowSpacing);
-//         LayoutClusterRow(mFlattenedNoColon!, ref y, rowSpacing);
-//         LayoutClusterRow(mFlattenedNullBackground!, ref y, rowSpacing);
-//         mResultLabel.Location = new Point(padding, y + rowSpacing);
+//         ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
+//         LabelPosition[] positions = [
+//            LabelPosition.Left, LabelPosition.Right, LabelPosition.Top, LabelPosition.Bottom
+//         ];
+//         ClusterLayoutMode[] modes = [
+//            ClusterLayoutMode.MaxWidth, ClusterLayoutMode.MaxHeight,
+//            ClusterLayoutMode.FixedColumns, ClusterLayoutMode.FixedRows,
+//            ClusterLayoutMode.AutoSquareGrid, ClusterLayoutMode.FlowLayout
+//         ];
+//         int containerIndex = 0;
+//         for (int modeIndex = 0; modeIndex < modes.Length; modeIndex++) {
+//            for (int positionIndex = 0; positionIndex < positions.Length; positionIndex++) {
+//               ClusterContainer container = mContainers[containerIndex];
+//               GroupBox groupBox = mGroupBoxes[containerIndex];
+//               containerIndex++;
+//               foreach (BaseCluster cluster in container)
+//                  cluster.LayoutCluster();
+//               if (modes[modeIndex] == ClusterLayoutMode.FlowLayout) {
+//                  int clusterWidth = container.mClusters[0].Width;
+//                  container.Size = new Size(clusterWidth * 3 + mEm * 2 + mIndent + mRightPad, 1);
+//               }
+//               container.LayoutClusters();
+//               int containerRight = 0, containerBottom = 0;
+//               foreach (BaseCluster cluster in container) {
+//                  if (cluster.Right > containerRight)
+//                     containerRight = cluster.Right;
+//                  if (cluster.Bottom > containerBottom)
+//                     containerBottom = cluster.Bottom;
+//               }
+//               container.Size = new Size(containerRight + mEm, containerBottom + mEm);
+//               container.Location = GetGroupBoxFirstLineOffset(groupBox);
+//               SizeGroupBox(groupBox);
+//            }
+//         }
+//         int maxGroupBoxWidth = 0, maxGroupBoxHeight = 0;
+//         foreach (GroupBox groupBox in mGroupBoxes) {
+//            if (groupBox.Width > maxGroupBoxWidth)
+//               maxGroupBoxWidth = groupBox.Width;
+//            if (groupBox.Height > maxGroupBoxHeight)
+//               maxGroupBoxHeight = groupBox.Height;
+//         }
+//         int cellWidth = maxGroupBoxWidth + mEm;
+//         int cellHeight = maxGroupBoxHeight + mEm;
+//         containerIndex = 0;
+//         for (int modeIndex = 0; modeIndex < modes.Length; modeIndex++) {
+//            for (int positionIndex = 0; positionIndex < positions.Length; positionIndex++) {
+//               GroupBox groupBox = mGroupBoxes[containerIndex++];
+//               groupBox.Location = new Point(
+//                  mIndent + positionIndex * cellWidth,
+//                  mIndent + modeIndex * cellHeight);
+//               groupBox.Size = new Size(maxGroupBoxWidth, maxGroupBoxHeight);
+//            }
+//         }
+//         int totalContentWidth = mIndent + positions.Length * cellWidth;
+//         int totalContentHeight = mIndent + modes.Length * cellHeight;
+//         Screen screen = Screen.PrimaryScreen ?? Screen.AllScreens[0];
+//         int formWidth = Math.Min(totalContentWidth + mEm * 2, (int)(screen.WorkingArea.Width * 0.95));
+//         int formHeight = Math.Min(totalContentHeight + mCloseButton.Height + mEm * 4,
+//            (int)(screen.WorkingArea.Height * 0.95));
+//         ClientSize = new Size(formWidth, formHeight);
 //         mCloseButton.Location = new Point(
-//            ClientSize.Width - mCloseButton.Width - closeMargin,
-//            ClientSize.Height - mCloseButton.Height - closeMargin);
+//            ClientSize.Width - mCloseButton.Width - mEm,
+//            ClientSize.Height - mCloseButton.Height - mEm);
+//         mContentPanel.Location = Point.Empty;
+//         mContentPanel.Size = new Size(ClientSize.Width, mCloseButton.Top - mEm);
 //      }
 
-//      private static void LayoutClusterRow(BaseCluster pCluster, ref int pY, int pSpacing) {
-//         pCluster.LayoutCluster();
-//         pCluster.Location = new Point(12, pY);
-//         pY += pCluster.Height + pSpacing;
-//      }
-
-//      private void OnLoad(object? pSender, EventArgs pEventArgs) {
-//         VerifyColonInvariant();
-//         VerifyNoOpLayoutControls();
-//      }
-
-//      private void OnClientSizeChanged(object? pSender, EventArgs pEventArgs) {
-//         LayoutControls();
-//      }
-
-//      private void OnCloseClick(object? pSender, EventArgs pEventArgs) {
+//      private void OnCloseClick(object? pSender, EventArgs pEventArguments) {
 //         Close();
 //      }
 
-//      private void OnNoOpButtonClick(object? pSender, EventArgs pEventArgs) {
-//         ThrowIfNull(mButtonClusterNoOp, nameof(mButtonClusterNoOp));
-//         ThrowIfNull(mButtonClusterNoOp.mButton, nameof(mButtonClusterNoOp.mButton));
-//         Rectangle before = mButtonClusterNoOp.mButton.Bounds;
-//         mButtonClusterNoOp.LayoutControls();
-//         Rectangle after = mButtonClusterNoOp.mButton.Bounds;
-//         string result = before == after
-//            ? $"PASS – ButtonCluster.LayoutControls() is a no-op. Bounds before and after: {before}."
-//            : $"FAIL – ButtonCluster.LayoutControls() changed button bounds from {before} to {after}.";
-//         SetResult(result);
-//      }
-
-//      private void OnClickMeClick(object? pSender, EventArgs pEventArgs) {
-//         SetResult("PASS – ButtonCluster click event fired correctly.");
-//      }
-
-//      private void OnFlattenedWithColonClick(object? pSender, EventArgs pEventArgs) {
-//         ThrowIfNull(mFlattenedWithColon, nameof(mFlattenedWithColon));
-//         ThrowIfNull(mFlattenedWithColon.mButton, nameof(mFlattenedWithColon.mButton));
-//         string buttonText = mFlattenedWithColon.mButton.Text;
-//         string result = buttonText.EndsWith(':') && buttonText.IndexOf(':', StringComparison.Ordinal) == buttonText.Length - 1
-//            ? $"PASS – Colon not doubled. Button text is \"{buttonText}\"."
-//            : $"FAIL – Unexpected button text: \"{buttonText}\".";
-//         SetResult(result);
-//      }
-
-//      private void OnFlattenedNoColonClick(object? pSender, EventArgs pEventArgs) {
-//         ThrowIfNull(mFlattenedNoColon, nameof(mFlattenedNoColon));
-//         ThrowIfNull(mFlattenedNoColon.mButton, nameof(mFlattenedNoColon.mButton));
-//         ThrowIfNull(mTextBox, nameof(mTextBox));
-//         string buttonText = mFlattenedNoColon.mButton.Text;
-//         string result = buttonText.EndsWith(':')
-//            ? $"PASS – Colon was appended. Button text is \"{buttonText}\"."
-//            : $"FAIL – Colon was not appended. Button text is \"{buttonText}\".";
-//         SetResult(result);
-//         mTextBox.Text = buttonText;
-//         mTextBox.Focus();
-//      }
-
-//      private void OnFlattenedNullBgClick(object? pSender, EventArgs pEventArgs) {
-//         ThrowIfNull(mFlattenedNullBackground, nameof(mFlattenedNullBackground));
-//         ThrowIfNull(mFlattenedNullBackground.mButton, nameof(mFlattenedNullBackground.mButton));
-//         Button button = mFlattenedNullBackground.mButton;
-//         bool isFlat = button.FlatStyle == FlatStyle.Flat;
-//         string result = !isFlat
-//            ? $"PASS – Null background correctly skips FlattenButton. FlatStyle is {button.FlatStyle}."
-//            : $"FAIL – Button was flattened despite null background.";
-//         SetResult(result);
-//      }
-
-//      private void VerifyColonInvariant() {
-//         ThrowIfNull(mFlattenedWithColon, nameof(mFlattenedWithColon));
-//         ThrowIfNull(mFlattenedWithColon.mButton, nameof(mFlattenedWithColon.mButton));
-//         ThrowIfNull(mFlattenedNoColon, nameof(mFlattenedNoColon));
-//         ThrowIfNull(mFlattenedNoColon.mButton, nameof(mFlattenedNoColon.mButton));
-//         ThrowIfNull(mFlattenedNullBackground, nameof(mFlattenedNullBackground));
-//         ThrowIfNull(mFlattenedNullBackground.mButton, nameof(mFlattenedNullBackground.mButton));
-//         if (!mFlattenedWithColon.mButton.Text.EndsWith(':'))
-//            SetResult("FAIL – mFlattenedWithColon button text does not end in ':'.");
-//         else if (!mFlattenedNoColon.mButton.Text.EndsWith(':'))
-//            SetResult("FAIL – mFlattenedNoColon button text does not end in ':'.");
-//         else if (!mFlattenedNullBackground.mButton.Text.EndsWith(':'))
-//            SetResult("FAIL – mFlattenedNullBackground button text does not end in ':'.");
-//         else
-//            SetResult("Load – Colon invariant PASS for all FlattenedButtonCluster instances. Click a button to run its test.");
-//      }
-
-//      private void VerifyNoOpLayoutControls() {
-//         ThrowIfNull(mButtonClusterNoOp, nameof(mButtonClusterNoOp));
-//         ThrowIfNull(mButtonClusterNoOp.mButton, nameof(mButtonClusterNoOp.mButton));
-//         Rectangle b1 = mButtonClusterNoOp.mButton.Bounds;
-//         mButtonClusterNoOp.LayoutControls();
-//         Rectangle b2 = mButtonClusterNoOp.mButton.Bounds;
-//         mButtonClusterNoOp.LayoutControls();
-//         Rectangle b3 = mButtonClusterNoOp.mButton.Bounds;
-//         if (b1 != b2 || b2 != b3) // else: colon-invariant message already shown; no need to overwrite it
-//            SetResult($"FAIL – ButtonCluster.LayoutControls() is NOT a no-op. Bounds: {b1} → {b2} → {b3}");
-//      }
-
-//      private void SetResult(string pMessage) {
-//         ThrowIfNull(mResultLabel, nameof(mResultLabel));
-//         mResultLabel.Text = pMessage;
-//         mResultLabel.Refresh();
-//      }
-
 //      protected override void Dispose(bool pDisposing) {
-//         ThrowIfNull(mResultLabel, nameof(mResultLabel));
-//         ThrowIfNull(mCloseButton, nameof(mCloseButton));
-//         ThrowIfNull(mButtonClusterNoOp, nameof(mButtonClusterNoOp));
-//         ThrowIfNull(mButtonClusterNoOp.mButton, nameof(mButtonClusterNoOp.mButton));
-//         ThrowIfNull(mButtonClusterWithClick, nameof(mButtonClusterWithClick));
-//         ThrowIfNull(mButtonClusterWithClick.mButton, nameof(mButtonClusterWithClick.mButton));
-//         ThrowIfNull(mFlattenedWithColon, nameof(mFlattenedWithColon));
-//         ThrowIfNull(mFlattenedWithColon.mButton, nameof(mFlattenedWithColon.mButton));
-//         ThrowIfNull(mFlattenedNoColon, nameof(mFlattenedNoColon));
-//         ThrowIfNull(mFlattenedNoColon.mButton, nameof(mFlattenedNoColon.mButton));
-//         ThrowIfNull(mFlattenedNullBackground, nameof(mFlattenedNullBackground));
-//         ThrowIfNull(mFlattenedNullBackground.mButton, nameof(mFlattenedNullBackground.mButton));
-//         ThrowIfNull(mAssocLabel1, nameof(mAssocLabel1));
-//         ThrowIfNull(mAssocLabel3, nameof(mAssocLabel3));
 //         if (pDisposing) {
-//            Load -= OnLoad;
-//            ClientSizeChanged -= OnClientSizeChanged;
 //            mCloseButton.Click -= OnCloseClick;
-//            mButtonClusterNoOp.mButton.Click -= OnNoOpButtonClick;
-//            mButtonClusterWithClick.mButton.Click -= OnClickMeClick;
-//            mFlattenedWithColon.mButton.Click -= OnFlattenedWithColonClick;
-//            mFlattenedNoColon.mButton.Click -= OnFlattenedNoColonClick;
-//            mFlattenedNullBackground.mButton.Click -= OnFlattenedNullBgClick;
-//            MainForm.DisposeFontIfOwned(mResultLabel.Font);
-//            MainForm.DisposeFontIfOwned(mCloseButton.Font);
-//            MainForm.DisposeFontIfOwned(mAssocLabel1.Font);
-//            MainForm.DisposeFontIfOwned(mAssocLabel3.Font);
+//            foreach (ClusterContainer container in mContainers)
+//               foreach (BaseCluster cluster in container)
+//                  if (cluster is LabeledButtonColorSwatchCluster swatchCluster)
+//                     swatchCluster.SwatchClicked -= OnSwatchClicked;
+//            foreach (Font font in mOwnedFonts)
+//               MainForm.DisposeFontIfOwned(font);
+//            mOwnedFonts.Clear();
 //         }
-//         base.Dispose(pDisposing); // base walks Controls tree — clusters disposed here
+//         base.Dispose(pDisposing);
 //      }
 //   }
 //}

@@ -347,6 +347,8 @@ All text appears in the default foreground color."
                new TabPage("SQL"), new TabPage("Markdown"), new TabPage("Python")]);
             mPrimaryTabControl.Dock = DockStyle.Fill;
             mHighlightTabControl.Dock = DockStyle.Fill;
+            mPrimaryTabControl.Multiline = true;
+            mHighlightTabControl.Multiline = true;
             mPrimaryTabControl.SetStripBackColor(mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground]);
             mHighlightTabControl.SetStripBackColor(mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground]);
             mPrimaryTabControl.DrawMode = TabDrawMode.OwnerDrawFixed;

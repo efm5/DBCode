@@ -39,7 +39,7 @@
          mAssociatedTextPostButtonVerticalOffset = 0, mAssociatedUpDownPostButtonHorizontalSpace = 0,
          mAssociatedUpDownPostButtonVerticalOffset = 0, mAssociatedUpDownPostCheckBoxHorizontalSpace = 0,
          mAssociatedUpDownPostCheckBoxVerticalOffset = 0, mBottomButtonTop = 0, mCancelOffset = 0, mBottomPad = 0,
-         mComboBoxMaxDropdownHeight = 0, mComboBoxMaxDropdownWidth = 0, mEm = 0, mEm2 = 0, mEm3 = 0, mEm4 = 0,
+         mComboBoxMaxDropdownHeight = 0, mComboBoxMaxDropdownWidth = 0, mEmMenu = 0, mEm = 0, mEm2 = 0, mEm3 = 0, mEm4 = 0,
          mEmHalf = 0, mEmFifth = 0, mGroupBottomPad = 0, mGroupLeftPad = 0, mGroupRightPad = 0, mGroupTopPad = 0,
          mHorizontalScrollOffset = 0, mIndent = 0, mMaximumGridWidth = 0, mMenuLeftOffset = 0, mOkOffset = 0,
          mScalePad = 0, mRightPad = 0, mScalingGroupBoxTopLinePad = 0, mTabIndex = 1, mTitleBarHeight = 0,

@@ -2,6 +2,8 @@ namespace DBCode {
    namespace Themes {
       internal sealed partial class ColorPickerPanel : ScrollablePanel {
          internal BottomPanel mBottomPanel;
+         private Action? mCloseAction;
+         private Action<Color>? mColorCallback;
          private bool mIsSyntaxColor;
          private Button mBluePrefixButton, mGrayPrefixButton, mGreenPrefixButton,
             mNamedColorPrefixButton, mRedPrefixButton, mOKButton;
@@ -224,6 +226,14 @@ namespace DBCode {
             mLanguageKind = pLanguageKind;
             mIsSyntaxColor = true;
             mTitleLabel.ResetBottomLabel($"Use this color for {ToDescription(pTokenKind)} ({pLanguageKind})");
+         }
+
+         public ColorPickerPanel(Theme pTheme, Color pInitialColor, Action<Color> pColorCallback, Action pCloseAction,
+            string pBottomLabel = "Select a brace pair color")
+            : this(pTheme, ColorSwatchUsage.InterfaceBackground, pInitialColor) {
+            mColorCallback = pColorCallback;
+            mCloseAction = pCloseAction;
+            mTitleLabel.ResetBottomLabel(pBottomLabel);
          }
 
          public void LayoutControls() {

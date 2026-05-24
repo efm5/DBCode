@@ -119,8 +119,11 @@
     <Setting Name="AllIfNothing" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="CommentConcatenateFirst" Type="System.Boolean" Scope="User">
+    <Setting Name="ShortcutsDgvAutoSize" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ShortcutsColumnWidths" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="CommentWidth" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">80</Value>
@@ -157,6 +160,18 @@
     </Setting>
     <Setting Name="BracePairColor6" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">138, 80, 48</Value>
+    </Setting>
+    <Setting Name="CommentOutBlankLines" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="UseThreeSpaces" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ConcatenateCommentFirst" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="MaximumCommentWidth" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">80</Value>
     </Setting>
   </Settings>
 </SettingsFile>

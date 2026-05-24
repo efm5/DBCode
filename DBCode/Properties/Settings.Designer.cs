@@ -494,12 +494,24 @@ namespace DBCode.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool CommentConcatenateFirst {
+        public bool ShortcutsDgvAutoSize {
             get {
-                return ((bool)(this["CommentConcatenateFirst"]));
+                return ((bool)(this["ShortcutsDgvAutoSize"]));
             }
             set {
-                this["CommentConcatenateFirst"] = value;
+                this["ShortcutsDgvAutoSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ShortcutsColumnWidths {
+            get {
+                return ((string)(this["ShortcutsColumnWidths"]));
+            }
+            set {
+                this["ShortcutsColumnWidths"] = value;
             }
         }
         
@@ -644,6 +656,54 @@ namespace DBCode.Properties {
             }
             set {
                 this["BracePairColor6"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CommentOutBlankLines {
+            get {
+                return ((bool)(this["CommentOutBlankLines"]));
+            }
+            set {
+                this["CommentOutBlankLines"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseThreeSpaces {
+            get {
+                return ((bool)(this["UseThreeSpaces"]));
+            }
+            set {
+                this["UseThreeSpaces"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ConcatenateCommentFirst {
+            get {
+                return ((bool)(this["ConcatenateCommentFirst"]));
+            }
+            set {
+                this["ConcatenateCommentFirst"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("80")]
+        public int MaximumCommentWidth {
+            get {
+                return ((int)(this["MaximumCommentWidth"]));
+            }
+            set {
+                this["MaximumCommentWidth"] = value;
             }
         }
     }

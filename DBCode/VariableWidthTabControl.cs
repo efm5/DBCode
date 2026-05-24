@@ -1,17 +1,10 @@
-﻿namespace DBCode {
+namespace DBCode {
    public class VariableWidthTabControl : TabControl {
       public readonly List<int> TabHeaderWidths = [];
-      private bool mStripBackgroundPainted = false;
-      private bool mAllowStripPainting = true;
       private Color mCapturedBackColor = SystemColors.Control;
 
       public void SetStripBackColor(Color pColor) {
          mCapturedBackColor = pColor;
-      }
-
-      public void ResetStripBackgroundPainted() {
-         mStripBackgroundPainted = false;
-         mAllowStripPainting = true;
       }
 
       public void RecalculateItemSize(Font pFont) {
@@ -28,7 +21,6 @@
          TabHeaderWidths.Clear();
          for (int i = 0; i < TabCount; i++)
             TabHeaderWidths.Add(GetTabRect(i).Width);
-         ResetStripBackgroundPainted();
          Invalidate();
       }
 
@@ -42,47 +34,35 @@
          RecalculateItemSize(Font ?? SystemFonts.DefaultFont);
       }
 
-      protected override void OnSelectedIndexChanged(EventArgs pEventArgs) {
-         mAllowStripPainting = false;
-         base.OnSelectedIndexChanged(pEventArgs);
-      }
-
+      // DrawItem fires inside base.WndProc and paints every tab header; we then fill only
+      // the gaps between headers so the themed background shows without overwriting them.
+      // This works identically for single-line and multiline — no flag state needed.
       protected override void WndProc(ref Message pMessage) {
+         if (pMessage.Msg == 0x0201) {
+            int lp = pMessage.LParam.ToInt32();
+            int hitTab = HitTestTabHeaders(new Point(lp & 0xFFFF, (lp >> 16) & 0xFFFF));
+            if (hitTab >= 0) {
+               SelectedIndex = hitTab;
+               Focus();
+               return;
+            }
+         }
          base.WndProc(ref pMessage);
-         if (pMessage.Msg == 0x000F && mAllowStripPainting && !mStripBackgroundPainted && TabCount > 0 && DrawMode == TabDrawMode.OwnerDrawFixed) {
-            using (Graphics g = CreateGraphics()) {
-               Rectangle displayRect = DisplayRectangle;
-               Rectangle stripRect = new Rectangle(0, 0, Width, displayRect.Top);
-               using SolidBrush brush = new SolidBrush(mCapturedBackColor);
-               g.FillRectangle(brush, stripRect);
-            }
-            mStripBackgroundPainted = true;
-            for (int i = 0; i < TabCount; i++) {
-               Rectangle tabRect = GetTabRect(i);
-               Invalidate(tabRect);
-            }
+         if (pMessage.Msg == 0x000F && TabCount > 0 && DrawMode == TabDrawMode.OwnerDrawFixed) {
+            Rectangle stripRect = new Rectangle(0, 0, Width, DisplayRectangle.Top);
+            using Graphics g = CreateGraphics();
+            using SolidBrush brush = new SolidBrush(mCapturedBackColor);
+            using Region stripRegion = new Region(stripRect);
+            for (int i = 0; i < TabCount; i++)
+               stripRegion.Exclude(GetTabRect(i));
+            g.FillRegion(brush, stripRegion);
          }
       }
 
-      protected override void OnMouseDown(MouseEventArgs pMouseEventArgs) {
-         int tabIndex = HitTestTabHeaders(pMouseEventArgs.Location);
-         if (tabIndex >= 0)
-            SelectedIndex = tabIndex;
-         else
-            base.OnMouseDown(pMouseEventArgs);
-      }
-
       private int HitTestTabHeaders(Point pMouseLocation) {
-         if (TabCount == 0)
-            return -1;
-         int currentOffset = GetTabRect(0).X; // account for native left margin
-         int tabHeaderTop = GetTabRect(0).Y;
-         for (int index = 0; index < TabHeaderWidths.Count; index++) {
-            int width = TabHeaderWidths[index];
-            Rectangle rect = new Rectangle(currentOffset, tabHeaderTop, width, ItemSize.Height);
-            if (rect.Contains(pMouseLocation))
+         for (int index = 0; index < TabCount; index++) {
+            if (GetTabRect(index).Contains(pMouseLocation))
                return index;
-            currentOffset += width;
          }
          return -1;
       }

@@ -252,5 +252,44 @@ namespace DBCode {
                PaintMenuItemsRecursive(tsmi, pTheme);
          }
       }
+
+      internal static int ComputeMenuSeparatorHeight() {
+         int raw = mEmMenu / 3;
+         int rounded = ((raw + 2) / 3) * 3;
+         return Math.Clamp(rounded, 6, 33);
+      }
+
+      internal static void ApplyThemeToSeparators(ToolStripItemCollection pItems, int pHeight, Color pMenuBackground) {
+         foreach (ToolStripItem item in pItems) {
+            if (item is ToolStripSeparator separator) {
+               separator.AutoSize = false;
+               separator.Height = pHeight;
+               separator.BackColor = pMenuBackground;
+            }
+            else if (item is ToolStripMenuItem menuItem && menuItem.DropDownItems.Count > 0)
+               ApplyThemeToSeparators(menuItem.DropDownItems, pHeight, pMenuBackground);
+         }
+      }
+   }
+
+   internal sealed class ThemeMenuRenderer : ToolStripProfessionalRenderer {
+      private readonly Color mSeparatorLineColor;
+      internal ThemeMenuRenderer(Color pSeparatorLineColor) {
+         mSeparatorLineColor = pSeparatorLineColor;
+      }
+      protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs pEventArguments) {
+         if (pEventArguments.Vertical) {
+            base.OnRenderSeparator(pEventArguments);
+            return;
+         }
+         Rectangle bounds = new Rectangle(Point.Empty, pEventArguments.Item.Size);
+         int lineThickness = bounds.Height / 3;
+         int lineTop = bounds.Height / 3;
+         Rectangle lineRect = new Rectangle(mMenuLeftOffset, lineTop, bounds.Width - mMenuLeftOffset - 2, lineThickness);
+         using (SolidBrush backgroundBrush = new SolidBrush(pEventArguments.Item.BackColor))
+            pEventArguments.Graphics.FillRectangle(backgroundBrush, bounds);
+         using SolidBrush lineBrush = new SolidBrush(mSeparatorLineColor);
+         pEventArguments.Graphics.FillRectangle(lineBrush, lineRect);
+      }
    }
 }

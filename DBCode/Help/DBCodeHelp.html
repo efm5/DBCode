@@ -11,6 +11,7 @@
       <h1>DBCode&rsquo;s</h1>
       <h2>Reference Manual</h2>
       <h3>Version 0.0.0.1</h3>
+      <!-- #region heading -->
       <div class="introdiv">
          <p>This replacement for Dragon&rsquo;s built&ndash;in dictation box is specifically designed for use with IDEs by programmers. It can also be used as a general purpose dictation box replacement.</p>
       </div>
@@ -28,10 +29,18 @@
       <div class="picturediv">
          <img src="DBCodeMainTargeted.png" alt="DBCode&rsquo;s main window, targeted">
       </div>
+      <div class="imageLabel">
+         <big>DBCode</big> Minimal Mode, untargeted:
+      </div>
+      <div class="picturediv">
+         <img src="DBCodeMainMinimal.png" alt="DBCode&rsquo;s main window, minimal mode, untargeted">
+      </div>
+      <!-- #endregion -->
+      <!-- #region table of contents -->
       <h3>Table of Contents</h3>
       <table class="center">
          <tr>
-            <td colspan="4">
+            <td colspan="3">
                <a href="#menu">
                   <big>
                      <b>The&nbsp;Menu</b>
@@ -41,34 +50,37 @@
          </tr>
          <tr>
             <td>
-               <a href="#edit">The&nbsp;Edit&nbsp;Menu</a>
+               <a href="#editMenu">The&nbsp;Edit&nbsp;Menu</a>
             </td>
             <td>
-               <a href="#targeting">The&nbsp;Targeting&nbsp;Menu</a>
+               <a href="#targetingMenu">The&nbsp;Targeting&nbsp;Menu</a>
             </td>
             <td>
-               <a href="#visibility">The&nbsp;Visibility&nbsp;Menu</a>
-            </td>
-            <td>
-               <a href="#mode">The&nbsp;Mode&nbsp;Menu</a>
+               <a href="#viewMenu">The&nbsp;View&nbsp;Menu</a>
             </td>
          </tr>
          <tr>
             <td>
-               <a href="#language">The&nbsp;Language&nbsp;Menu</a>
+               <a href="#modeMenu">The&nbsp;Mode&nbsp;Menu</a>
             </td>
             <td>
-               <a href="options">The&nbsp;Options&nbsp;Menu&nbsp;Item</a>
+               <a href="#languageMenu">The&nbsp;Language&nbsp;Menu</a>
             </td>
             <td>
-               <a href="#theme">The&nbsp;Theme&nbsp;Menu</a>
-            </td>
-            <td>
-               <a href="#help">The&nbsp;Help&nbsp;Menu&nbsp;Item</a>
-            </td>
+               <a href="#codingMenu">The&nbsp;Coding&nbsp;Menu</a>
          </tr>
          <tr>
-            <td colspan="4">
+            <td>
+               <a href="#optionsMenu">The&nbsp;Options&nbsp;Menu&nbsp;Item</a>
+            </td>
+            <td>
+               <a href="#themeMenu">The&nbsp;Theme&nbsp;Menu</a>
+            </td>
+            <td>
+               <a href="#helpMenu">The&nbsp;Help&nbsp;Menu&nbsp;Item</a>
+            </tr>
+         <tr>
+            <td colspan="3">
                <a href="#dialogs">
                   <big>
                      <b>The&nbsp;Dialogs</b>
@@ -78,40 +90,67 @@
          </tr>
          <tr>
             <td>
-               <a href="#find">The&nbsp;Find&nbsp;Dialog</a>
+               <a href="#optionsDialogue">The&nbsp;Options&nbsp;Dialog</a>
+            </td>
+            <td colspan="2">
+               <a href="#pickTargetDialogue">The&nbsp;Pick&nbsp;Target&nbsp;Dialog</a>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <a href="#findDialogue">The&nbsp;Find&nbsp;Dialog</a>
             </td>
             <td>
-               <a href="#replace">The&nbsp;Replace&nbsp;Dialog</a>
+               <a href="#replaceDialogue">The&nbsp;Replace&nbsp;Dialog</a>
+            </td>
+            <td>
+               <a href="goToDialogue">The&nbsp;Go&nbsp;To&nbsp;Dialog</a>
             </td>
          </tr>
          <tr>
             <td>
-               <a href="#target">The&nbsp;Pick&nbsp;Target&nbsp;Dialog</a>
+               <a href="#getStringDialogue">The&nbsp;Get&nbsp;String&nbsp;Dialog</a>
             </td>
             <td>
-               <a href="#getString">The&nbsp;Get&nbsp;String&nbsp;Dialog</a>
+               <a href="#getIntegerDialogue">The&nbsp;Get&nbsp;Integer&nbsp;Dialog</a>
             </td>
             <td>
-               <a href="#goTo">The&nbsp;Go&nbsp;To&nbsp;Dialog</a>
+               <a href="#confirmationDialogue">The&nbsp;Confirmation&nbsp;Dialog</a>
             </td>
          </tr>
          <tr>
-            <td colspan="4">
+            <td>
+               <a href="#pickThemeDialogue">The&nbsp;Pick&nbsp;Theme&nbsp;Dialog</a>
+            </td>
+            <td>
+               <a href="designThemeDialogue">The&nbsp;Design&nbsp;Theme&nbsp;Dialog</a>
+            </td>
+            <td>
+               <a href="#editThemeDialogue">The&nbsp;Edit&nbsp;Theme&nbsp;Dialog</a>
+            </td>
+         </tr>
+         <tr>
+            <td colspan="2">
                <a href="#contextMenu">Context&nbsp;Menu</a>
             </td>
-         </tr>
-         <tr>
-            <td colspan="4">
+            <td>
                <a href="#shortcutKeys">Shortcut&nbsp;Keys</a>
             </td>
          </tr>
          <tr>
-            <td>
+            <td colspan="3">
+               <a href="#mainBottomPanel">The&nbsp;Bottom&nbsp;Controls</a>
+            </td>
+         </tr>
+         <tr>
+            <td colspan="3">
                <a href="#pageLinks">Other&nbsp;Help&nbsp;Pages</a>
             </td>
          </tr>
       </table>
       <br>
+      <!-- #endregion --> 
+      <!-- #region The menu -->
       <div class="largesectiondiv" id="menu">
          <p>The Menu</p>
       </div>
@@ -119,25 +158,26 @@
          <img src="Menu.png" alt="DBCode&rsquo;s menu">
       </div>
       <p>
-         The menu has 8 items: &ldquo;<u>E</u>dit&rdquo;; &ldquo;<u>T</u>argeting&rdquo;;
-         &ldquo;<u>V</u>isibility&rdquo;;  &ldquo;Mo<u>d</u>e&rdquo;;
-         &ldquo;<u>L</u>anguage&rdquo;; &ldquo;<u>O</u>ptions&rdquo;; &ldquo;The<u>m</u>e&rdquo;; and
-         &ldquo;<u>H</u>elp&rdquo;. All of these items have accelerator keys. All menu items and their children have
-         accelerator keys and keyboard shortcuts (when the they have no children).
+         The menu has 9 items: &ldquo;<u>E</u>dit&rdquo;; &ldquo;<u>T</u>argeting&rdquo;; &ldquo;<u>V</u>isibility&rdquo;;  &ldquo;Mo<u>d</u>e&rdquo;; &ldquo;<u>L</u>anguage&rdquo;; &ldquo; &ldquo;<u>C</u>oding&rdquo;; <u>O</u>ptions&rdquo;; &ldquo;The<u>m</u>e&rdquo;; and &ldquo;<u>H</u>elp&rdquo;. All menu items, their children and grandchildren have accelerator keys and many have keyboard shortcuts (when the they have no children).
       </p>
-      <div class="mediumsectiondiv" id="edit">
+        <div class="warningdiv">
+         <p>
+            Accelerator keys and keyboard shortcuts presented here are the defaults; the user is free to use the Shortcut Manager (located within the Options dialog on the &ldquo;Shortcuts&rdquo; page) to modify these at their discretion. (See here <a href="DBCodeOptionsHelp.html#shortcutsPage">for details</a>.)
+         </p>
+         <p>
+            Even when the menu is hidden in the &ldquo;Minimal&rdquo; view, its items are still accessible via keyboard shortcuts.
+         </p>
+         </div>    
+      <!-- #endregion --> 
+      <!-- #region edit -->
+      <div class="mediumsectiondiv" id="editMenu">
          <p>
             The <u>E</u>dit Menu (<b>ALT+e</b>)
          </p>
       </div>
       <div class="picturediv">
-         <img src="EditMenu.png" alt="DBCode&rsquo;s Edit menu">
-      </div>
-      <div class="notediv">
-         <p>
-            The menu images reflect a current working version of the keyboard shortcuts. After the menu has completely stabilized these keyboard shortcuts will be updated in the code and documentation.
-         </p>
-      </div>
+         <img src="MenuEdit.png" alt="DBCode&rsquo;s Edit menu">
+      </div>   
       <div class="lefttext">
          <p>
             The <u>E</u>dit menu has nineteen subitems: <u>U</u>ndo; <u>R</u>edo; Select <u>A</u>ll; Select <u>N</u>one; Cu<u>t</u>; <u>D</u>elete; Trim To <u>B</u>eginning; Tr<u>i</u>m To End; <u>C</u>opy; Cop<u>y</u> All; C<u>o</u>py To Beginning; Copy To <u>E</u>nd; <u>P</u>aste; <u>F</u>ind; Find Ne<u>x</u>t; Find Pre<u>v</u>ious; Rep<u>l</u>ace; <u>G</u>oTo; and <u>W</u>ordwrap.
@@ -219,14 +259,21 @@
             <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
          </p>
       </div>
+      <!-- #endregion -->
+      <!-- #region targeting -->
+         <div class="mediumsectiondiv" id="targetingMenu">
+            <p>
+               The <u>T</u>argeting Menu (<b>ALT+t</b>)
+            </p>
+         </div>
       <div class="picturediv">
-         <img src="TargetingMenu.png" alt="DBCode&rsquo;s Targeting menu">
+         <img src="MenuTargeting.png" alt="DBCode&rsquo;s Targeting menu">
       </div>
       <div class="lefttext">
-         <p id="targeting">
-            The <u>T</u>argeting menu controls transfers and has two subitems: <u>T</u>argeted and <u>R</u>etarget.
+         <p">
+            The <u>T</u>argeting menu controls transfers and has five subitems: <u>T</u>argeted; <u>R</u>etarget.
          </p>
-         <p class="tab" id="targeted">
+         <p class="tab">
             The &ldquo;<u>T</u>argeted&rdquo; (<b>CTRL+d</b>) subitem allows you to specify whether text transfer will
             be targeted or untargeted.
             <div class="tomatoSpan"> [TODO: finish out the details about targeted versus untargeted]</div>
@@ -236,48 +283,359 @@
             DB Code. This subitem will change the targeted status if targeting is not set.
          </p>
       </div>
-      <div class="tomatoSpan"> [TODO: finish out the rest of this page]</div>
-      <div class="largesectiondiv" id="mainBottomPanel">
-         <p>The Bottom Panel</p>
+      <!-- #endregion -->
+      <!-- #region view -->
+         <div class="mediumsectiondiv" id="viewMenu">
+            <p>
+               The <u>V</u>iew Menu (<b>ALT+v</b>)
+            </p>
+         </div>
+         <div class="picturediv">
+            <img src="MenuView.png" alt="DBCode&rsquo;s View menu">
+      </div>
+         <div class="lefttext">
+            <p>
+               The <u>V</u>iew menu controls <big>DBCode</big>&rsquo;s  transparency with five transparency&ndash;related subitems: <u>T</u>ransparent; <u>3</u>0%; <u>5</u>0%; <u>7</u>5%; and <u>O</u>paque. It also contains the <u>S</u>crolling subitem which has three sub-subitems: <u>E</u>dge; <u>S</u>croll and <u>P</u>age. Each of these three sub-subitems has four related sub-subitems: <u>T</u>op or <u>U</u>p; <u>B</u>ottom or <u>D</u>own; <u>L</u>eft and <u>R</u>ight.
+            </p>
+            <p class="tab">
+               The &ldquo;<u>T</u>ransparent&rdquo; (<b>CTRL+t</b>) subitem makes the DB Code window completely transparent. All available menu items are still usable even though invisible.
+            </p>
+            <p class="tab">
+               The &ldquo;<u>3</u>0% (<b>CTRL+3</b>)&rdquo; subitem makes the DB Code window quite transparent.
+            </p>
+            <p class="tab">
+               The &ldquo;<u>5</u>0% (<b>CTRL+5</b>)&rdquo; subitem makes the DB Code window moderately transparent.
+            </p>
+            <p class="tab">
+               The &ldquo;<u>7</u>5% (<b>CTRL+7</b>)&rdquo; subitem makes the DB Code window slightly transparent.
+            </p>
+            <p class="tab">
+               The &ldquo;<u>O</u>paque (<b>CTRL+o</b> &mdash; the letter o)&rdquo; subitem makes the DB Code window completely opaque.
+            </p>
+            <p class="tab">
+               The &ldquo;<u>S</u>crolling&rdquo; subitem contains tools to allow the user to scroll the active panel.
+            </p>
+         <div class="picturediv">
+            <img src="MenuViewScroll.png" alt="DBCode&rsquo;s View menu&rsquo;s Scrolling subsection">
+      </div>
+            <p class="doubletab">
+               The &ldquo;<u>E</u>dge&rdquo; sub-subitem has tools for scrolling the active panel all the way to the edge.
+            </p>
+            <p class="tripletab">
+               The &ldquo;<u>T</u>op (<b>CTRL+Alt+F1</b>)&rdquo; sub-subitem scrolls the active panel all the way to the top.
+            </p>
+            <p class="tripletab">
+               The &ldquo;<u>B</u>ottom (<b>CTRL+Alt+F2</b>)&rdquo; sub-subitem scrolls the active panel all the way to the bottom.
+            </p>
+            <p class="tripletab">
+               The &ldquo;<u>L</u>eft (<b>CTRL+Alt+F3</b>)&rdquo; sub-subitem scrolls the active panel all the way to the left edge.
+            </p>
+            <p class="tripletab">
+               The &ldquo;<u>R</u>ight (<b>CTRL+Alt+F4</b>)&rdquo; sub-subitem scrolls the active panel all the way to the right edge.
+            </p>
+            <p class="doubletab">
+               The &ldquo;<u>S</u>croll&rdquo; sub-subitem has tools for scrolling the active panel small amounts.
+            </p>
+            <p class="tripletab">
+               The &ldquo;<u>U</u>p (<b>CTRL+Alt+F5</b>)&rdquo; sub-subitem scrolls the active panel up one line.
+            </p>
+            <p class="tripletab">
+               The &ldquo;<u>D</u>own (<b>CTRL+Alt+F6</b>)&rdquo; sub-subitem scrolls the active panel down one line.
+            </p>
+            <p class="tripletab">
+               The &ldquo;<u>L</u>eft (<b>CTRL+Alt+F7</b>)&rdquo; sub-subitem scrolls the active panel left one character.
+            </p>
+            <p class="tripletab">
+               The &ldquo;<u>R</u>ight (<b>CTRL+Alt+F8</b>)&rdquo; sub-subitem scrolls the active panel write one character.
+            </p>
+            <p class="doubletab">
+               The &ldquo;<u>P</u>age&rdquo; sub-subitem has tools for scrolling the active panel a page at a time.
+            </p>
+            <p class="tripletab">
+               The &ldquo;<u>U</u>p (<b>CTRL+Alt+F9</b>)&rdquo; sub-subitem scrolls the active panel up one page.
+            </p>
+            <p class="tripletab">
+               The &ldquo;<u>D</u>own (<b>CTRL+Alt+F10</b>)&rdquo; sub-subitem scrolls the active panel down one page.
+            </p>
+            <p class="tripletab">
+               The &ldquo;<u>L</u>eft (<b>CTRL+Alt+F11</b>)&rdquo; sub-subitem scrolls the active panel left one page.
+            </p>
+            <p class="tripletab">
+               The &ldquo;<u>R</u>ight (<b>CTRL+Alt+F12</b>)&rdquo; sub-subitem scrolls the active panel right one page.
+            </p>
+         </div>
+         <div class="notediv">
+            <p>
+               These scrolling tools are provided mainly for the hands&ndash;free user who would otherwise find it difficult to move scrollable panels around without a mouse.
+            </p>
+            </div>
+         <!-- #endregion -->
+      <!-- #region mode -->
+         <div class="mediumsectiondiv" id="modeMenu">
+            <p>
+               The Mo<u>d</u>e Menu (<b>ALT+d</b>)
+            </p>
+         </div>
+         <div class="picturediv">
+            <img src="MenuMode.png" alt="DBCode&rsquo;s Mode menu">
+      </div>
+         <div class="lefttext">
+            <p>
+               The Mo<u>d</u>e menu controls the looks of <big>DBCode</big>. &ldquo;Minimal&rdquo; is without the menu, &ldquo;Features&rdquo; has the menu. Though invisible in Minimum mode, all of the menu items and their subitems are still usable via their keyboard shortcuts.
+               </p>
+            <p class="tab">
+               The &ldquo;<u>M</u>inimal&rdquo; (<b>CTRL+m</b>) subitem removes <big>DBCode</big>&rsquo;s menu.
+            </p>
+            <p class="tab">
+               The &ldquo;<u>F</u>eatures&rdquo; (<b>CTRL+SHIFT+t</b>) subitem restores <big>DBCode</big>&rsquo;s menu.
+            </p>
+         </div>
+         <!-- #endregion -->
+      <!-- #region language -->
+         <div class="mediumsectiondiv" id="languageMenu">
+            <p>
+               The <u>L</u>anguage Menu (<b>ALT+l</b>)
+            </p>
+         </div>
+         <div class="picturediv">
+            <img src="MenuLanguage.png" alt="DBCode&rsquo;s Language menu">
+      </div>
+         <div class="lefttext">
+            <p>
+               The <u>L</u>anguage menu controls which syntax style and colors will be applied. It has 15 subitems (none of which have sub-subitems): <u>P</u>laintext; CSha<u>r</u>p; <u>C</u>; C<u>p</u>p; <u>B</u>asic; <u>F</u>Sharp; <u>H</u>TML; C<u>S</u>S; <u>X</u>ML; <u>J</u>SON; Po<u>w</u>erShell; B<u>a</u>tch; S<u>Q</u>L; <u>M</u>arkdown and P<u>y</u>thon.
+               </p>
+            <p class="tab">
+               The &ldquo;<<u>P</u>laintext&rdquo; (<b>CTRL+ALT+G</b>) subitem applies no syntax. It would be appropriate when <big>DBCode</big> is used as a generic dictation box.
+            </p>
+            <p class="tab">
+               The &ldquo;CSha<u>r</u>p&rdquo; (<b>CTRL+ALT+H</b>) subitem applies the user&rsquo;s specified syntax highlighting for the language.
+            </p>
+            <p class="tab">
+               The &ldquo;<u>C</u>&rdquo; (<b>CTRL+ALT+I</b>) subitem applies the user&rsquo;s specified syntax highlighting for the language.
+            </p>
+            <p class="tab">
+               The &ldquo;C<u>p</u>p&rdquo; (<b>CTRL+ALT+J</b>) subitem applies the user&rsquo;s specified syntax highlighting for the language.
+            </p>
+            <p class="tab">
+               The &ldquo;<u>B</u>asic&rdquo; (<b>CTRL+ALT+K</b>) subitem applies the user&rsquo;s specified syntax highlighting for the language.
+            </p>
+            <p class="tab">
+               The &ldquo;<u>F</u>Sharp&rdquo; (<b>CTRL+ALT+L</b>) subitem applies the user&rsquo;s specified syntax highlighting for the language.
+            </p>
+            <p class="tab">
+               The &ldquo;<u>H</u>TML&rdquo; (<b>CTRL+ALT+M</b>) subitem applies the user&rsquo;s specified syntax highlighting for the language.
+            </p>
+            <p class="tab">
+               The &ldquo;C<u>S</u>S&rdquo; (<b>CTRL+ALT+N</b>) subitem applies the user&rsquo;s specified syntax highlighting for the language.
+            </p>
+            <p class="tab">
+               The &ldquo;<u>X</u>ML&rdquo; (<b>CTRL+ALT+O</b>) subitem applies the user&rsquo;s specified syntax highlighting for the language.
+            </p>
+            <p class="tab">
+               The &ldquo;<u>J</u>SON&rdquo; (<b>CTRL+ALT+P</b>) subitem applies the user&rsquo;s specified syntax highlighting for the language.
+            </p>
+            <p class="tab">
+               The &ldquo;Po<u>w</u>erShell&rdquo; (<b>CTRL+ALT+Q</b>) subitem applies the user&rsquo;s specified syntax highlighting for the language.
+            </p>
+            <p class="tab">
+               The &ldquo;B<u>a</u>tch&rdquo; (<b>CTRL+ALT+R</b>) subitem applies the user&rsquo;s specified syntax highlighting for the language.
+            </p>
+            <p class="tab">
+               The &ldquo;S<u>Q</u>L&rdquo; (<b>CTRL+ALT+S</b>) subitem applies the user&rsquo;s specified syntax highlighting for the language.
+            </p>
+            <p class="tab">
+               The &ldquo;<u>M</u>arkdown&rdquo; (<b>CTRL+ALT+T</b>) subitem applies the user&rsquo;s specified syntax highlighting for the language.
+            </p>
+            <p class="tab">
+               The &ldquo;P<u>y</u>thon&rdquo; (<b>CTRL+ALT+U</b>) subitem applies the user&rsquo;s specified syntax highlighting for the language.
+            </p>
+            <div class="notediv">
+               <p>
+                  More about syntax highlighting can be found in the <a href="DBCodeThemesHelp.html#syntaxHighlighting">Themes Help Page&rsquo;s Syntax Highlighting section</a>.
+               </p>
+               </div>
+         <!-- #endregion -->
+      <!-- #region coding -->
+         <div class="mediumsectiondiv" id="codingMenu">
+            <p>
+               The <u>C</u>oding Menu (<b>ALT+c</b>)
+            </p>
+         </div>
+      <div class="imageLabel">
+         <big>DBCode</big>&rsquo;s Coding menu:
+      </div>
+         <div class="picturediv">
+            <img src="MenuCoding.png" alt="DBCode&rsquo;s Coding menu">
+      </div>
+      <div class="imageLabel">
+         <b>
+            <big>DBCode</big>&rsquo;s Coding menu&rsquo;s C Family&rsquo;s snippets:
+         </b>
+      </div>
+      <div class="pictureTightVerticaldiv">
+         <img src="MenuCodingCFamily.png" alt="DBCode&rsquo;s Coding menu&rsquo;s C Family&rsquo;s snippets">
+      </div>
+      <div class="imageLabel">
+         <big>DBCode</big>&rsquo;s Coding menu&rsquo;s Basic&rsquo;s snippets:
       </div>
       <div class="picturediv">
-         <img src="MainBottomPanel.png" alt="DBCode&rsquo;s main bottom panel">
+         <img src="MenuCodingBasic.png" alt="DBCode&rsquo;s Coding menu&rsquo;s Basic&rsquo;s snippets">
       </div>
+      <div class="imageLabel">
+         <big>DBCode</big>&rsquo;s Coding menu&rsquo;s HTML&rsquo;s snippets:
+      </div>
+      <div class="picturediv">
+         <img src="MenuCodingHTML.png" alt="DBCode&rsquo;s Coding menu&rsquo;s HTML&rsquo;s snippets">
+      </div>
+      <div class="notediv">
+         <p>
+            Although all twelve Coding subitems have some simple example snippets included, the user is encouraged  to add their own items as desired.
+         </p>
+         <p>
+            For the sake of brevity, only a few of these subitems have images included here&nbsp;&mdash;&nbsp;they are highly repetitive.
+         </p>
+         <p>
+            More extensive documentation on the shipped snippets can be found <a href="CodingMethodsDocumentation.txt">here in a plain text document</a>.
+         </p>
+         </div>
+         <div class="lefttext">
+            <p>
+               The <u>C</u>oding menu allows the user to choose various coding snippets for the supported languages. It has 12 subitems, none of which have sub-subitems.
+            </p>
+            <div class="notediv">
+               <p>
+                  The &ldquo;Plaintext&rdquo; language selection has no entry here because it has no coding snippets.
+               </p>
+            </div>
+            <p class="tab">
+               <div class="notediv">
+                  <p>
+                     &ldquo;HTML&rdquo; language selection has a good start on giving the user a selection of useful HTML editing features. &ldquo;Bigger&rdquo; wraps the selection in 
+                     <big><big>…</big></big>; &ldquo;Smaller&rdquo; wraps the selection in 
+                     <small><small>…</small></small>. Colorize… opens the Color Picker to select a color for the foreground color of the selection.
+                  </p>
+               </div>
+            </p>
+         </div>
+         <!-- #endregion -->
+      <!-- #region options -->
+         <div class="mediumsectiondiv" id="optionsMenu">
+            <p>
+               The <u>O</u>ptions Menu Item (<b>F2</b> or <b>Ctrl+,</b> the comma)
+            </p>
+         </div>
+         <div class="lefttext">
+            <p>
+               The &ldquo;Options&rdquo; menu item has no subitems&nbsp;&mdash;&nbsp; it directly opens the Options dialog.
+            </p>
+         </div>
+         <!-- #endregion -->
+      <!-- #region theme -->
+         <div class="mediumsectiondiv" id="themeMenu">
+            <p>
+               The The<u>m</u>e Menu (<b>ALT+m</b>)
+            </p>
+         </div>
+      <div class="imageLabel">
+         <big>DBCode</big>&rsquo;s Theme menu:
+      </div>
+         <div class="picturediv">
+            <img src="MenuTheme.png" alt="DBCode&rsquo;s Theme menu">
+      </div> 
+      <div class="imageLabel">
+         <big>DBCode</big>&rsquo;s Theme menu&rsquo;s Pick subitem:
+      </div>
+         <div class="picturediv">
+            <img src="MenuThemePick.png" alt="DBCode&rsquo;s Theme menu&rsquo;s Pick subitem">
+      </div> 
+         <p>
+         The The<u>m</u>e menu has four subitems: &ldquo;Currently:…&rdquo;; &ldquo;<u>P</u>ick&rdquo;; &ldquo;<u>D</u>esign (<b>Ctrl+Shift+d</b>)&rdquo; and &ldquo;<u>E</u>dit (<b>Ctrl+Shift+e</b>)&rdquo;.
+         </p>
+      <div class="lefttext"></div>
+         <p class = "tab">
+         The &ldquo;Currently:…&rdquo; has no associated action&nbsp;&mdash;&nbsp; it displays the name of the current Theme.
+         </p>
+         <p class = "tab">
+         &ldquo;Pick&rdquo; has has two sub-subitems: &ldquo;<u>P</u>ick To Edit (<b>Ctrl+Shift+p</b>)&rdquo; and &ldquo;<u>E</u>dit Current (<b>Ctrl+Shift+c</b>)&rdquo;.
+         </p>
+         <p class = "doubletab">
+         &ldquo;<u>P</u>ick To Edit (<b>Ctrl+Shift+p</b>)&rdquo; opens the Theme Picker dialog allowing the user to pick a theme to edit directly (it need not be the current theme). Details on the Theme Picker dialog  <a href="DBCodeThemePickerHelp.html">can be found here</a>.
+         </p>
+         <p class = "doubletab">
+         &ldquo;<u>E</u>dit Current (<b>Ctrl+Shift+c</b>)&rdquo; opens the Theme Designer/Editor dialog allowing the user to edit the current theme. Details on the Theme Designer/Editor dialog <a href="DBCodeThemeDesignerHelp.html">are available here</a>.
+         </p>
+         <p class = "tab">
+         &ldquo;<u>D</u>esign (<b>Ctrl+Shift+d</b>)&rdquo; opens the Theme Designer/Editor dialog allowing the user to create a new theme initially based on the current theme. Details on the Theme Designer/Editor dialog <a href="DBCodeThemeDesignerHelp.html">are available here</a>.
+         </p>
+      </div>
+         <!-- #endregion -->
+      <!-- #region help-->
+         <div class="mediumsectiondiv" id="helpMenu">
+            <p>
+               The <u>H</u>elp Menu Item (<b>F1</b>)
+            </p>
+         </div>
+         <div class="lefttext">
+            <p>
+               The &ldquo;Help&rdquo; menu item has no subitems&nbsp;&mdash;&nbsp; it directly opens this Help dialog in the user&rsquo;s preferred browser.
+            </p>
+         </div>
+         <!-- #endregion -->
+      <!-- #region Bottom panel-->
+      <div class="largesectiondiv" id="mainBottomPanel">
+         <p>The Main Bottom Panels</p>
+      </div>     
+      <div class="notediv">
+         <p>
+            The main interface and all dialogs have Bottom Panels. These Bottom Panels will always have a &ldquo;Help&rdquo; button at the extreme left (providing context&ndash;sensitive help in the user&rsquo;s  preferred browser) and some form of closure button at the extreme right (this could be the &ldquo;Exit&rdquo; button for closing <big><b>DBCode</b></big>, a &ldquo;Cancel&rdquo; button, an &ldquo;OK&rdquo; button etc.) In between these leftmost and rightmost buttons there might be other buttons, checkboxes and/or other controls which apply to the dialog in general.
+         </p>
+      </div>
+      <div class="picturediv">
+         <img src="MainBottomPanels.png" alt="DBCode&rsquo;s main bottom panels">
+      </div> 
+         <div class="lefttext">
+            <p>
+               The Main bottom panel comes in two possible configurations: untargeted and targeted. The above composite image shows both&nbsp;&mdash;&nbsp;the top is the untargeted and the bottom is the targeted version. The only difference is that the targeted version gives an indication of what the name of the targeted application is (it might also include other information from the title bar of the targeted application).
+            </p>
       <p class="tab">
-         <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+         The &ldquo;<u>S</u>end All&rdquo; button causes the <b>entire</b> content of the RichTextBox to be inserted at the current cursor location of the target application.
+      </p>
+      <p class="tab">         
+         The &ldquo;<u>P</u>aste Selected&rdquo; button causes the <b>selected</b> content of the RichTextBox to be inserted at the current cursor location of the target application.
       </p>
       <p class="tab">
-         <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+         The &ldquo;Get <u>A</u>ll&rdquo; button causes the <b>entire</b> content of the targeted application to be inserted at the current cursor location of the <big>DBCode</big>.
       </p>
       <p class="tab">
-         <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+         The &ldquo;<u>G</u>et Selected&rdquo; button causes the <b>selected</b> content of the targeted application to be inserted at the current cursor location of the <big>DBCode</big>.         
+      </p>
+      <div class="notediv">
+         <p>
+             <a href="DBCodeTargetingHelp.html">More about the <b>targeted application</b> may be found here</a>.
+         </p>
+         </div>
+      <p class="tab">
+         The targeted icon changes subtly depending upon whether targeting is in force; there is a red slash across the targeting bull&rsquo;s&ndash;eye when there is no specific target. Additionally, if there is a target all or part of that targeted application&rsquo;s your name or its window&rsquo;s title will be displayed.
       </p>
       <p class="tab">
-         <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+         <b>DBCode</b>&rsquo;s  version will be displayed in this format: &ldquo;v:[primary version number].[secondary version number].[minor version number].[build number]&rdquo;     
       </p>
-      <p class="tab">
-         <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
+      <p class="tab">     
+         The &ldquo;<u>R</u>evert&rdquo; button restores the menu, exiting the minimal mode.         
       </p>
-      <p class="tab">
-         <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
-      </p>
-      <p class="tab">
-         <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
-      </p>
-      <p class="tab">
-         <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
-      </p>
-      <p class="tab">
-         <div class="tomatoSpan"> [TODO: finish out the rest of this section]</div>
-      </p>
+         </div>
+         <!-- #endregion -->      
       <div class="pageslinkdiv">
          <h3 id="pageLinks">Other Pages</h3>
          <p> <a href="DBCodeHelp.html">DB Code Main Help Page</a> </p>
+         <p> <a href="DBCodeTargetingHelp.html">Targeting Help Page</a> </p>
          <p> <a href="DBCodeOptionsHelp.html">Options Help Page</a> </p>
-         <p> <a href="DBCodeThemesHelp.html">Themes Help Page</a> </p>
-         <p> <a href="DBCodeThemePickerHelp.html">Theme Picker Help Page</a> </p>
-         <p> <a href="DBCodeColorPickerHelp.html">Color Picker Help Page</a> </p>
-         <p> <a href="DBCodeFontPickerHelp.html">Font Picker Help Page</a> </p>
+         <p> <a href="DBCodeThemesHelp.html">Themes Help Page</a> 
+             <a href="DBCodeThemePickerHelp.html">Theme Picker Help Page</a>
+             <a href="DBCodeThemeDesignerHelp.html">Theme Designer/Editor Help Page</a> 
+         </p>
+         <p> <a href="DBCodeColorPickerHelp.html">Color Picker Help Page</a>
+             <a href="DBCodeFontPickerHelp.html">Font Picker Help Page</a> </p>
          <p> <a href="DBCodeDialogsHelp.html">Dialogs Help Page</a> </p>
          <p> <a href="DBCodeShortcuts.html">Keyboard Shortcuts Help Page</a> </p>
       </div>

@@ -531,64 +531,64 @@
             tsmi.Checked = false;
          switch (mCurrentLanguage) {
             case LanguageKind.CSharp:
-               ThrowIfNull(mCSharpTSMI, nameof(mCSharpTSMI));
-               mCSharpTSMI.Checked = true;
+               ThrowIfNull(mLanguageCSharpTSMI, nameof(mLanguageCSharpTSMI));
+               mLanguageCSharpTSMI.Checked = true;
                break;
             case LanguageKind.C:
-               ThrowIfNull(mCTSMI, nameof(mCTSMI));
-               mCTSMI.Checked = true;
+               ThrowIfNull(mLanguageCTSMI, nameof(mLanguageCTSMI));
+               mLanguageCTSMI.Checked = true;
                break;
             case LanguageKind.Cpp:
-               ThrowIfNull(mCppTSMI, nameof(mCppTSMI));
-               mCppTSMI.Checked = true;
+               ThrowIfNull(mLanguageCppTSMI, nameof(mLanguageCppTSMI));
+               mLanguageCppTSMI.Checked = true;
                break;
             case LanguageKind.Basic:
-               ThrowIfNull(mBasicTSMI, nameof(mBasicTSMI));
-               mBasicTSMI.Checked = true;
+               ThrowIfNull(mLanguageBasicTSMI, nameof(mLanguageBasicTSMI));
+               mLanguageBasicTSMI.Checked = true;
                break;
             case LanguageKind.FSharp:
-               ThrowIfNull(mFSharpTSMI, nameof(mFSharpTSMI));
-               mFSharpTSMI.Checked = true;
+               ThrowIfNull(mLanguageFSharpTSMI, nameof(mLanguageFSharpTSMI));
+               mLanguageFSharpTSMI.Checked = true;
                break;
             case LanguageKind.Html:
-               ThrowIfNull(mHtmlTSMI, nameof(mHtmlTSMI));
-               mHtmlTSMI.Checked = true;
+               ThrowIfNull(mLanguageHtmlTSMI, nameof(mLanguageHtmlTSMI));
+               mLanguageHtmlTSMI.Checked = true;
                break;
             case LanguageKind.Css:
-               ThrowIfNull(mCssTSMI, nameof(mCssTSMI));
-               mCssTSMI.Checked = true;
+               ThrowIfNull(mLanguageCssTSMI, nameof(mLanguageCssTSMI));
+               mLanguageCssTSMI.Checked = true;
                break;
             case LanguageKind.Xml:
-               ThrowIfNull(mXmlTSMI, nameof(mXmlTSMI));
-               mXmlTSMI.Checked = true;
+               ThrowIfNull(mLanguageXmlTSMI, nameof(mLanguageXmlTSMI));
+               mLanguageXmlTSMI.Checked = true;
                break;
             case LanguageKind.Json:
-               ThrowIfNull(mJsonTSMI, nameof(mJsonTSMI));
-               mJsonTSMI.Checked = true;
+               ThrowIfNull(mLanguageJsonTSMI, nameof(mLanguageJsonTSMI));
+               mLanguageJsonTSMI.Checked = true;
                break;
             case LanguageKind.PowerShell:
-               ThrowIfNull(mPowerShellTSMI, nameof(mPowerShellTSMI));
-               mPowerShellTSMI.Checked = true;
+               ThrowIfNull(mLanguagePowerShellTSMI, nameof(mLanguagePowerShellTSMI));
+               mLanguagePowerShellTSMI.Checked = true;
                break;
             case LanguageKind.Batch:
-               ThrowIfNull(mBatchTSMI, nameof(mBatchTSMI));
-               mBatchTSMI.Checked = true;
+               ThrowIfNull(mLanguageBatchTSMI, nameof(mLanguageBatchTSMI));
+               mLanguageBatchTSMI.Checked = true;
                break;
             case LanguageKind.Sql:
-               ThrowIfNull(mSqlTSMI, nameof(mSqlTSMI));
-               mSqlTSMI.Checked = true;
+               ThrowIfNull(mLanguageSqlTSMI, nameof(mLanguageSqlTSMI));
+               mLanguageSqlTSMI.Checked = true;
                break;
             case LanguageKind.Markdown:
-               ThrowIfNull(mMarkdownTSMI, nameof(mMarkdownTSMI));
-               mMarkdownTSMI.Checked = true;
+               ThrowIfNull(mLanguageMarkdownTSMI, nameof(mLanguageMarkdownTSMI));
+               mLanguageMarkdownTSMI.Checked = true;
                break;
             case LanguageKind.Python:
-               ThrowIfNull(mPythonTSMI, nameof(mPythonTSMI));
-               mPythonTSMI.Checked = true;
+               ThrowIfNull(mLanguagePythonTSMI, nameof(mLanguagePythonTSMI));
+               mLanguagePythonTSMI.Checked = true;
                break;
             case LanguageKind.PlainText:
-               ThrowIfNull(mPlainTextTSMI, nameof(mPlainTextTSMI));
-               mPlainTextTSMI.Checked = true;
+               ThrowIfNull(mLanguagePlainTextTSMI, nameof(mLanguagePlainTextTSMI));
+               mLanguagePlainTextTSMI.Checked = true;
                break;
          }
       }
@@ -612,7 +612,7 @@
       internal void ApplyTheme() {
          ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
          ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
-         ThrowIfNull(mCurrentThemeIsTSMI, nameof(mCurrentThemeIsTSMI));
+         ThrowIfNull(mThemeCurrentThemeIsTSMI, nameof(mThemeCurrentThemeIsTSMI));
          ThrowIfNull(mForm, nameof(mForm));
          ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
          ThrowIfNull(mMenuStrip, nameof(mMenuStrip));
@@ -620,11 +620,17 @@
          ThrowIfNull(mHighlighterEngine, nameof(mHighlighterEngine));
          mRichTextBox.TextChanged -= OnEditorTextChanged;
          Theme theme = mCurrentTheme;
-         mCurrentThemeIsTSMI.Text = mCurrently + theme.mName;
+         Color menuBackground = theme.mInterfaceColors[(int)ColorSwatchUsage.MenuBackground];
+         int separatorHeight = ComputeMenuSeparatorHeight();
+         ThemeMenuRenderer menuRenderer = new ThemeMenuRenderer(ContrastingColor(menuBackground));
+         mThemeCurrentThemeIsTSMI.Text = mCurrently + theme.mName;
          mForm.BackColor = theme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground];
          mRichTextBox.BackColor = theme.mInterfaceColors[(int)ColorSwatchUsage.TextBox];
          mRichTextBox.ForeColor = theme.mInterfaceColors[(int)ColorSwatchUsage.TextBoxFont];
-         mMenuStrip.BackColor = theme.mInterfaceColors[(int)ColorSwatchUsage.MenuBackground];
+         mMenuStrip.BackColor = menuBackground;
+         mMenuStrip.Renderer = menuRenderer;
+         mContextMenuStrip.Renderer = menuRenderer;
+         ToolStripManager.Renderer = menuRenderer;
          foreach (ToolStripMenuItem toolStripMenuItem in mMenuStrip.Items.OfType<ToolStripMenuItem>()) {
             PaintMenuItem(toolStripMenuItem, theme);
             foreach (ToolStripMenuItem subItem in toolStripMenuItem.DropDownItems.OfType<ToolStripMenuItem>())
@@ -635,6 +641,8 @@
             foreach (ToolStripMenuItem subItem in toolStripMenuItem.DropDownItems.OfType<ToolStripMenuItem>())
                PaintMenuItemsRecursive(subItem, theme);
          }
+         ApplyThemeToSeparators(mMenuStrip.Items, separatorHeight, menuBackground);
+         ApplyThemeToSeparators(mContextMenuStrip.Items, separatorHeight, menuBackground);
          mMainBottomPanel.BackColor = theme.mInterfaceColors[(int)ColorSwatchUsage.StatusBackground];
          mMainBottomPanel.SetFontAndColor();
          LayoutMainBottomPanel();
@@ -748,8 +756,8 @@
                   mIsTargetingEnabled = false;
                   mTargetWindow = IntPtr.Zero;
                   mTargetWindowName = string.Empty;
-                  if (mTargetedTSMI != null)
-                     mTargetedTSMI.Checked = false;
+                  if (mTargetingTargetedTSMI != null)
+                     mTargetingTargetedTSMI.Checked = false;
                   UpdateTargetingStatusLabel();
                   TimedMessage("The targeted window no longer exists. Targeting has been turned off.", "Target Lost");
                   return;
@@ -763,7 +771,7 @@
                   return;
                }
             }
-            ClipboardHelper.TrySetClipboardText(text);
+            ClipboardHelper.TrySetClipboardText(ApplyLineEnding(text));
             await Task.Delay(mUiState.mClipboardDelayMs);
             BringWindowToTop(target);
             SetForegroundWindow(target);
@@ -798,8 +806,8 @@
                   mIsTargetingEnabled = false;
                   mTargetWindow = IntPtr.Zero;
                   mTargetWindowName = string.Empty;
-                  if (mTargetedTSMI != null)
-                     mTargetedTSMI.Checked = false;
+                  if (mTargetingTargetedTSMI != null)
+                     mTargetingTargetedTSMI.Checked = false;
                   UpdateTargetingStatusLabel();
                   TimedMessage("The targeted window no longer exists. Targeting has been turned off.", "Target Lost");
                   return;
@@ -813,7 +821,7 @@
                   return;
                }
             }
-            ClipboardHelper.TrySetClipboardText(text);
+            ClipboardHelper.TrySetClipboardText(ApplyLineEnding(text));
             await Task.Delay(mUiState.mClipboardDelayMs);
             BringWindowToTop(target);
             SetForegroundWindow(target);
@@ -831,6 +839,18 @@
          }
       }
 
+      private static string ApplyLineEnding(string pText) {
+         if (mUiState.mLineEnding == LineEndings.Default)
+            return pText;
+         const string bell = "\a";
+         string text = pText.Replace("\n\n", bell);
+         return mUiState.mLineEnding switch {
+            LineEndings.Insert => text.Replace("\n", "\r\n").Replace(bell, "\r\n\r\n"),
+            LineEndings.Append => text.Replace("\n", "\n\r").Replace(bell, "\n\r\n\r"),
+            _ => pText
+         };
+      }
+
       private static async void GetAllAsync() {
          ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
          ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
@@ -846,8 +866,8 @@
                   mIsTargetingEnabled = false;
                   mTargetWindow = IntPtr.Zero;
                   mTargetWindowName = string.Empty;
-                  if (mTargetedTSMI != null)
-                     mTargetedTSMI.Checked = false;
+                  if (mTargetingTargetedTSMI != null)
+                     mTargetingTargetedTSMI.Checked = false;
                   UpdateTargetingStatusLabel();
                   TimedMessage("The targeted window no longer exists. Targeting has been turned off.", "Target Lost");
                   return;
@@ -902,8 +922,8 @@
                   mIsTargetingEnabled = false;
                   mTargetWindow = IntPtr.Zero;
                   mTargetWindowName = string.Empty;
-                  if (mTargetedTSMI != null)
-                     mTargetedTSMI.Checked = false;
+                  if (mTargetingTargetedTSMI != null)
+                     mTargetingTargetedTSMI.Checked = false;
                   UpdateTargetingStatusLabel();
                   TimedMessage("The targeted window no longer exists. Targeting has been turned off.", "Target Lost");
                   return;
@@ -1126,11 +1146,9 @@
       }
 
       private static void UpdateOpacityMenuChecks(double pOpacity) {
-         ThrowIfNull(mVisibilityMenuItem, nameof(mVisibilityMenuItem));
-         foreach (ToolStripMenuItem tsmi in mVisibilityMenuItem.DropDownItems.OfType<ToolStripMenuItem>()) {
-            if (tsmi.Tag is not double tagOpacity)
-               ThrowBadCode($"ToolStripMenuItem {tsmi.Name} in {nameof(UpdateOpacityMenuChecks)} has a null or non-double Tag.");
-            else
+         ThrowIfNull(mViewMenuItem, nameof(mViewMenuItem));
+         foreach (ToolStripMenuItem tsmi in mViewMenuItem.DropDownItems.OfType<ToolStripMenuItem>()) {
+            if (tsmi.Tag is double tagOpacity)
                tsmi.Checked = Math.Abs(tagOpacity - pOpacity) < 0.001;
          }
       }
@@ -1148,8 +1166,8 @@
 
       private void EnterMinimalView() {
          ThrowIfNull(mMenuStrip, nameof(mMenuStrip));
-         ThrowIfNull(mMinimalTSMI, nameof(mMinimalTSMI));
-         ThrowIfNull(mFeaturesTSMI, nameof(mFeaturesTSMI));
+         ThrowIfNull(mModeMinimalTSMI, nameof(mModeMinimalTSMI));
+         ThrowIfNull(mModeFeaturesTSMI, nameof(mModeFeaturesTSMI));
          string currentText = Text;
          bool currentControlBox = ControlBox;
          mPreMinimalText = currentText;
@@ -1157,14 +1175,14 @@
          mMenuStrip.Visible = false;
          Text = string.Empty;
          ControlBox = false;
-         mMinimalTSMI.Checked = true;
-         mFeaturesTSMI.Checked = false;
+         mModeMinimalTSMI.Checked = true;
+         mModeFeaturesTSMI.Checked = false;
       }
 
       private void EnterFeaturesView() {
          ThrowIfNull(mMenuStrip, nameof(mMenuStrip));
-         ThrowIfNull(mMinimalTSMI, nameof(mMinimalTSMI));
-         ThrowIfNull(mFeaturesTSMI, nameof(mFeaturesTSMI));
+         ThrowIfNull(mModeMinimalTSMI, nameof(mModeMinimalTSMI));
+         ThrowIfNull(mModeFeaturesTSMI, nameof(mModeFeaturesTSMI));
          string restoredText = mPreMinimalText;
          bool restoredControlBox = mPreMinimalControlBox;
          if (string.IsNullOrEmpty(restoredText))
@@ -1172,8 +1190,8 @@
          Text = restoredText;
          ControlBox = restoredControlBox;
          mMenuStrip.Visible = true;
-         mMinimalTSMI.Checked = false;
-         mFeaturesTSMI.Checked = true;
+         mModeMinimalTSMI.Checked = false;
+         mModeFeaturesTSMI.Checked = true;
       }
 
       private static void LayoutMainBottomPanel() {

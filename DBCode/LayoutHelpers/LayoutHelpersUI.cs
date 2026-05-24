@@ -118,6 +118,7 @@ namespace DBCode {
 
       internal static void RecalculateAssociatedOffsets(Font pFont) {
          float fontSize = pFont.SizeInPoints;
+         mEmMenu = (int)Math.Ceiling(mCurrentTheme.mFonts[(int)FontUsage.Menu].SizeInPoints);
          mGroupLeftPad = (int)Math.Ceiling(fontSize * 1.5f);
          mAssociatedButtonPostCheckBoxVerticalOffset = (int)Math.Ceiling(fontSize * 0.3f);
          mAssociatedButtonPostLabelHorizontalSpace = (int)Math.Ceiling(fontSize * 0.3f);

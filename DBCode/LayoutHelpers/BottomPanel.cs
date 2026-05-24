@@ -56,6 +56,17 @@
             return pControl;
          }
 
+         internal void ShowLeftControl(Control pControl) {
+            pControl.Visible = true;
+            if (!Controls.Contains(pControl))
+               Controls.Add(pControl);
+         }
+
+         internal void HideLeftControl(Control pControl) {
+            pControl.Visible = false;
+            Controls.Remove(pControl);
+         }
+
          internal Control AddRightControl(Control pControl) {
             mRightControls.Add(pControl);
             Controls.Add(pControl);

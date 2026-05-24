@@ -182,11 +182,10 @@
             if (!string.IsNullOrEmpty(lines[i]))
                content += @"//  " + lines[i] + Environment.NewLine;
             else {
-               //DEBUG efm5 2026 05 18 reinstate
-               //if (Settings.Default.CommentOutBlankLines)
-               //   content += @"//" + Environment.NewLine;
-               //else
-               content += lines[i] + Environment.NewLine;
+               if (mUiState.mCommentOutBlankLines)
+                  content += @"//" + Environment.NewLine;
+               else
+                  content += lines[i] + Environment.NewLine;
             }
          }
          mRichTextBox.SelectedText = content.Substring(0, content.Length - 2);
@@ -204,27 +203,24 @@
          foreach (string phrase in lines)
             lines[index] = lines[index++].TrimStart();
          if (pSummary) {
-            //DEBUG efm5 2026 05 18 reinstate
-            //if (Settings.Default.UseThreeSpaces)
-            //   content += @"///   <summary>" + Environment.NewLine + Environment.NewLine;
-            //else
-            content += @"///  <summary>" + Environment.NewLine + Environment.NewLine;
+            if (mUiState.mUseThreeSpaces)
+               content += @"///   <summary>" + Environment.NewLine + Environment.NewLine;
+            else
+               content += @"///  <summary>" + Environment.NewLine + Environment.NewLine;
          }
 
          for (int i = 0; i < lines.Length; i++) {
             if (!string.IsNullOrEmpty(lines[i])) {
-               //DEBUG efm5 2026 05 18 reinstate
-               //if (Settings.Default.UseThreeSpaces)
-               //   content += @"///   " + lines[i] + Environment.NewLine;
-               //else
-               content += @"///  " + lines[i] + Environment.NewLine;
+               if (mUiState.mUseThreeSpaces)
+                  content += @"///   " + lines[i] + Environment.NewLine;
+               else
+                  content += @"///  " + lines[i] + Environment.NewLine;
             }
             else {
-               //DEBUG efm5 2026 05 18 reinstate
-               //if (Settings.Default.CommentOutBlankLines)
-               //   content += @"///" + lines[i] + Environment.NewLine;
-               //else
-               content += lines[i] + Environment.NewLine;
+               if (mUiState.mCommentOutBlankLines)
+                  content += @"///" + lines[i] + Environment.NewLine;
+               else
+                  content += lines[i] + Environment.NewLine;
             }
          }
          mRichTextBox.SelectedText = content.Substring(0, content.Length - 2);
@@ -265,22 +261,20 @@
          AllIfNothing();
          string content = string.Empty;
          string[] lines = [string.Empty];
-         //DEBUG efm5 2026 05 18 reinstate
-         //if (Settings.Default.ConcatenateCommentFirst) {
-         //   lines[0] = mRichTextBox.SelectedText.Replace("\r\n", " ");
-         //   lines[0] = lines[0].Replace("\n\r", " ");
-         //   lines[0] = lines[0].Replace("\r", " ");
-         //   lines[0] = lines[0].Replace("\n", " ");
-         //}
-         //else
-         lines = mRichTextBox.SelectedText.Split(Environment.NewLine);
+         if (mUiState.mConcatenateCommentFirst) {
+            lines[0] = mRichTextBox.SelectedText.Replace("\r\n", " ");
+            lines[0] = lines[0].Replace("\n\r", " ");
+            lines[0] = lines[0].Replace("\r", " ");
+            lines[0] = lines[0].Replace("\n", " ");
+         }
+         else
+            lines = mRichTextBox.SelectedText.Split(Environment.NewLine);
          foreach (string phrase in lines) {
-            //DEBUG efm5 2026 05 18 reinstate
-            //if (phrase.Length > Settings.Default.CommentWidth)
-            //   content += SplitToLines(phrase, new char[] { ' ' }, Settings.Default.CommentWidth) +
-            //      Environment.NewLine;
-            //else
-            content += phrase + Environment.NewLine;
+            if (phrase.Length > mUiState.mMaximumCommentWidth)
+               content += SplitToLines(phrase, [' '], mUiState.mMaximumCommentWidth) +
+                  Environment.NewLine;
+            else
+               content += phrase + Environment.NewLine;
          }
          mRichTextBox.SelectedText = content.Substring(0, content.Length - 2);
       }
@@ -516,19 +510,20 @@
       private static void HTMLPreformatted() => HTMLWrap("<pre>", "</pre>");
 
       private static void HTMLColorize() {
+         ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
          AssertCodingReady();
          if (string.IsNullOrEmpty(mRichTextBox.Text))
             return;
          AllIfNothing();
          string selected = mRichTextBox.SelectedText;
-         using ColorDialog dialog = new ColorDialog { FullOpen = true };
-         if (dialog.ShowDialog() != DialogResult.OK)
-            return;
-         Color color = dialog.Color;
-         string hex = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
-         mRichTextBox.SelectedText = $"<span style=\"color: {hex}\">{selected}</span>";
-         mRichTextBox.SelectAll();
-         mRichTextBox.Copy();
+         int selStart = mRichTextBox.SelectionStart;
+         ThemePanel.EnsureColorPickerPanelFromCoding(mCurrentTheme, Color.Red, color => {
+            string hex = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
+            mRichTextBox.Select(selStart, selected.Length);
+            mRichTextBox.SelectedText = $"<span style=\"color: {hex}\">{selected}</span>";
+            mRichTextBox.SelectAll();
+            mRichTextBox.Copy();
+         });
       }
 
       #endregion

@@ -78,6 +78,17 @@ namespace DBCode {
             }
          }
 
+         private void FontSizeComboBox_DrawItem(object? pSender, DrawItemEventArgs pEventArguments) {
+            if (pSender == null || pEventArguments.Index < 0)
+               return;
+            ComboBox comboBox = (ComboBox)pSender;
+            string sizeText = (string)comboBox.Items[pEventArguments.Index]!;
+            pEventArguments.DrawBackground();
+            using SolidBrush brush = new SolidBrush(pEventArguments.ForeColor);
+            pEventArguments.Graphics.DrawString(sizeText, comboBox.Font, brush,
+               pEventArguments.Bounds.X, pEventArguments.Bounds.Y);
+         }
+
          private void NormalStyleCheckBox_Click(object? pSender, EventArgs pEventArguments) {
             ThrowIfNull(mNormalStyleCluster, nameof(mNormalStyleCluster));
             if (mNormalStyleCluster.mScalableCheckBox.Checked) {

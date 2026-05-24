@@ -330,12 +330,36 @@
             ShowColorPickerPanel();
          }
 
+         public static void EnsureColorPickerPanel(Theme pTheme, Color pInitialColor, Action<Color> pColorCallback) {
+            ThrowIfNull(mForm, nameof(mForm));
+            mUiState.ThemeBounds = mForm.Bounds;
+            mColorPickerPanel?.Dispose();
+            mColorPickerPanel = new ColorPickerPanel(pTheme, pInitialColor, pColorCallback,
+               RestoreFromColorPickerPanelToOptions);
+            ShowColorPickerPanelFromOptions();
+         }
+
          public static void ShowColorPickerPanel() {
             ThrowIfNull(mColorPickerPanel, nameof(mColorPickerPanel));
             ThrowIfNull(mForm, nameof(mForm));
             ThrowIfNull(mThemePanel, nameof(mThemePanel));
             if (mForm.Controls.Contains(mThemePanel))
                mForm.Controls.Remove(mThemePanel);
+            if (!mForm.Controls.Contains(mColorPickerPanel))
+               mForm.Controls.Add(mColorPickerPanel);
+            mActiveLayoutable = mColorPickerPanel.mBottomPanel;
+            mColorPickerPanel.mTitleLabel.CenterTitle();
+            mColorPickerPanel.mBottomPanel.PositionRightControls();
+            mColorPickerPanel.Dock = DockStyle.Fill;
+            mColorPickerPanel.Visible = true;
+            mColorPickerPanel.BringToFront();
+            mColorPickerPanel.Show();
+         }
+
+         public static void ShowColorPickerPanelFromOptions() {
+            ThrowIfNull(mColorPickerPanel, nameof(mColorPickerPanel));
+            ThrowIfNull(mForm, nameof(mForm));
+            ThrowIfNull(mOptionsPanel, nameof(mOptionsPanel));
             if (!mForm.Controls.Contains(mColorPickerPanel))
                mForm.Controls.Add(mColorPickerPanel);
             mActiveLayoutable = mColorPickerPanel.mBottomPanel;
@@ -373,6 +397,75 @@
                   mThemePanel.HighlightAllExampleBoxes();
                mThemePanel.Invalidate(true);
             }
+         }
+
+         public static void RestoreFromColorPickerPanelToOptions() {
+            ThrowIfNull(mForm, nameof(mForm));
+            ThrowIfNull(mColorPickerPanel, nameof(mColorPickerPanel));
+            ThrowIfNull(mOptionsPanel, nameof(mOptionsPanel));
+            if (mForm.Controls.Contains(mColorPickerPanel))
+               mForm.Controls.Remove(mColorPickerPanel);
+            mColorPickerPanel.Dispose();
+            mColorPickerPanel = null;
+            mUiState.mColorPickerBounds = mForm.Bounds;
+            mForm.SuspendClientSizeChanged();
+            mForm.Bounds = mUiState.ThemeBounds;
+            mActiveLayoutable = mOptionsPanel.mBottomPanel;
+            mForm.ResumeClientSizeChanged();
+            if (!mForm.Controls.Contains(mOptionsPanel))
+               mForm.Controls.Add(mOptionsPanel);
+            mOptionsPanel.BringToFront();
+            mOptionsPanel.Visible = true;
+            mOptionsPanel.Show();
+            mForm.Activate();
+            mOptionsPanel.Focus();
+            mOptionsPanel.RefreshBraceExample();
+         }
+
+         public static void EnsureColorPickerPanelFromCoding(Theme pTheme, Color pInitialColor,
+            Action<Color> pColorCallback) {
+            ThrowIfNull(mForm, nameof(mForm));
+            mUiState.ThemeBounds = mForm.Bounds;
+            mColorPickerPanel?.Dispose();
+            mColorPickerPanel = new ColorPickerPanel(pTheme, pInitialColor, pColorCallback,
+               RestoreFromColorPickerPanelToCoding, "Select a color for the HTML span element");
+            ShowColorPickerPanelFromCoding();
+         }
+
+         public static void ShowColorPickerPanelFromCoding() {
+            ThrowIfNull(mColorPickerPanel, nameof(mColorPickerPanel));
+            ThrowIfNull(mForm, nameof(mForm));
+            ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
+            if (!mForm.Controls.Contains(mColorPickerPanel))
+               mForm.Controls.Add(mColorPickerPanel);
+            mActiveLayoutable = mColorPickerPanel.mBottomPanel;
+            mColorPickerPanel.mTitleLabel.CenterTitle();
+            mColorPickerPanel.mBottomPanel.PositionRightControls();
+            mColorPickerPanel.Dock = DockStyle.Fill;
+            mColorPickerPanel.Visible = true;
+            mColorPickerPanel.BringToFront();
+            mColorPickerPanel.Show();
+         }
+
+         public static void RestoreFromColorPickerPanelToCoding() {
+            ThrowIfNull(mForm, nameof(mForm));
+            ThrowIfNull(mColorPickerPanel, nameof(mColorPickerPanel));
+            ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
+            ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
+            if (mForm.Controls.Contains(mColorPickerPanel))
+               mForm.Controls.Remove(mColorPickerPanel);
+            mColorPickerPanel.Dispose();
+            mColorPickerPanel = null;
+            mUiState.mColorPickerBounds = mForm.Bounds;
+            mForm.SuspendClientSizeChanged();
+            mForm.Bounds = mUiState.ThemeBounds;
+            mActiveLayoutable = mMainBottomPanel;
+            mForm.ResumeClientSizeChanged();
+            mScrollableMainPanel.BringToFront();
+            mScrollableMainPanel.Visible = true;
+            mForm.Activate();
+            mScrollableMainPanel.Focus();
+            mMainBottomPanel.LayoutControls();
          }
 
          public static void EnsureFontPickerPanel(Theme pTheme, FontUsage pUsage, Font pInitialFont) {

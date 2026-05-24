@@ -62,6 +62,17 @@
             }
          }
 
+         public void CenterTitle(Panel pPanel) {
+            ThrowIfNull(pPanel, nameof(pPanel));
+            ThrowIfNull(mLabel, nameof(mLabel));
+            int x = (pPanel.ClientSize.Width - mLabel.Width) / 2;
+            if (x < 0)
+               x = 0;
+            mLabel.Left = x;
+            mLabel.Invalidate();
+            mLabel.Refresh();
+         }
+
          internal override void SetFontAndColor() {
             Theme.ThemeInterfaceThings(mTheme, out Font poFont, out Color poForeColor, out Color poBackColor);
             UpdateFont(mLabel, CreateNewTitleFont(mSizeMultiplier));

@@ -1,21 +1,21 @@
 namespace DBCode {
    internal sealed class UiState {
       // ───── Persisted via Settings.Default ─────
-      internal bool mFirstTheme, mFirstLaunch, mUseTabs, mUseSpaces, mUsePCRE,
-         mFindMatchCase, mFindWholeWord, mFindRegularExpressions, mFindScopeSelection,
-         mSRMatchCase, mSRWholeWord, mSRRegularExpressions, mSRScopeSelection, mAllIfNothing, mCommentConcatenateFirst;
+      internal bool mFirstTheme, mFirstLaunch, mUseTabs, mUseSpaces, mUsePCRE, mFindMatchCase, mFindWholeWord, mFindRegularExpressions,
+         mFindScopeSelection, mSRMatchCase, mSRWholeWord, mSRRegularExpressions, mSRScopeSelection, mAllIfNothing, mConcatenateCommentFirst,
+         mShortcutsDgvAutoSize, mCommentOutBlankLines, mUseThreeSpaces;
+      internal Color mBracePairColor0, mBracePairColor1, mBracePairColor2, mBracePairColor3, mBracePairColor4, mBracePairColor5,
+         mBracePairColor6, mBracePairColor7, mBracePairColor8, mBracePairColor9;
       internal double mFormOpacity;
       internal Point mFormLocation, mThemeLocation, mThemePickerLocation;
       internal Size mFormSize, mThemeSize, mThemePickerSize;
       internal int mThemePrimaryTabPageIndex, mThemeTargetingTabIndexIndex, mThemeHighlightTabPageIndex, mOptionsCodingTabControlPageIndex,
          mTopDraggerHeight, mTopDraggerEdge, mActivationDelayMs, mClipboardDelayMs, mReactivationDelayMs,
          mWhitespace, mSpacesPerTab, mSpacesToBecomeTab, mOptionsGeneralTabControlPageIndex,
-         mOptionsIncludeExcludeTabControlPageIndex, mSearchHistoryMaxEntries, mReplaceHistoryMaxEntries, mCommentWidth;
+         mOptionsIncludeExcludeTabControlPageIndex, mSearchHistoryMaxEntries, mReplaceHistoryMaxEntries, mMaximumCommentWidth;
       internal LanguageKind mLanguageKind;
-      internal string mCurrentThemeName;
-      internal Color mBracePairColor0, mBracePairColor1, mBracePairColor2, mBracePairColor3,
-                     mBracePairColor4, mBracePairColor5, mBracePairColor6, mBracePairColor7,
-                     mBracePairColor8, mBracePairColor9;
+      internal LineEndings mLineEnding;
+      internal string mCurrentThemeName, mShortcutsColumnWidths;
       // ───── Persisted as text files ─────
       internal List<string> mFindSearchHistory = [];
       internal List<string> mFindPcreSearchHistory = [];
@@ -64,6 +64,7 @@ namespace DBCode {
          mOptionsCodingTabControlPageIndex = 0;
          mLanguageKind = LanguageKind.CSharp;
          mCurrentThemeName = string.Empty;
+         mShortcutsColumnWidths = string.Empty;
          mFirstTheme = true;
          mFirstLaunch = true;
          mTopDraggerHeight = 10;
@@ -88,8 +89,11 @@ namespace DBCode {
          mSRRegularExpressions = false;
          mSRScopeSelection = false;
          mAllIfNothing = false;
-         mCommentConcatenateFirst = true;
-         mCommentWidth = 80;
+         mConcatenateCommentFirst = true;
+         mMaximumCommentWidth = 80;
+         mShortcutsDgvAutoSize = true;
+         mCommentOutBlankLines = true;
+         mUseThreeSpaces = true;
          mBracePairColor0 = Color.FromArgb(196, 160, 16);   // gold
          mBracePairColor1 = Color.FromArgb(32, 138, 138);   // teal
          mBracePairColor2 = Color.FromArgb(196, 32, 48);    // crimson
@@ -100,6 +104,7 @@ namespace DBCode {
          mBracePairColor7 = Color.FromArgb(32, 80, 192);    // cobalt
          mBracePairColor8 = Color.FromArgb(196, 98, 0);     // amber
          mBracePairColor9 = Color.FromArgb(106, 138, 28);   // olive
+         mLineEnding = LineEndings.Default;
       }
 
       public void Read() {
@@ -139,6 +144,7 @@ namespace DBCode {
          mThemePickerLocation = Settings.Default.ThemePickerLocation;
          mCurrentLanguage = (LanguageKind)Settings.Default.CurrentLanguage;
          mCurrentThemeName = Settings.Default.CurrentThemeName;
+         mShortcutsColumnWidths = Settings.Default.ShortcutsColumnWidths;
          mFirstTheme = Settings.Default.FirstTheme;
          mFirstLaunch = Settings.Default.FirstLaunch;
          mTopDraggerHeight = Settings.Default.TopDraggerHeight;
@@ -163,8 +169,9 @@ namespace DBCode {
          mSRRegularExpressions = Settings.Default.SRRegularExpressions;
          mSRScopeSelection = Settings.Default.SRScopeSelection;
          mAllIfNothing = Settings.Default.AllIfNothing;
-         mCommentConcatenateFirst = Settings.Default.CommentConcatenateFirst;
-         mCommentWidth = Settings.Default.CommentWidth;
+         mConcatenateCommentFirst = Settings.Default.ConcatenateCommentFirst;
+         mShortcutsDgvAutoSize = Settings.Default.ShortcutsDgvAutoSize;
+         mMaximumCommentWidth = Settings.Default.CommentWidth;
          mBracePairColor0 = Settings.Default.BracePairColor0;
          mBracePairColor1 = Settings.Default.BracePairColor1;
          mBracePairColor2 = Settings.Default.BracePairColor2;
@@ -175,6 +182,8 @@ namespace DBCode {
          mBracePairColor7 = Settings.Default.BracePairColor7;
          mBracePairColor8 = Settings.Default.BracePairColor8;
          mBracePairColor9 = Settings.Default.BracePairColor9;
+         mUseThreeSpaces = Settings.Default.UseThreeSpaces;
+         mCommentOutBlankLines = Settings.Default.CommentOutBlankLines;
       }
 
       private void WriteSettings() {
@@ -193,6 +202,7 @@ namespace DBCode {
          Settings.Default.OptionsCodingTabControlPageIndex = mOptionsCodingTabControlPageIndex;
          Settings.Default.CurrentLanguage = (int)mCurrentLanguage;
          Settings.Default.CurrentThemeName = mCurrentThemeName;
+         Settings.Default.ShortcutsColumnWidths = mShortcutsColumnWidths;
          Settings.Default.FirstTheme = mFirstTheme;
          Settings.Default.FirstLaunch = mFirstLaunch;
          Settings.Default.TopDraggerHeight = mTopDraggerHeight;
@@ -217,8 +227,9 @@ namespace DBCode {
          Settings.Default.SRRegularExpressions = mSRRegularExpressions;
          Settings.Default.SRScopeSelection = mSRScopeSelection;
          Settings.Default.AllIfNothing = mAllIfNothing;
-         Settings.Default.CommentConcatenateFirst = mCommentConcatenateFirst;
-         Settings.Default.CommentWidth = mCommentWidth;
+         Settings.Default.ConcatenateCommentFirst = mConcatenateCommentFirst;
+         Settings.Default.ShortcutsDgvAutoSize = mShortcutsDgvAutoSize;
+         Settings.Default.CommentWidth = mMaximumCommentWidth;
          Settings.Default.BracePairColor0 = mBracePairColor0;
          Settings.Default.BracePairColor1 = mBracePairColor1;
          Settings.Default.BracePairColor2 = mBracePairColor2;
@@ -229,6 +240,8 @@ namespace DBCode {
          Settings.Default.BracePairColor7 = mBracePairColor7;
          Settings.Default.BracePairColor8 = mBracePairColor8;
          Settings.Default.BracePairColor9 = mBracePairColor9;
+         Settings.Default.UseThreeSpaces = mUseThreeSpaces;
+         Settings.Default.CommentOutBlankLines = mCommentOutBlankLines;
       }
 
       private static void LoadHistory(List<string> pList, string pFile, int pMax) {

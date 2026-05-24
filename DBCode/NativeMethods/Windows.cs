@@ -24,6 +24,15 @@ namespace DBCode {
          [return: MarshalAs(UnmanagedType.Bool)]
          internal static extern bool BringWindowToTop(nint pWindowHandle);
 
+         // Disables visual styles on a specific window, causing it to use BackColor
+         // for its background instead of the system theme. Pass "" for both string
+         // arguments to remove all theming from the control.
+         [DllImport("uxtheme.dll", CharSet = CharSet.Unicode)]
+         internal static extern int SetWindowTheme(
+            IntPtr pWindowHandle,
+            string pSubAppName,
+            string pSubIdList);
+
          // Forces an immediate repaint of the specified window and, optionally, its non-client
          // area and children. Pass IntPtr.Zero for pUpdateRect and pUpdateRegion to repaint
          // the entire window. Flags: RDW_INVALIDATE | RDW_ERASE | RDW_FRAME | RDW_UPDATENOW.

@@ -2,6 +2,8 @@
 
 namespace DBCode {
    #region enumerations
+   public enum LineEndings { Default, Insert, Append }
+
    public enum CodingTabPageUsage { CFamily, Basic, FSharp, HTML, CSS, XML, JSON, PowerShell, Batch, SQL, Markdown, Python }
 
    public enum PickMode { Use, Edit }
@@ -36,7 +38,7 @@ namespace DBCode {
 
    public enum TargetingTabPageUsage : int { Include, Exclude }
 
-   public enum OptionsTabPageUsage : int { General, Targeting, Coding }
+   public enum OptionsTabPageUsage : int { General, Targeting, Coding, BraceMatching, Shortcuts }
 
    public enum FontUsage : int {
       [DisplayText("Interface Font")]
@@ -215,6 +217,9 @@ namespace DBCode {
          mAnchorTopRight = AnchorStyles.Top | AnchorStyles.Right;
       public static bool mFirstGray = true, mForceActivation = true, mUseControlPasting,
          mIsTargetingEnabled = false, mPreMinimalControlBox = true, mUsePCRE = false;
+      public static BottomPanel mMainBottomPanel = null!;
+      public static Button mSendAllButton = null!, mPasteSelectedButton = null!, mRevertButton = null!,
+         mGetAllButton = null!, mGetSelectedButton = null!;
       public static ColorPickerPanel? mColorPickerPanel = null;
       public static List<Control>? mBottomPanelExcluded = null;
       public static FindPanel? mFindPanel = null;
@@ -223,13 +228,16 @@ namespace DBCode {
       public static float mFontWidthAdjustment = 0.5f;
       public static FontPickerPanel? mFontPickerPanel = null;
       public static FontUsage mFontUsage = FontUsage.Text;
+      public static ConfirmationDialog? mConfirmationPanel = null;
       public static GetString? mGetStringPanel = null;
       public static GetInteger? mGetIntegerPanel = null;
       public static HighlighterEngine? mHighlighterEngine = null;
       public static Icon[] mIcons = new Icon[4];
       public static ILayoutable? mActiveLayoutable = null;
+      public static Panel? mActiveScrollablePanel = null;
       public static IntPtr mTargetWindow = IntPtr.Zero, mThisWindow = IntPtr.Zero;
       public static readonly IntPtr mInsertAfterWindow = new IntPtr(0);
+      public static Label mTargetingLabel = null!, mVersionLabel = null!;
       public static LanguageKind mCurrentLanguage = LanguageKind.CSharp;
       public static MainForm mForm = null!;
       public static OptionsPanel? mOptionsPanel = null;
@@ -281,10 +289,6 @@ namespace DBCode {
       public static HelpContext mUIContext = HelpContext.Main;
       public static UiState mUiState = null!;
       public static ViewMode mCurrentViewMode = ViewMode.Features;
-      public static BottomPanel mMainBottomPanel = null!;
-      public static Label mTargetingLabel = null!, mVersionLabel = null!;
-      public static Button mSendAllButton = null!, mPasteSelectedButton = null!, mRevertButton = null!,
-         mGetAllButton = null!, mGetSelectedButton = null!;
       #endregion
 
       #region main & context menus
@@ -304,60 +308,67 @@ namespace DBCode {
          toolStripSeparator22 = new ToolStripSeparator(), toolStripSeparator23 = new ToolStripSeparator(),
          toolStripSeparator24 = new ToolStripSeparator(), toolStripSeparator25 = new ToolStripSeparator(),
          toolStripSeparator26 = new ToolStripSeparator(), toolStripSeparator27 = new ToolStripSeparator(),
-         toolStripSeparator28 = new ToolStripSeparator(), toolStripSeparator29 = new ToolStripSeparator();
-      public static ToolStripMenuItem mFeaturesTSMI = null!, mFiftyTSMI = null!, mHelpMenuItem = null!,
-         mMinimalTSMI = null!, mModeMenuItem = null!, mLanguageMenuItem = null!, mOpaqueTSMI = null!,
-         mRetargetTSMI = null!, mSeventyFiveTSMI = null!, mTargetedTSMI = null!, mTargetingMenuItem = null!,
-         mThemeDesignTSMI = null!, mThemeEditTSMI = null!, mThemeEditCurrentTSMI = null!, mThemeEditPickTSMI = null!,
-         mThemeMenuItem = null!, mThemePickTSMI = null!, mThirtyTSMI = null!, mTransparentTSMI = null!,
-         mOptionsMenuItem = null!, mVisibilityMenuItem = null!, mPlainTextTSMI = null!, mCSharpTSMI = null!,
-         mCTSMI = null!, mCppTSMI = null!, mBasicTSMI = null!, mFSharpTSMI = null!, mHtmlTSMI = null!, mCssTSMI = null!,
-         mXmlTSMI = null!, mJsonTSMI = null!, mPowerShellTSMI = null!, mBatchTSMI = null!, mSqlTSMI = null!,
-         mMarkdownTSMI = null!, mPythonTSMI = null!, mCurrentThemeIsTSMI = null!,
-         mCodingTSMI = null!,
-         mCodingCFamilyTSMI = null!, mCSharpCommentAddDoubleTSMI = null!, mCSharpAddNotImplementedTSMI = null!,
-         mCSharpCommentAddTripleTSMI = null!, mCPlusPlusCommentTSMI = null!, mCSharpExpressionBodiedMethodTSMI = null!,
-         mCSharpCommentOutTSMI = null!, mCSharpCommentRemoveTSMI = null!, mCSharpReverseEqualityTSMI = null!,
-         mCSharpWrapTSMI = null!,
-         mConvertVBToCSharpCommentTSMI = null!,
-         mCodingBasicTSMI = null!, mBasicAddSingleQuoteTSMI = null!, mBasicConvertCSharpToVBCommentTSMI = null!,
-         mBasicReverseEqualityTSMI = null!, mBasicRemoveLineContinuationTSMI = null!,
-         mBasicConvertBooleansTSMI = null!, mBasicConvertNullNothingTSMI = null!, mBasicConvertLogicalOperatorsTSMI = null!,
-         mCodingFSharpTSMI = null!, mFSharpBlockCommentTSMI = null!, mFSharpAddCommentTSMI = null!,
-         mFSharpAddMutableTSMI = null!, mFSharpAddIgnoreTSMI = null!, mFSharpConvertNullNoneTSMI = null!,
-         mCodingHTMLTSMI = null!, mHTMLCommentTSMI = null!,
-         mHTMLBoldTSMI = null!, mHTMLItalicTSMI = null!, mHTMLUnderlineTSMI = null!, mHTMLStrikethroughTSMI = null!,
-         mHTMLBigTSMI = null!, mHTMLBigBigTSMI = null!, mHTMLSmallTSMI = null!, mHTMLSmallSmallTSMI = null!,
-         mHTMLMarkTSMI = null!, mHTMLSuperscriptTSMI = null!, mHTMLSubscriptTSMI = null!,
-         mHTMLCodeTSMI = null!, mHTMLPreformattedTSMI = null!, mHTMLColorizeTSMI = null!,
-         mCodingCSSTSMI = null!, mCSSBlockCommentTSMI = null!, mCSSCommentRemoveTSMI = null!,
-         mCSSToggleImportantTSMI = null!, mCSSConvertColorFormatTSMI = null!,
-         mCodingXMLTSMI = null!, mXMLCommentTSMI = null!, mXMLRemoveCommentTSMI = null!,
-         mXMLEscapeEntitiesTSMI = null!, mXMLWrapCDataTSMI = null!, mXMLToggleSelfCloseTSMI = null!,
-         mCodingJSONTSMI = null!, mJSONAddCommentTSMI = null!, mJSONBlockCommentTSMI = null!,
-         mJSONRemoveCommentTSMI = null!, mJSONToggleQuotesTSMI = null!,
-         mJSONEscapeStringTSMI = null!, mJSONRemoveTrailingCommasTSMI = null!,
-         mCodingPowerShellTSMI = null!, mPowerShellAddCommentTSMI = null!, mPowerShellBlockCommentTSMI = null!,
-         mPowerShellRemoveCommentTSMI = null!, mPowerShellToggleBooleanTSMI = null!, mPowerShellToggleQuotesTSMI = null!,
-         mCodingBatchTSMI = null!, mBatchAddCommentTSMI = null!, mBatchAddColonCommentTSMI = null!,
-         mBatchRemoveCommentTSMI = null!, mBatchToggleCommentStyleTSMI = null!,
-         mCodingSQLTSMI = null!, mSQLAddCommentTSMI = null!, mSQLBlockCommentTSMI = null!,
-         mSQLRemoveCommentTSMI = null!, mSQLToggleNullCheckTSMI = null!, mSQLToggleBooleanTSMI = null!,
-         mCodingMarkdownTSMI = null!, mMarkdownCommentTSMI = null!, mMarkdownBoldTSMI = null!,
-         mMarkdownItalicTSMI = null!, mMarkdownBoldItalicTSMI = null!, mMarkdownStrikethroughTSMI = null!,
-         mMarkdownCodeTSMI = null!, mMarkdownCodeBlockTSMI = null!,
-         mCodingPythonTSMI = null!, mPythonAddCommentTSMI = null!, mPythonBlockCommentTSMI = null!,
-         mPythonRemoveCommentTSMI = null!, mPythonToggleBooleanTSMI = null!, mPythonConvertNullNoneTSMI = null!,
-         mContextUndoTSMI = null!, mContextRedoTSMI = null!, mContextCopyAllTSMI = null!,
-         mContextCopyTSMI = null!, mContextCutTSMI = null!, mContextDeleteTSMI = null!, mContextPasteTSMI = null!,
-         mContextSelectAllTSMI = null!, mContextSelectNoneTSMI = null!, mContextFindTSMI = null!,
-         mContextFindNextTSMI = null!, mContextFindPreviousTSMI = null!, mContextReplaceTSMI = null!,
-         mContextGoToTSMI = null!,
-         mEditMenuItem = null!, mEditUndoTSMI = null!, mEditRedoTSMI = null!, mEditCutTSMI = null!, mEditDeleteTSMI = null!,
-         mEditPasteTSMI = null!, mEditSelectAllTSMI = null!, mEditSelectNoneTSMI = null!,
-         mEditTrimToBeginningTSMI = null!, mEditTrimToEndTSMI = null!, mEditCopyTSMI = null!, mEditCopyAllTSMI = null!,
-         mEditCopyToBeginningTSMI = null!, mEditCopyToEndTSMI = null!, mEditFindTSMI = null!, mEditFindNextTSMI = null!,
-         mEditFindPreviousTSMI = null!, mEditReplaceTSMI = null!, mEditGoToTSMI = null!, mEditWordWrapTSMI = null!;
+         toolStripSeparator28 = new ToolStripSeparator(), toolStripSeparator29 = new ToolStripSeparator(),
+         toolStripSeparator30 = new ToolStripSeparator(), toolStripSeparator31 = new ToolStripSeparator();
+      public static ToolStripMenuItem?
+      #region top-level menu items
+         mEditMenuItem = null, mTargetingMenuItem = null, mViewMenuItem = null, mModeMenuItem = null, mLanguageMenuItem = null,
+         mCodingMenuItem = null, mOptionsMenuItem = null, mThemeMenuItem = null, mHelpMenuItem = null,
+      #endregion
+      #region have grandchildren – No shortcut keys
+         mThemePickTSMI = null, mCodingCFamilyTSMI = null, mCodingBasicTSMI = null, mCodingFSharpTSMI = null, mCodingHTMLTSMI = null, mCodingCSSTSMI = null,
+         mCodingXMLTSMI = null, mCodingJSONTSMI = null, mCodingPowerShellTSMI = null, mCodingBatchTSMI = null, mCodingSQLTSMI = null,
+         mCodingMarkdownTSMI = null, mCodingPythonTSMI = null,
+         mViewScrollingTSMI = null, mViewScrollingEdgeTSMI = null, mViewScrollingScrollTSMI = null, mViewScrollingPageTSMI = null,
+      #endregion
+      #region Are children and need shortcut keys
+         mEditUndoTSMI = null, mEditRedoTSMI = null, mEditCutTSMI = null, mEditDeleteTSMI = null,
+         mEditPasteTSMI = null, mEditSelectAllTSMI = null, mEditSelectNoneTSMI = null,
+         mEditTrimToBeginningTSMI = null, mEditTrimToEndTSMI = null, mEditCopyTSMI = null, mEditCopyAllTSMI = null,
+         mEditCopyToBeginningTSMI = null, mEditCopyToEndTSMI = null, mEditFindTSMI = null, mEditFindNextTSMI = null,
+         mEditFindPreviousTSMI = null, mEditReplaceTSMI = null, mEditGoToTSMI = null, mEditWordWrapTSMI = null,
+         mTargetingTargetedTSMI = null, mTargetingRetargetTSMI = null, mTargetingDefaultEndingsTSMI = null, mTargetingInsertCRTSMI = null,
+         mTargetingAppendCRTSMI = null,
+         mViewTransparentTSMI = null, mViewThirtyTSMI = null, mViewFiftyTSMI = null, mViewSeventyFiveTSMI = null, mViewOpaqueTSMI = null,
+         mViewScrollingEdgeTopTSMI = null, mViewScrollingEdgeBottomTSMI = null, mViewScrollingEdgeLeftTSMI = null, mViewScrollingEdgeRightTSMI = null,
+         mViewScrollingScrollUpTSMI = null, mViewScrollingScrollDownTSMI = null, mViewScrollingScrollLeftTSMI = null, mViewScrollingScrollRightTSMI = null,
+         mViewScrollingPageUpTSMI = null, mViewScrollingPageDownTSMI = null, mViewScrollingPageLeftTSMI = null, mViewScrollingPageRightTSMI = null,
+         mModeFeaturesTSMI = null, mModeMinimalTSMI = null,
+         mThemeCurrentThemeIsTSMI = null, mThemeDesignTSMI = null, mThemeEditTSMI = null, mThemeEditCurrentTSMI = null, mThemeEditPickTSMI = null,
+         mLanguageCSharpTSMI = null, mLanguageCTSMI = null, mLanguageCppTSMI = null, mLanguageBasicTSMI = null,
+         mLanguageFSharpTSMI = null, mLanguageHtmlTSMI = null, mLanguageCssTSMI = null, mLanguageXmlTSMI = null, mLanguageJsonTSMI = null,
+         mLanguagePowerShellTSMI = null, mLanguageBatchTSMI = null, mLanguageSqlTSMI = null, mLanguageMarkdownTSMI = null,
+         mLanguagePythonTSMI = null, mLanguagePlainTextTSMI = null,
+         mCSharpCommentAddDoubleTSMI = null, mCSharpAddNotImplementedTSMI = null, mCSharpCommentAddTripleTSMI = null,
+         mCFamilyCPlusPlusCommentTSMI = null, mCFamilyCSharpExpressionBodiedMethodTSMI = null, mCFamilyCSharpCommentOutTSMI = null,
+         mCFamilyCSharpCommentRemoveTSMI = null, mCSharpReverseEqualityTSMI = null, mCFamilyCSharpWrapTSMI = null,
+         mBasicConvertVBToCSharpCommentTSMI = null, mBasicAddSingleQuoteTSMI = null, mBasicConvertCSharpToVBCommentTSMI = null,
+         mBasicReverseEqualityTSMI = null, mBasicRemoveLineContinuationTSMI = null, mBasicConvertBooleansTSMI = null,
+         mBasicConvertNullNothingTSMI = null, mBasicConvertLogicalOperatorsTSMI = null,
+         mFSharpBlockCommentTSMI = null, mFSharpAddCommentTSMI = null, mFSharpAddMutableTSMI = null, mFSharpAddIgnoreTSMI = null,
+         mFSharpConvertNullNoneTSMI = null,
+         mHTMLCommentTSMI = null, mHTMLBoldTSMI = null, mHTMLItalicTSMI = null, mHTMLUnderlineTSMI = null, mHTMLStrikethroughTSMI = null,
+         mHTMLBigTSMI = null, mHTMLBigBigTSMI = null, mHTMLSmallTSMI = null, mHTMLSmallSmallTSMI = null, mHTMLMarkTSMI = null,
+         mHTMLSuperscriptTSMI = null, mHTMLSubscriptTSMI = null, mHTMLCodeTSMI = null, mHTMLPreformattedTSMI = null, mHTMLColorizeTSMI = null,
+         mCSSBlockCommentTSMI = null, mCSSCommentRemoveTSMI = null, mCSSToggleImportantTSMI = null, mCSSConvertColorFormatTSMI = null,
+         mXMLCommentTSMI = null, mXMLRemoveCommentTSMI = null, mXMLEscapeEntitiesTSMI = null, mXMLWrapCDataTSMI = null,
+         mXMLToggleSelfCloseTSMI = null,
+         mJSONAddCommentTSMI = null, mJSONBlockCommentTSMI = null, mJSONRemoveCommentTSMI = null, mJSONToggleQuotesTSMI = null,
+         mJSONEscapeStringTSMI = null, mJSONRemoveTrailingCommasTSMI = null,
+         mPowerShellAddCommentTSMI = null, mPowerShellBlockCommentTSMI = null, mPowerShellRemoveCommentTSMI = null,
+         mPowerShellToggleBooleanTSMI = null, mPowerShellToggleQuotesTSMI = null,
+         mBatchAddCommentTSMI = null, mBatchAddColonCommentTSMI = null, mBatchRemoveCommentTSMI = null, mBatchToggleCommentStyleTSMI = null,
+         mSQLAddCommentTSMI = null, mSQLBlockCommentTSMI = null, mSQLRemoveCommentTSMI = null, mSQLToggleNullCheckTSMI = null,
+         mSQLToggleBooleanTSMI = null,
+         mMarkdownCommentTSMI = null, mMarkdownBoldTSMI = null, mMarkdownItalicTSMI = null, mMarkdownBoldItalicTSMI = null,
+         mMarkdownStrikethroughTSMI = null, mMarkdownCodeTSMI = null, mMarkdownCodeBlockTSMI = null,
+         mPythonAddCommentTSMI = null, mPythonBlockCommentTSMI = null, mPythonRemoveCommentTSMI = null, mPythonToggleBooleanTSMI = null,
+         mPythonConvertNullNoneTSMI = null,
+         mContextUndoTSMI = null, mContextRedoTSMI = null, mContextCopyAllTSMI = null, mContextCopyTSMI = null, mContextCutTSMI = null,
+         mContextDeleteTSMI = null, mContextPasteTSMI = null, mContextSelectAllTSMI = null, mContextSelectNoneTSMI = null,
+         mContextFindTSMI = null, mContextFindNextTSMI = null, mContextFindPreviousTSMI = null, mContextReplaceTSMI = null,
+         mContextGoToTSMI = null;
+      #endregion
       #endregion
    }
    #endregion

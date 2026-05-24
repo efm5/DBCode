@@ -38,22 +38,28 @@ namespace DBCode {
             "DBCode – Fatal Error", 0);
          Environment.Exit(-1);
       }
-
-      internal static T ThrowIfNull<T>([NotNull] T? pValue, string pMemberName,
+      internal static T ThrowIfNull<T>(
+         [NotNull] T? pValue,
+         string pMemberName,
          [CallerFilePath] string pCallerFilePath = "",
          [CallerLineNumber] int pCallerLineNumber = 0,
-         [CallerMemberName] string pCallerMemberName = "") where T : class {
+         [CallerMemberName] string pCallerMemberName = ""
+         ) where T : class {
          if (pValue == null) {
             StackTrace stackTrace = new StackTrace(0, true);
-            string message = $"Fatal: {pMemberName} was unexpectedly null in {pCallerMemberName} " +
+            string message =
+               $"Fatal: {pMemberName} was unexpectedly null in {pCallerMemberName} " +
                $"at {Path.GetFileName(pCallerFilePath)}:{pCallerLineNumber}";
+
             InvalidOperationException exception = new InvalidOperationException(message);
             exception.Data["CapturedStackTrace"] = stackTrace.ToString();
+
             ShowFatalErrorAndExit(exception, $"A critical component was null: {pMemberName}");
             throw exception;
          }
          return pValue;
       }
+
 
       internal static void ThrowBadCode(string pDescription,
          [CallerFilePath] string pCallerFilePath = "",

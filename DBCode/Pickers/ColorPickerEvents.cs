@@ -209,6 +209,11 @@ namespace DBCode {
          private void OkButton_Click(object? pSender, EventArgs pEventArguments) {
             ThrowIfNull(mTheme, nameof(mTheme));
             ThrowIfNull(mDemoSwatch, nameof(mDemoSwatch));
+            if (mColorCallback != null) {
+               mColorCallback(mDemoSwatch.GetColor());
+               mCloseAction!();
+               return;
+            }
             ThemePanel.mRepaint = mDemoSwatch.GetColor() != mInitialColor;
             if (mIsSyntaxColor)
                mTheme.mHighlightColors[(int)mLanguageKind][(int)mTokenKind] = mDemoSwatch.BackColor;
@@ -218,6 +223,10 @@ namespace DBCode {
          }
 
          private void CancelButton_Click(object? pSender, EventArgs pEventArguments) {
+            if (mCloseAction != null) {
+               mCloseAction();
+               return;
+            }
             ThemePanel.RestoreFromColorPickerPanel();
          }
          #endregion

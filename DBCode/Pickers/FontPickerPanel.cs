@@ -4,16 +4,15 @@ namespace DBCode {
          internal BottomPanel mBottomPanel;
          private Button mOkButton;
          private ComboBox mFontFamilyComboBox, mFontSizeComboBox;
-         private FlattenedButtonCluster mFamilyCluster, mFontDropDownCluster,
-            mFontSizePrefixCluster, mFontSizeDropDownCluster;
+         private FlattenedButtonCluster mFamilyCluster, mFontDropDownCluster, mFontSizePrefixCluster, mFontSizeDropDownCluster;
          private Font? mInitialFont, mWorkingFont;
          private FontUsage mFontUsage;
          private GroupBox mFontStyleGroupBox;
          internal Label mFontDescriptionLabel;
          private List<Font> mOwnedFonts = [];
          private Panel mFontSizePanel, mPickFontPanel, mScrollPanel;
-         private ScalableCheckBoxCluster mBoldStyleCluster, mItalicsStyleCluster, mNormalStyleCluster,
-            mStrikethroughStyleCluster, mUnderlineStyleCluster;
+         private ScalableCheckBoxCluster mBoldStyleCluster, mItalicsStyleCluster, mNormalStyleCluster, mStrikethroughStyleCluster,
+            mUnderlineStyleCluster;
          private TextBox mFontFamilyNameTextBox, mFontSizeTextBox;
          private Theme? mTheme;
          internal TwoLineHeaderLabelCluster mTitleLabel;
@@ -93,9 +92,11 @@ namespace DBCode {
             mFontSizeComboBox = new ComboBox {
                Name = $"FontSizeComboBox{mTabIndex++}",
                DropDownStyle = ComboBoxStyle.DropDownList,
+               DrawMode = DrawMode.OwnerDrawFixed,
                Width = 60,
                Font = CreateNewFont(interfaceTextFont)
             };
+            mFontSizeComboBox.DrawItem += FontSizeComboBox_DrawItem;
             int[] fontSizes = [6, 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72];
             foreach (int size in fontSizes)
                mFontSizeComboBox.Items.Add(size.ToString());
@@ -379,6 +380,7 @@ namespace DBCode {
             if (pDisposing) {
                RemoveEventHandlers();
                mFontFamilyComboBox.DrawItem -= FontFamilyComboBox_DrawItem;
+               mFontSizeComboBox.DrawItem -= FontSizeComboBox_DrawItem;
                mOkButton.Click -= OkButton_Click;
                ThrowIfNull(mBottomPanel.mHelpButton, nameof(mBottomPanel.mHelpButton));
                ThrowIfNull(mBottomPanel.mCancelButton, nameof(mBottomPanel.mCancelButton));

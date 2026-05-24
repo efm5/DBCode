@@ -94,7 +94,7 @@ namespace DBCode {
                mScalableRadioButtons.Add(button);
             }
             foreach (ScalableRadioButton button in mScalableRadioButtons)
-               this.Controls.Add(button);//DEBUG efm5 2026 05 16 this is confusing “this” should probably be past by reference or something
+               Controls.Add(button);
             LayoutRadioPanel();
          }
 
@@ -192,7 +192,7 @@ namespace DBCode {
          }
 
          public int AssignTabIndexes(int pIndex) {
-            foreach (Control control in Controls)//DEBUG efm5 2026 05 16 it should also be a reference
+            foreach (Control control in Controls)
                control.TabIndex = pIndex++;
             return pIndex;
          }
