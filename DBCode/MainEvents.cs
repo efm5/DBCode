@@ -157,14 +157,14 @@
          EnsureOptionsPanel();
       }
 
-      private void ThemeEditPick_Click(object? pSender, EventArgs pEventArgs) {
+      private void ThemePickToEdit_Click(object? pSender, EventArgs pEventArgs) {
          EnsureThemePickerPanel(PickMode.Edit);
       }
 
-      private void ThemeEditCurrent_Click(object? pSender, EventArgs pEventArgs) {
+      private void ThemePickCurrent_Click(object? pSender, EventArgs pEventArgs) {
       }
 
-      private void ThemePick_Click(object? pSender, EventArgs pEventArgs) {
+      private void ThemeEditCurrent_Click(object? pSender, EventArgs pEventArgs) {
          EnsureThemePickerPanel(PickMode.Use);
       }
 
@@ -438,6 +438,14 @@
          mRichTextBox.ScrollBars = mRichTextBox.WordWrap
             ? RichTextBoxScrollBars.Vertical
             : RichTextBoxScrollBars.Both;
+         mUiState.mWordWrap = mRichTextBox.WordWrap;
+      }
+      private void LineNumbers_Click(object? pSender, EventArgs pEventArgs) {
+         ThrowIfNull(mViewLineNumbersTSMI, nameof(mViewLineNumbersTSMI));
+         ThrowIfNull(mLineNumberPanel, nameof(mLineNumberPanel));
+         bool showLineNumbers = mViewLineNumbersTSMI.Checked;
+         mLineNumberPanel.Visible = showLineNumbers;
+         mUiState.mShowLineNumbers = showLineNumbers;
       }
 
       public static void Help_Click(object? pSender, EventArgs pEventArgs) {

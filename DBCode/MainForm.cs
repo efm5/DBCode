@@ -50,8 +50,8 @@ namespace DBCode {
          mThemeDesignTSMI = new ToolStripMenuItem();
          mThemePickTSMI = new ToolStripMenuItem();
          mThemeEditTSMI = new ToolStripMenuItem();
-         mThemeEditPickTSMI = new ToolStripMenuItem();
-         mThemeEditCurrentTSMI = new ToolStripMenuItem();
+         mThemePickEditTSMI = new ToolStripMenuItem();
+         mThemePickCurrentTSMI = new ToolStripMenuItem();
          mHelpMenuItem = new ToolStripMenuItem();
          mTargetingTargetedTSMI = new ToolStripMenuItem();
          mTargetingRetargetTSMI = new ToolStripMenuItem();
@@ -130,7 +130,8 @@ namespace DBCode {
          mEditFindPreviousTSMI = new ToolStripMenuItem();
          mEditReplaceTSMI = new ToolStripMenuItem();
          mEditGoToTSMI = new ToolStripMenuItem();
-         mEditWordWrapTSMI = new ToolStripMenuItem();
+         mViewWordWrapTSMI = new ToolStripMenuItem();
+         mViewLineNumbersTSMI = new ToolStripMenuItem();
          mCSharpCommentAddDoubleTSMI = new ToolStripMenuItem();
          mCSharpAddNotImplementedTSMI = new ToolStripMenuItem();
          mCSharpCommentAddTripleTSMI = new ToolStripMenuItem();
@@ -229,6 +230,7 @@ namespace DBCode {
             BackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground]
          };
          mRichTextBox = new PlainRichTextBox();
+         mLineNumberPanel = new LineNumberPanel();
          mSendAllButton = new Button();
          mPasteSelectedButton = new Button();
          mGetAllButton = new Button();
@@ -268,7 +270,6 @@ namespace DBCode {
          mEditFindPreviousTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.Alt | Keys.F;
          mEditReplaceTSMI.ShortcutKeys = Keys.Control | Keys.H;
          mEditGoToTSMI.ShortcutKeys = Keys.Control | Keys.G;
-         mEditWordWrapTSMI.ShortcutKeys = Keys.Control | Keys.W;
          mTargetingTargetedTSMI.ShortcutKeys = Keys.Control | Keys.D;
          mTargetingRetargetTSMI.ShortcutKeys = Keys.Control | Keys.E;
          //mTargetingDefaultEndingsTSMI.ShortcutKeys = 
@@ -291,6 +292,8 @@ namespace DBCode {
          mViewScrollingPageDownTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.F10;
          mViewScrollingPageLeftTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.F11;
          mViewScrollingPageRightTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.F12;
+         mViewWordWrapTSMI.ShortcutKeys = Keys.Control | Keys.W;
+         mViewLineNumbersTSMI.ShortcutKeys = Keys.Control | Keys.N;
          mModeMinimalTSMI.ShortcutKeys = Keys.Control | Keys.M;
          mModeFeaturesTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.G;
          mLanguagePlainTextTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.G;
@@ -386,8 +389,8 @@ namespace DBCode {
          mPythonRemoveCommentTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.F9;
          mPythonToggleBooleanTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.F10;
          mPythonConvertNullNoneTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.F11;
-         mThemeEditPickTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.P;
-         mThemeEditCurrentTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.C;
+         mThemePickEditTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.P;
+         mThemePickCurrentTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.C;
          mThemeDesignTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D;
          mThemeEditTSMI.ShortcutKeys = Keys.Control | Keys.Shift | Keys.E;
          mHelpMenuItem.ShortcutKeys = Keys.F1;
@@ -828,7 +831,7 @@ namespace DBCode {
          ThrowIfNull(mMainBottomPanel.mHelpButton, nameof(mMainBottomPanel.mHelpButton));
          mMainBottomPanel.mHelpButton.Tag = new HelpTag(HelpContext.Main);
          mMainBottomPanel.mCancelButton.Click += ExitButton_Click;
-         mScrollableMainPanel.Controls.AddRange([mRichTextBox, mMainBottomPanel, mMenuStrip!]);
+         mScrollableMainPanel.Controls.AddRange([mRichTextBox, mLineNumberPanel, mMainBottomPanel, mMenuStrip!]);
          mActiveLayoutable = mMainBottomPanel;
          mActiveScrollablePanel = mScrollableMainPanel;
          SuspendLayout();
@@ -856,17 +859,18 @@ namespace DBCode {
          mOptionsMenuItem.ShortcutKeyDisplayString = "Ctrl+,";
          mThemeMenuItem.Name = "mThemeMenuItem";
          mThemeMenuItem.Text = "The&me";
-         mThemeEditPickTSMI.Name = "mThemeEditPickTSMI";
-         mThemeEditPickTSMI.Text = "&Pick To Edit";
-         mThemeEditPickTSMI.Click += ThemeEditPick_Click;
-         mThemeEditCurrentTSMI.Name = "mThemeEditCurrentTSMI";
-         mThemeEditCurrentTSMI.Text = "&Edit Current";
-         mThemeEditCurrentTSMI.Click += ThemeEditCurrent_Click;
+         mThemePickEditTSMI.Name = "mThemeEditPickTSMI";
+         mThemePickEditTSMI.Text = "Pick To &Edit";
+         mThemePickEditTSMI.Click += ThemePickToEdit_Click;
+         mThemePickCurrentTSMI.Name = "mThemeEditCurrentTSMI";
+         mThemePickCurrentTSMI.Text = "Pick To &Use";
+         mThemePickCurrentTSMI.Click += ThemePickCurrent_Click;
          mThemeDesignTSMI.Name = "mThemeDesignTSMI";
          mThemeDesignTSMI.Text = "&Design";
          mThemeDesignTSMI.Click += ThemeDesign_Click;
          mThemeEditTSMI.Name = "mThemeEditTSMI";
          mThemeEditTSMI.Text = "&Edit";
+         mThemeEditTSMI.Click += ThemeEditCurrent_Click;
          mThemePickTSMI.Name = "mThemePickTSMI";
          mThemePickTSMI.Text = "&Pick";
          mHelpMenuItem.Name = "mHelpMenuItem";
@@ -1130,12 +1134,18 @@ namespace DBCode {
          mEditGoToTSMI.Name = "mEditGoToTSMI";
          mEditGoToTSMI.Text = "&GoTo";
          mEditGoToTSMI.Click += GoTo_Click;
-         mEditWordWrapTSMI.Name = "mEditWordWrapTSMI";
-         mEditWordWrapTSMI.Text = "&Wordwrap";
-         mEditWordWrapTSMI.Click += WordWrap_Click;
-         mThemePickTSMI.DropDownItems.AddRange([mThemeEditPickTSMI, mThemeEditCurrentTSMI]);
+         mViewWordWrapTSMI.Name = "mViewWordWrapTSMI";
+         mViewWordWrapTSMI.Text = "&Wordwrap";
+         mViewWordWrapTSMI.CheckOnClick = true;
+         mViewWordWrapTSMI.Click += WordWrap_Click;
+         mViewLineNumbersTSMI.Name = "mViewLineNumbersTSMI";
+         mViewLineNumbersTSMI.Text = "Line &Numbers";
+         mViewLineNumbersTSMI.CheckOnClick = true;
+         mViewLineNumbersTSMI.Click += LineNumbers_Click;
+         mThemePickTSMI.DropDownItems.AddRange([mThemePickEditTSMI, mThemePickCurrentTSMI]);
          mViewMenuItem.DropDownItems.AddRange([mViewTransparentTSMI, mViewThirtyTSMI, mViewFiftyTSMI,
-            mViewSeventyFiveTSMI, mViewOpaqueTSMI, toolStripSeparator31, mViewScrollingTSMI]);
+            mViewSeventyFiveTSMI, mViewOpaqueTSMI, toolStripSeparator31, mViewScrollingTSMI,
+            toolStripSeparator32, mViewWordWrapTSMI, mViewLineNumbersTSMI]);
          mViewScrollingTSMI.DropDownItems.AddRange([mViewScrollingEdgeTSMI, mViewScrollingScrollTSMI, mViewScrollingPageTSMI]);
          mViewScrollingEdgeTSMI.DropDownItems.AddRange([mViewScrollingEdgeTopTSMI, mViewScrollingEdgeBottomTSMI,
             mViewScrollingEdgeLeftTSMI, mViewScrollingEdgeRightTSMI]);
@@ -1151,8 +1161,7 @@ namespace DBCode {
             mEditSelectAllTSMI, mEditSelectNoneTSMI, toolStripSeparator3, mEditCutTSMI, mEditDeleteTSMI,
             mEditTrimToBeginningTSMI, mEditTrimToEndTSMI, toolStripSeparator4, mEditCopyTSMI, mEditCopyAllTSMI,
             mEditCopyToBeginningTSMI, mEditCopyToEndTSMI, mEditPasteTSMI, toolStripSeparator5, mEditFindTSMI,
-            mEditFindNextTSMI, mEditFindPreviousTSMI, mEditReplaceTSMI, toolStripSeparator6, mEditGoToTSMI,
-            mEditWordWrapTSMI]);
+            mEditFindNextTSMI, mEditFindPreviousTSMI, mEditReplaceTSMI, toolStripSeparator6, mEditGoToTSMI]);
          mCodingMenuItem.DropDownItems.AddRange([mCodingCFamilyTSMI, mCodingBasicTSMI, mCodingFSharpTSMI,
             mCodingHTMLTSMI, mCodingCSSTSMI, mCodingXMLTSMI, mCodingJSONTSMI, mCodingPowerShellTSMI,
             mCodingBatchTSMI, mCodingSQLTSMI, mCodingMarkdownTSMI, mCodingPythonTSMI]);
@@ -1216,12 +1225,19 @@ namespace DBCode {
          FormClosing += MainForm_FormClosing;
          mHighlighterEngine = new HighlighterEngine(mRichTextBox, mCurrentLanguage);
          mMainBottomPanel.Dock = DockStyle.Bottom;
+         mLineNumberPanel.Dock = DockStyle.Left;
          mRichTextBox.Dock = DockStyle.Fill;
          mRichTextBox.TextChanged += OnEditorTextChanged;
+         mLineNumberPanel.Initialize(mRichTextBox);
          InitializeIcon();
          CheckLanguage();
          AdjustForThemeFont(mCurrentTheme.mFonts[(int)FontUsage.Interface]);
          ApplyTheme();
+         mViewLineNumbersTSMI.Checked = mUiState.mShowLineNumbers;
+         mLineNumberPanel.Visible = mUiState.mShowLineNumbers;
+         mViewWordWrapTSMI.Checked = mUiState.mWordWrap;
+         mRichTextBox.WordWrap = mUiState.mWordWrap;
+         mRichTextBox.ScrollBars = mUiState.mWordWrap ? RichTextBoxScrollBars.Vertical : RichTextBoxScrollBars.Both;
          UpdateTargetingStatusLabel();
          ThrowIfNull(mMenuStrip, nameof(mMenuStrip));
          ThrowIfNull(mContextMenuStrip, nameof(mContextMenuStrip));
@@ -1238,6 +1254,7 @@ namespace DBCode {
          ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
          ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
          ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
+         ThrowIfNull(mLineNumberPanel, nameof(mLineNumberPanel));
          ThrowIfNull(mMenuStrip, nameof(mMenuStrip));
          ThrowIfNull(mContextMenuStrip, nameof(mContextMenuStrip));
          // Buttons and labels
@@ -1277,7 +1294,7 @@ namespace DBCode {
          ThrowIfNull(mEditFindPreviousTSMI, nameof(mEditFindPreviousTSMI));
          ThrowIfNull(mEditReplaceTSMI, nameof(mEditReplaceTSMI));
          ThrowIfNull(mEditGoToTSMI, nameof(mEditGoToTSMI));
-         ThrowIfNull(mEditWordWrapTSMI, nameof(mEditWordWrapTSMI));
+         ThrowIfNull(mViewWordWrapTSMI, nameof(mViewWordWrapTSMI));
          ThrowIfNull(mTargetingTargetedTSMI, nameof(mTargetingTargetedTSMI));
          ThrowIfNull(mTargetingRetargetTSMI, nameof(mTargetingRetargetTSMI));
          ThrowIfNull(mViewTransparentTSMI, nameof(mViewTransparentTSMI));
@@ -1380,14 +1397,14 @@ namespace DBCode {
          ThrowIfNull(mPythonRemoveCommentTSMI, nameof(mPythonRemoveCommentTSMI));
          ThrowIfNull(mPythonToggleBooleanTSMI, nameof(mPythonToggleBooleanTSMI));
          ThrowIfNull(mPythonConvertNullNoneTSMI, nameof(mPythonConvertNullNoneTSMI));
-         ThrowIfNull(mThemeEditPickTSMI, nameof(mThemeEditPickTSMI));
-         ThrowIfNull(mThemeEditCurrentTSMI, nameof(mThemeEditCurrentTSMI));
+         ThrowIfNull(mThemePickEditTSMI, nameof(mThemePickEditTSMI));
+         ThrowIfNull(mThemePickCurrentTSMI, nameof(mThemePickCurrentTSMI));
          ThrowIfNull(mThemeDesignTSMI, nameof(mThemeDesignTSMI));
          ThrowIfNull(mThemeEditTSMI, nameof(mThemeEditTSMI));
          ThrowIfNull(mHelpMenuItem, nameof(mHelpMenuItem));
          // Theme menu
-         ThrowIfNull(mThemeEditPickTSMI, nameof(mThemeEditPickTSMI));
-         ThrowIfNull(mThemeEditCurrentTSMI, nameof(mThemeEditCurrentTSMI));
+         ThrowIfNull(mThemePickEditTSMI, nameof(mThemePickEditTSMI));
+         ThrowIfNull(mThemePickCurrentTSMI, nameof(mThemePickCurrentTSMI));
          ThrowIfNull(mThemeDesignTSMI, nameof(mThemeDesignTSMI));
          ThrowIfNull(mThemeEditTSMI, nameof(mThemeEditTSMI));
          ThrowIfNull(mThemePickTSMI, nameof(mThemePickTSMI));
@@ -1400,6 +1417,7 @@ namespace DBCode {
          ThrowIfNull(mViewFiftyTSMI, nameof(mViewFiftyTSMI));
          ThrowIfNull(mViewSeventyFiveTSMI, nameof(mViewSeventyFiveTSMI));
          ThrowIfNull(mViewOpaqueTSMI, nameof(mViewOpaqueTSMI));
+         ThrowIfNull(mViewLineNumbersTSMI, nameof(mViewLineNumbersTSMI));
          // Mode
          ThrowIfNull(mModeMinimalTSMI, nameof(mModeMinimalTSMI));
          ThrowIfNull(mModeFeaturesTSMI, nameof(mModeFeaturesTSMI));
@@ -1453,7 +1471,7 @@ namespace DBCode {
          ThrowIfNull(mEditFindPreviousTSMI, nameof(mEditFindPreviousTSMI));
          ThrowIfNull(mEditReplaceTSMI, nameof(mEditReplaceTSMI));
          ThrowIfNull(mEditGoToTSMI, nameof(mEditGoToTSMI));
-         ThrowIfNull(mEditWordWrapTSMI, nameof(mEditWordWrapTSMI));
+         ThrowIfNull(mViewWordWrapTSMI, nameof(mViewWordWrapTSMI));
          // Coding — C Family
          ThrowIfNull(mCodingMenuItem, nameof(mCodingMenuItem));
          ThrowIfNull(mCodingCFamilyTSMI, nameof(mCodingCFamilyTSMI));

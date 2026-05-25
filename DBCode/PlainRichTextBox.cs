@@ -1,8 +1,7 @@
 namespace DBCode {
    internal sealed class PlainRichTextBox : RichTextBox {
-      private const int EM_SETCHARFORMAT = 0x0444;
-      private const int WM_PASTE = 0x0302;
       internal bool mAllowFormatting { get; set; }
+      internal event EventHandler? ViewChanged;
       private static bool mIsProtectionActive {
          get {
             return mUiState.mEnforceFormattingProtection
@@ -22,6 +21,8 @@ namespace DBCode {
             return;
          }
          base.WndProc(ref pMessage);
+         if (pMessage.Msg == WM_PAINT)
+            ViewChanged?.Invoke(this, EventArgs.Empty);
       }
    }
 }

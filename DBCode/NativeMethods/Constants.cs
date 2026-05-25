@@ -10,7 +10,8 @@ namespace DBCode {
 
          #region Constants
          // EM_  (Edit Control)
-         public const int EM_LINESCROLL = 0x00B6;
+         public const int EM_LINESCROLL = 0x00B6,
+                          EM_SETCHARFORMAT = 0x0444;
          // FILE_  (File Share Flags)
          public const int FILE_SHARE_READ = 0x00000001,
                           FILE_SHARE_WRITE = 0x00000002;
@@ -73,6 +74,7 @@ namespace DBCode {
          // WM_  (Window Messages)
          public const int WM_COPYDATA = 0x0000004A,
                           WM_LBUTTONDBLCLK = 0x00000203,
+                          WM_PAINT = 0x0000000F,
                           WM_PASTE = 0x00000302,
                           WM_SCROLL = 0x00000114,
                           WM_SETREDRAW = 0x0000000B,

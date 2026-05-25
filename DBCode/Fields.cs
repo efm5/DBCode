@@ -239,6 +239,7 @@ namespace DBCode {
       public static readonly IntPtr mInsertAfterWindow = new IntPtr(0);
       public static Label mTargetingLabel = null!, mVersionLabel = null!;
       public static LanguageKind mCurrentLanguage = LanguageKind.CSharp;
+      public static LineNumberPanel mLineNumberPanel = null!;
       public static MainForm mForm = null!;
       public static OptionsPanel? mOptionsPanel = null;
       public static readonly PropertyInfo[] mPredefinedColors =
@@ -309,7 +310,8 @@ namespace DBCode {
          toolStripSeparator24 = new ToolStripSeparator(), toolStripSeparator25 = new ToolStripSeparator(),
          toolStripSeparator26 = new ToolStripSeparator(), toolStripSeparator27 = new ToolStripSeparator(),
          toolStripSeparator28 = new ToolStripSeparator(), toolStripSeparator29 = new ToolStripSeparator(),
-         toolStripSeparator30 = new ToolStripSeparator(), toolStripSeparator31 = new ToolStripSeparator();
+         toolStripSeparator30 = new ToolStripSeparator(), toolStripSeparator31 = new ToolStripSeparator(),
+         toolStripSeparator32 = new ToolStripSeparator();
       public static ToolStripMenuItem?
       #region top-level menu items
          mEditMenuItem = null, mTargetingMenuItem = null, mViewMenuItem = null, mModeMenuItem = null, mLanguageMenuItem = null,
@@ -326,15 +328,16 @@ namespace DBCode {
          mEditPasteTSMI = null, mEditSelectAllTSMI = null, mEditSelectNoneTSMI = null,
          mEditTrimToBeginningTSMI = null, mEditTrimToEndTSMI = null, mEditCopyTSMI = null, mEditCopyAllTSMI = null,
          mEditCopyToBeginningTSMI = null, mEditCopyToEndTSMI = null, mEditFindTSMI = null, mEditFindNextTSMI = null,
-         mEditFindPreviousTSMI = null, mEditReplaceTSMI = null, mEditGoToTSMI = null, mEditWordWrapTSMI = null,
+         mEditFindPreviousTSMI = null, mEditReplaceTSMI = null, mEditGoToTSMI = null,
          mTargetingTargetedTSMI = null, mTargetingRetargetTSMI = null, mTargetingDefaultEndingsTSMI = null, mTargetingInsertCRTSMI = null,
          mTargetingAppendCRTSMI = null,
          mViewTransparentTSMI = null, mViewThirtyTSMI = null, mViewFiftyTSMI = null, mViewSeventyFiveTSMI = null, mViewOpaqueTSMI = null,
          mViewScrollingEdgeTopTSMI = null, mViewScrollingEdgeBottomTSMI = null, mViewScrollingEdgeLeftTSMI = null, mViewScrollingEdgeRightTSMI = null,
          mViewScrollingScrollUpTSMI = null, mViewScrollingScrollDownTSMI = null, mViewScrollingScrollLeftTSMI = null, mViewScrollingScrollRightTSMI = null,
          mViewScrollingPageUpTSMI = null, mViewScrollingPageDownTSMI = null, mViewScrollingPageLeftTSMI = null, mViewScrollingPageRightTSMI = null,
+         mViewWordWrapTSMI = null, mViewLineNumbersTSMI = null,
          mModeFeaturesTSMI = null, mModeMinimalTSMI = null,
-         mThemeCurrentThemeIsTSMI = null, mThemeDesignTSMI = null, mThemeEditTSMI = null, mThemeEditCurrentTSMI = null, mThemeEditPickTSMI = null,
+         mThemeCurrentThemeIsTSMI = null, mThemeDesignTSMI = null, mThemeEditTSMI = null, mThemePickCurrentTSMI = null, mThemePickEditTSMI = null,
          mLanguageCSharpTSMI = null, mLanguageCTSMI = null, mLanguageCppTSMI = null, mLanguageBasicTSMI = null,
          mLanguageFSharpTSMI = null, mLanguageHtmlTSMI = null, mLanguageCssTSMI = null, mLanguageXmlTSMI = null, mLanguageJsonTSMI = null,
          mLanguagePowerShellTSMI = null, mLanguageBatchTSMI = null, mLanguageSqlTSMI = null, mLanguageMarkdownTSMI = null,

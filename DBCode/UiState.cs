@@ -3,7 +3,7 @@ namespace DBCode {
       // ───── Persisted via Settings.Default ─────
       internal bool mFirstTheme, mFirstLaunch, mUseTabs, mUseSpaces, mUsePCRE, mFindMatchCase, mFindWholeWord, mFindRegularExpressions,
          mFindScopeSelection, mSRMatchCase, mSRWholeWord, mSRRegularExpressions, mSRScopeSelection, mAllIfNothing, mConcatenateCommentFirst,
-         mShortcutsDgvAutoSize, mCommentOutBlankLines, mUseThreeSpaces, mEnforceFormattingProtection;
+         mShortcutsDgvAutoSize, mCommentOutBlankLines, mUseThreeSpaces, mEnforceFormattingProtection, mShowLineNumbers, mWordWrap;
       internal Color mBracePairColor0, mBracePairColor1, mBracePairColor2, mBracePairColor3, mBracePairColor4, mBracePairColor5,
          mBracePairColor6, mBracePairColor7, mBracePairColor8, mBracePairColor9;
       internal double mFormOpacity;
@@ -106,6 +106,8 @@ namespace DBCode {
          mBracePairColor9 = Color.FromArgb(106, 138, 28);   // olive
          mLineEnding = LineEndings.Default;
          mEnforceFormattingProtection = true;
+         mShowLineNumbers = true;
+         mWordWrap = false;
       }
 
       public void Read() {
@@ -186,6 +188,8 @@ namespace DBCode {
          mUseThreeSpaces = Settings.Default.UseThreeSpaces;
          mCommentOutBlankLines = Settings.Default.CommentOutBlankLines;
          mEnforceFormattingProtection = Settings.Default.EnforceFormattingProtection;
+         mShowLineNumbers = Settings.Default.ShowLineNumbers;
+         mWordWrap = Settings.Default.WordWrap;
       }
 
       private void WriteSettings() {
@@ -245,6 +249,8 @@ namespace DBCode {
          Settings.Default.UseThreeSpaces = mUseThreeSpaces;
          Settings.Default.CommentOutBlankLines = mCommentOutBlankLines;
          Settings.Default.EnforceFormattingProtection = mEnforceFormattingProtection;
+         Settings.Default.ShowLineNumbers = mShowLineNumbers;
+         Settings.Default.WordWrap = mWordWrap;
       }
 
       private static void LoadHistory(List<string> pList, string pFile, int pMax) {

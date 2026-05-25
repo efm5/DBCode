@@ -624,6 +624,7 @@
          ThrowIfNull(mMenuStrip, nameof(mMenuStrip));
          ThrowIfNull(mContextMenuStrip, nameof(mContextMenuStrip));
          ThrowIfNull(mHighlighterEngine, nameof(mHighlighterEngine));
+         ThrowIfNull(mLineNumberPanel, nameof(mLineNumberPanel));
          mRichTextBox.TextChanged -= OnEditorTextChanged;
          Theme theme = mCurrentTheme;
          Color menuBackground = theme.mInterfaceColors[(int)ColorSwatchUsage.MenuBackground];
@@ -631,6 +632,7 @@
          ThemeMenuRenderer menuRenderer = new ThemeMenuRenderer(ContrastingColor(menuBackground));
          mThemeCurrentThemeIsTSMI.Text = mCurrently + theme.mName;
          mForm.BackColor = theme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground];
+         mRichTextBox.Font = theme.mFonts[(int)FontUsage.Text];
          mRichTextBox.BackColor = theme.mInterfaceColors[(int)ColorSwatchUsage.TextBox];
          mRichTextBox.ForeColor = theme.mInterfaceColors[(int)ColorSwatchUsage.TextBoxFont];
          mMenuStrip.BackColor = menuBackground;
@@ -661,6 +663,7 @@
             mRichTextBox.mAllowFormatting = false;
          }
          mRichTextBox.TextChanged += OnEditorTextChanged;
+         mLineNumberPanel.ApplyTheme(theme);
          ResumeLayout(true);
       }
 

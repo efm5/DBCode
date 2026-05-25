@@ -718,5 +718,29 @@ namespace DBCode.Properties {
                 this["EnforceFormattingProtection"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowLineNumbers {
+            get {
+                return ((bool)(this["ShowLineNumbers"]));
+            }
+            set {
+                this["ShowLineNumbers"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool WordWrap {
+            get {
+                return ((bool)(this["WordWrap"]));
+            }
+            set {
+                this["WordWrap"] = value;
+            }
+        }
     }
 }

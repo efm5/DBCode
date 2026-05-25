@@ -161,6 +161,7 @@ namespace DBCode {
          mEm4 = mEm * 4;
          mEmHalf = (int)Math.Ceiling(mEm * 0.5f);
          mEmFifth = Math.Clamp(mEm / 5, 3, 14);
+         mEmHeight = TextRenderer.MeasureText(mUnicodeSampleString, pFont).Height;
          mTabControlTopPad = (int)Math.Ceiling(fontSize * 0.25f);
          mTabControlLeftPad = (int)Math.Ceiling(fontSize * 0.25f);
          mTextPadding = TextRenderer.MeasureText(" ", pFont).Width - TextRenderer.MeasureText("", pFont).Width;
