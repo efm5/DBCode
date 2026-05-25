@@ -1,26 +1,96 @@
-<html>
-<head>
-   <title>
-      Targeted Application
-   </title>
-   <meta name="description" content="Reference manual for DBCode&rsquo;s Targeted Application">
-   <meta name="keywords" content="DBCode">
-   <link rel="stylesheet" href="styles.css">
-   <link rel="icon" type="image/x-icon" href="helpIcon.ico">
-</head>
-<body style="margin:50px;padding:0">
-   <h1>DBCode&rsquo;s Targeted Application</h1>
-   <h2>Reference Manual</h2>
-   <br>
-   <div class="introdiv">
-      <p>[Real details] THIS IS JUST A PLACEHOLDER.</p>
-   </div>
-   <div class="pageslinkdiv">
-      <h3 id="pageLinks">Other Pages</h3>
-      <p><a href="DBCodeMain.html">Main Window Help Page</a></p>
-      <p><a href="DBCodeColorPickerHelp.html">Color Picker Help Page</a>
-      <p><a href="DBCodeFontPickerHelp.html">Font Picker Help Page</a>
-      <p><a href="DBCodeShortcuts.html">Keyboard Shortcuts Help Page</a></p>
-   </div>
-</body>
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Targeting Help</title>
+      <meta name="description" content="Reference manual for DBCode&rsquo;s Targeted Application">
+      <meta name="keywords" content="DBCode">
+      <link rel="stylesheet" href="styles.css">
+      <link rel="icon" type="image/x-icon" href="helpIcon.ico">
+   </head>
+   <body style="margin:50px;padding:0">
+      <h1>DBCode&rsquo;s</h1>
+      <h2>Reference Manual</h2>
+      <h3>Version 0.0.0.1</h3>
+      <h4>Targeting</h4>
+      <div class="introdiv">
+         <p>
+            The whole concept of <span class="larger">DBCode</span> is to move text from one Dragon-friendly text editor (<span class="larger">DBCode</span>) into another text editor (the primary focus is on IDEs, but it works just as well anywhere text can be pasted). Where the pasted code lands depends on whether <span class="larger">DBCode</span> is &ldquo;targeted&rdquo; or &ldquo;untargeted&rdquo;.
+         </p>
+      </div>
+      <div class="largesectiondiv" id="targetingConcept">
+         <p>The <span class="larger">DBCode</span> Targeting Concept</p>
+      </div>     
+      <div class="imagecluster">
+         <div class="imageLabel">
+            DBCode&rsquo;s Targeting menu
+         </div>
+         <img src="MenuTargeting.png" alt="DBCode&rsquo;s Targeting menu">
+      </div> 
+      <p class="tab">
+         &ldquo;<u>T</u>argeted&rdquo; (<b>Ctrl+d</b>) on the Targeting menu is a toggle&mdash; when checked it is on; otherwise targeting is untargeted. &ldquo;<u>R</u>etarget&rdquo; (<b>Ctrl+e</b>) allows the user to change the target.
+      </p> 
+      <p class="doubletab">
+         When &ldquo;<u>T</u>argeted&rdquo; is not checked and the user selects &ldquo;<u>T</u>argeted&rdquo;, it becomes checked and <span class="larger">DBCode</span> enters the targeting behavior. The first thing that happens is a Target Picker dialog opens:
+      </p>    
+      <div class="imagecluster">
+         <div class="imageLabel">
+            DBCode&rsquo;s Target Picker
+         </div>
+         <img src="PickTarget.png" alt="DBCode&rsquo;s Target Picker dialog">
+      </div> 
+      <p class="doubletab">
+         If the user chooses to &ldquo;Cancel&rdquo; &ldquo;<u>T</u>argeted&rdquo; is unchecked and targeting is turned off. If the user chooses one of the potential targets, it will become the &ldquo;target&rdquo; until targeting is turned off or &ldquo;<u>R</u>etarget&rdquo; is used to choose a different target.
+      </p>    
+      <div class="smallsectiondiv" id="transferTargeted">
+         <p>
+            Targeted Transfer
+         </p>
+      </div>    
+      <p class="doubletab">
+         Targeted transfer forces the targeted application to the top of the Z&ndash;Order. Whatever text is being transferred is pasted into the target application at its current cursor location.
+      </p>    
+      <div class="smallsectiondiv" id="transferUntargeted">
+         <p>
+            Untargeted Transfer
+         </p>
+      </div>     
+      <p class="doubletab">
+         Untargeted transfer forces the next application in the Z&ndash;Order (below <span class="larger">DBCode</span>) to the top so that whatever text is being transferred is pasted into the top application at its current cursor location.
+      </p>    
+      <div class="mediumsectiondiv" id="retarget">
+         <p>
+            Retarget
+         </p>
+      </div>   
+      <p class="doubletab">
+         If the user chooses &ldquo;<u>R</u>etarget&rdquo; the Target Picker  opens. If the user chooses &ldquo;Cancel&rdquo; the existing target remains in effect. Otherwise, a new target is established.
+      </p>    
+      <div class="largesectiondiv">
+         <p>The <span class="larger">Line&ndash;Endings</span> Items</p>
+      </div>     
+      <p class="tab">
+         These three items () have no direct effect on targeting but do affect how the text ends up formatted the target. See: <a href="DBCodeMenuHelp.html#lineEndings">line&ndash;endings</a> for more details.
+      </p>    
+      <div class="pageslinkdiv">
+         <h3 id="pageLinks">Other Pages</h3>
+         <p> <a href="DBCodeHelp.html">DB Code Main Help Page</a>
+             <a href="DBCodeConventionsHelp.html">Programming Conventions</a>
+         </p>
+         <p> <a href="DBCodeMenuHelp.html">DB Code Menu Help Page</a> </p>
+         <p> <a href="DBCodeTargetingHelp.html">Targeting Help Page</a> </p>
+         <p> <a href="DBCodeOptionsHelp.html">Options Help Page</a> </p>
+         <p> <a href="DBCodeThemesHelp.html">Themes Help Page</a>
+             <a href="DBCodeThemePickerHelp.html">Theme Picker Help Page</a>
+             <a href="DBCodeThemeDesignerHelp.html">Theme Designer/Editor Help Page</a>
+         </p>
+         <p> <a href="DBCodeColorPickerHelp.html">Color Picker Help Page</a>
+             <a href="DBCodeFontPickerHelp.html">Font Picker Help Page</a> </p>
+         <p> <a href="DBCodeDialogsHelp.html">Dialogs Help Page</a>
+             <a href="DBCodeFindHelp.html">Find And Search/Replace Dialogs Help Page</a>
+         </p>
+         <p> <a href="DBCodeShortcutsHelp.html">Keyboard Shortcuts Help Page</a> </p>
+      </div>
+   </body>
 </html>

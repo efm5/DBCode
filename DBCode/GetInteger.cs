@@ -113,6 +113,7 @@
             ApplyTheme();
             mTitleCluster.LayoutCluster();
             SetUpDownBoxWidth(mUpDown);
+            mPromptLabel.Left = mIndent;
             mUpDown.Left = mIndent;
             mGetIntegerBottomPanel.LayoutControls();
             int wantedWidth = mTitleCluster.Width;
@@ -120,12 +121,13 @@
             wantedWidth = Math.Max(wantedWidth, mUpDown.Width);
             wantedWidth = Math.Max(wantedWidth, mGetIntegerBottomPanel.NeededWidth);
             mInnerPanel.Size = new Size(wantedWidth + mEm,
-               mTitleCluster.Height + mPromptLabel.Height + mUpDown.Height +
-               mGetIntegerBottomPanel.Height);
+               mTitleCluster.Height + mPromptLabel.Height + mUpDown.Height + mGetIntegerBottomPanel.Height + mEm);
             mGetIntegerBottomPanel.LayoutControls();
-            mUpDown.Width = 150;
-            mOuterPanel.Size = new Size(mInnerPanel.Width + (mEmHalf * 2), mInnerPanel.Height + (mEmHalf * 2));
-            Size = new Size(mOuterPanel.Width + (mEmHalf * 2), mOuterPanel.Height + mEm + mEmHalf);
+            SetUpDownBoxWidth(mUpDown);
+            mOuterPanel.Size = new Size(mInnerPanel.Width + mEm, mInnerPanel.Height + mEm);
+            Size = new Size(mOuterPanel.Width + mEm, mOuterPanel.Height + mEm + mEmHalf);
+            mPromptLabel.Top = mTitleCluster.Bottom;
+            mUpDown.Top = mPromptLabel.Bottom + mEm;
             mInnerPanel.ResumeLayout(true);
             ResumeLayout(true);
          }

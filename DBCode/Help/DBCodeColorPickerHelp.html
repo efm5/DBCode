@@ -1,39 +1,109 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
    <head>
-      <title>Color Picker</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Color Picker Help</title>
       <meta name="description" content="Reference manual for DBCode">
-         <meta name="keywords" content="DBCode">
-            <link rel="stylesheet" href="styles.css">
-               <link rel="icon" type="image/x-icon" href="helpIcon.ico">
+      <meta name="keywords" content="DBCode">
+      <link rel="stylesheet" href="styles.css">
+      <link rel="icon" type="image/x-icon" href="helpIcon.ico">
    </head>
    <body style="margin:50px;padding:0">
       <h1>DBCode&rsquo;s</h1>
       <h2>Reference Manual</h2>
       <h3>Version 0.0.0.1</h3>
       <h4>Color Picker</h4>
-   <div class="introdiv">
-      <p>[Real details] THIS IS JUST A PLACEHOLDER.</p>
-   </div>
-   <div class="imageLabel">
-      <b><big>DBCode</big>&rsquo;s Color Picker Dialog:</b>
-   </div>
-   <div class="picturediv">
-      <img src="DBCodeColorPicker.png" alt="DBCode&rsquo;s Color Picker Dialog">
-   </div>   
+      <div class="introdiv">
+         <p>
+            This Color Picker dialog was specifically designed to be Dragon&ndash;friendly.
+         </p>
+      </div>
+      <div class="imagecluster">
+         <div class="imageLabel">
+            <b>
+               <span class="larger">DBCode</span>&rsquo;s Color Picker dialog:
+            </b>
+         </div>
+         <img src="ColorPicker.png" alt="DBCode&rsquo;s Color Picker dialog">
+      </div>
+      <div class="largesectiondiv" id="colorPicker">
+         <p>The Color Picker</p>
+      </div>     
+      <p>
+         The &ldquo;Color Picker&rdquo; has a title: &ldquo;Select A Color&rdquo; below which is a label which describes how the color is to be used.
+      </p>
+      <div class="mediumsectiondiv" id="namedColors">
+         <p>
+            The Named Colors GroupBox
+         </p>
+      </div>     
+      <p class="tab">
+         There is a &ldquo;Use Named Colors Only&rdquo; CheckBox; when checked, only named colors are available. &ldquo;Named Colors&rdquo; consists of about 175 colors; the list is subject to change by addition.
+      </p>    
+      <p class="tab">
+         There is a &ldquo;Named Color Drop&ndash;down&rdquo; ComboBox which contains dictation&ndash;friendly versions of all color names (the actual names have no spaces in them). &ldquo;Named Color Drop&ndash;down&rdquo; is a <a href="DBCodeConventionsHelp#prefixButton.html"><b><i>prefix button</i></b></a> with which the user may activate the ComboBox.
+      </p>
+      <div class="mediumsectiondiv" id="namedColors">
+         <p>
+            The Custom Color GroupBox
+         </p>
+      </div>     
+      <p class="tab">
+         There is a &ldquo;Use Grayscale Only&rdquo; CheckBox; when checked, only colors which are the grayscale are available. A color is &ldquo;gray&rdquo; if all three of its red, green and blue values are equal.
+      </p>    
+      <p class="tab">
+         Below that CheckBox are four color clusters (a cluster consists of a <a href="DBCodeConventionsHelp#prefixButton.html"><b><i>prefix button</i></b></a>, its associated NumericUpDown, a slider and an example color swatch). There is one each for gray, red, green and blue.
+      </p>     
+      <p class="tab">
+         Below the four color clusters is a large example color swatch which will dynamically reflect the color being designed.
+      </p>   
+      <div class="notediv">
+         <p>
+            The user may activate any of the NumericUpDowns by dictating the name of its associated prefix button. One may then directly dictate any value between 0 and 2554 tab out of the ComboBox. Tabbing out will activate the slider which will respond to both left and right arrow keys (either keyboard presses or dictated). All of these controls are dynamically updated&nbsp;&mdash;&nbsp;changing the value of the ComboBox will update the associated slider and the associated color swatch; the example swatch will also be updated.
+         </p>
+      </div> 
+      <div class="largesectiondiv" id="colorPickerBottomPanel">
+         <p>The Bottom Panel</p>
+      </div>     
+      <div class="imagecluster">
+         <div class="imageLabel">
+            Color Picker&rsquo;s bottom panels
+         </div>
+         <img src="HelpOKCancelBottomPanel.png" alt="Color Picker&rsquo;s bottom panel">
+      </div> 
+      <div class="lefttext">
+         <p>
+            The bottom panel has the three traditional buttons: &ldquo;Help&rdquo;; &ldquo;OK&rdquo; and &ldquo;Cancel&rdquo;.
+         </p>
+         <p class="tab">
+            &ldquo;Help&rdquo; brings up context&ndash;sensitive help in the user&rsquo;s preferred browser (this page).
+         </p>
+         <p class="tab">
+            &ldquo;OK&rdquo; closes the dialog and immediately applies the color according to the usage.
+         </p>
+         <p class="tab">
+            &ldquo;Cancel&rdquo; closes the dialog without applying the color.
+         </p>
+      </div> 
       <div class="pageslinkdiv">
          <h3 id="pageLinks">Other Pages</h3>
-         <p> <a href="DBCodeHelp.html">DB Code Main Help Page</a> </p>
+         <p> <a href="DBCodeHelp.html">DB Code Main Help Page</a>
+             <a href="DBCodeConventionsHelp.html">Programming Conventions</a>
+         </p>
+         <p> <a href="DBCodeMenuHelp.html">DB Code Menu Help Page</a> </p>
          <p> <a href="DBCodeTargetingHelp.html">Targeting Help Page</a> </p>
          <p> <a href="DBCodeOptionsHelp.html">Options Help Page</a> </p>
-         <p> <a href="DBCodeThemesHelp.html">Themes Help Page</a> 
+         <p> <a href="DBCodeThemesHelp.html">Themes Help Page</a>
              <a href="DBCodeThemePickerHelp.html">Theme Picker Help Page</a>
-             <a href="DBCodeThemeDesignerHelp.html">Theme Designer/Editor Help Page</a> 
+             <a href="DBCodeThemeDesignerHelp.html">Theme Designer/Editor Help Page</a>
          </p>
          <p> <a href="DBCodeColorPickerHelp.html">Color Picker Help Page</a>
              <a href="DBCodeFontPickerHelp.html">Font Picker Help Page</a> </p>
-         <p> <a href="DBCodeDialogsHelp.html">Dialogs Help Page</a> </p>
-         <p> <a href="DBCodeShortcuts.html">Keyboard Shortcuts Help Page</a> </p>
+         <p> <a href="DBCodeDialogsHelp.html">Dialogs Help Page</a>
+             <a href="DBCodeFindHelp.html">Find And Search/Replace Dialogs Help Page</a>
+         </p>
+         <p> <a href="DBCodeShortcutsHelp.html">Keyboard Shortcuts Help Page</a> </p>
       </div>
-</body>
+   </body>
 </html>
