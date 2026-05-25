@@ -228,7 +228,7 @@ namespace DBCode {
             TabIndex = mTabIndex++,
             BackColor = mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground]
          };
-         mRichTextBox = new RichTextBox();
+         mRichTextBox = new PlainRichTextBox();
          mSendAllButton = new Button();
          mPasteSelectedButton = new Button();
          mGetAllButton = new Button();

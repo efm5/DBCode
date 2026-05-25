@@ -20,7 +20,8 @@
       private readonly RichTextBox? mBraceExampleRichTextBox;
       private ScalableCheckBox? mShortcutsAllCheckBox, mShortcutsAutoSizeCheckBox, mShortcutsSortCheckBox;
       private readonly ScalableCheckBoxCluster? mTabCheckBoxCluster, mSpaceCheckBoxCluster, mAllIfNothingCheckBoxCluster,
-         mCommentConcatenateFirstCheckBoxCluster, mCommentOutBlankLinesCheckBoxCluster, mUseThreeSpacesCheckBoxCluster;
+         mCommentConcatenateFirstCheckBoxCluster, mCommentOutBlankLinesCheckBoxCluster, mUseThreeSpacesCheckBoxCluster,
+         mEnforceFormattingProtectionCheckBoxCluster;
       private readonly ScalableRadioButtonCluster? mWhitespaceRadioCluster, mPastingRadioCluster;
       internal List<ShortcutEntry> mShortcutEntries = [];
       private static readonly string[] sUsableShortcutKeys = [
@@ -393,6 +394,9 @@
          mCommentOutBlankLinesCheckBoxCluster.mScalableCheckBox.Checked = mUiState.mCommentOutBlankLines;
          mUseThreeSpacesCheckBoxCluster = new ScalableCheckBoxCluster(mCurrentTheme, "&Use Three Spaces", false, groupBoxBackColor);
          mUseThreeSpacesCheckBoxCluster.mScalableCheckBox.Checked = mUiState.mUseThreeSpaces;
+         mEnforceFormattingProtectionCheckBoxCluster = new ScalableCheckBoxCluster(mCurrentTheme, "Enforce &Formatting Protection", false,
+            groupBoxBackColor);
+         mEnforceFormattingProtectionCheckBoxCluster.mScalableCheckBox.Checked = mUiState.mEnforceFormattingProtection;
          mWhitespaceGroupBox.Controls.AddRange([mWhitespaceRadioCluster, mTabUpDownCluster, mTabCheckBoxCluster,
             mSpaceUpDownCluster, mSpaceCheckBoxCluster]);
          mBottomPanel = new BottomPanel(mCurrentTheme) {
@@ -431,13 +435,11 @@
             button.Click += CtrlVAltV_Click;
          mPastingGroupBox.Controls.AddRange([mPastingRadioCluster]);
          mBottomPanel.AddRightControl(mOKButton);
-         mBaseClusters.AddRange([mTopDraggerHeightUpDownCluster,
-            mTopDraggerEdgeUpDownCluster, mActivationDelayUpDownCluster, mReactivationRateUpDownCluster,
-            mClipboardDelayUpDownCluster, mSearchUpDownCluster, mReplaceUpDownCluster,
-            mWhitespaceRadioCluster, mPastingRadioCluster,
-            mTabUpDownCluster, mTabCheckBoxCluster, mSpaceUpDownCluster, mSpaceCheckBoxCluster,
+         mBaseClusters.AddRange([mTopDraggerHeightUpDownCluster, mTopDraggerEdgeUpDownCluster, mActivationDelayUpDownCluster,
+            mReactivationRateUpDownCluster, mClipboardDelayUpDownCluster, mSearchUpDownCluster, mReplaceUpDownCluster, mWhitespaceRadioCluster,
+            mPastingRadioCluster, mTabUpDownCluster, mTabCheckBoxCluster, mSpaceUpDownCluster, mSpaceCheckBoxCluster,
             mAllIfNothingCheckBoxCluster, mCommentWidthUpDownCluster, mCommentConcatenateFirstCheckBoxCluster,
-            mCommentOutBlankLinesCheckBoxCluster, mUseThreeSpacesCheckBoxCluster]);
+            mCommentOutBlankLinesCheckBoxCluster, mUseThreeSpacesCheckBoxCluster, mEnforceFormattingProtectionCheckBoxCluster]);
          mMagicNumbersGroupBox.Controls.AddRange([mTopDraggerHeightUpDownCluster,
             mTopDraggerEdgeUpDownCluster, mActivationDelayUpDownCluster, mReactivationRateUpDownCluster,
             mClipboardDelayUpDownCluster]);
@@ -447,7 +449,7 @@
             mCommentConcatenateFirstCheckBoxCluster, mCommentOutBlankLinesCheckBoxCluster,
             mUseThreeSpacesCheckBoxCluster]);
          mGeneralScrollPanel.Controls.AddRange([mMagicNumbersGroupBox, mWhitespaceGroupBox, mPastingGroupBox,
-            mHistoryGroupBox, mCodingGroupBox]);
+            mHistoryGroupBox, mCodingGroupBox, mEnforceFormattingProtectionCheckBoxCluster]);
          mGeneralTabControl.TabPages[(int)OptionsTabPageUsage.General].Controls.Add(mGeneralScrollPanel);
          mIncludeExcludeTabControl.TabPages[(int)TargetingTabPageUsage.Include].Controls.Add(mIncludeScrollPanel);
          mIncludeScrollPanel.Controls.Add(mIncludeDataGridView);
@@ -672,6 +674,7 @@
          ThrowIfNull(mCommentConcatenateFirstCheckBoxCluster, nameof(mCommentConcatenateFirstCheckBoxCluster));
          ThrowIfNull(mCommentOutBlankLinesCheckBoxCluster, nameof(mCommentOutBlankLinesCheckBoxCluster));
          ThrowIfNull(mUseThreeSpacesCheckBoxCluster, nameof(mUseThreeSpacesCheckBoxCluster));
+         ThrowIfNull(mEnforceFormattingProtectionCheckBoxCluster, nameof(mEnforceFormattingProtectionCheckBoxCluster));
          ThrowIfNull(mCFamilyTitleLabel, nameof(mCFamilyTitleLabel));
          ThrowIfNull(mBasicTitleLabel, nameof(mBasicTitleLabel));
          ThrowIfNull(mFSharpTitleLabel, nameof(mFSharpTitleLabel));
@@ -745,6 +748,7 @@
          mSpaceUpDownCluster.Location = new Point(radioRight, spaceRowY);
          mSpaceCheckBoxCluster.Location = new Point(mSpaceUpDownCluster.Right + mEm, spaceRowY);
          SizeGroupBox(mWhitespaceGroupBox);
+         mEnforceFormattingProtectionCheckBoxCluster.Location = new Point(mIndent, mWhitespaceGroupBox.Bottom + mEm);
          mPastingGroupBox.Location = new Point(mMagicNumbersGroupBox.Right + mEm, mMagicNumbersGroupBox.Top);
          mPastingRadioCluster.Location = GetGroupBoxFirstLineOffset(mPastingGroupBox);
          SizeGroupBox(mPastingGroupBox);
@@ -758,7 +762,7 @@
             new Point(mSearchUpDownCluster.Left, mSearchUpDownCluster.Bottom + mEm);
          mClearReplaceButton.Location = new Point(mReplaceUpDownCluster.Right + mEm, mReplaceUpDownCluster.Top);
          SizeGroupBox(mHistoryGroupBox);
-         mCodingGroupBox.Location = new Point(mWhitespaceGroupBox.Right + mEm, mHistoryGroupBox.Bottom + mEm);
+         mCodingGroupBox.Location = new Point(Math.Max(mWhitespaceGroupBox.Right, mEnforceFormattingProtectionCheckBoxCluster.Right) + mEm, mHistoryGroupBox.Bottom + mEm);
          mAllIfNothingCheckBoxCluster.Location = GetGroupBoxFirstLineOffset(mCodingGroupBox);
          mCommentWidthUpDownCluster.Location = new Point(mAllIfNothingCheckBoxCluster.Left, mAllIfNothingCheckBoxCluster.Bottom);
          mCommentConcatenateFirstCheckBoxCluster.Location = new Point(mAllIfNothingCheckBoxCluster.Left, mCommentWidthUpDownCluster.Bottom);
@@ -775,13 +779,20 @@
          mGeneralTabControl.SelectedIndex = savedGeneral;
          mGeneralTabControl.SelectedIndexChanged += GeneralTabControl_SelectedIndexChanged;
          mGeneralTabControl.DrawItem += GeneralTabControl_DrawItem;
-         Rectangle client = mGeneralTabControl.ClientRectangle;
-         Rectangle display = mGeneralTabControl.DisplayRectangle;
-         int tabStripHeight = display.Top - client.Top;
-         Size wantedSize = new Size(mHistoryGroupBox.Right + (mTabControlLeftPad * 2) +
-            SystemInformation.VerticalScrollBarWidth + mEm,
-            mTitleLabel.Height + mTitleBarHeight + mBottomPanel.Height + tabStripHeight + (mTabControlTopPad * 2) +
-            mWhitespaceGroupBox.Bottom + mEm3 + SystemInformation.HorizontalScrollBarHeight);
+         int tabControlWidth = mHistoryGroupBox.Right + (mTabControlLeftPad * 2) + SystemInformation.VerticalScrollBarWidth + mEm;
+         int tabStripHeight = mGeneralTabControl.GetTabStripHeight(tabControlWidth);
+         int leftBottom = mTabControlTopPad
+            + mMagicNumbersGroupBox.Height + mEm
+            + mWhitespaceGroupBox.Height + mEm
+            + mEnforceFormattingProtectionCheckBoxCluster.Height;
+         int rightBottom = mTabControlTopPad
+            + mPastingGroupBox.Height + mEm
+            + mHistoryGroupBox.Height + mEm
+            + mCodingGroupBox.Height;
+         int contentBottom = Math.Max(leftBottom, rightBottom);
+         Size wantedSize = new Size(mHistoryGroupBox.Right + (mTabControlLeftPad * 2) + SystemInformation.VerticalScrollBarWidth + mEm,
+            mTitleLabel.Height + mTitleBarHeight + mBottomPanel.Height + tabStripHeight + mTabControlTopPad +
+            contentBottom + mEm3 + SystemInformation.HorizontalScrollBarHeight);
          if (mUiState.mOptionsFirstShow) {
             Screen screen = Screen.FromPoint(mUiState.FormBounds.Location);
             Point location = new Point(((screen.WorkingArea.Width - wantedSize.Width) / 2) + screen.WorkingArea.Left,
@@ -789,9 +800,8 @@
             mUiState.mOptionsBounds = new Rectangle(location, wantedSize);
             mUiState.mOptionsFirstShow = false;
          }
-         else {
+         else
             mUiState.mOptionsBounds = new Rectangle(mUiState.mOptionsBounds.Location, wantedSize);
-         }
          mCFamilyTitleLabel.LayoutCluster();
          mBasicTitleLabel.LayoutCluster();
          mFSharpTitleLabel.LayoutCluster();

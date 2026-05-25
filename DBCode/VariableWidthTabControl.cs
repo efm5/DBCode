@@ -59,6 +59,40 @@ namespace DBCode {
          }
       }
 
+      public int GetTabStripHeight(int pAvailableWidth) {
+         Font font = Font ?? SystemFonts.DefaultFont;
+         int singleRowHeight = ItemSize.Height;
+         if (singleRowHeight == 0) {
+            FontFamily family = font.FontFamily;
+            float emHeight = family.GetEmHeight(font.Style);
+            float ascent = family.GetCellAscent(font.Style);
+            float descent = family.GetCellDescent(font.Style);
+            singleRowHeight = (int)Math.Ceiling(font.Size * (ascent + descent) / emHeight) + 12;
+         }
+         if (pAvailableWidth <= 0 || TabCount == 0)
+            return singleRowHeight;
+         List<int> widths = TabHeaderWidths.Count > 0
+            ? TabHeaderWidths
+            : ComputeTabWidths(font);
+         int rows = 1;
+         int rowWidth = 0;
+         for (int i = 0; i < widths.Count; i++) {
+            rowWidth += widths[i];
+            if (rowWidth > pAvailableWidth) {
+               rows++;
+               rowWidth = widths[i];
+            }
+         }
+         return rows * singleRowHeight;
+      }
+
+      private List<int> ComputeTabWidths(Font pFont) {
+         List<int> widths = [];
+         for (int i = 0; i < TabCount; i++)
+            widths.Add(TextRenderer.MeasureText(TabPages[i].Text, pFont).Width + 40);
+         return widths;
+      }
+
       private int HitTestTabHeaders(Point pMouseLocation) {
          for (int index = 0; index < TabCount; index++) {
             if (GetTabRect(index).Contains(pMouseLocation))

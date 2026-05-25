@@ -706,5 +706,17 @@ namespace DBCode.Properties {
                 this["MaximumCommentWidth"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool EnforceFormattingProtection {
+            get {
+                return ((bool)(this["EnforceFormattingProtection"]));
+            }
+            set {
+                this["EnforceFormattingProtection"] = value;
+            }
+        }
     }
 }

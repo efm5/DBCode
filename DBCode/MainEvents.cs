@@ -193,7 +193,13 @@
                mRichTextBox.Text = mRichTextBox.Text.Replace(whitespace, "\t");
             }
          }//else both - do nothing
-         mHighlighterEngine.HighlightNow();
+         mRichTextBox.mAllowFormatting = true;
+         try {
+            mHighlighterEngine.HighlightNow();
+         }
+         finally {
+            mRichTextBox.mAllowFormatting = false;
+         }
          mRichTextBox.TextChanged += OnEditorTextChanged;
       }
 
@@ -269,7 +275,13 @@
          CheckLanguage();
          ThrowIfNull(mHighlighterEngine, nameof(mHighlighterEngine));
          mHighlighterEngine.SetLanguage(mCurrentLanguage);
-         mHighlighterEngine.HighlightNow();
+         mRichTextBox.mAllowFormatting = true;
+         try {
+            mHighlighterEngine.HighlightNow();
+         }
+         finally {
+            mRichTextBox.mAllowFormatting = false;
+         }
       }
 
       private void Undo_Click(object? pSender, EventArgs pEventArgs) {

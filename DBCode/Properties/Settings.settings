@@ -173,5 +173,8 @@
     <Setting Name="MaximumCommentWidth" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">80</Value>
     </Setting>
+    <Setting Name="EnforceFormattingProtection" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

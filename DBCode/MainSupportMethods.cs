@@ -597,7 +597,13 @@
          ThrowIfNull(mHighlighterEngine, nameof(mHighlighterEngine));
          ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
          mRichTextBox.TextChanged -= OnEditorTextChanged;
-         mHighlighterEngine.HighlightNow();
+         mRichTextBox.mAllowFormatting = true;
+         try {
+            mHighlighterEngine.HighlightNow();
+         }
+         finally {
+            mRichTextBox.mAllowFormatting = false;
+         }
          mRichTextBox.TextChanged += OnEditorTextChanged;
       }
 
@@ -647,7 +653,13 @@
          mMainBottomPanel.SetFontAndColor();
          LayoutMainBottomPanel();
          mMainBottomPanel.Invalidate(true);
-         mHighlighterEngine.HighlightNow();
+         mRichTextBox.mAllowFormatting = true;
+         try {
+            mHighlighterEngine.HighlightNow();
+         }
+         finally {
+            mRichTextBox.mAllowFormatting = false;
+         }
          mRichTextBox.TextChanged += OnEditorTextChanged;
          ResumeLayout(true);
       }

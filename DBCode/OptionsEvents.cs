@@ -139,6 +139,7 @@
          ThrowIfNull(mCommentConcatenateFirstCheckBoxCluster, nameof(mCommentConcatenateFirstCheckBoxCluster));
          ThrowIfNull(mCommentOutBlankLinesCheckBoxCluster, nameof(mCommentOutBlankLinesCheckBoxCluster));
          ThrowIfNull(mUseThreeSpacesCheckBoxCluster, nameof(mUseThreeSpacesCheckBoxCluster));
+         ThrowIfNull(mEnforceFormattingProtectionCheckBoxCluster, nameof(mEnforceFormattingProtectionCheckBoxCluster));
          mUiState.mTopDraggerHeight = (int)mTopDraggerHeightUpDownCluster.mNumericUpDown.Value;
          mUiState.mTopDraggerEdge = (int)mTopDraggerEdgeUpDownCluster.mNumericUpDown.Value;
          mUiState.mActivationDelayMs = (int)mActivationDelayUpDownCluster.mNumericUpDown.Value;
@@ -151,6 +152,7 @@
          mUiState.mConcatenateCommentFirst = mCommentConcatenateFirstCheckBoxCluster.mScalableCheckBox.Checked;
          mUiState.mCommentOutBlankLines = mCommentOutBlankLinesCheckBoxCluster.mScalableCheckBox.Checked;
          mUiState.mUseThreeSpaces = mUseThreeSpacesCheckBoxCluster.mScalableCheckBox.Checked;
+         mUiState.mEnforceFormattingProtection = mEnforceFormattingProtectionCheckBoxCluster.mScalableCheckBox.Checked;
          mWhitespaceRadioCluster.mRadioPanel.GetReturnValue(out int whitespaceValue);
          mUiState.mWhitespace = whitespaceValue;
          mUiState.mSpacesPerTab = (int)mTabUpDownCluster.mNumericUpDown.Value;

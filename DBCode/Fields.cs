@@ -243,7 +243,7 @@ namespace DBCode {
       public static OptionsPanel? mOptionsPanel = null;
       public static readonly PropertyInfo[] mPredefinedColors =
          typeof(Color).GetProperties(BindingFlags.Public | BindingFlags.Static);
-      public static RichTextBox mRichTextBox = null!;
+      public static PlainRichTextBox mRichTextBox = null!;
       public static ScrollablePanel mScrollableMainPanel = null!;
       public static SearchReplacePanel? mSearchReplacePanel = null;
 #pragma warning disable CS0649

@@ -3,7 +3,7 @@ namespace DBCode {
       // ───── Persisted via Settings.Default ─────
       internal bool mFirstTheme, mFirstLaunch, mUseTabs, mUseSpaces, mUsePCRE, mFindMatchCase, mFindWholeWord, mFindRegularExpressions,
          mFindScopeSelection, mSRMatchCase, mSRWholeWord, mSRRegularExpressions, mSRScopeSelection, mAllIfNothing, mConcatenateCommentFirst,
-         mShortcutsDgvAutoSize, mCommentOutBlankLines, mUseThreeSpaces;
+         mShortcutsDgvAutoSize, mCommentOutBlankLines, mUseThreeSpaces, mEnforceFormattingProtection;
       internal Color mBracePairColor0, mBracePairColor1, mBracePairColor2, mBracePairColor3, mBracePairColor4, mBracePairColor5,
          mBracePairColor6, mBracePairColor7, mBracePairColor8, mBracePairColor9;
       internal double mFormOpacity;
@@ -105,6 +105,7 @@ namespace DBCode {
          mBracePairColor8 = Color.FromArgb(196, 98, 0);     // amber
          mBracePairColor9 = Color.FromArgb(106, 138, 28);   // olive
          mLineEnding = LineEndings.Default;
+         mEnforceFormattingProtection = true;
       }
 
       public void Read() {
@@ -184,6 +185,7 @@ namespace DBCode {
          mBracePairColor9 = Settings.Default.BracePairColor9;
          mUseThreeSpaces = Settings.Default.UseThreeSpaces;
          mCommentOutBlankLines = Settings.Default.CommentOutBlankLines;
+         mEnforceFormattingProtection = Settings.Default.EnforceFormattingProtection;
       }
 
       private void WriteSettings() {
@@ -242,6 +244,7 @@ namespace DBCode {
          Settings.Default.BracePairColor9 = mBracePairColor9;
          Settings.Default.UseThreeSpaces = mUseThreeSpaces;
          Settings.Default.CommentOutBlankLines = mCommentOutBlankLines;
+         Settings.Default.EnforceFormattingProtection = mEnforceFormattingProtection;
       }
 
       private static void LoadHistory(List<string> pList, string pFile, int pMax) {
