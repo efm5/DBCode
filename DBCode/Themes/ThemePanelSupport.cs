@@ -80,6 +80,16 @@
             ResumeLayout(true);
          }
 
+         internal void UpdateActiveScrollablePanel() {
+            int primaryIndex = mPrimaryTabControl.SelectedIndex;
+            if (primaryIndex == (int)PrimaryTabPageUsage.Interface)
+               mActiveScrollablePanel = mPrimaryScrollPanel;
+            else if (primaryIndex == (int)PrimaryTabPageUsage.Examples)
+               mActiveScrollablePanel = mExampleScrollPanel;
+            else
+               mActiveScrollablePanel = mHighlightScrollPanels[mHighlightTabControl.SelectedIndex];
+         }
+
          private void SizeExamplesContainer() {
             ThrowIfNull(mExampleScrollPanel, nameof(mExampleScrollPanel));
             mExamplesContainer.Width = mExampleScrollPanel.ClientSize.Width - mRightPad;
@@ -347,6 +357,8 @@
                mForm.Controls.Remove(mThemePanel);
             if (!mForm.Controls.Contains(mColorPickerPanel))
                mForm.Controls.Add(mColorPickerPanel);
+            mColorPickerPanel.ContextMenuStrip = mGeneralContextMenuStrip;
+            mActiveScrollablePanel = mColorPickerPanel.ScrollPanel;
             mActiveLayoutable = mColorPickerPanel.mBottomPanel;
             mColorPickerPanel.mTitleLabel.CenterTitle();
             mColorPickerPanel.mBottomPanel.PositionRightControls();
@@ -362,6 +374,8 @@
             ThrowIfNull(mOptionsPanel, nameof(mOptionsPanel));
             if (!mForm.Controls.Contains(mColorPickerPanel))
                mForm.Controls.Add(mColorPickerPanel);
+            mColorPickerPanel.ContextMenuStrip = mGeneralContextMenuStrip;
+            mActiveScrollablePanel = mColorPickerPanel.ScrollPanel;
             mActiveLayoutable = mColorPickerPanel.mBottomPanel;
             mColorPickerPanel.mTitleLabel.CenterTitle();
             mColorPickerPanel.mBottomPanel.PositionRightControls();
@@ -377,6 +391,7 @@
             ThrowIfNull(mThemePanel, nameof(mThemePanel));
             if (mForm.Controls.Contains(mColorPickerPanel))
                mForm.Controls.Remove(mColorPickerPanel);
+            mColorPickerPanel.ContextMenuStrip = null;
             mColorPickerPanel.Dispose();
             mColorPickerPanel = null;
             mUiState.mColorPickerBounds = mForm.Bounds;
@@ -386,6 +401,7 @@
             mForm.ResumeClientSizeChanged();
             if (!mForm.Controls.Contains(mThemePanel))
                mForm.Controls.Add(mThemePanel);
+            mThemePanel.UpdateActiveScrollablePanel();
             mThemePanel.BringToFront();
             mThemePanel.Show();
             mForm.Activate();
@@ -405,6 +421,7 @@
             ThrowIfNull(mOptionsPanel, nameof(mOptionsPanel));
             if (mForm.Controls.Contains(mColorPickerPanel))
                mForm.Controls.Remove(mColorPickerPanel);
+            mColorPickerPanel.ContextMenuStrip = null;
             mColorPickerPanel.Dispose();
             mColorPickerPanel = null;
             mUiState.mColorPickerBounds = mForm.Bounds;
@@ -414,6 +431,7 @@
             mForm.ResumeClientSizeChanged();
             if (!mForm.Controls.Contains(mOptionsPanel))
                mForm.Controls.Add(mOptionsPanel);
+            mOptionsPanel.UpdateActiveScrollablePanel();
             mOptionsPanel.BringToFront();
             mOptionsPanel.Visible = true;
             mOptionsPanel.Show();
@@ -438,6 +456,8 @@
             ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
             if (!mForm.Controls.Contains(mColorPickerPanel))
                mForm.Controls.Add(mColorPickerPanel);
+            mColorPickerPanel.ContextMenuStrip = mGeneralContextMenuStrip;
+            mActiveScrollablePanel = mColorPickerPanel.ScrollPanel;
             mActiveLayoutable = mColorPickerPanel.mBottomPanel;
             mColorPickerPanel.mTitleLabel.CenterTitle();
             mColorPickerPanel.mBottomPanel.PositionRightControls();
@@ -454,6 +474,7 @@
             ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
             if (mForm.Controls.Contains(mColorPickerPanel))
                mForm.Controls.Remove(mColorPickerPanel);
+            mColorPickerPanel.ContextMenuStrip = null;
             mColorPickerPanel.Dispose();
             mColorPickerPanel = null;
             mUiState.mColorPickerBounds = mForm.Bounds;
@@ -461,6 +482,7 @@
             mForm.Bounds = mUiState.ThemeBounds;
             mActiveLayoutable = mMainBottomPanel;
             mForm.ResumeClientSizeChanged();
+            mActiveScrollablePanel = mScrollableMainPanel;
             mScrollableMainPanel.BringToFront();
             mScrollableMainPanel.Visible = true;
             mForm.Activate();
@@ -486,6 +508,8 @@
                mForm.Controls.Remove(mThemePanel);
             if (!mForm.Controls.Contains(mFontPickerPanel))
                mForm.Controls.Add(mFontPickerPanel);
+            mFontPickerPanel.ContextMenuStrip = mGeneralContextMenuStrip;
+            mActiveScrollablePanel = mFontPickerPanel.ScrollPanel;
             mActiveLayoutable = mFontPickerPanel.mBottomPanel;
             mFontPickerPanel.mTitleLabel.CenterTitle();
             mFontPickerPanel.mBottomPanel.PositionRightControls();
@@ -504,6 +528,7 @@
             mBottomPanelExcluded = null;
             if (mForm.Controls.Contains(mFontPickerPanel))
                mForm.Controls.Remove(mFontPickerPanel);
+            mFontPickerPanel.ContextMenuStrip = null;
             mFontPickerPanel.Dispose();
             mFontPickerPanel = null;
             mUiState.mFontPickerBounds = mForm.Bounds;
@@ -513,6 +538,7 @@
             mForm.ResumeClientSizeChanged();
             if (!mForm.Controls.Contains(mThemePanel))
                mForm.Controls.Add(mThemePanel);
+            mThemePanel.UpdateActiveScrollablePanel();
             mThemePanel.BringToFront();
             mThemePanel.Show();
             mForm.Activate();

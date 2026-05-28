@@ -24,6 +24,48 @@
             Modal Dialogs
          </p>
       </div>
+      <div class="mediumsectiondiv">
+         <p>
+            Concerns
+         </p>
+      </div>
+      <p>
+         Dragon frequently fails to work perfectly with modal (blocking) dialogs(e.g. the MessageBox when it contains more than &ldquo;OK&rdquo; or &ldquo;Yes&rdquo;/&ldquo;No&rdquo;&nbsp;&mdash;&nbsp;it and sometimes even then; built&ndash;in color and font pickers; &ldquo;Options&rdquo;/&ldquo;Preferences&rdquo; dialogs etc.) This is especially true when such a modal dialog has more extensive Controls than just a few Buttons&nbsp;&mdash;&nbsp;a Menu, CheckBoxes, RadioButtons, ComboBoxes etc..
+      </p>
+      <div class="mediumsectiondiv">
+         <p>
+            Solutions
+         </p>
+      </div>
+      <div class="smallsectiondiv">
+         <p>
+            Panel Overlay
+         </p>
+      </div>
+      <p>
+         Simplest solution is to create a Panel, typically centered on the Form (or its Client Area), and add it directly to the Form&rsquo;s Controls. You might need to use some combination of BringToFront() and Show() to achieve the best results&nbsp;&mdash;&nbsp;especially if the Panel&rsquo;s Controls are complex. You might also need to deal with (temporarily) resizing the Form if the created panel is too large to fit.
+      </p>
+      <div class="smallsectiondiv">
+         <p>
+            Draggable Panel
+         </p>
+      </div>
+      <p>
+         A more complex solution is to create a DraggablePanel. In general this is similar to creating an overlay panel; the class is included and used in <span class="larger">DBCode</span>.
+      </p>
+      <div class="smallsectiondiv">
+         <p>
+            Truly Modal
+         </p>
+      </div>
+      <p>
+         A more complex solution is to create a separate application with its own Form. This involves creating a method whereby the two applications communicate with each other.
+      </p>
+      <div class="notediv">
+         <p>
+            Both Panel&ndash;based solutions and the truly modal Form&ndash;based solution often work best when the rest of the GUI is disabled.The easiest method that I have found for doing this is to put literally everything&nbsp;&mdash;&nbsp; Menu, BottomPanel (StatusBar) and all other Controls in a scrollable Panel which is itself added exclusively to the Form&rsquo;s Controls. This makes it easy to disable or even remove (temporarily) the scrollable Panel while the simulated modal Panel is in place. This also means that the Form has AutoScroll turned off.
+         </p>
+      </div>
       <div class="largesectiondiv" id="activating">
          <p>
             Activating Controls
@@ -39,9 +81,25 @@
             Menu Items
          </p>
       </div>
+      <p>
+         Menu items are probably the most Dragon&ndash;friendly Controls. Top&ndash;level Menu item should have Clearly distinct, dissimilar Text each of which should be easy to pronounce (the programmer should dictate these to ensure that Dragon is comfortable with the Text string). The same is true for all children, grandchildren etc.&nbsp;&mdash;&nbsp;they should be easy to dictate, dissimilar from top&ndash;level menu items and all other exposed items. It's always a good idea to give these Text strings accelerator keys and, where possible, keyboard shortcuts.
+      </p>
+      <div class="notediv">
+         <p>
+            Strangely, even if a menu item is disabled and/or hidden Dragon can still &ldquo;click&rdquo; it. The same is true for exercising its keyboard shortcut. The only reliable way to ensure that Dragon cannot &ldquo;click&rdquo; a menu item is to physically remove it. Unfortunately, doing so also causes problems if the programmer wants to re&ndash;add the menu item. It would seem that Dragon only scans the menu once, when it is first displayed and thereafter, only sporadically. It frequently fails to see a re&ndash;added item.
+         </p>
+         </div>
       <div class="smallsectiondiv" id="buttons">
          <p>
             Buttons, CheckBoxes and RadioButtons
+         </p>
+      </div>
+      <p>
+         Buttons, CheckBoxes and RadioButtons are probably almost as Dragon&ndash;friendly as menu items. The same constraints should be followed when creating their Text&nbsp;&mdash;&nbsp;make sure they are easy to dictate, distinctly dissimilar and, to be on the safe side try to always give them accelerator keys.
+      </p>
+      <div class="notediv">
+         <p>
+            As with menus, it seems that Dragon only scans the Controls once, when it they are first displayed and thereafter, only sporadically. It frequently fails to see a re&ndash;added Control.
          </p>
       </div>
       <div class="mediumsectiondiv" id="unclickable">
@@ -49,13 +107,19 @@
             Non&ndash;Clickable Controls
          </p>
       </div>
-      <p class="tab" id="prefixButton"></p>
-         The &ldquo;Prefix Button&rdquo; is a Button which has been &ldquo;flattened&rdquo; and looks like a Label. Its text always ends with &ldquo;<b>:</b>&rdquo; to give a visual indication that it is a &ldquo;Prefix Button&rdquo;. It and its associated control, must always share sequential TabIndexes&nbsp;&mdash;&nbsp; with the Prefix Button&rsquo;s index being the smaller.It should always be in the immediate vicinity of its associated control&nbsp;&mdash;&nbsp;typically immediately to the left, but occasionally just above.
+      <p>
+         These are Controls like TextBoxes, RichTextBoxes, DataGridViews, NumericUpDowns and sliders (TrackBars) etc.. Dragon has no native facility for directly activating these (although careful assignment of TabIndexes can make it easier). In the image below, the NumericUpDown has a Prefix Button to its immediate left; the TextBox has a (rather long&ndash;winded) Prefix Button just above it.
       </p>
-      <div class="smallsectiondiv" id="textFields">
-         <p>
-            NumericUpDowns, TextBoxes and RichTextBoxes
-         </p>
+      <p class="tab" id="prefixButton">
+         The &ldquo;Prefix Button&rdquo; is a Button which has been &ldquo;flattened&rdquo; and looks like a Label. Its Text should always end with &ldquo;<b>:</b>&rdquo; to give a visual indication that it is a &ldquo;Prefix Button&rdquo;. It and its associated control, must always share sequential TabIndexes&nbsp;&mdash;&nbsp; with the Prefix Button&rsquo;s index being the smaller. It should always be in the immediate vicinity of its associated control&nbsp;&mdash;&nbsp;typically immediately to the left, but occasionally just above.
+      </p>
+      <div class="imagecluster">
+         <div class="imageLabel">
+            <b>
+               The Prefix Button
+            </b>
+         </div>
+         <img src="PrefixButtons.png" alt="Prefix Button Examples">
       </div>
       <div class="pageslinkdiv">
          <h3 id="pageLinks">Other Pages</h3>

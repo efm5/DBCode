@@ -40,7 +40,8 @@ namespace DBCode {
       private static void MakeNews() {
          ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
          mMenuStrip = new MenuStrip();
-         mContextMenuStrip = new ContextMenuStrip();
+         mMainContextMenuStrip = new ContextMenuStrip();
+         mGeneralContextMenuStrip = new ContextMenuStrip();
          mTargetingMenuItem = new ToolStripMenuItem();
          mViewMenuItem = new ToolStripMenuItem();
          mModeMenuItem = new ToolStripMenuItem();
@@ -111,6 +112,21 @@ namespace DBCode {
          mContextFindPreviousTSMI = new ToolStripMenuItem();
          mContextReplaceTSMI = new ToolStripMenuItem();
          mContextGoToTSMI = new ToolStripMenuItem();
+         mContextScrollingEdgeTSMI = new ToolStripMenuItem();
+         mContextScrollingScrollTSMI = new ToolStripMenuItem();
+         mContextScrollingPageTSMI = new ToolStripMenuItem();
+         mContextScrollingEdgeTopTSMI = new ToolStripMenuItem();
+         mContextScrollingEdgeBottomTSMI = new ToolStripMenuItem();
+         mContextScrollingEdgeLeftTSMI = new ToolStripMenuItem();
+         mContextScrollingEdgeRightTSMI = new ToolStripMenuItem();
+         mContextScrollingScrollUpTSMI = new ToolStripMenuItem();
+         mContextScrollingScrollDownTSMI = new ToolStripMenuItem();
+         mContextScrollingScrollLeftTSMI = new ToolStripMenuItem();
+         mContextScrollingScrollRightTSMI = new ToolStripMenuItem();
+         mContextScrollingPageUpTSMI = new ToolStripMenuItem();
+         mContextScrollingPageDownTSMI = new ToolStripMenuItem();
+         mContextScrollingPageLeftTSMI = new ToolStripMenuItem();
+         mContextScrollingPageRightTSMI = new ToolStripMenuItem();
          mEditMenuItem = new ToolStripMenuItem();
          mEditUndoTSMI = new ToolStripMenuItem();
          mEditRedoTSMI = new ToolStripMenuItem();
@@ -292,6 +308,18 @@ namespace DBCode {
          mViewScrollingPageDownTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.F10;
          mViewScrollingPageLeftTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.F11;
          mViewScrollingPageRightTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.F12;
+         mContextScrollingEdgeTopTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.F1;
+         mContextScrollingEdgeBottomTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.F2;
+         mContextScrollingEdgeLeftTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.F3;
+         mContextScrollingEdgeRightTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.F4;
+         mContextScrollingScrollUpTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.F5;
+         mContextScrollingScrollDownTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.F6;
+         mContextScrollingScrollLeftTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.F7;
+         mContextScrollingScrollRightTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.F8;
+         mContextScrollingPageUpTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.F9;
+         mContextScrollingPageDownTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.F10;
+         mContextScrollingPageLeftTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.F11;
+         mContextScrollingPageRightTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.F12;
          mViewWordWrapTSMI.ShortcutKeys = Keys.Control | Keys.W;
          mViewLineNumbersTSMI.ShortcutKeys = Keys.Control | Keys.N;
          mModeMinimalTSMI.ShortcutKeys = Keys.Control | Keys.M;
@@ -424,7 +452,7 @@ namespace DBCode {
          mRichTextBox.Anchor = mAnchorTopLeftBottomRight;
          mRichTextBox.Name = "mRichTextBox";
          mRichTextBox.TabIndex = mTabIndex++;
-         mRichTextBox.ContextMenuStrip = mContextMenuStrip;
+         mRichTextBox.ContextMenuStrip = mMainContextMenuStrip;
          mSendAllButton.Text = "&Send All";
          mSendAllButton.Name = "mSendAllButton";
          mSendAllButton.TabIndex = mTabIndex++;
@@ -967,6 +995,48 @@ namespace DBCode {
          mViewScrollingPageRightTSMI.Name = "mViewScrollingPageRightTSMI";
          mViewScrollingPageRightTSMI.Text = "&Right";
          mViewScrollingPageRightTSMI.Click += ViewScrollingPageRight_Click;
+         mContextScrollingEdgeTSMI.Name = "mContextScrollingEdgeTSMI";
+         mContextScrollingEdgeTSMI.Text = "&Edge";
+         mContextScrollingScrollTSMI.Name = "mContextScrollingScrollTSMI";
+         mContextScrollingScrollTSMI.Text = "&Scroll";
+         mContextScrollingPageTSMI.Name = "mContextScrollingPageTSMI";
+         mContextScrollingPageTSMI.Text = "&Page";
+         mContextScrollingEdgeTopTSMI.Name = "mContextScrollingEdgeTopTSMI";
+         mContextScrollingEdgeTopTSMI.Text = "&Top";
+         mContextScrollingEdgeTopTSMI.Click += ViewScrollingEdgeTop_Click;
+         mContextScrollingEdgeBottomTSMI.Name = "mContextScrollingEdgeBottomTSMI";
+         mContextScrollingEdgeBottomTSMI.Text = "&Bottom";
+         mContextScrollingEdgeBottomTSMI.Click += ViewScrollingEdgeBottom_Click;
+         mContextScrollingEdgeLeftTSMI.Name = "mContextScrollingEdgeLeftTSMI";
+         mContextScrollingEdgeLeftTSMI.Text = "&Left";
+         mContextScrollingEdgeLeftTSMI.Click += ViewScrollingEdgeLeft_Click;
+         mContextScrollingEdgeRightTSMI.Name = "mContextScrollingEdgeRightTSMI";
+         mContextScrollingEdgeRightTSMI.Text = "&Right";
+         mContextScrollingEdgeRightTSMI.Click += ViewScrollingEdgeRight_Click;
+         mContextScrollingScrollUpTSMI.Name = "mContextScrollingScrollUpTSMI";
+         mContextScrollingScrollUpTSMI.Text = "&Up";
+         mContextScrollingScrollUpTSMI.Click += ViewScrollingScrollUp_Click;
+         mContextScrollingScrollDownTSMI.Name = "mContextScrollingScrollDownTSMI";
+         mContextScrollingScrollDownTSMI.Text = "&Down";
+         mContextScrollingScrollDownTSMI.Click += ViewScrollingScrollDown_Click;
+         mContextScrollingScrollLeftTSMI.Name = "mContextScrollingScrollLeftTSMI";
+         mContextScrollingScrollLeftTSMI.Text = "&Left";
+         mContextScrollingScrollLeftTSMI.Click += ViewScrollingScrollLeft_Click;
+         mContextScrollingScrollRightTSMI.Name = "mContextScrollingScrollRightTSMI";
+         mContextScrollingScrollRightTSMI.Text = "&Right";
+         mContextScrollingScrollRightTSMI.Click += ViewScrollingScrollRight_Click;
+         mContextScrollingPageUpTSMI.Name = "mContextScrollingPageUpTSMI";
+         mContextScrollingPageUpTSMI.Text = "&Up";
+         mContextScrollingPageUpTSMI.Click += ViewScrollingPageUp_Click;
+         mContextScrollingPageDownTSMI.Name = "mContextScrollingPageDownTSMI";
+         mContextScrollingPageDownTSMI.Text = "&Down";
+         mContextScrollingPageDownTSMI.Click += ViewScrollingPageDown_Click;
+         mContextScrollingPageLeftTSMI.Name = "mContextScrollingPageLeftTSMI";
+         mContextScrollingPageLeftTSMI.Text = "&Left";
+         mContextScrollingPageLeftTSMI.Click += ViewScrollingPageLeft_Click;
+         mContextScrollingPageRightTSMI.Name = "mContextScrollingPageRightTSMI";
+         mContextScrollingPageRightTSMI.Text = "&Right";
+         mContextScrollingPageRightTSMI.Click += ViewScrollingPageRight_Click;
          mModeMinimalTSMI.Name = "mModeMinimalTSMI";
          mModeMinimalTSMI.Text = "&Minimal";
          mModeMinimalTSMI.Click += MinimalTSMI_Click;
@@ -1153,6 +1223,13 @@ namespace DBCode {
             mViewScrollingScrollLeftTSMI, mViewScrollingScrollRightTSMI]);
          mViewScrollingPageTSMI.DropDownItems.AddRange([mViewScrollingPageUpTSMI, mViewScrollingPageDownTSMI,
             mViewScrollingPageLeftTSMI, mViewScrollingPageRightTSMI]);
+         mContextScrollingEdgeTSMI.DropDownItems.AddRange([mContextScrollingEdgeTopTSMI, mContextScrollingEdgeBottomTSMI,
+            mContextScrollingEdgeLeftTSMI, mContextScrollingEdgeRightTSMI]);
+         mContextScrollingScrollTSMI.DropDownItems.AddRange([mContextScrollingScrollUpTSMI, mContextScrollingScrollDownTSMI,
+            mContextScrollingScrollLeftTSMI, mContextScrollingScrollRightTSMI]);
+         mContextScrollingPageTSMI.DropDownItems.AddRange([mContextScrollingPageUpTSMI, mContextScrollingPageDownTSMI,
+            mContextScrollingPageLeftTSMI, mContextScrollingPageRightTSMI]);
+         mGeneralContextMenuStrip.Items.AddRange([mContextScrollingEdgeTSMI, mContextScrollingScrollTSMI, mContextScrollingPageTSMI]);
          mModeMenuItem.DropDownItems.AddRange([mModeMinimalTSMI, mModeFeaturesTSMI]);
          mLanguageMenuItem.DropDownItems.AddRange([mLanguagePlainTextTSMI, mLanguageCSharpTSMI, mLanguageCTSMI, mLanguageCppTSMI,
             mLanguageBasicTSMI, mLanguageFSharpTSMI, mLanguageHtmlTSMI, mLanguageCssTSMI, mLanguageXmlTSMI, mLanguageJsonTSMI, mLanguagePowerShellTSMI, mLanguageBatchTSMI,
@@ -1212,7 +1289,7 @@ namespace DBCode {
             toolStripSeparator29, mPythonToggleBooleanTSMI, mPythonConvertNullNoneTSMI]);
          mMenuStrip.Items.AddRange([mEditMenuItem, mTargetingMenuItem, mViewMenuItem, mModeMenuItem,
             mLanguageMenuItem, mCodingMenuItem, mOptionsMenuItem, mThemeMenuItem, mHelpMenuItem]);
-         mContextMenuStrip.Items.AddRange([mContextUndoTSMI, mContextRedoTSMI, mContextCopyAllTSMI,
+         mMainContextMenuStrip.Items.AddRange([mContextUndoTSMI, mContextRedoTSMI, mContextCopyAllTSMI,
             mContextCopyTSMI, mContextCutTSMI, mContextDeleteTSMI, mContextPasteTSMI, toolStripSeparator7,
             mContextSelectAllTSMI, mContextSelectNoneTSMI, toolStripSeparator8, mContextFindTSMI,
             mContextFindNextTSMI, mContextFindPreviousTSMI, mContextReplaceTSMI, toolStripSeparator9,
@@ -1240,8 +1317,8 @@ namespace DBCode {
          mRichTextBox.ScrollBars = mUiState.mWordWrap ? RichTextBoxScrollBars.Vertical : RichTextBoxScrollBars.Both;
          UpdateTargetingStatusLabel();
          ThrowIfNull(mMenuStrip, nameof(mMenuStrip));
-         ThrowIfNull(mContextMenuStrip, nameof(mContextMenuStrip));
-         var menuDict = ShortcutManager.BuildMenuDictionary(mMenuStrip, mContextMenuStrip);
+         ThrowIfNull(mMainContextMenuStrip, nameof(mMainContextMenuStrip));
+         var menuDict = ShortcutManager.BuildMenuDictionary(mMenuStrip, mMainContextMenuStrip);
          ShortcutManager.TryLoadAndApply(menuDict);
          ResumeLayout(false);
          PerformLayout();
@@ -1256,7 +1333,7 @@ namespace DBCode {
          ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
          ThrowIfNull(mLineNumberPanel, nameof(mLineNumberPanel));
          ThrowIfNull(mMenuStrip, nameof(mMenuStrip));
-         ThrowIfNull(mContextMenuStrip, nameof(mContextMenuStrip));
+         ThrowIfNull(mMainContextMenuStrip, nameof(mMainContextMenuStrip));
          // Buttons and labels
          ThrowIfNull(mSendAllButton, nameof(mSendAllButton));
          ThrowIfNull(mPasteSelectedButton, nameof(mPasteSelectedButton));
@@ -1438,6 +1515,7 @@ namespace DBCode {
          ThrowIfNull(mLanguageCTSMI, nameof(mLanguageCTSMI));
          ThrowIfNull(mLanguageCppTSMI, nameof(mLanguageCppTSMI));
          // Context menu
+         ThrowIfNull(mGeneralContextMenuStrip, nameof(mGeneralContextMenuStrip));
          ThrowIfNull(mContextCopyTSMI, nameof(mContextCopyTSMI));
          ThrowIfNull(mContextCutTSMI, nameof(mContextCutTSMI));
          ThrowIfNull(mContextDeleteTSMI, nameof(mContextDeleteTSMI));
@@ -1452,6 +1530,21 @@ namespace DBCode {
          ThrowIfNull(mContextUndoTSMI, nameof(mContextUndoTSMI));
          ThrowIfNull(mContextRedoTSMI, nameof(mContextRedoTSMI));
          ThrowIfNull(mContextCopyAllTSMI, nameof(mContextCopyAllTSMI));
+         ThrowIfNull(mContextScrollingEdgeTSMI, nameof(mContextScrollingEdgeTSMI));
+         ThrowIfNull(mContextScrollingScrollTSMI, nameof(mContextScrollingScrollTSMI));
+         ThrowIfNull(mContextScrollingPageTSMI, nameof(mContextScrollingPageTSMI));
+         ThrowIfNull(mContextScrollingEdgeTopTSMI, nameof(mContextScrollingEdgeTopTSMI));
+         ThrowIfNull(mContextScrollingEdgeBottomTSMI, nameof(mContextScrollingEdgeBottomTSMI));
+         ThrowIfNull(mContextScrollingEdgeLeftTSMI, nameof(mContextScrollingEdgeLeftTSMI));
+         ThrowIfNull(mContextScrollingEdgeRightTSMI, nameof(mContextScrollingEdgeRightTSMI));
+         ThrowIfNull(mContextScrollingScrollUpTSMI, nameof(mContextScrollingScrollUpTSMI));
+         ThrowIfNull(mContextScrollingScrollDownTSMI, nameof(mContextScrollingScrollDownTSMI));
+         ThrowIfNull(mContextScrollingScrollLeftTSMI, nameof(mContextScrollingScrollLeftTSMI));
+         ThrowIfNull(mContextScrollingScrollRightTSMI, nameof(mContextScrollingScrollRightTSMI));
+         ThrowIfNull(mContextScrollingPageUpTSMI, nameof(mContextScrollingPageUpTSMI));
+         ThrowIfNull(mContextScrollingPageDownTSMI, nameof(mContextScrollingPageDownTSMI));
+         ThrowIfNull(mContextScrollingPageLeftTSMI, nameof(mContextScrollingPageLeftTSMI));
+         ThrowIfNull(mContextScrollingPageRightTSMI, nameof(mContextScrollingPageRightTSMI));
          // Edit menu
          ThrowIfNull(mEditUndoTSMI, nameof(mEditUndoTSMI));
          ThrowIfNull(mEditRedoTSMI, nameof(mEditRedoTSMI));

@@ -622,7 +622,7 @@
          ThrowIfNull(mForm, nameof(mForm));
          ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
          ThrowIfNull(mMenuStrip, nameof(mMenuStrip));
-         ThrowIfNull(mContextMenuStrip, nameof(mContextMenuStrip));
+         ThrowIfNull(mMainContextMenuStrip, nameof(mMainContextMenuStrip));
          ThrowIfNull(mHighlighterEngine, nameof(mHighlighterEngine));
          ThrowIfNull(mLineNumberPanel, nameof(mLineNumberPanel));
          mRichTextBox.TextChanged -= OnEditorTextChanged;
@@ -637,20 +637,20 @@
          mRichTextBox.ForeColor = theme.mInterfaceColors[(int)ColorSwatchUsage.TextBoxFont];
          mMenuStrip.BackColor = menuBackground;
          mMenuStrip.Renderer = menuRenderer;
-         mContextMenuStrip.Renderer = menuRenderer;
+         mMainContextMenuStrip.Renderer = menuRenderer;
          ToolStripManager.Renderer = menuRenderer;
          foreach (ToolStripMenuItem toolStripMenuItem in mMenuStrip.Items.OfType<ToolStripMenuItem>()) {
             PaintMenuItem(toolStripMenuItem, theme);
             foreach (ToolStripMenuItem subItem in toolStripMenuItem.DropDownItems.OfType<ToolStripMenuItem>())
                PaintMenuItemsRecursive(subItem, theme);
          }
-         foreach (ToolStripMenuItem toolStripMenuItem in mContextMenuStrip.Items.OfType<ToolStripMenuItem>()) {
+         foreach (ToolStripMenuItem toolStripMenuItem in mMainContextMenuStrip.Items.OfType<ToolStripMenuItem>()) {
             PaintMenuItem(toolStripMenuItem, theme);
             foreach (ToolStripMenuItem subItem in toolStripMenuItem.DropDownItems.OfType<ToolStripMenuItem>())
                PaintMenuItemsRecursive(subItem, theme);
          }
          ApplyThemeToSeparators(mMenuStrip.Items, separatorHeight, menuBackground);
-         ApplyThemeToSeparators(mContextMenuStrip.Items, separatorHeight, menuBackground);
+         ApplyThemeToSeparators(mMainContextMenuStrip.Items, separatorHeight, menuBackground);
          mMainBottomPanel.BackColor = theme.mInterfaceColors[(int)ColorSwatchUsage.StatusBackground];
          mMainBottomPanel.SetFontAndColor();
          LayoutMainBottomPanel();

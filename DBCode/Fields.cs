@@ -235,6 +235,7 @@ namespace DBCode {
       public static Icon[] mIcons = new Icon[4];
       public static ILayoutable? mActiveLayoutable = null;
       public static Panel? mActiveScrollablePanel = null;
+      public static DataGridView? mActiveScrollableDataGridView = null;
       public static IntPtr mTargetWindow = IntPtr.Zero, mThisWindow = IntPtr.Zero;
       public static readonly IntPtr mInsertAfterWindow = new IntPtr(0);
       public static Label mTargetingLabel = null!, mVersionLabel = null!;
@@ -294,7 +295,7 @@ namespace DBCode {
 
       #region main & context menus
       public static MenuStrip mMenuStrip = null!;
-      public static ContextMenuStrip mContextMenuStrip = null!;
+      public static ContextMenuStrip mMainContextMenuStrip = null!, mGeneralContextMenuStrip = null!;
       public static readonly ToolStripSeparator toolStripSeparator1 = new ToolStripSeparator(),
          toolStripSeparator2 = new ToolStripSeparator(), toolStripSeparator3 = new ToolStripSeparator(),
          toolStripSeparator4 = new ToolStripSeparator(), toolStripSeparator5 = new ToolStripSeparator(),
@@ -318,9 +319,9 @@ namespace DBCode {
          mCodingMenuItem = null, mOptionsMenuItem = null, mThemeMenuItem = null, mHelpMenuItem = null,
       #endregion
       #region have grandchildren – No shortcut keys
-         mThemePickTSMI = null, mCodingCFamilyTSMI = null, mCodingBasicTSMI = null, mCodingFSharpTSMI = null, mCodingHTMLTSMI = null, mCodingCSSTSMI = null,
-         mCodingXMLTSMI = null, mCodingJSONTSMI = null, mCodingPowerShellTSMI = null, mCodingBatchTSMI = null, mCodingSQLTSMI = null,
-         mCodingMarkdownTSMI = null, mCodingPythonTSMI = null,
+         mThemePickTSMI = null, mCodingCFamilyTSMI = null, mCodingBasicTSMI = null, mCodingFSharpTSMI = null, mCodingHTMLTSMI = null,
+         mCodingCSSTSMI = null, mCodingXMLTSMI = null, mCodingJSONTSMI = null, mCodingPowerShellTSMI = null, mCodingBatchTSMI = null,
+         mCodingSQLTSMI = null, mCodingMarkdownTSMI = null, mCodingPythonTSMI = null,
          mViewScrollingTSMI = null, mViewScrollingEdgeTSMI = null, mViewScrollingScrollTSMI = null, mViewScrollingPageTSMI = null,
       #endregion
       #region Are children and need shortcut keys
@@ -367,6 +368,11 @@ namespace DBCode {
          mMarkdownStrikethroughTSMI = null, mMarkdownCodeTSMI = null, mMarkdownCodeBlockTSMI = null,
          mPythonAddCommentTSMI = null, mPythonBlockCommentTSMI = null, mPythonRemoveCommentTSMI = null, mPythonToggleBooleanTSMI = null,
          mPythonConvertNullNoneTSMI = null,
+         mContextScrollingEdgeTSMI = null, mContextScrollingScrollTSMI = null, mContextScrollingPageTSMI = null,
+         mContextScrollingEdgeTopTSMI = null, mContextScrollingEdgeBottomTSMI = null, mContextScrollingEdgeLeftTSMI = null,
+         mContextScrollingEdgeRightTSMI = null, mContextScrollingScrollUpTSMI = null, mContextScrollingScrollDownTSMI = null,
+         mContextScrollingScrollLeftTSMI = null, mContextScrollingScrollRightTSMI = null, mContextScrollingPageUpTSMI = null,
+         mContextScrollingPageDownTSMI = null, mContextScrollingPageLeftTSMI = null, mContextScrollingPageRightTSMI = null,
          mContextUndoTSMI = null, mContextRedoTSMI = null, mContextCopyAllTSMI = null, mContextCopyTSMI = null, mContextCutTSMI = null,
          mContextDeleteTSMI = null, mContextPasteTSMI = null, mContextSelectAllTSMI = null, mContextSelectNoneTSMI = null,
          mContextFindTSMI = null, mContextFindNextTSMI = null, mContextFindPreviousTSMI = null, mContextReplaceTSMI = null,

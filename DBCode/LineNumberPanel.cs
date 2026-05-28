@@ -1,7 +1,7 @@
 namespace DBCode {
    internal sealed class LineNumberPanel : Panel {
       private PlainRichTextBox mTextBox = null!;
-      private List<int> mLineStarts = new List<int>();
+      private List<int> mLineStarts = [];
 
       #region public methods
       internal void Initialize(PlainRichTextBox pTextBox) {

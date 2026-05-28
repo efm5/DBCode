@@ -63,18 +63,45 @@
             mBottomPanel.HideLeftControl(mShortcutsAllCheckBox);
             mBottomPanel.Refresh();
          }
+         UpdateActiveScrollablePanel();
       }
 
       private void IncludeExcludeTabControl_SelectedIndexChanged(object? pSender, EventArgs pArgs) {
          ThrowIfNull(mUiState, nameof(mUiState));
          ThrowIfNull(mIncludeExcludeTabControl, nameof(mIncludeExcludeTabControl));
          mUiState.mOptionsIncludeExcludeTabControlPageIndex = mIncludeExcludeTabControl.SelectedIndex;
+         UpdateActiveScrollablePanel();
       }
 
       private void CodingTabControl_SelectedIndexChanged(object? pSender, EventArgs pArgs) {
          ThrowIfNull(mUiState, nameof(mUiState));
          ThrowIfNull(mCodingTabControl, nameof(mCodingTabControl));
          mUiState.mOptionsCodingTabControlPageIndex = mCodingTabControl.SelectedIndex;
+         UpdateActiveScrollablePanel();
+      }
+
+      internal void UpdateActiveScrollablePanel() {
+         ThrowIfNull(mGeneralTabControl, nameof(mGeneralTabControl));
+         ThrowIfNull(mIncludeExcludeTabControl, nameof(mIncludeExcludeTabControl));
+         ThrowIfNull(mCodingTabControl, nameof(mCodingTabControl));
+         mActiveScrollableDataGridView = null;
+         int generalIndex = mGeneralTabControl.SelectedIndex;
+         if (generalIndex == (int)OptionsTabPageUsage.General)
+            mActiveScrollablePanel = mGeneralScrollPanel;
+         else if (generalIndex == (int)OptionsTabPageUsage.BraceMatching)
+            mActiveScrollablePanel = mBraceMatchingScrollPanel;
+         else if (generalIndex == (int)OptionsTabPageUsage.Shortcuts) {
+            mActiveScrollablePanel = null;
+            mActiveScrollableDataGridView = mShortcutsDgv;
+         }
+         else if (generalIndex == (int)OptionsTabPageUsage.Targeting) {
+            if (mIncludeExcludeTabControl.SelectedIndex == (int)TargetingTabPageUsage.Include)
+               mActiveScrollablePanel = mIncludeScrollPanel;
+            else
+               mActiveScrollablePanel = mExcludeScrollPanel;
+         }
+         else
+            mActiveScrollablePanel = mCodingScrollPanels[mCodingTabControl.SelectedIndex];
       }
 
       private void TabRadioButton_Click(object? pSender, EventArgs pEventArguments) {
@@ -175,9 +202,9 @@
             return;
          }
          ThrowIfNull(mMenuStrip, nameof(mMenuStrip));
-         ThrowIfNull(mContextMenuStrip, nameof(mContextMenuStrip));
+         ThrowIfNull(mMainContextMenuStrip, nameof(mMainContextMenuStrip));
          ShortcutManager.Save(ShortcutManager.DefaultFilePath, mShortcutEntries);
-         Dictionary<string, ToolStripMenuItem> menuDictionary = ShortcutManager.BuildMenuDictionary(mMenuStrip!, mContextMenuStrip!);
+         Dictionary<string, ToolStripMenuItem> menuDictionary = ShortcutManager.BuildMenuDictionary(mMenuStrip!, mMainContextMenuStrip!);
          ShortcutManager.Apply(mShortcutEntries, menuDictionary);
          ShortcutManager.SyncContextMenuShortcutDisplays();
          SaveColumnWidths();

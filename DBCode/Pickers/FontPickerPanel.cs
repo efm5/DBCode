@@ -11,6 +11,7 @@ namespace DBCode {
          internal Label mFontDescriptionLabel;
          private List<Font> mOwnedFonts = [];
          private Panel mFontSizePanel, mPickFontPanel, mScrollPanel;
+         internal Panel ScrollPanel { get { return mScrollPanel; } }
          private ScalableCheckBoxCluster mBoldStyleCluster, mItalicsStyleCluster, mNormalStyleCluster, mStrikethroughStyleCluster,
             mUnderlineStyleCluster;
          private TextBox mFontFamilyNameTextBox, mFontSizeTextBox;

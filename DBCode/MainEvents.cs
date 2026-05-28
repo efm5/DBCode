@@ -440,6 +440,7 @@
             : RichTextBoxScrollBars.Both;
          mUiState.mWordWrap = mRichTextBox.WordWrap;
       }
+
       private void LineNumbers_Click(object? pSender, EventArgs pEventArgs) {
          ThrowIfNull(mViewLineNumbersTSMI, nameof(mViewLineNumbersTSMI));
          ThrowIfNull(mLineNumberPanel, nameof(mLineNumberPanel));

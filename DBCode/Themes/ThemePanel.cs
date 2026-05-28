@@ -267,6 +267,7 @@ All text appears in the default foreground color."
            mHighlightPowerShellScrollPanel, mHighlightBatchScrollPanel, mHighlightSQLScrollPanel,
            mHighlightMarkdownScrollPanel, mHighlightPythonScrollPanel;
          private readonly List<Panel?> mAllScrollPanels = [];
+         private readonly Panel?[] mHighlightScrollPanels;
          public Theme mTemporaryTheme;
          private ThemeUsage mThemeUsage;
 
@@ -833,6 +834,12 @@ All text appears in the default foreground color."
                mHighlightCSSScrollPanel, mHighlightXMLScrollPanel, mHighlightJSONScrollPanel,
                mHighlightPowerShellScrollPanel, mHighlightBatchScrollPanel, mHighlightSQLScrollPanel,
                mHighlightMarkdownScrollPanel, mHighlightPythonScrollPanel]);
+            mHighlightScrollPanels = [mHighlightInterfaceScrollPanel, mHighlightCSharpScrollPanel,
+               mHighlightCScrollPanel, mHighlightCppScrollPanel, mHighlightBasicScrollPanel,
+               mHighlightFSharpScrollPanel, mHighlightHTMLScrollPanel, mHighlightCSSScrollPanel,
+               mHighlightXMLScrollPanel, mHighlightJSONScrollPanel, mHighlightPowerShellScrollPanel,
+               mHighlightBatchScrollPanel, mHighlightSQLScrollPanel, mHighlightMarkdownScrollPanel,
+               mHighlightPythonScrollPanel];
             ResumeLayout(false);
          }
 

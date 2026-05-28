@@ -162,8 +162,8 @@ Sort	Id	Top	Child	Grandchild	Ctrl	Shift	Alt	Key	DisplayString	ShortcutLocked	Not
 162	mThemeMenuItem	The&me			0	0	0			1	
 163	mThemeCurrentThemeIsTSMI	The&me			0	0	0			1	
 164	mThemePickTSMI	The&me	&Pick		0	0	0			1	
-165	mThemePickEditTSMI	The&me	&Pick	Pick To &Edit	1	1	0	E		0	
-166	mThemePickCurrentTSMI	The&me	&Pick	To &Use	1	1	0	P		0	
+165	mThemePickEditTSMI	The&me	&Pick	Pick To &Edit	1	1	0	P		0	
+166	mThemePickCurrentTSMI	The&me	&Pick	To &Use	1	1	0	C		0	
 167	mThemeDesignTSMI	The&me	&Design		1	1	0	D		0	
-168	mThemeEditTSMI	The&me	&Edit		1	1	0	C		0	
+168	mThemeEditTSMI	The&me	&Edit		1	1	0	E		0	
 169	mHelpMenuItem	&Help			0	0	0	F1		1

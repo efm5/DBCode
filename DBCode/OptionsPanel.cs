@@ -17,6 +17,7 @@
       private Panel? mScrollPanel, mGeneralScrollPanel, mIncludeScrollPanel, mExcludeScrollPanel, mCFamilyScrollablePanel, mBasicScrollablePanel,
          mFSharpScrollablePanel, mHTMLScrollablePanel, mCSSScrollablePanel, mXMLScrollablePanel, mJSONScrollablePanel, mPowerShellScrollablePanel,
          mBatchScrollablePanel, mBraceMatchingScrollPanel, mSQLScrollablePanel, mMarkdownScrollablePanel, mPythonScrollablePanel;
+      private readonly Panel?[] mCodingScrollPanels;
       private readonly RichTextBox? mBraceExampleRichTextBox;
       private ScalableCheckBox? mShortcutsAllCheckBox, mShortcutsAutoSizeCheckBox, mShortcutsSortCheckBox;
       private readonly ScalableCheckBoxCluster? mTabCheckBoxCluster, mSpaceCheckBoxCluster, mAllIfNothingCheckBoxCluster,
@@ -542,6 +543,10 @@
          mSQLScrollablePanel.Controls.Add(mSQLTitleLabel);
          mMarkdownScrollablePanel.Controls.Add(mMarkdownTitleLabel);
          mPythonScrollablePanel.Controls.Add(mPythonTitleLabel);
+         mCodingScrollPanels = [mCFamilyScrollablePanel, mBasicScrollablePanel, mFSharpScrollablePanel,
+            mHTMLScrollablePanel, mCSSScrollablePanel, mXMLScrollablePanel, mJSONScrollablePanel,
+            mPowerShellScrollablePanel, mBatchScrollablePanel, mSQLScrollablePanel,
+            mMarkdownScrollablePanel, mPythonScrollablePanel];
          Controls.AddRange([mScrollPanel, mBottomPanel, mTitleLabel]);
          ThrowIfNull(mBottomPanel.mHelpButton, nameof(mBottomPanel.mHelpButton));
          ThrowIfNull(mBottomPanel.mCancelButton, nameof(mBottomPanel.mCancelButton));

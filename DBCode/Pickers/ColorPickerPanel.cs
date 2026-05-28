@@ -18,6 +18,7 @@ namespace DBCode {
          private LanguageKind mLanguageKind;
          private NumericUpDown mBlueUpDown, mGrayUpDown, mGreenUpDown, mRedUpDown;
          private Panel mScrollPanel;
+         internal Panel ScrollPanel { get { return mScrollPanel; } }
          internal Theme mTheme;
          private TokenKind mTokenKind;
          private TrackBar mBlueSlider, mGraySlider, mGreenSlider, mRedSlider;

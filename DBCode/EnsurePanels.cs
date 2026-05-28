@@ -28,8 +28,10 @@
          }
          mThemePanel.SetThemeUsage(pThemeUsage);
          mForm.Controls.Add(mThemePanel);
+         mThemePanel.ContextMenuStrip = mGeneralContextMenuStrip;
          EnsureWindowFitsMonitor(mForm);
          mThemePanel.LayoutControls();
+         mThemePanel.UpdateActiveScrollablePanel();
          mActiveLayoutable = mThemePanel.mBottomPanel;
          mThemePanel.mTitleLabel.CenterTitle();
          mThemePanel.mBottomPanel.PositionRightControls();
@@ -53,6 +55,7 @@
          mThemePanel.Visible = false;
          mThemePanel.SendToBack();
          mForm.Controls.Remove(mThemePanel);
+         mThemePanel.ContextMenuStrip = null;
          SuspendClientSizeChanged();
          mForm.Bounds = mUiState.FormBounds;
          ResumeClientSizeChanged();
@@ -66,6 +69,8 @@
          mScrollableMainPanel.Show();
          mActiveScrollablePanel = mScrollableMainPanel;
          mForm.ControlBox = true;
+         mForm.Activate();
+         mScrollableMainPanel.Focus();
          mForm.Opacity = savedOpacity;
          mActiveLayoutable = mMainBottomPanel;
          mMainBottomPanel.LayoutControls();
@@ -96,6 +101,8 @@
             mActiveScrollablePanel = null;
          }
          mForm.Controls.Add(mThemePickerPanel);
+         mThemePickerPanel.ContextMenuStrip = mGeneralContextMenuStrip;
+         mActiveScrollablePanel = mThemePickerPanel;
          mActiveLayoutable = mThemePickerPanel.mBottomPanel;
          mThemePickerPanel.mTitleLabel.CenterTitle();
          mThemePickerPanel.mBottomPanel.PositionRightControls();
@@ -116,6 +123,7 @@
          mThemePickerPanel.Visible = false;
          mThemePickerPanel.SendToBack();
          mForm.Controls.Remove(mThemePickerPanel);
+         mThemePickerPanel.ContextMenuStrip = null;
          mThemePickerPanel.Dispose();
          mThemePickerPanel = null;
          SuspendClientSizeChanged();
@@ -176,6 +184,7 @@
             mActiveScrollablePanel = null;
          }
          mForm.Controls.Add(mOptionsPanel);
+         mOptionsPanel.ContextMenuStrip = mGeneralContextMenuStrip;
          mOptionsPanel.ApplyFontsAndColors();
          mForm.SuspendClientSizeChanged();
          mActiveLayoutable = mOptionsPanel.mBottomPanel;
@@ -220,6 +229,7 @@
          mOptionsPanel.Visible = false;
          mOptionsPanel.SendToBack();
          mForm.Controls.Remove(mOptionsPanel);
+         mOptionsPanel.ContextMenuStrip = null;
          mOptionsPanel.Dispose();
          mOptionsPanel = null;
          SuspendClientSizeChanged();
@@ -267,6 +277,8 @@
             mActiveScrollablePanel = null;
          }
          mForm.Controls.Add(mTargetPickerPanel);
+         mTargetPickerPanel.ContextMenuStrip = mGeneralContextMenuStrip;
+         mActiveScrollablePanel = mTargetPickerPanel;
          mActiveLayoutable = mTargetPickerPanel.mBottomPanel;
          mTargetPickerPanel.mTitleLabel.CenterTitle();
          mTargetPickerPanel.mBottomPanel.PositionRightControls();
@@ -288,6 +300,7 @@
          mTargetPickerPanel.Visible = false;
          mTargetPickerPanel.SendToBack();
          mForm.Controls.Remove(mTargetPickerPanel);
+         mTargetPickerPanel.ContextMenuStrip = null;
          mTargetPickerPanel.Dispose();
          mTargetPickerPanel = null;
          if (mTargetingTargetedTSMI != null)

@@ -13,10 +13,76 @@
       <h1>DBCode&rsquo;s</h1>
       <h2>Reference Manual</h2>
       <h3>Version 0.0.0.1</h3>
-      <h4>Find And Search/Replace</h4>
+      <h4>Find And Search/Replace Dialogs</h4>
    <div class="introdiv">
-      <p>[Real details] THIS IS JUST A PLACEHOLDER.</p>
+      <p>
+         <span class="larger"><b>DBCode</b></span> has two dialogs which are visually quite similar. One is used to find text (the Find dialog), the other is used to search out and replace text.
+      </p>
    </div>
+      <div class="imagecluster">
+         <div class="imageLabel">
+            <b>
+               <span class="larger">DBCode</span>&rsquo;s Find dialog:
+            </b>
+         </div>
+         <img src="FindDialog.png" alt="DBCode&rsquo;s Find dialog">
+      </div>
+      <div class="imagecluster">
+         <div class="imageLabel">
+            <b>
+               <span class="larger">DBCode</span>&rsquo;s Search/Replace dialog:
+            </b>
+         </div>
+         <img src="SearchReplaceDialog.png" alt="DBCode&rsquo;s Search/Replace dialog">
+      </div>
+      <p>
+         Both of these dialogs are extremely similar to one another. The Find dialog has a single ComboBox at the top; the Search/Replace dialog has two ComboBoxes. They both have identical &ldquo;Options&rdquo; Group Boxes and &ldquo;Scope&rdquo; GroupBoxes. Both dialogs have Bottom Panels which contain the Buttons which initiate the actions.
+      </p>
+      <div class="mediumsectiondiv" id="optionsGroupBox">
+         <p>The Options GroupBox</p>
+      </div> 
+      <p class="tab">
+         The &ldquo;<u>M</u>atch Case&rdquo; CheckBox, when checked, forces the find or search term to be case-sensitive.
+      </p>
+      <p class="tab">
+         The &ldquo;<u>W</u>hole Word&rdquo; CheckBox, when checked, forces the find or search term to match whole words only.
+      </p>
+      <p class="tab">
+         The &ldquo;<u>R</u>egular Expressions&rdquo; CheckBox, when checked, causes the find or search and replacement to be performed either by the built&ndash;in .NET Regular Expressions library or by the PCRE  Regular Expressions library.
+      </p>
+      <p class="tab">
+         The &ldquo;<u>V</u>erbose&rdquo; CheckBox (Find dialog only), when checked, presents the user with a list of all of the found matches.
+      </p>
+      <p class="tab">
+         The &ldquo;Use <u>P</u>CRE&rdquo; CheckBox, when checked, specifies that the PCRE Regular Expressions library (Perl Compatible Regular Expressions) is to be used. This library is more comprehensive than that built into .NET and its pattern construction is quite different.
+      </p>
+      <div class="mediumsectiondiv" id="scopeGroupBox">
+         <p>The Scope GroupBox</p>
+      </div> 
+      <p class="tab">
+         The &ldquo;<u>S</u>election&rdquo; RadioButton, when selected, specifies that only that portion of the text which is selected will be searched. If nothing is selected, nothing is searched.
+      </p>
+      <p class="tab">
+         The &ldquo;<u>G</u>lobal&rdquo; RadioButton, When selected, specifies that all texts will be searched regardless of what might or might not be selected.
+      </p>
+      <div class="largesectiondiv" id="findDialog">
+         <p>The Find Dialog</p>
+      </div>  
+      <div class="mediumsectiondiv">
+         <p>The Find BottomPanel</p>
+      </div> 
+      <p class="tab">
+         The Find dialog&rsquo;s  BottomPanel has three buttons: &ldquo;<u>H</u>elp&rdquo;; &ldquo;<u>F</u>ind&rdquo;; and &ldquo;<u>C</u>ancel&rdquo;. The &ldquo;Help&rdquo; Button brings up context&ndash;sensitive help (this HTML document) in the user&rsquo;s  preferred browser. The &ldquo;Find&rdquo; Button initiates the search for the specified term using the specified options and scope. The &ldquo;Cancel&rdquo; Button immediately closes the dialog without performing a search.
+      </p>
+      <div class="largesectiondiv" id="findDialog">
+         <p>The Search/Replace Dialog</p>
+      </div>  
+      <div class="mediumsectiondiv">
+         <p>The Search/Replace BottomPanel</p>
+      </div>    
+      <p class="tab">
+         The Search/Replace dialog&rsquo;s  BottomPanel has four buttons: &ldquo;<u>H</u>elp&rdquo;; &ldquo;<u>R</u>eplace&rdquo;; &ldquo;Replace <u>A</u>ll&rdquo;; and &ldquo;<u>C</u>ancel&rdquo;. The &ldquo;Help&rdquo; Button brings up context&ndash;sensitive help (this HTML document) in the user&rsquo;s  preferred browser. The &ldquo;Replace&rdquo; Button initiates the search for the specified term using the specified options and scope and replaces the first instance found with the specified replacement. The &ldquo;Replace All&rdquo; Button initiates the search for the specified term using the specified options and scope and replaces all instances found with the specified replacement. The &ldquo;Cancel&rdquo; Button immediately closes the dialog without performing a search.
+      </p>
       <div class="pageslinkdiv">
          <h3 id="pageLinks">Other Pages</h3>
          <p> <a href="DBCodeHelp.html">DB Code Main Help Page</a>

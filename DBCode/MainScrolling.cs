@@ -1,6 +1,15 @@
 namespace DBCode {
    public sealed partial class MainForm : Form {
+      private static void ScrollDgvRows(DataGridView pDgv, int pDelta) {
+         if (pDgv.RowCount == 0)
+            return;
+         pDgv.FirstDisplayedScrollingRowIndex = Math.Max(0,
+            Math.Min(pDgv.RowCount - 1, pDgv.FirstDisplayedScrollingRowIndex + pDelta));
+      }
+
       private static void ViewScrollingEdgeTop_Click(object? pSender, EventArgs pArgs) {
+         DataGridView? dgv = mActiveScrollableDataGridView;
+         if (dgv != null) { ScrollDgvRows(dgv, -dgv.RowCount); return; }
          Panel? panel = mActiveScrollablePanel;
          if (panel == null)
             return;
@@ -8,6 +17,12 @@ namespace DBCode {
       }
 
       private static void ViewScrollingEdgeBottom_Click(object? pSender, EventArgs pArgs) {
+         DataGridView? dgv = mActiveScrollableDataGridView;
+         if (dgv != null) {
+            if (dgv.RowCount > 0)
+               dgv.FirstDisplayedScrollingRowIndex = Math.Max(0, dgv.RowCount - dgv.DisplayedRowCount(false));
+            return;
+         }
          Panel? panel = mActiveScrollablePanel;
          if (panel == null)
             return;
@@ -29,6 +44,8 @@ namespace DBCode {
       }
 
       private static void ViewScrollingScrollUp_Click(object? pSender, EventArgs pArgs) {
+         DataGridView? dgv = mActiveScrollableDataGridView;
+         if (dgv != null) { ScrollDgvRows(dgv, -1); return; }
          Panel? panel = mActiveScrollablePanel;
          if (panel == null)
             return;
@@ -37,6 +54,8 @@ namespace DBCode {
       }
 
       private static void ViewScrollingScrollDown_Click(object? pSender, EventArgs pArgs) {
+         DataGridView? dgv = mActiveScrollableDataGridView;
+         if (dgv != null) { ScrollDgvRows(dgv, 1); return; }
          Panel? panel = mActiveScrollablePanel;
          if (panel == null)
             return;
@@ -61,6 +80,8 @@ namespace DBCode {
       }
 
       private static void ViewScrollingPageUp_Click(object? pSender, EventArgs pArgs) {
+         DataGridView? dgv = mActiveScrollableDataGridView;
+         if (dgv != null) { ScrollDgvRows(dgv, -dgv.DisplayedRowCount(false)); return; }
          Panel? panel = mActiveScrollablePanel;
          if (panel == null)
             return;
@@ -69,6 +90,8 @@ namespace DBCode {
       }
 
       private static void ViewScrollingPageDown_Click(object? pSender, EventArgs pArgs) {
+         DataGridView? dgv = mActiveScrollableDataGridView;
+         if (dgv != null) { ScrollDgvRows(dgv, dgv.DisplayedRowCount(false)); return; }
          Panel? panel = mActiveScrollablePanel;
          if (panel == null)
             return;

@@ -31,10 +31,12 @@ namespace DBCode {
             mUiState.mThemePrimaryTabPageIndex = mPrimaryTabControl.SelectedIndex;
             if (mPrimaryTabControl.SelectedIndex == (int)PrimaryTabPageUsage.Examples)
                HighlightAllExampleBoxes();
+            UpdateActiveScrollablePanel();
          }
 
          private void HighlightTabControl_SelectedIndexChanged(object? pSender, EventArgs pArgs) {
             mUiState.mThemeHighlightTabPageIndex = mHighlightTabControl.SelectedIndex;
+            UpdateActiveScrollablePanel();
          }
 
          private void OnExampleTextChanged(object? pSender, EventArgs pArgs) {
