@@ -10,8 +10,10 @@ namespace DBCode {
          private GroupBox mFontStyleGroupBox;
          internal Label mFontDescriptionLabel;
          private List<Font> mOwnedFonts = [];
+#pragma warning disable IDE0032
          private Panel mFontSizePanel, mPickFontPanel, mScrollPanel;
          internal Panel ScrollPanel { get { return mScrollPanel; } }
+#pragma warning restore IDE0032
          private ScalableCheckBoxCluster mBoldStyleCluster, mItalicsStyleCluster, mNormalStyleCluster, mStrikethroughStyleCluster,
             mUnderlineStyleCluster;
          private TextBox mFontFamilyNameTextBox, mFontSizeTextBox;

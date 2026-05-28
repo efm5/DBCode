@@ -297,7 +297,7 @@
          mTopDraggerHeightUpDownCluster = new UpDownCluster(mCurrentTheme, "Top &Dragger Height", 3, 50,
             mUiState.mTopDraggerHeight, 1, mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground],
             "3–50");
-         mTopDraggerEdgeUpDownCluster = new UpDownCluster(mCurrentTheme, "Top Dragger &Edge", 1, 10,
+         mTopDraggerEdgeUpDownCluster = new UpDownCluster(mCurrentTheme, "Dragger &Edge Size", 1, 10,
             mUiState.mTopDraggerEdge, 1, mCurrentTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground],
             "1–10");
          mActivationDelayUpDownCluster = new UpDownCluster(mCurrentTheme, "&Activation Delay", 10, 700,
@@ -377,19 +377,19 @@
          ], false, false);
          mWhitespaceRadioCluster.mRadioPanel.mScalableRadioButtons[1].Click += TabRadioButton_Click;
          mWhitespaceRadioCluster.mRadioPanel.mScalableRadioButtons[2].Click += SpaceRadioButton_Click;
-         mTabUpDownCluster = new UpDownCluster(mCurrentTheme, "Spaces to &just be a tab:", 2, 12,
+         mTabUpDownCluster = new UpDownCluster(mCurrentTheme, "Spaces To &Just Be A Tab:", 2, 12,
             mUiState.mSpacesPerTab, 1, groupBoxBackColor, "2–12");
          mTabCheckBoxCluster = new ScalableCheckBoxCluster(mCurrentTheme, "&Keep Tabs", false, groupBoxBackColor);
          mTabCheckBoxCluster.mScalableCheckBox.Checked = mUiState.mUseTabs;
-         mSpaceUpDownCluster = new UpDownCluster(mCurrentTheme, "Spaces per&/ tab:", 2, 12,
+         mSpaceUpDownCluster = new UpDownCluster(mCurrentTheme, "Spaces Per&/ Tab:", 2, 12,
             mUiState.mSpacesToBecomeTab, 1, groupBoxBackColor, "2–12");
          mCommentWidthUpDownCluster = new UpDownCluster(mCurrentTheme, "Ma&ximum Line Width:", 40, 300,
             mUiState.mMaximumCommentWidth, 1, groupBoxBackColor, "40–300");
          mSpaceCheckBoxCluster = new ScalableCheckBoxCluster(mCurrentTheme, "Kee&p Spaces", false, groupBoxBackColor);
          mSpaceCheckBoxCluster.mScalableCheckBox.Checked = mUiState.mUseSpaces;
-         mAllIfNothingCheckBoxCluster = new ScalableCheckBoxCluster(mCurrentTheme, "All if &Nothing", false, groupBoxBackColor);
+         mAllIfNothingCheckBoxCluster = new ScalableCheckBoxCluster(mCurrentTheme, "All If &Nothing", false, groupBoxBackColor);
          mAllIfNothingCheckBoxCluster.mScalableCheckBox.Checked = mUiState.mAllIfNothing;
-         mCommentConcatenateFirstCheckBoxCluster = new ScalableCheckBoxCluster(mCurrentTheme, "Concatenate first &when re-flowing", false, groupBoxBackColor);
+         mCommentConcatenateFirstCheckBoxCluster = new ScalableCheckBoxCluster(mCurrentTheme, "Concatenate First &When Re-flowing", false, groupBoxBackColor);
          mCommentConcatenateFirstCheckBoxCluster.mScalableCheckBox.Checked = mUiState.mConcatenateCommentFirst;
          mCommentOutBlankLinesCheckBoxCluster = new ScalableCheckBoxCluster(mCurrentTheme, "Co&mment Out Blank Lines", false, groupBoxBackColor);
          mCommentOutBlankLinesCheckBoxCluster.mScalableCheckBox.Checked = mUiState.mCommentOutBlankLines;
@@ -784,6 +784,25 @@
          mGeneralTabControl.SelectedIndex = savedGeneral;
          mGeneralTabControl.SelectedIndexChanged += GeneralTabControl_SelectedIndexChanged;
          mGeneralTabControl.DrawItem += GeneralTabControl_DrawItem;
+         Font interfaceFont = mCurrentTheme.mFonts[(int)FontUsage.Interface];
+         mGeneralTabControl.Font = interfaceFont;
+         mIncludeExcludeTabControl.Font = interfaceFont;
+         mCodingTabControl.Font = interfaceFont;
+         mGeneralTabControl.RecalculateItemSize(interfaceFont);
+         mIncludeExcludeTabControl.RecalculateItemSize(interfaceFont);
+         mCodingTabControl.RecalculateItemSize(interfaceFont);
+         int dgvRowHeight = Math.Max(25, interfaceFont.Height + 8);
+         mIncludeDataGridView.RowTemplate.Height = dgvRowHeight;
+         mExcludeDataGridView.RowTemplate.Height = dgvRowHeight;
+         mShortcutsDgv.RowTemplate.Height = dgvRowHeight;
+         foreach (DataGridViewRow row in mIncludeDataGridView.Rows)
+            row.Height = dgvRowHeight;
+         foreach (DataGridViewRow row in mExcludeDataGridView.Rows)
+            row.Height = dgvRowHeight;
+         foreach (DataGridViewRow row in mShortcutsDgv.Rows)
+            row.Height = dgvRowHeight;
+         if (mUiState.mShortcutsDgvAutoSize)
+            mShortcutsDgv.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
          int tabControlWidth = mHistoryGroupBox.Right + (mTabControlLeftPad * 2) + SystemInformation.VerticalScrollBarWidth + mEm;
          int tabStripHeight = mGeneralTabControl.GetTabStripHeight(tabControlWidth);
          int leftBottom = mTabControlTopPad
@@ -929,8 +948,7 @@
                entry.DisplayString, entry.ShortcutLocked, entry.Notes);
             mShortcutsDgv.Rows[rowIdx].Tag = entry;
             if (entry.ShortcutLocked)
-               for (int c = ShortColCtrl; c <= ShortColKey; c++)
-                  mShortcutsDgv.Rows[rowIdx].Cells[c].ReadOnly = true;
+               mShortcutsDgv.Rows[rowIdx].ReadOnly = true;
          }
          mShortcutsDgv.CurrentCellDirtyStateChanged += ShortcutsDgv_CurrentCellDirtyStateChanged;
          mShortcutsDgv.CellValueChanged += ShortcutsDgv_CellValueChanged;

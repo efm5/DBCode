@@ -186,6 +186,7 @@
          mForm.Controls.Add(mOptionsPanel);
          mOptionsPanel.ContextMenuStrip = mGeneralContextMenuStrip;
          mOptionsPanel.ApplyFontsAndColors();
+         mOptionsPanel.LayoutControls();
          mForm.SuspendClientSizeChanged();
          mActiveLayoutable = mOptionsPanel.mBottomPanel;
          mForm.Bounds = mUiState.mOptionsBounds;

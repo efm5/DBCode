@@ -203,10 +203,12 @@
          }
          ThrowIfNull(mMenuStrip, nameof(mMenuStrip));
          ThrowIfNull(mMainContextMenuStrip, nameof(mMainContextMenuStrip));
+         ShortcutManager.SyncLockedScrollingEntries(mShortcutEntries);
          ShortcutManager.Save(ShortcutManager.DefaultFilePath, mShortcutEntries);
          Dictionary<string, ToolStripMenuItem> menuDictionary = ShortcutManager.BuildMenuDictionary(mMenuStrip!, mMainContextMenuStrip!);
          ShortcutManager.Apply(mShortcutEntries, menuDictionary);
          ShortcutManager.SyncContextMenuShortcutDisplays();
+         ShortcutManager.SyncScrollingContextMenuKeys();
          SaveColumnWidths();
          CloseOptionsPanel();
       }

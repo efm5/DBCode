@@ -102,17 +102,17 @@ namespace DBCode {
       }
 
       internal static void AdjustForThemeFont(Font pFont) {
-         float fontSize = pFont.SizeInPoints;
-         if (fontSize < 15f)
-            mFontWidthAdjustment = 0.75f;
-         else if (fontSize < 20f)
-            mFontWidthAdjustment = 0.8f;
-         else if (fontSize < 30f)
-            mFontWidthAdjustment = 0.85f;
-         else if (fontSize < 50f)
-            mFontWidthAdjustment = 0.9f;
-         else
-            mFontWidthAdjustment = 0.95f;
+         //float fontSize = pFont.SizeInPoints;
+         //if (fontSize < 15f)
+         //   mFontWidthAdjustment = 0.75f;
+         //else if (fontSize < 20f)
+         //   mFontWidthAdjustment = 0.8f;
+         //else if (fontSize < 30f)
+         //   mFontWidthAdjustment = 0.85f;
+         //else if (fontSize < 50f)
+         //   mFontWidthAdjustment = 0.9f;
+         //else
+         //   mFontWidthAdjustment = 0.95f;
          RecalculateAssociatedOffsets(pFont);
       }
 

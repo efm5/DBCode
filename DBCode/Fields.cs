@@ -225,7 +225,6 @@ namespace DBCode {
       public static FindPanel? mFindPanel = null;
       public static FindRecord? mCurrentFindRecord = null;
       public static FindRecord? mCurrentSearchRecord = null;
-      public static float mFontWidthAdjustment = 0.5f;
       public static FontPickerPanel? mFontPickerPanel = null;
       public static FontUsage mFontUsage = FontUsage.Text;
       public static ConfirmationDialog? mConfirmationPanel = null;
@@ -248,9 +247,6 @@ namespace DBCode {
       public static PlainRichTextBox mRichTextBox = null!;
       public static ScrollablePanel mScrollableMainPanel = null!;
       public static SearchReplacePanel? mSearchReplacePanel = null;
-#pragma warning disable CS0649
-      public static Size mMonitorSize, mResolution;
-#pragma warning restore CS0649
       public static TargetPickerPanel? mTargetPickerPanel = null;
       public static ThemePanel? mThemePanel = null;
       public static ThemePickerPanel? mThemePickerPanel = null;
@@ -291,6 +287,18 @@ namespace DBCode {
       public static HelpContext mUIContext = HelpContext.Main;
       public static UiState mUiState = null!;
       public static ViewMode mCurrentViewMode = ViewMode.Features;
+      public static Keys mScrollingEdgeTopKey = Keys.Control | Keys.Alt | Keys.F1,
+         mScrollingEdgeBottomKey = Keys.Control | Keys.Alt | Keys.F2,
+         mScrollingEdgeLeftKey = Keys.Control | Keys.Alt | Keys.F3,
+         mScrollingEdgeRightKey = Keys.Control | Keys.Alt | Keys.F4,
+         mScrollingScrollUpKey = Keys.Control | Keys.Alt | Keys.F5,
+         mScrollingScrollDownKey = Keys.Control | Keys.Alt | Keys.F6,
+         mScrollingScrollLeftKey = Keys.Control | Keys.Alt | Keys.F7,
+         mScrollingScrollRightKey = Keys.Control | Keys.Alt | Keys.F8,
+         mScrollingPageUpKey = Keys.Control | Keys.Alt | Keys.F9,
+         mScrollingPageDownKey = Keys.Control | Keys.Alt | Keys.F10,
+         mScrollingPageLeftKey = Keys.Control | Keys.Alt | Keys.F11,
+         mScrollingPageRightKey = Keys.Control | Keys.Alt | Keys.F12;
       #endregion
 
       #region main & context menus

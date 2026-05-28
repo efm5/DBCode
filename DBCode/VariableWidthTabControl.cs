@@ -2,26 +2,35 @@ namespace DBCode {
    public class VariableWidthTabControl : TabControl {
       public readonly List<int> TabHeaderWidths = [];
       private Color mCapturedBackColor = SystemColors.Control;
+      private bool mRecalculating;
 
       public void SetStripBackColor(Color pColor) {
          mCapturedBackColor = pColor;
       }
 
       public void RecalculateItemSize(Font pFont) {
-         if (TabCount == 0 || !IsHandleCreated)
+         if (TabCount == 0 || !IsHandleCreated || mRecalculating)
             return;
-         FontFamily family = pFont.FontFamily;
-         float emHeight = family.GetEmHeight(pFont.Style);
-         float ascent = family.GetCellAscent(pFont.Style);
-         float descent = family.GetCellDescent(pFont.Style);
-         float cellHeight = pFont.Size * (ascent + descent) / emHeight;
-         int tabHeight = (int)Math.Ceiling(cellHeight) + 12;
-         SendMessage(Handle, TCM_SETPADDING, 0, MakeLParam(20, 0));
-         ItemSize = new Size(ItemSize.Width, tabHeight);
-         TabHeaderWidths.Clear();
-         for (int i = 0; i < TabCount; i++)
-            TabHeaderWidths.Add(GetTabRect(i).Width);
-         Invalidate();
+         mRecalculating = true;
+         try {
+            using Font boldFont = new Font(pFont, pFont.Style | FontStyle.Bold);
+            FontFamily family = boldFont.FontFamily;
+            float emHeight = family.GetEmHeight(boldFont.Style);
+            float ascent = family.GetCellAscent(boldFont.Style);
+            float descent = family.GetCellDescent(boldFont.Style);
+            float cellHeight = boldFont.Size * (ascent + descent) / emHeight;
+            int hPad = (int)Math.Ceiling(Math.Max(20, boldFont.Size * mFontWidthAdjustment));
+            int vPad = (int)Math.Ceiling(Math.Max(12, boldFont.Size * mFontHeightAdjustment));
+            int tabHeight = (int)Math.Ceiling(cellHeight) + vPad;
+            ItemSize = new Size(0, tabHeight);
+            SendMessage(Handle, TCM_SETPADDING, 0, MakeLParam(hPad, vPad));
+            TabHeaderWidths.Clear();
+            for (int i = 0; i < TabCount; i++)
+               TabHeaderWidths.Add(GetTabRect(i).Width);
+            Invalidate();
+         } finally {
+            mRecalculating = false;
+         }
       }
 
       protected override void OnHandleCreated(EventArgs pEventArgs) {
@@ -63,11 +72,13 @@ namespace DBCode {
          Font font = Font ?? SystemFonts.DefaultFont;
          int singleRowHeight = ItemSize.Height;
          if (singleRowHeight == 0) {
-            FontFamily family = font.FontFamily;
-            float emHeight = family.GetEmHeight(font.Style);
-            float ascent = family.GetCellAscent(font.Style);
-            float descent = family.GetCellDescent(font.Style);
-            singleRowHeight = (int)Math.Ceiling(font.Size * (ascent + descent) / emHeight) + 12;
+            using Font boldFont = new Font(font, font.Style | FontStyle.Bold);
+            FontFamily family = boldFont.FontFamily;
+            float emHeight = family.GetEmHeight(boldFont.Style);
+            float ascent = family.GetCellAscent(boldFont.Style);
+            float descent = family.GetCellDescent(boldFont.Style);
+            int vPad = (int)Math.Ceiling(Math.Max(12, boldFont.Size * mFontHeightAdjustment));
+            singleRowHeight = (int)Math.Ceiling(boldFont.Size * (ascent + descent) / emHeight) + vPad;
          }
          if (pAvailableWidth <= 0 || TabCount == 0)
             return singleRowHeight;
@@ -87,9 +98,13 @@ namespace DBCode {
       }
 
       private List<int> ComputeTabWidths(Font pFont) {
+         using Font boldFont = new Font(pFont, pFont.Style | FontStyle.Bold);
+         int hPad = (int)Math.Ceiling(Math.Max(20, boldFont.Size * mFontWidthAdjustment));
          List<int> widths = [];
-         for (int i = 0; i < TabCount; i++)
-            widths.Add(TextRenderer.MeasureText(TabPages[i].Text, pFont).Width + 40);
+         for (int i = 0; i < TabCount; i++) {
+            int w = TextRenderer.MeasureText(TabPages[i].Text, boldFont).Width;
+            widths.Add(w + 2 * hPad);
+         }
          return widths;
       }
 

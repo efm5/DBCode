@@ -145,6 +145,20 @@
             bottomPanel.mHelpButton.PerformClick();
             return true;
          }
+         if (mActiveScrollablePanel != null || mActiveScrollableDataGridView != null) {
+            if (keyData == mScrollingEdgeTopKey) { ViewScrollingEdgeTop_Click(null, EventArgs.Empty); return true; }
+            if (keyData == mScrollingEdgeBottomKey) { ViewScrollingEdgeBottom_Click(null, EventArgs.Empty); return true; }
+            if (keyData == mScrollingEdgeLeftKey) { ViewScrollingEdgeLeft_Click(null, EventArgs.Empty); return true; }
+            if (keyData == mScrollingEdgeRightKey) { ViewScrollingEdgeRight_Click(null, EventArgs.Empty); return true; }
+            if (keyData == mScrollingScrollUpKey) { ViewScrollingScrollUp_Click(null, EventArgs.Empty); return true; }
+            if (keyData == mScrollingScrollDownKey) { ViewScrollingScrollDown_Click(null, EventArgs.Empty); return true; }
+            if (keyData == mScrollingScrollLeftKey) { ViewScrollingScrollLeft_Click(null, EventArgs.Empty); return true; }
+            if (keyData == mScrollingScrollRightKey) { ViewScrollingScrollRight_Click(null, EventArgs.Empty); return true; }
+            if (keyData == mScrollingPageUpKey) { ViewScrollingPageUp_Click(null, EventArgs.Empty); return true; }
+            if (keyData == mScrollingPageDownKey) { ViewScrollingPageDown_Click(null, EventArgs.Empty); return true; }
+            if (keyData == mScrollingPageLeftKey) { ViewScrollingPageLeft_Click(null, EventArgs.Empty); return true; }
+            if (keyData == mScrollingPageRightKey) { ViewScrollingPageRight_Click(null, EventArgs.Empty); return true; }
+         }
          return base.ProcessCmdKey(ref msg, keyData);
       }
       #endregion

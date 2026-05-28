@@ -17,8 +17,10 @@ namespace DBCode {
          private LabeledColorSwatchCluster mDemoSwatch;
          private LanguageKind mLanguageKind;
          private NumericUpDown mBlueUpDown, mGrayUpDown, mGreenUpDown, mRedUpDown;
+#pragma warning disable IDE0032
          private Panel mScrollPanel;
          internal Panel ScrollPanel { get { return mScrollPanel; } }
+#pragma warning restore IDE0032
          internal Theme mTheme;
          private TokenKind mTokenKind;
          private TrackBar mBlueSlider, mGraySlider, mGreenSlider, mRedSlider;

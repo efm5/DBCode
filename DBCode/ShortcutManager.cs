@@ -168,10 +168,86 @@ namespace DBCode {
          mContextGoToTSMI.ShortcutKeyDisplayString = mEditGoToTSMI.ShortcutKeyDisplayString;
       }
 
+      private static readonly (string ViewId, string ContextId)[] sScrollingSyncPairs = [
+         ("mViewScrollingEdgeTopTSMI",     "mContextScrollingEdgeTopTSMI"),
+         ("mViewScrollingEdgeBottomTSMI",  "mContextScrollingEdgeBottomTSMI"),
+         ("mViewScrollingEdgeLeftTSMI",    "mContextScrollingEdgeLeftTSMI"),
+         ("mViewScrollingEdgeRightTSMI",   "mContextScrollingEdgeRightTSMI"),
+         ("mViewScrollingScrollUpTSMI",    "mContextScrollingScrollUpTSMI"),
+         ("mViewScrollingScrollDownTSMI",  "mContextScrollingScrollDownTSMI"),
+         ("mViewScrollingScrollLeftTSMI",  "mContextScrollingScrollLeftTSMI"),
+         ("mViewScrollingScrollRightTSMI", "mContextScrollingScrollRightTSMI"),
+         ("mViewScrollingPageUpTSMI",      "mContextScrollingPageUpTSMI"),
+         ("mViewScrollingPageDownTSMI",    "mContextScrollingPageDownTSMI"),
+         ("mViewScrollingPageLeftTSMI",    "mContextScrollingPageLeftTSMI"),
+         ("mViewScrollingPageRightTSMI",   "mContextScrollingPageRightTSMI"),
+      ];
+
+      internal static void SyncLockedScrollingEntries(List<ShortcutEntry> pEntries) {
+         Dictionary<string, ShortcutEntry> byId = pEntries.ToDictionary(e => e.Id, e => e);
+         foreach ((string viewId, string contextId) in sScrollingSyncPairs) {
+            if (!byId.TryGetValue(viewId, out ShortcutEntry? viewEntry))
+               continue;
+            if (!byId.TryGetValue(contextId, out ShortcutEntry? contextEntry))
+               continue;
+            contextEntry.Ctrl = viewEntry.Ctrl;
+            contextEntry.Shift = viewEntry.Shift;
+            contextEntry.Alt = viewEntry.Alt;
+            contextEntry.Key = viewEntry.Key;
+            contextEntry.DisplayString = viewEntry.DisplayString;
+         }
+      }
+
+      internal static void SyncScrollingContextMenuKeys() {
+         ThrowIfNull(mViewScrollingEdgeTopTSMI, nameof(mViewScrollingEdgeTopTSMI));
+         ThrowIfNull(mViewScrollingEdgeBottomTSMI, nameof(mViewScrollingEdgeBottomTSMI));
+         ThrowIfNull(mViewScrollingEdgeLeftTSMI, nameof(mViewScrollingEdgeLeftTSMI));
+         ThrowIfNull(mViewScrollingEdgeRightTSMI, nameof(mViewScrollingEdgeRightTSMI));
+         ThrowIfNull(mViewScrollingScrollUpTSMI, nameof(mViewScrollingScrollUpTSMI));
+         ThrowIfNull(mViewScrollingScrollDownTSMI, nameof(mViewScrollingScrollDownTSMI));
+         ThrowIfNull(mViewScrollingScrollLeftTSMI, nameof(mViewScrollingScrollLeftTSMI));
+         ThrowIfNull(mViewScrollingScrollRightTSMI, nameof(mViewScrollingScrollRightTSMI));
+         ThrowIfNull(mViewScrollingPageUpTSMI, nameof(mViewScrollingPageUpTSMI));
+         ThrowIfNull(mViewScrollingPageDownTSMI, nameof(mViewScrollingPageDownTSMI));
+         ThrowIfNull(mViewScrollingPageLeftTSMI, nameof(mViewScrollingPageLeftTSMI));
+         ThrowIfNull(mViewScrollingPageRightTSMI, nameof(mViewScrollingPageRightTSMI));
+         ThrowIfNull(mContextScrollingEdgeTopTSMI, nameof(mContextScrollingEdgeTopTSMI));
+         ThrowIfNull(mContextScrollingEdgeBottomTSMI, nameof(mContextScrollingEdgeBottomTSMI));
+         ThrowIfNull(mContextScrollingEdgeLeftTSMI, nameof(mContextScrollingEdgeLeftTSMI));
+         ThrowIfNull(mContextScrollingEdgeRightTSMI, nameof(mContextScrollingEdgeRightTSMI));
+         ThrowIfNull(mContextScrollingScrollUpTSMI, nameof(mContextScrollingScrollUpTSMI));
+         ThrowIfNull(mContextScrollingScrollDownTSMI, nameof(mContextScrollingScrollDownTSMI));
+         ThrowIfNull(mContextScrollingScrollLeftTSMI, nameof(mContextScrollingScrollLeftTSMI));
+         ThrowIfNull(mContextScrollingScrollRightTSMI, nameof(mContextScrollingScrollRightTSMI));
+         ThrowIfNull(mContextScrollingPageUpTSMI, nameof(mContextScrollingPageUpTSMI));
+         ThrowIfNull(mContextScrollingPageDownTSMI, nameof(mContextScrollingPageDownTSMI));
+         ThrowIfNull(mContextScrollingPageLeftTSMI, nameof(mContextScrollingPageLeftTSMI));
+         ThrowIfNull(mContextScrollingPageRightTSMI, nameof(mContextScrollingPageRightTSMI));
+         SyncScrollingOne(mViewScrollingEdgeTopTSMI,     mContextScrollingEdgeTopTSMI,     ref mScrollingEdgeTopKey);
+         SyncScrollingOne(mViewScrollingEdgeBottomTSMI,  mContextScrollingEdgeBottomTSMI,  ref mScrollingEdgeBottomKey);
+         SyncScrollingOne(mViewScrollingEdgeLeftTSMI,    mContextScrollingEdgeLeftTSMI,    ref mScrollingEdgeLeftKey);
+         SyncScrollingOne(mViewScrollingEdgeRightTSMI,   mContextScrollingEdgeRightTSMI,   ref mScrollingEdgeRightKey);
+         SyncScrollingOne(mViewScrollingScrollUpTSMI,    mContextScrollingScrollUpTSMI,    ref mScrollingScrollUpKey);
+         SyncScrollingOne(mViewScrollingScrollDownTSMI,  mContextScrollingScrollDownTSMI,  ref mScrollingScrollDownKey);
+         SyncScrollingOne(mViewScrollingScrollLeftTSMI,  mContextScrollingScrollLeftTSMI,  ref mScrollingScrollLeftKey);
+         SyncScrollingOne(mViewScrollingScrollRightTSMI, mContextScrollingScrollRightTSMI, ref mScrollingScrollRightKey);
+         SyncScrollingOne(mViewScrollingPageUpTSMI,      mContextScrollingPageUpTSMI,      ref mScrollingPageUpKey);
+         SyncScrollingOne(mViewScrollingPageDownTSMI,    mContextScrollingPageDownTSMI,    ref mScrollingPageDownKey);
+         SyncScrollingOne(mViewScrollingPageLeftTSMI,    mContextScrollingPageLeftTSMI,    ref mScrollingPageLeftKey);
+         SyncScrollingOne(mViewScrollingPageRightTSMI,   mContextScrollingPageRightTSMI,   ref mScrollingPageRightKey);
+      }
+
+      private static void SyncScrollingOne(ToolStripMenuItem pView, ToolStripMenuItem pContext, ref Keys pField) {
+         pField = pView.ShortcutKeys;
+         pContext.ShortcutKeys = pView.ShortcutKeys;
+         pContext.ShortcutKeyDisplayString = pView.ShortcutKeyDisplayString;
+      }
+
       internal static void TryLoadAndApply(Dictionary<string, ToolStripMenuItem> pMenuDictionary) {
          List<ShortcutEntry> entries = LoadWithFallback();
          if (entries.Count > 0)
             Apply(entries, pMenuDictionary);
+         SyncScrollingContextMenuKeys();
       }
 
       internal static void CheckConflicts(List<ShortcutEntry> pEntries) {
@@ -182,6 +258,8 @@ namespace DBCode {
          foreach (ShortcutEntry entry in pEntries) {
             if (string.IsNullOrEmpty(entry.Key))
                continue;
+            if (entry.ShortcutLocked)
+               continue;
             (bool Ctrl, bool Shift, bool Alt, string Key) shortcutKey = (entry.Ctrl, entry.Shift, entry.Alt, entry.Key);
             if (keyCounts.TryGetValue(shortcutKey, out int existingCount))
                keyCounts[shortcutKey] = existingCount + 1;
@@ -190,6 +268,8 @@ namespace DBCode {
          }
          foreach (ShortcutEntry entry in pEntries) {
             if (string.IsNullOrEmpty(entry.Key))
+               continue;
+            if (entry.ShortcutLocked)
                continue;
             (bool Ctrl, bool Shift, bool Alt, string Key) shortcutKey = (entry.Ctrl, entry.Shift, entry.Alt, entry.Key);
             if (keyCounts.TryGetValue(shortcutKey, out int count) && count > 1)

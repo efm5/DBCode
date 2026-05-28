@@ -6,8 +6,8 @@
          OFFSET = 5, PANEL_BORDER = 12, POST_CLIP_DELAY = 300, SHORT_DELAY = 50, TAB_INDEX_IGNORED = int.MaxValue - 1,
          WINDOW_REDUCER = 7;
       internal static float AnimationSpeedFast = 0.15f, AnimationSpeedNormal = 0.25f, AnimationSpeedSlow = 0.40f,
-         FontScaleFactor = 1.0f, OpacityDisabled = 0.5f, OpacityHover = 0.85f, OpacityPressed = 0.70f,
-         UiScaleFactor = 1.0f, mFontWidthAdjustment = 1.0f;
+         FontScaleFactor = 1.0f, OpacityDisabled = 0.5f, OpacityHover = 0.85f,
+         OpacityPressed = 0.70f, UiScaleFactor = 1.0f, mFontWidthAdjustment = 0.25f, mFontHeightAdjustment = 0.75f;
       internal static int BorderThicknessNormal = 2, BorderThicknessThick = 3, BorderThicknessThin = 1,
          ButtonWidthLarge = 100, ButtonWidthMedium = 80, ButtonWidthSmall = 60, CaretBlinkTime = 530, CaretWidth = 2,
          CheckBoxSize = 14, ComboBoxDropDownWidthLarge = 200, ComboBoxDropDownWidthMedium = 150,
@@ -49,6 +49,7 @@
 #pragma warning disable CS8602
          COMBOBOX_MAXIMUM_DROPDOWN_WIDTH = Screen.PrimaryScreen.WorkingArea.Width - 100;
 #pragma warning restore CS8602
-      internal static Size DefaultControlSize = new Size(100, 24), mMonitorSize = new Size(0, 0);
+      internal static Size DefaultControlSize = new Size(100, 24), mMonitorSize = new Size(0, 0),
+         mResolution = new Size(0, 0);
    }
 }

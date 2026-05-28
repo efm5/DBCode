@@ -5,42 +5,6 @@
             mThemeUsage = pThemeUsage;
          }
 
-         public Size WantedSize() {
-            int maxWidth = 0, maxHeight = 0, pageWidth, pageHeight, wantedWidth, wantedHeight;
-            int primaryTabStripHeight = mPrimaryTabControl.TabCount > 0 ? mPrimaryTabControl.GetTabRect(0).Height + 4 : 25;
-            int highlightTabStripHeight = mHighlightTabControl.TabCount > 0 ? mHighlightTabControl.GetTabRect(0).Height + 4 : 25;
-            foreach (Panel panel in mPrimaryTabControl.TabPages[(int)PrimaryTabPageUsage.Interface].Controls.OfType<Panel>()) {
-               Control? rightmost = Rightmost(ControlCollectionAsList(panel.Controls));
-               Control? bottommost = Bottommost(ControlCollectionAsList(panel.Controls));
-               pageWidth = rightmost != null ? rightmost.Right : 300;
-               pageHeight = bottommost != null ? bottommost.Bottom : 300;
-               if (pageWidth > maxWidth)
-                  maxWidth = pageWidth;
-               if (pageHeight > maxHeight)
-                  maxHeight = pageHeight;
-            }
-            foreach (TabPage tabPage in mHighlightTabControl.TabPages) {
-               foreach (Panel panel in tabPage.Controls.OfType<Panel>()) {
-                  Control? rightmost = Rightmost(ControlCollectionAsList(panel.Controls));
-                  Control? bottommost = Bottommost(ControlCollectionAsList(panel.Controls));
-                  pageWidth = rightmost != null ? rightmost.Right : 300;
-                  pageHeight = bottommost != null ? bottommost.Bottom : 300;
-                  if (pageWidth > maxWidth)
-                     maxWidth = pageWidth;
-                  if (pageHeight > maxHeight)
-                     maxHeight = pageHeight;
-               }
-            }
-            wantedWidth = maxWidth + mEm3 + SystemInformation.VerticalScrollBarWidth;
-            wantedHeight = maxHeight + SystemInformation.HorizontalScrollBarHeight + mTitleLabel.Height +
-               mBottomPanel.Height + primaryTabStripHeight + highlightTabStripHeight + mEm3;
-            if (wantedWidth < 300)
-               wantedWidth = 300;
-            if (wantedHeight < 300)
-               wantedHeight = 300;
-            return new Size(wantedWidth, wantedHeight);
-         }
-
          public void LayoutControls() {
             SuspendLayout();
             //efm5 - switching to each tab forces the controls to be created and laid out, which is necessary
@@ -131,20 +95,34 @@
 
          private void ApplyThemeToControlTree(Control pParent) {
             foreach (Control control in pParent.Controls) {
-               if (control is BaseCluster cluster && cluster.mSkipTheme) {
-                  ApplyThemeToControlTree(control);
+               if (control is BaseCluster skipCluster && skipCluster.mSkipTheme) {
+                  skipCluster.mTheme.Dispose();
+                  skipCluster.mTheme = mTemporaryTheme.Clone();
+                  skipCluster.LayoutCluster();
                   continue;
                }
                control.ForeColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont];
-               if (control is not BaseCluster && control is not TabControl && control is not TabPage) {
+               if (control is not BaseCluster && control is not TabControl && control is not TabPage && control is not GroupBox) {
                   control.BackColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceBackground];
-                  control.Font = CreateNewFont(mTemporaryTheme.mFonts[(int)FontUsage.Interface]);
+                  Font oldControlFont = control.Font;
+                  Font newControlFont = CreateNewFont(mTemporaryTheme.mFonts[(int)FontUsage.Interface]);
+                  control.Font = newControlFont;
+                  if (object.ReferenceEquals(control.Font, newControlFont))
+                     MainForm.DisposeFontIfOwned(oldControlFont);
+                  else
+                     newControlFont.Dispose();
                }
                if (control is BaseCluster baseCluster) {
                   baseCluster.LayoutCluster();
                }
                else if (control is GroupBox groupBox) {
-                  groupBox.Font = CreateNewBoldFont();
+                  Font oldGroupFont = groupBox.Font;
+                  Font newGroupFont = CreateNewBoldFont();
+                  groupBox.Font = newGroupFont;
+                  if (object.ReferenceEquals(groupBox.Font, newGroupFont))
+                     MainForm.DisposeFontIfOwned(oldGroupFont);
+                  else
+                     newGroupFont.Dispose();
                   groupBox.BackColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxBackground];
                   groupBox.ForeColor = mTemporaryTheme.mInterfaceColors[(int)ColorSwatchUsage.GroupBoxFont];
                }
@@ -192,6 +170,9 @@
                   cluster.mTheme = clonedTheme.Clone();
                }
             }
+            mTitleLabel.mTheme.Dispose();
+            mTitleLabel.mTheme = clonedTheme.Clone();
+            mTitleLabel.LayoutCluster();
             foreach (FontUsage fontUsage in Enum.GetValues<FontUsage>())
                UpdateFontLabels(fontUsage);
             BackColor = clonedTheme.mInterfaceColors[(int)ColorSwatchUsage.PanelBackground];
@@ -200,10 +181,11 @@
             ApplyThemeToControlTree(mHighlightTabControl);
             mBottomPanel.SetFontAndColor();
             mExampleBottomPanel.SetFontAndColor();
-            using (Font interfaceFont = CreateNewBoldFont(clonedTheme.mFonts[(int)FontUsage.Interface])) {
-               mPrimaryTabControl.RecalculateItemSize(interfaceFont);
-               mHighlightTabControl.RecalculateItemSize(interfaceFont);
-            }
+            Font rawInterfaceFont = clonedTheme.mFonts[(int)FontUsage.Interface];
+            mPrimaryTabControl.Font = rawInterfaceFont;
+            mHighlightTabControl.Font = rawInterfaceFont;
+            mPrimaryTabControl.RecalculateItemSize(rawInterfaceFont);
+            mHighlightTabControl.RecalculateItemSize(rawInterfaceFont);
             mPrimaryTabControl.Invalidate(true);
             mHighlightTabControl.Invalidate(true);
          }
@@ -545,8 +527,10 @@
             mThemePanel.Focus();
             if (mRepaint) {
                mRepaint = false;
-               if (pTheme != null)
+               if (pTheme != null) {
                   mThemePanel.ApplyTheme(pTheme);
+                  mThemePanel.LayoutClustersAndContainers();
+               }
                if (mThemePanel.mPrimaryTabControl.SelectedIndex == (int)PrimaryTabPageUsage.Examples)
                   mThemePanel.HighlightAllExampleBoxes();
                mThemePanel.Invalidate(true);
