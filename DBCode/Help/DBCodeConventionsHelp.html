@@ -18,26 +18,94 @@
          <p>
             Here are some thoughts on how I make an application more Dragon&ndash;friendly…
          </p>
-      </div>
+      </div>            
+      <!-- #region table of contents -->
+      <h3>Table of Contents</h3>
+      <table class="center">
+         <tr>
+            <td colspan="3">
+               <a href="#modal">
+                  <span class="larger">
+                     <b>Modal&nbsp;Dialogs</b>
+                  </span>
+               </a>
+            </td>
+         </tr>
+         <tr>
+            <td colspan="2">
+               <a href="#concerns">Concerns</a>
+            </td>
+         </tr>
+         <tr>
+            <td colspan="2">
+               <a href="#solutions">Solutions</a>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <a href="#panelOverlay">Panel&nbsp;Overlay</a>
+            </td>
+            <td>
+               <a href="#draggablePanel">Draggable&nbsp;Panel</a>
+            </td>
+            <td>
+               <a href="#trulyModal">Truly&nbsp;Modal</a>
+            </td>
+         </tr>
+         <tr>
+            <td colspan="3">
+               <a href="#activating">
+                  <span class="larger">
+                     <b>Activating&nbsp;Controls</b>
+                  </span>
+               </a>
+            </td>
+         </tr>
+         <tr>
+            <td colspan="2">
+               <a href="#clickable">Clickable&nbsp;Controls</a>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <a href="#menuItems">Menu&nbsp;Items</a>
+            </td>
+            <td>
+               <a href="#buttons">Buttons,&nbsp;CheckBoxes&nbsp;and&nbsp;RadioButtons</a>
+            </td>
+         </tr>
+         <tr>
+            <td colspan="2">
+               <a href="#unclickable">Non&ndash;Clickable&nbsp;Controls</a>
+            </td>
+         </tr>
+         <tr>
+            <td colspan="3">
+               <a href="#pageLinks">Other&nbsp;Help&nbsp;Pages</a>
+            </td>
+         </tr>
+      </table>
+      <br>
+      <!-- #endregion -->
       <div class="largesectiondiv" id="modal">
          <p>
             Modal Dialogs
          </p>
       </div>
-      <div class="mediumsectiondiv">
+      <div class="mediumsectiondiv" id="concerns">
          <p>
             Concerns
          </p>
       </div>
       <p>
-         Dragon frequently fails to work perfectly with modal (blocking) dialogs(e.g. the MessageBox when it contains more than &ldquo;OK&rdquo; or &ldquo;Yes&rdquo;/&ldquo;No&rdquo;&nbsp;&mdash;&nbsp;it and sometimes even then; built&ndash;in color and font pickers; &ldquo;Options&rdquo;/&ldquo;Preferences&rdquo; dialogs etc.) This is especially true when such a modal dialog has more extensive Controls than just a few Buttons&nbsp;&mdash;&nbsp;a Menu, CheckBoxes, RadioButtons, ComboBoxes etc..
+         Dragon frequently fails to work perfectly with modal (blocking) dialogs (e.g. the MessageBox when it contains more than &ldquo;OK&rdquo; or &ldquo;Yes&rdquo;/&ldquo;No&rdquo;&nbsp;&mdash;&nbsp;it and sometimes even then; built&ndash;in color and font pickers; &ldquo;Options&rdquo;/&ldquo;Preferences&rdquo; dialogs etc.) This is especially true when such a modal dialog has more extensive Controls than just a few Buttons&nbsp;&mdash;&nbsp;a Menu, CheckBoxes, RadioButtons, ComboBoxes etc..
       </p>
-      <div class="mediumsectiondiv">
+      <div class="mediumsectiondiv" id="solutions">
          <p>
             Solutions
          </p>
       </div>
-      <div class="smallsectiondiv">
+      <div class="smallsectiondiv" id="panelOverlay">
          <p>
             Panel Overlay
          </p>
@@ -45,7 +113,7 @@
       <p>
          Simplest solution is to create a Panel, typically centered on the Form (or its Client Area), and add it directly to the Form&rsquo;s Controls. You might need to use some combination of BringToFront() and Show() to achieve the best results&nbsp;&mdash;&nbsp;especially if the Panel&rsquo;s Controls are complex. You might also need to deal with (temporarily) resizing the Form if the created panel is too large to fit.
       </p>
-      <div class="smallsectiondiv">
+      <div class="smallsectiondiv" id="draggablePanel">
          <p>
             Draggable Panel
          </p>
@@ -53,7 +121,7 @@
       <p>
          A more complex solution is to create a DraggablePanel. In general this is similar to creating an overlay panel; the class is included and used in <span class="larger">DBCode</span>.
       </p>
-      <div class="smallsectiondiv">
+      <div class="smallsectiondiv" id="trulyModal">
          <p>
             Truly Modal
          </p>
@@ -63,7 +131,7 @@
       </p>
       <div class="notediv">
          <p>
-            Both Panel&ndash;based solutions and the truly modal Form&ndash;based solution often work best when the rest of the GUI is disabled.The easiest method that I have found for doing this is to put literally everything&nbsp;&mdash;&nbsp; Menu, BottomPanel (StatusBar) and all other Controls in a scrollable Panel which is itself added exclusively to the Form&rsquo;s Controls. This makes it easy to disable or even remove (temporarily) the scrollable Panel while the simulated modal Panel is in place. This also means that the Form has AutoScroll turned off.
+            Both Panel&ndash;based solutions and the truly modal Form&ndash;based solution often work best when the rest of the GUI is disabled. The easiest method that I have found for doing this is to put literally everything&nbsp;&mdash;&nbsp;Menu, BottomPanel (StatusBar) and all other Controls in a scrollable Panel which is itself added exclusively to the Form&rsquo;s Controls. This makes it easy to disable or even remove (temporarily) the scrollable Panel while the simulated modal Panel is in place. This also means that the Form has AutoScroll turned off.
          </p>
       </div>
       <div class="largesectiondiv" id="activating">
@@ -82,7 +150,7 @@
          </p>
       </div>
       <p>
-         Menu items are probably the most Dragon&ndash;friendly Controls. Top&ndash;level Menu item should have Clearly distinct, dissimilar Text each of which should be easy to pronounce (the programmer should dictate these to ensure that Dragon is comfortable with the Text string). The same is true for all children, grandchildren etc.&nbsp;&mdash;&nbsp;they should be easy to dictate, dissimilar from top&ndash;level menu items and all other exposed items. It's always a good idea to give these Text strings accelerator keys and, where possible, keyboard shortcuts.
+         Menu items are probably the most Dragon&ndash;friendly Controls. Top&ndash;level Menu item should have Clearly distinct, dissimilar Text each of which should be easy to pronounce (the programmer should dictate these to ensure that Dragon is comfortable with the Text string). The same is true for all children, grandchildren etc.&nbsp;&mdash;&nbsp;they should be easy to dictate, dissimilar from top&ndash;level menu items and all other exposed items. It&rsquo;s always a good idea to give these Text strings accelerator keys and, where possible, keyboard shortcuts.
       </p>
       <div class="notediv">
          <p>
@@ -99,7 +167,7 @@
       </p>
       <div class="notediv">
          <p>
-            As with menus, it seems that Dragon only scans the Controls once, when it they are first displayed and thereafter, only sporadically. It frequently fails to see a re&ndash;added Control.
+            As with menus, it seems that Dragon only scans the Controls once, when they are first displayed and thereafter, only sporadically. It frequently fails to see a re&ndash;added Control.
          </p>
       </div>
       <div class="mediumsectiondiv" id="unclickable">

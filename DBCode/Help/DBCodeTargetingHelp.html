@@ -19,6 +19,46 @@
             The whole concept of <span class="larger">DBCode</span> is to move text from one Dragon-friendly text editor (<span class="larger">DBCode</span>) into another text editor (the primary focus is on IDEs, but it works just as well anywhere text can be pasted). Where the pasted code lands depends on whether <span class="larger">DBCode</span> is &ldquo;targeted&rdquo; or &ldquo;untargeted&rdquo;.
          </p>
       </div>
+      <!-- #region table of contents -->
+      <h3>Table of Contents</h3>
+      <table class="center">
+         <tr>
+            <td colspan="3">
+               <a href="#targetingConcept">
+                  <span class="larger">
+                     <b>The&nbsp;DBCode&nbsp;Targeting&nbsp;Concept</b>
+                  </span>
+               </a>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <a href="#transferTargeted">Targeted&nbsp;Transfer</a>
+            </td>
+            <td>
+               <a href="#transferUntargeted">Untargeted&nbsp;Transfer</a>
+            </td>
+            <td>
+               <a href="#retarget">Retarget</a>
+            </td>
+         </tr>
+         <tr>
+            <td colspan="3">
+               <a href="#lineEndings">
+                  <span class="larger">
+                     <b>The&nbsp;Line&ndash;Endings&nbsp;Items</b>
+                  </span>
+               </a>
+            </td>
+         </tr>
+         <tr>
+            <td colspan="3">
+               <a href="#pageLinks">Other&nbsp;Help&nbsp;Pages</a>
+            </td>
+         </tr>
+      </table>
+      <br>
+      <!-- #endregion -->
       <div class="largesectiondiv" id="targetingConcept">
          <p>The <span class="larger">DBCode</span> Targeting Concept</p>
       </div>     
@@ -29,7 +69,7 @@
          <img src="MenuTargeting.png" alt="DBCode&rsquo;s Targeting menu">
       </div> 
       <p class="tab">
-         &ldquo;<u>T</u>argeted&rdquo; (<b>Ctrl+d</b>) on the Targeting menu is a toggle&mdash; when checked it is on; otherwise targeting is untargeted. &ldquo;<u>R</u>etarget&rdquo; (<b>Ctrl+e</b>) allows the user to change the target.
+         &ldquo;<u>T</u>argeted&rdquo; (<b>Ctrl+d</b>) on the Targeting menu is a toggle&nbsp;&mdash;&nbsp;when checked it is on; otherwise targeting is untargeted. &ldquo;<u>R</u>etarget&rdquo; (<b>Ctrl+e</b>) allows the user to change the target.
       </p> 
       <p class="doubletab">
          When &ldquo;<u>T</u>argeted&rdquo; is not checked and the user selects &ldquo;<u>T</u>argeted&rdquo;, it becomes checked and <span class="larger">DBCode</span> enters the targeting behavior. The first thing that happens is a Target Picker dialog opens:
@@ -43,7 +83,7 @@
       <p class="doubletab">
          If the user chooses to &ldquo;Cancel&rdquo; &ldquo;<u>T</u>argeted&rdquo; is unchecked and targeting is turned off. If the user chooses one of the potential targets, it will become the &ldquo;target&rdquo; until targeting is turned off or &ldquo;<u>R</u>etarget&rdquo; is used to choose a different target.
       </p>    
-      <div class="smallsectiondiv" id="transferTargeted">
+      <div class="mediumsectiondiv" id="transferTargeted">
          <p>
             Targeted Transfer
          </p>
@@ -51,7 +91,7 @@
       <p class="doubletab">
          Targeted transfer forces the targeted application to the top of the Z&ndash;Order. Whatever text is being transferred is pasted into the target application at its current cursor location.
       </p>    
-      <div class="smallsectiondiv" id="transferUntargeted">
+      <div class="mediumsectiondiv" id="transferUntargeted">
          <p>
             Untargeted Transfer
          </p>
@@ -67,11 +107,11 @@
       <p class="doubletab">
          If the user chooses &ldquo;<u>R</u>etarget&rdquo; the Target Picker  opens. If the user chooses &ldquo;Cancel&rdquo; the existing target remains in effect. Otherwise, a new target is established.
       </p>    
-      <div class="largesectiondiv">
+      <div class="largesectiondiv" id="lineEndings">
          <p>The <span class="larger">Line&ndash;Endings</span> Items</p>
       </div>     
       <p class="tab">
-         These three items () have no direct effect on targeting but do affect how the text ends up formatted the target. See: <a href="DBCodeMenuHelp.html#lineEndings">line&ndash;endings</a> for more details.
+         These three items (&ldquo;Default&rdquo;, &ldquo;Insert CR&rdquo; and &ldquo;Append CR&rdquo;) have no direct effect on targeting but do affect how the text ends up formatted in the target. See: <a href="DBCodeMenuHelp.html#lineEndings">line&ndash;endings</a> for more details.
       </p>    
       <div class="pageslinkdiv">
          <h3 id="pageLinks">Other Pages</h3>

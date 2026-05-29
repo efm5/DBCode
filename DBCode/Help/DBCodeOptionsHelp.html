@@ -1,54 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Options Help</title>
-      <meta name="description" content="Reference manual for DBCode">
-      <meta name="keywords" content="DBCode">
-      <link rel="stylesheet" href="styles.css">
-      <link rel="icon" type="image/x-icon" href="helpIcon.ico">
-   </head>
-   <body style="margin:50px;padding:0">
-      <h1>DBCode&rsquo;s</h1>
-      <h2>Reference Manual</h2>
-      <h3>Version 0.0.0.1</h3>
-      <h4>Options</h4>
-      <div class="introdiv">
-         <p>
-            This Options dialog was specifically designed to be Dragon&ndash;friendly. It has non&ndash;Theme&ndash;related settings.
-         </p>
-      </div>
-      <div class="imagecluster">
-         <div class="imageLabel">
-            <b>
-               <b><span class="larger">DBCode</span>&rsquo;s Options Dialog:</b>
-            </b>
-         </div>
-         <img src="OptionsGeneral.png" alt="DBCode&rsquo;s Options Dialog">
-      </div>
-   <div class="largesectiondiv" id="general">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Options Help</title>
+   <meta name="description" content="Reference manual for DBCode">
+   <meta name="keywords" content="DBCode">
+   <link rel="stylesheet" href="styles.css">
+   <link rel="icon" type="image/x-icon" href="helpIcon.ico">
+</head>
+
+<body style="margin:50px;padding:0">
+   <h1>DBCode&rsquo;s</h1>
+   <h2>Reference Manual</h2>
+   <h3>Version 0.0.0.1</h3>
+   <h4>Options</h4>
+   <div class="introdiv">
       <p>
-         The &ldquo;Options&rdquo; Dialog
+         This Options dialog was specifically designed to be Dragon&ndash;friendly. It has non&ndash;Theme&ndash;related
+         settings.
       </p>
    </div>
+   <!-- #region table of contents -->
+   <h3>Table of Contents</h3>
+   <table class="center">
+      <tr>
+         <td colspan="3">
+            <a href="#XXX">
+               <span class="larger">
+                  <b>The&nbsp;largesectiondiv&nbsp;XXX</b>
+               </span>
+            </a>
+         </td>
+      </tr>
+      <tr>
+         <td colspan="2">
+            <a href="#XXX">The&nbsp;mediumsectiondiv&nbsp;XXX</a>
+         </td>
+      </tr>
+      <tr>
+         <td>
+            <a href="#XXX">XXX</a>
+         </td>
+         <td>
+            <a href="#XXX">XXX</a>
+         </td>
+         <td>
+            <a href="#XXX">XXX</a>
+         </td>
+      </tr>
+      <tr>
+         <td colspan="3">
+            <a href="#XXXPAGEBottomPanel">The&nbsp;Bottom&nbsp;Controls</a>
+         </td>
+      </tr>
+      <tr>
+         <td colspan="3">
+            <a href="#pageLinks">Other&nbsp;Help&nbsp;Pages</a>
+         </td>
+      </tr>
+   </table>
+   <br>
+   <!-- #endregion -->
+   <!-- #region general page -->
+   <div class="imagecluster">
+      <div class="imageLabel">
+         <b>
+            <b>
+               <span class="larger">DBCode</span>&rsquo;s Options Dialog:
+            </b>
+         </b>
+      </div>
+      <img src="OptionsGeneral.png" alt="DBCode&rsquo;s Options Dialog">
+   </div>
    <p>
-      The Options dialog has five pages: &ldquo;General&rdquo;; &ldquo;Targeting&rdquo;; &ldquo;Coding&rdquo;; &ldquo;Brace Matching&rdquo; and &ldquo;Shortcuts&rdquo;
+      The Options dialog has five pages: &ldquo;General&rdquo;; &ldquo;Targeting&rdquo;; &ldquo;Coding&rdquo;;
+      &ldquo;Brace Matching&rdquo; and &ldquo;Shortcuts&rdquo;
    </p>
    <div class="warningdiv">
       <p>
-         The &ldquo;Coding&rdquo; page does not ship with any content&nbsp;&mdash;&nbsp;it is designed for the user to add language&ndash;specific settings, as desired.
+         The &ldquo;Coding&rdquo; page does not ship with any content&nbsp;&mdash;&nbsp;it is designed for the user to
+         add language&ndash;specific settings, as desired.
       </p>
    </div>
-   <div class="mediumsectiondiv" id="optionsGeneral">
+   <div class="largesectiondiv" id="optionsGeneral">
       <p>
          The &ldquo;General&rdquo; Page
       </p>
    </div>
    <p>
-      The General page has five GroupBoxes: &ldquo;Magic Numbers&rdquo;; &ldquo;Target Paste Shortcut&rdquo;; &ldquo;Search&rdquo;; &ldquo;Whitespace&rdquo; and &ldquo;Coding Settings&rdquo;.
+      The General page has five GroupBoxes: &ldquo;Magic Numbers&rdquo;; &ldquo;Target Paste Shortcut&rdquo;;
+      &ldquo;Search&rdquo;; &ldquo;Whitespace&rdquo; and &ldquo;Coding Settings&rdquo;.
    </p>
-   <div class="smallsectiondiv" id="optionsMagicNumbers">
+   <div class="mediumsectiondiv" id="optionsMagicNumbers">
       <p>
          The &ldquo;Magic Numbers&rdquo; Section
       </p>
@@ -56,117 +101,160 @@
    <p>
       The &ldquo;magic numbers&rdquo; are miscellaneous values that the user sets with the options dialog.
       <span class="tomatoSpan"> [TODO: List: all; five]</span>
-   </p>    
-      <p class="tab">
-         There is a pair of &ldquo;DraggablePanel&rdquo;&ndash;related settings: &ldquo;Top Dragger Height:&rdquo; and &ldquo;Dragger Edge Size:&rdquo;.
-      </p>  
-      <span class="tomatoSpan"> [TODO: underline accelerators]</span>
-      <p class="doubletab">
-         The &ldquo;Top Dragger Height:&rdquo; setting controls the height of the area with which the user may grab the DraggablePanel in order to move it around. This is similar to a Form&rsquo;s Title bar.
-      </p>    
-      <p class="doubletab">
-         The &ldquo;Dragger Edge Size:&rdquo; setting controls the width of the side borders and the height of the bottom border (with which )the user may grab the DraggablePanel by these borders as well in order to move it around.
-      </p>       
-      <p class="tab">
-         There is a trio of delay&ndash;related settings: &ldquo;Activation Delay:&rdquo;; &ldquo;Reactivation Delay:&rdquo; and &ldquo;Clipboard Delay:&rdquo;.
-      </p>  
-      <div class="notediv">
-         <p>
-            Windows takes a bit of time preparing things &ldquo;under the hood&rdquo; when it comes to shuffling Forms around in the Z&ndash;Order and dealing with the Clipboard. Some versions of Windows and some computer hardware get these tasks done quickly, others not so much. While the defaults will probably work on most computers, some older laptops might need somewhat longer values. Some newer hardware might be able to get by with much shorter values. If the user finds themselves becoming impatient with the responsiveness of transferring texts to the target, one might start trimming these values down the bit
-         </p>
-      </div>
-      <span class="tomatoSpan"> [TODO: underline accelerators]</span>
-      <p class="doubletab">
-         The &ldquo;Activation Delay:&rdquo; setting controls the timing delay.
-      </p>    
-      <p class="doubletab">
-         The &ldquo;Reactivation Delay:&rdquo; setting controls the timing delay.
-      </p>    
-      <p class="doubletab">
-         The &ldquo;Clipboard Delay:&rdquo; setting controls the timing delay.
-      </p>    
-      <div class="notediv">
-         <p>
-            All five of these consist of a cluster of <a href="DBCodeConventionsHelp#prefixButton.html"><b><i>prefix buttons</i></b></a> with thier associated NumericUpDown and a suffix label specifying the range and (if not 1) the step value.
-         </p>
-      </div>
-   <div class="smallsectiondiv" id="optionsWhitespace">
+   </p>
+   <p class="tab">
+      There is a pair of &ldquo;DraggablePanel&rdquo;&ndash;related settings: &ldquo;Top Dragger Height:&rdquo; and
+      &ldquo;Dragger Edge Size:&rdquo;.
+   </p>
+   <span class="tomatoSpan"> [TODO: underline accelerators]</span>
+   <p class="doubletab">
+      The &ldquo;Top Dragger Height:&rdquo; setting controls the height of the area with which the user may grab the
+      DraggablePanel in order to move it around. This is similar to a Form&rsquo;s Title bar.
+   </p>
+   <p class="doubletab">
+      The &ldquo;Dragger Edge Size:&rdquo; setting controls the width of the side borders and the height of the bottom
+      border (with which )the user may grab the DraggablePanel by these borders as well in order to move it around.
+   </p>
+   <p class="tab">
+      There is a trio of delay&ndash;related settings: &ldquo;Activation Delay:&rdquo;; &ldquo;Reactivation
+      Delay:&rdquo; and &ldquo;Clipboard Delay:&rdquo;.
+   </p>
+   <div class="notediv">
+      <p>
+         Windows takes a bit of time preparing things &ldquo;under the hood&rdquo; when it comes to shuffling Forms
+         around in the Z&ndash;Order and dealing with the Clipboard. Some versions of Windows and some computer hardware
+         get these tasks done quickly, others not so much. While the defaults will probably work on most computers, some
+         older laptops might need somewhat longer values. Some newer hardware might be able to get by with much shorter
+         values. If the user finds themselves becoming impatient with the responsiveness of transferring texts to the
+         target, one might start trimming these values down the bit
+      </p>
+   </div>
+   <span class="tomatoSpan"> [TODO: underline accelerators]</span>
+   <p class="doubletab">
+      The &ldquo;Activation Delay:&rdquo; setting controls the timing delay.
+   </p>
+   <p class="doubletab">
+      The &ldquo;Reactivation Delay:&rdquo; setting controls the timing delay.
+   </p>
+   <p class="doubletab">
+      The &ldquo;Clipboard Delay:&rdquo; setting controls the timing delay.
+   </p>
+   <div class="notediv">
+      <p>
+         All five of these consist of a cluster of <a href="DBCodeConventionsHelp#prefixButton.html">
+            <b>
+               <i>prefix buttons</i>
+            </b>
+         </a> with thier associated NumericUpDown and a suffix label specifying the range and (if not 1) the step value.
+      </p>
+   </div>
+   <div class="mediumsectiondiv" id="optionsWhitespace">
       <p>
          The &ldquo;Whitespace&rdquo; Section
       </p>
    </div>
    <p>
-      The &ldquo;Whitespace&rdquo; values control the differentiation between tabs and spaces. It has three RadioButtons: &ldquo;<u>B</u>oth&rdquo;; &ldquo;<u>T</u>abs&rdquo; and &ldquo;<u>S</u>paces&rdquo;.
+      The &ldquo;Whitespace&rdquo; values control the differentiation between tabs and spaces. It has three
+      RadioButtons: &ldquo;<u>B</u>oth&rdquo;; &ldquo;<u>T</u>abs&rdquo; and &ldquo;<u>S</u>paces&rdquo;.
       <span class="tomatoSpan"> [TODO: Correctly underline accelerators]</span>
    </p>
-   <p class="tab">     
-      The &ldquo;Both&rdquo; RadioButton, when checked, allows the user to use both tabs and spaces.         
-   </p>   
-   <p class="tab">     
-      The &ldquo;Tabs&rdquo; RadioButton, when checked, enforces the use of tabs instead of multiple spaces. When the syntax highlighter runs, all instances of multiple spaces will be contracted into tabs as defined by the “Spaces to just be a tab:” value. The “Keep Tabs” CheckBox <span class="tomatoSpan"> [TODO: Figure out how to document this]</span>
-   </p>    
-   <p class="tab">     
-      The &ldquo;Spaces&rdquo; RadioButton, when checked, enforces the use of spaces instead of multiple tabs. When the syntax highlighter runs, all instances of tabs will be expanded into spaces as defined by the “Spaces per/tab:” value. The “Keep Tabs” CheckBox <span class="tomatoSpan"> [TODO: Figure out how to document this]</span>
-   </p> 
+   <p class="tab">
+      The &ldquo;Both&rdquo; RadioButton, when checked, allows the user to use both tabs and spaces.
+   </p>
+   <p class="tab">
+      The &ldquo;Tabs&rdquo; RadioButton, when checked, enforces the use of tabs instead of multiple spaces. When the
+      syntax highlighter runs, all instances of multiple spaces will be contracted into tabs as defined by the “Spaces
+      to just be a tab:” value. The “Keep Tabs” CheckBox <span class="tomatoSpan"> [TODO: Figure out how to document
+         this]</span>
+   </p>
+   <p class="tab">
+      The &ldquo;Spaces&rdquo; RadioButton, when checked, enforces the use of spaces instead of multiple tabs. When the
+      syntax highlighter runs, all instances of tabs will be expanded into spaces as defined by the “Spaces per/tab:”
+      value. The “Keep Tabs” CheckBox <span class="tomatoSpan"> [TODO: Figure out how to document this]</span>
+   </p>
    <div class="notediv">
       <p>
-         Sometimes it is incredibly difficult to come up with unique accelerator keys; “Spaces to just be a tab:”uses the rare letter “j” and “Spaces per/tab:” uses the redundant “/” for just this reason.
+         Sometimes it is incredibly difficult to come up with unique accelerator keys; “Spaces to just be a tab:”uses
+         the rare letter “j” and “Spaces per/tab:” uses the redundant “/” for just this reason.
       </p>
-      </div>
-   <div class="smallsectiondiv" id="optionsTargetPastingShortcuts">
+   </div>
+   <div class="mediumsectiondiv" id="optionsTargetPastingShortcuts">
       <p>
          The &ldquo;Target Pasting Shortcuts&rdquo; Section
       </p>
    </div>
    <p>
-      The &ldquo;Target Pasting Shortcuts&rdquo; values control the method used for transferring the text to the target application. &ldquo;Ctrl+v&rdquo; (&ldquo;Control V&rdquo;) is by far the most common &ldquo;pasting shortcut&rdquo;; however &ldquo;ALT+v&rdquo; (&ldquo;Alternate V<u>?</u>&rdquo;) is used occasionally so the option is allowed.
+      The &ldquo;Target Pasting Shortcuts&rdquo; values control the method used for transferring the text to the target
+      application. &ldquo;Ctrl+v&rdquo; (&ldquo;Control V&rdquo;) is by far the most common &ldquo;pasting
+      shortcut&rdquo;; however &ldquo;ALT+v&rdquo; (&ldquo;Alternate V<u>?</u>&rdquo;) is used occasionally so the
+      option is allowed.
       <span class="tomatoSpan"> [TODO: underline missing accelerator]</span>
    </p>
-   <div class="smallsectiondiv" id="optionsSearchGroupBox">
+   <div class="mediumsectiondiv" id="optionsSearchGroupBox">
       <p>
          The &ldquo;Search&rdquo; Section
       </p>
    </div>
    <p>
-      The &ldquo;Search&rdquo; values control how many items are remembered for the Find/Search ComboBoxes (they share a common list) and how many items are remembered for the Replace ComboBox. Each has a Clear Button which empties out the respective list.Both of these are clusters of <a href="DBCodeConventionsHelp#prefixButton.html"><b><i>prefix buttons</i></b></a> with thier associated NumericUpDown and a suffix label specifying the range and (if not 1) the step value.
+      The &ldquo;Search&rdquo; values control how many items are remembered for the Find/Search ComboBoxes (they share a
+      common list) and how many items are remembered for the Replace ComboBox. Each has a Clear Button which empties out
+      the respective list.Both of these are clusters of <a href="DBCodeConventionsHelp#prefixButton.html">
+         <b>
+            <i>prefix buttons</i>
+         </b>
+      </a> with thier associated NumericUpDown and a suffix label specifying the range and (if not 1) the step value.
    </p>
-   <div class="smallsectiondiv" id="optionsCodeSettings">
+   <div class="mediumsectiondiv" id="optionsCodeSettings">
       <p>
          The &ldquo;Code Settings&rdquo; Section
       </p>
    </div>
    <p>
-      The &ldquo;Code Settings&rdquo; are not specific to any one coding language. These are values which are considered when performing many of the Coding menu actions. There are five of them: &ldquo;All If <u>N</u>othing&rdquo;; &ldquo;Ma<u>x</u>imum Line Width&rdquo;; &ldquo;Concatenate First <u>W</u>hen Re-flowing&rdquo;; &ldquo;Co<u>m</u>ment Out Blank Lines&rdquo; and &ldquo;<u>U</u>se Three Spaces&rdquo;.
-   </p>   
-   <p class="tab">     
-      The &ldquo;All If <u>N</u>othing&rdquo; CheckBox, when checked, selects everything in the text box if nothing is selected.
-   </p>  
-   <p class="tab">     
-      The &ldquo;Ma<u>x</u>imum Line Width&rdquo; sets the value for how wide (in characters) a comment line may be before being split.
-   </p> 
-   <p class="tab">     
-      The &ldquo;Concatenate First <u>W</u>hen Re-flowing&rdquo; CheckBox, when checked, forces multiline comments to be forced into a single line, with all commenting notation stripped, before re-flowing according to the maximum width. Appropriate commenting notation is added as needed (depending on the comment style: /*C and C++*/ or //C++) after re-flowing.
-   </p> 
-   <p class="tab">     
-      The &ldquo;Co<u>m</u>ment Out Blank Lines&rdquo; CheckBox, when checked, forces blank lines to be included in multiline comments.
-   </p> 
-   <p class="codediv">
-//Some Code<br>
-&nbsp;<br>
-//some other code
+      The &ldquo;Code Settings&rdquo; are not specific to any one coding language. These are values which are considered
+      when performing many of the Coding menu actions. There are five of them: &ldquo;All If <u>N</u>othing&rdquo;;
+      &ldquo;Ma<u>x</u>imum Line Width&rdquo;; &ldquo;Concatenate First <u>W</u>hen Re-flowing&rdquo;;
+      &ldquo;Co<u>m</u>ment Out Blank Lines&rdquo; and &ldquo;<u>U</u>se Three Spaces&rdquo;.
    </p>
-   <p class="Doubletab">     
+   <p class="tab">
+      The &ldquo;All If <u>N</u>othing&rdquo; CheckBox, when checked, selects everything in the text box if nothing is
+      selected.
+   </p>
+   <p class="tab">
+      The &ldquo;Ma<u>x</u>imum Line Width&rdquo; sets the value for how wide (in characters) a comment line may be
+      before being split.
+   </p>
+   <p class="tab">
+      The &ldquo;Concatenate First <u>W</u>hen Re-flowing&rdquo; CheckBox, when checked, forces multiline comments to be
+      forced into a single line, with all commenting notation stripped, before re-flowing according to the maximum
+      width. Appropriate commenting notation is added as needed (depending on the comment style: /*C and C++*/ or //C++)
+      after re-flowing.
+   </p>
+   <p class="tab">
+      The &ldquo;Co<u>m</u>ment Out Blank Lines&rdquo; CheckBox, when checked, forces blank lines to be included in
+      multiline comments.
+   </p>
+   <p class="codediv">
+      //Some Code<br>
+      &nbsp;<br>
+      //some other code
+
+   </p>
+   <p class="Doubletab">
       versus commented out:
-   </p> 
-   <p class="codediv">
-//Some Code<br>
-//<br>
-//some other code
    </p>
-   <p class="tab">     
-      The &ldquo;<u>U</u>se Three Spaces&rdquo; CheckBox is specific to &ldquo;summary blocks&rdquo; and XML documentation comments (these will start with &ldquo;///&rdquo; and typically have two or three spaces before any text).The default is to use two spaces but, when checked, three spaces will be enforced.
-   </p> 
-   <div class="mediumsectiondiv" id="optionsTargetingPage">
+   <p class="codediv">
+      //Some Code<br>
+      //<br>
+      //some other code
+   </p>
+   <p class="tab">
+      The &ldquo;<u>U</u>se Three Spaces&rdquo; CheckBox is specific to &ldquo;summary blocks&rdquo; and XML
+      documentation comments (these will start with &ldquo;///&rdquo; and typically have two or three spaces before any
+      text).The default is to use two spaces but, when checked, three spaces will be enforced.
+   </p>
+   <!-- #endregion -->
+   <!-- #region general page -->
+   <div class="largesectiondiv" id="optionsTargetingPage">
       <p>
          The &ldquo;Targeting&rdquo; Page
       </p>
@@ -174,7 +262,7 @@
    <div class="picturediv">
       <img src="DBCodeOptionsTargeting.png" alt="DBCode&rsquo;s Options Dialog&rsquo;s Targeting page">
    </div>
-   <div class="smallsectiondiv" id="XXX">
+   <div class="mediumsectiondiv" id="XXX">
       <p>
          The &ldquo;XXX&rdquo; Section
       </p>
@@ -183,7 +271,9 @@
       The &ldquo;XXX&rdquo; [&hellip;]
       <span class="tomatoSpan"> [TODO: finish out the rest of this section]</span>
    </p>
-   <div class="mediumsectiondiv" id="optionsCodingPage">
+   <!-- #endregion -->
+   <!-- #region general page -->
+   <div class="largesectiondiv" id="optionsCodingPage">
       <p>
          The &ldquo;Coding&rdquo; Page
       </p>
@@ -191,7 +281,7 @@
    <div class="picturediv">
       <img src="DBCodeOptionsCoding.png" alt="DBCode&rsquo;s Options Dialog&rsquo;s Coding page">
    </div>
-   <div class="smallsectiondiv" id="XXX">
+   <div class="mediumsectiondiv" id="XXX">
       <p>
          The &ldquo;XXX&rdquo; Section
       </p>
@@ -200,7 +290,9 @@
       The &ldquo;XXX&rdquo; [&hellip;]
       <span class="tomatoSpan"> [TODO: finish out the rest of this section]</span>
    </p>
-   <div class="mediumsectiondiv" id="optionsBraceMatchingPage">
+   <!-- #endregion -->
+   <!-- #region general page -->
+   <div class="largesectiondiv" id="optionsBraceMatchingPage">
       <p>
          The &ldquo;Brace Matching&rdquo; Page
       </p>
@@ -208,7 +300,7 @@
    <div class="picturediv">
       <img src="DBCodeOptionsBraceMatching.png" alt="DBCode&rsquo;s Options Dialog&rsquo;s Brace Matching page">
    </div>
-   <div class="smallsectiondiv" id="XXX">
+   <div class="mediumsectiondiv" id="XXX">
       <p>
          The &ldquo;XXX&rdquo; Section
       </p>
@@ -217,7 +309,9 @@
       The &ldquo;XXX&rdquo; [&hellip;]
       <span class="tomatoSpan"> [TODO: finish out the rest of this section]</span>
    </p>
-   <div class="mediumsectiondiv" id="optionsShortcutsPage">
+   <!-- #endregion -->
+   <!-- #region general page -->
+   <div class="largesectiondiv" id="optionsShortcutsPage">
       <p>
          The &ldquo;Shortcuts&rdquo; Page
       </p>
@@ -225,7 +319,7 @@
    <div class="picturediv">
       <img src="DBCodeOptionsShortcuts.png" alt="DBCode&rsquo;s Options Dialog&rsquo;s Shortcuts page">
    </div>
-   <div class="smallsectiondiv" id="XXX">
+   <div class="mediumsectiondiv" id="XXX">
       <p>
          The &ldquo;XXX&rdquo; Section
       </p>
@@ -234,6 +328,8 @@
       The &ldquo;XXX&rdquo; [&hellip;]
       <span class="tomatoSpan"> [TODO: finish out the rest of this section]</span>
    </p>
+   <!-- #endregion -->
+   <!-- #region general page -->
    <div class="largesectiondiv" id="optionBottomPanel">
       <p>The Bottom Panel</p>
    </div>
@@ -249,22 +345,38 @@
    <p class="tab">
       <span class="tomatoSpan"> [TODO: finish out the rest of this section]</span>
    </p>
-      <div class="pageslinkdiv">
-         <h3 id="pageLinks">Other Pages</h3>
-         <p> <a href="DBCodeHelp.html">DB Code Main Help Page</a> </p>
-         <p> <a href="DBCodeMenuHelp.html">DB Code Menu Help Page</a> </p>
-         <p> <a href="DBCodeTargetingHelp.html">Targeting Help Page</a> </p>
-         <p> <a href="DBCodeOptionsHelp.html">Options Help Page</a> </p>
-         <p> <a href="DBCodeThemesHelp.html">Themes Help Page</a>
-             <a href="DBCodeThemePickerHelp.html">Theme Picker Help Page</a>
-             <a href="DBCodeThemeDesignerHelp.html">Theme Designer/Editor Help Page</a>
-         </p>
-         <p> <a href="DBCodeColorPickerHelp.html">Color Picker Help Page</a>
-             <a href="DBCodeFontPickerHelp.html">Font Picker Help Page</a> </p>
-         <p> <a href="DBCodeDialogsHelp.html">Dialogs Help Page</a>
-             <a href="DBCodeFindHelp.html">Find And Search/Replace Dialogs Help Page</a>
-         </p>
-         <p> <a href="DBCodeShortcutsHelp.html">Keyboard Shortcuts Help Page</a> </p>
-      </div>
-   </body>
+   <!-- #endregion -->
+   <div class="pageslinkdiv">
+      <h3 id="pageLinks">Other Pages</h3>
+      <p>
+         <a href="DBCodeHelp.html">DB Code Main Help Page</a>
+      </p>
+      <p>
+         <a href="DBCodeMenuHelp.html">DB Code Menu Help Page</a>
+      </p>
+      <p>
+         <a href="DBCodeTargetingHelp.html">Targeting Help Page</a>
+      </p>
+      <p>
+         <a href="DBCodeOptionsHelp.html">Options Help Page</a>
+      </p>
+      <p>
+         <a href="DBCodeThemesHelp.html">Themes Help Page</a>
+         <a href="DBCodeThemePickerHelp.html">Theme Picker Help Page</a>
+         <a href="DBCodeThemeDesignerHelp.html">Theme Designer/Editor Help Page</a>
+      </p>
+      <p>
+         <a href="DBCodeColorPickerHelp.html">Color Picker Help Page</a>
+         <a href="DBCodeFontPickerHelp.html">Font Picker Help Page</a>
+      </p>
+      <p>
+         <a href="DBCodeDialogsHelp.html">Dialogs Help Page</a>
+         <a href="DBCodeFindHelp.html">Find And Search/Replace Dialogs Help Page</a>
+      </p>
+      <p>
+         <a href="DBCodeShortcutsHelp.html">Keyboard Shortcuts Help Page</a>
+      </p>
+   </div>
+</body>
+
 </html>
