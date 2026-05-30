@@ -99,21 +99,18 @@
       </p>
    </div>
    <p>
-      The &ldquo;magic numbers&rdquo; are miscellaneous values that the user sets with the options dialog.
-      <span class="tomatoSpan"> [TODO: List: all; five]</span>
+      The &ldquo;magic numbers&rdquo; are numeric values that the user sets with the options dialog. There are five of these; two of them are <a href="DBCodeDialogsHelp.html#draggable">&ldquo;DraggablePanel&rdquo;&ndash;related</a>: &ldquo;Top <u>D</u>ragger Height:&rdquo; and &ldquo;Dragger <u>E</u>dge Size:&rdquo;; three of them are delay&ndash;related: &ldquo;<u>A</u>ctivation Delay:&rdquo;; &ldquo;Reactivation Delay<u>!</u>:&rdquo; and &ldquo;C<u>l</u>ipboard Delay:&rdquo;.
    </p>
    <p class="tab">
       There is a pair of &ldquo;DraggablePanel&rdquo;&ndash;related settings: &ldquo;Top Dragger Height:&rdquo; and
       &ldquo;Dragger Edge Size:&rdquo;.
    </p>
-   <span class="tomatoSpan"> [TODO: underline accelerators]</span>
    <p class="doubletab">
       The &ldquo;Top Dragger Height:&rdquo; setting controls the height of the area with which the user may grab the
       DraggablePanel in order to move it around. This is similar to a Form&rsquo;s Title bar.
    </p>
    <p class="doubletab">
-      The &ldquo;Dragger Edge Size:&rdquo; setting controls the width of the side borders and the height of the bottom
-      border (with which )the user may grab the DraggablePanel by these borders as well in order to move it around.
+      The &ldquo;Dragger Edge Size:&rdquo; setting controls the width of the side borders and the height of the bottom border (with which )the user may grab the DraggablePanel by these borders as well in order to move it around.
    </p>
    <p class="tab">
       There is a trio of delay&ndash;related settings: &ldquo;Activation Delay:&rdquo;; &ldquo;Reactivation
@@ -122,14 +119,9 @@
    <div class="notediv">
       <p>
          Windows takes a bit of time preparing things &ldquo;under the hood&rdquo; when it comes to shuffling Forms
-         around in the Z&ndash;Order and dealing with the Clipboard. Some versions of Windows and some computer hardware
-         get these tasks done quickly, others not so much. While the defaults will probably work on most computers, some
-         older laptops might need somewhat longer values. Some newer hardware might be able to get by with much shorter
-         values. If the user finds themselves becoming impatient with the responsiveness of transferring texts to the
-         target, one might start trimming these values down the bit
+         around in the Z&ndash;Order and dealing with the Clipboard. Some versions of Windows and some computer hardware get these tasks done quickly, others not so much. While the defaults will probably work on most computers, some older laptops might need somewhat longer values. Some newer hardware might be able to get by with much shorter values. If the user finds themselves becoming impatient with the responsiveness of transferring texts to the target, one might start trimming these values down the bit
       </p>
    </div>
-   <span class="tomatoSpan"> [TODO: underline accelerators]</span>
    <p class="doubletab">
       The &ldquo;Activation Delay:&rdquo; setting controls the timing delay.
    </p>
@@ -155,27 +147,25 @@
    </div>
    <p>
       The &ldquo;Whitespace&rdquo; values control the differentiation between tabs and spaces. It has three
-      RadioButtons: &ldquo;<u>B</u>oth&rdquo;; &ldquo;<u>T</u>abs&rdquo; and &ldquo;<u>S</u>paces&rdquo;.
-      <span class="tomatoSpan"> [TODO: Correctly underline accelerators]</span>
+      RadioButtons: &ldquo;<u>B</u>oth&rdquo;; &ldquo;<u>T</u>abs&rdquo; and &ldquo;<u>&nbsp;</u>Spaces&rdquo;.
    </p>
+   <div class="notediv">
+      <p>
+         Note that there is a virtually invisible blank space in front of the word &ldquo;Spaces&rdquo;; It is used to assign the RadioButton an accelerator key. Something similar has been done with the word &ldquo;Reactivation!&rdquo;, the &ldquo;!&rdquo; is just there to be used as an accelerator key.
+      </p>
+   </div>
    <p class="tab">
       The &ldquo;Both&rdquo; RadioButton, when checked, allows the user to use both tabs and spaces.
    </p>
    <p class="tab">
-      The &ldquo;Tabs&rdquo; RadioButton, when checked, enforces the use of tabs instead of multiple spaces. When the
-      syntax highlighter runs, all instances of multiple spaces will be contracted into tabs as defined by the “Spaces
-      to just be a tab:” value. The “Keep Tabs” CheckBox <span class="tomatoSpan"> [TODO: Figure out how to document
-         this]</span>
+      The &ldquo;Tabs&rdquo; RadioButton, when checked, enforces the use of tabs instead of multiple spaces. When the syntax highlighter runs, all instances of multiple spaces will be contracted into tabs as defined by the “Spaces To Just Be A Tab:” value.
    </p>
    <p class="tab">
-      The &ldquo;Spaces&rdquo; RadioButton, when checked, enforces the use of spaces instead of multiple tabs. When the
-      syntax highlighter runs, all instances of tabs will be expanded into spaces as defined by the “Spaces per/tab:”
-      value. The “Keep Tabs” CheckBox <span class="tomatoSpan"> [TODO: Figure out how to document this]</span>
+      The &ldquo;Spaces&rdquo; RadioButton, when checked, enforces the use of spaces instead of multiple tabs. When the syntax highlighter runs, all instances of tabs will be expanded into spaces as defined by the “Spaces Per/&nbsp;Tab:” value.
    </p>
    <div class="notediv">
       <p>
-         Sometimes it is incredibly difficult to come up with unique accelerator keys; “Spaces to just be a tab:”uses
-         the rare letter “j” and “Spaces per/tab:” uses the redundant “/” for just this reason.
+         Sometimes it is incredibly difficult to come up with unique accelerator keys; &ldquo;Spaces To Just Be A Tab:&rdquo; uses the rare letter &ldquo;J&rdquo; and &ldquo;Spaces Per/Tab:&rdquo; uses the redundant &ldquo;/&rdquo; for just this reason.
       </p>
    </div>
    <div class="mediumsectiondiv" id="optionsTargetPastingShortcuts">
@@ -184,11 +174,7 @@
       </p>
    </div>
    <p>
-      The &ldquo;Target Pasting Shortcuts&rdquo; values control the method used for transferring the text to the target
-      application. &ldquo;Ctrl+v&rdquo; (&ldquo;Control V&rdquo;) is by far the most common &ldquo;pasting
-      shortcut&rdquo;; however &ldquo;ALT+v&rdquo; (&ldquo;Alternate V<u>?</u>&rdquo;) is used occasionally so the
-      option is allowed.
-      <span class="tomatoSpan"> [TODO: underline missing accelerator]</span>
+      The &ldquo;Target Pasting Shortcuts&rdquo; values control the method used for transferring the text to the target application. &ldquo;Ctrl+v&rdquo; (&ldquo;Control <u>V</u>&rdquo;) is by far the most common &ldquo;pasting shortcut&rdquo;; however &ldquo;ALT+v&rdquo; (&ldquo;Alternate V<u>?</u>&rdquo;) is used occasionally so the option is allowed.
    </p>
    <div class="mediumsectiondiv" id="optionsSearchGroupBox">
       <p>
@@ -253,7 +239,7 @@
       text).The default is to use two spaces but, when checked, three spaces will be enforced.
    </p>
    <!-- #endregion -->
-   <!-- #region general page -->
+   <!-- #region targeting page -->
    <div class="largesectiondiv" id="optionsTargetingPage">
       <p>
          The &ldquo;Targeting&rdquo; Page

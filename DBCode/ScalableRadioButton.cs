@@ -57,9 +57,8 @@ namespace DBCode {
          private bool mInterface = false, mHorizontal = true, mLayout = true;
          private int mMaximumWidth = 50;
 
-         public RadioPanel(List<RadioButtonQuad>? pRadioButtonQuads, Theme pTheme, bool pInterface,
-            bool pHorizontal = true, int pMaximumWidth = 0,
-            bool pLayout = true) {
+         public RadioPanel(List<RadioButtonQuad>? pRadioButtonQuads, Theme pTheme, bool pInterface, bool pHorizontal = true,
+            int pMaximumWidth = 0, bool pLayout = true) {
             if ((pRadioButtonQuads == null) || (pRadioButtonQuads.Count < 2))
                ThrowBadCode("ScalableRadioButtons.RadioPanel: pRadioButtonQuads was null or had fewer than 2 items.");
             AutoSize = true;
@@ -133,8 +132,7 @@ namespace DBCode {
             PaintFlatScalableRadioButtonList(mScalableRadioButtons, mTheme, mInterface);
          }
 
-         private static void PaintFlatScalableRadioButton(ScalableRadioButton pControl, Theme pTheme,
-            bool pInterface = false) {
+         private static void PaintFlatScalableRadioButton(ScalableRadioButton pControl, Theme pTheme, bool pInterface = false) {
             pControl.Font = CreateNewFont();
             if (pInterface) {
                pControl.ForeColor = pTheme.mInterfaceColors[(int)ColorSwatchUsage.InterfaceFont];
@@ -156,8 +154,8 @@ namespace DBCode {
                pControl.Text = mUnselectedRadioButtonPrefix + words;
          }
 
-         private static void PaintFlatScalableRadioButtonList(List<ScalableRadioButton> pScalableRadioButtons,
-            Theme? pTheme, bool pInterface = false) {
+         private static void PaintFlatScalableRadioButtonList(List<ScalableRadioButton> pScalableRadioButtons, Theme? pTheme,
+            bool pInterface = false) {
             ThrowIfNull(pTheme, nameof(pTheme));
 
             foreach (ScalableRadioButton button in pScalableRadioButtons)

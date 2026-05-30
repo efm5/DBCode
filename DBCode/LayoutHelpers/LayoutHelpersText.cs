@@ -29,5 +29,19 @@ namespace DBCode {
          }
          return true;
       }
+
+      internal static string MassagePascalName(string pCompressedName) {
+         if (string.IsNullOrWhiteSpace(pCompressedName))
+            return string.Empty;
+         StringBuilder expandedName = new StringBuilder(pCompressedName.Length + 8);
+         expandedName.Append(pCompressedName[0]);
+         for (int index = 1; index < pCompressedName.Length; index++) {
+            char nextCharacter = pCompressedName[index];
+            if (char.IsUpper(nextCharacter))
+               expandedName.Append(' ');
+            expandedName.Append(nextCharacter);
+         }
+         return expandedName.ToString().Trim();
+      }
    }
 }

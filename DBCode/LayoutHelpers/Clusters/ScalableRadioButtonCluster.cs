@@ -1,3 +1,5 @@
+using static DBCode.ScalableRadioButtons;
+
 namespace DBCode {
    internal static partial class LayoutHelpers {
       internal sealed class ScalableRadioButtonCluster : BaseCluster {
@@ -21,6 +23,11 @@ namespace DBCode {
 
          internal override void SetFontAndColor() {
             mRadioPanel.PaintButtons();
+         }
+
+         internal ScalableRadioButton? GetCheckedButton() {
+            ThrowIfNull(mRadioPanel, nameof(mRadioPanel));
+            return mRadioPanel.GetChecked();
          }
 
          protected override void Dispose(bool pDisposing) {

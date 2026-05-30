@@ -20,9 +20,8 @@
       private readonly Panel?[] mCodingScrollPanels;
       private readonly RichTextBox? mBraceExampleRichTextBox;
       private ScalableCheckBox? mShortcutsAllCheckBox, mShortcutsAutoSizeCheckBox, mShortcutsSortCheckBox;
-      private readonly ScalableCheckBoxCluster? mTabCheckBoxCluster, mSpaceCheckBoxCluster, mAllIfNothingCheckBoxCluster,
-         mCommentConcatenateFirstCheckBoxCluster, mCommentOutBlankLinesCheckBoxCluster, mUseThreeSpacesCheckBoxCluster,
-         mEnforceFormattingProtectionCheckBoxCluster;
+      private readonly ScalableCheckBoxCluster? mAllIfNothingCheckBoxCluster, mCommentConcatenateFirstCheckBoxCluster,
+         mCommentOutBlankLinesCheckBoxCluster, mUseThreeSpacesCheckBoxCluster, mEnforceFormattingProtectionCheckBoxCluster;
       private readonly ScalableRadioButtonCluster? mWhitespaceRadioCluster, mPastingRadioCluster;
       internal List<ShortcutEntry> mShortcutEntries = [];
       private static readonly string[] sUsableShortcutKeys = [
@@ -375,18 +374,17 @@
             new ScalableRadioButtons.RadioButtonQuad("&Tabs", "", mUiState.mWhitespace == (int)Whitespace.Tabs, (int)Whitespace.Tabs),
             new ScalableRadioButtons.RadioButtonQuad("& Spaces", "", mUiState.mWhitespace == (int)Whitespace.Spaces, (int)Whitespace.Spaces),
          ], false, false);
+         mWhitespaceRadioCluster.mRadioPanel.mScalableRadioButtons[0].Tag = "Both";
+         mWhitespaceRadioCluster.mRadioPanel.mScalableRadioButtons[1].Tag = "Tabs";
+         mWhitespaceRadioCluster.mRadioPanel.mScalableRadioButtons[2].Tag = "Spaces";
          mWhitespaceRadioCluster.mRadioPanel.mScalableRadioButtons[1].Click += TabRadioButton_Click;
          mWhitespaceRadioCluster.mRadioPanel.mScalableRadioButtons[2].Click += SpaceRadioButton_Click;
          mTabUpDownCluster = new UpDownCluster(mCurrentTheme, "Spaces To &Just Be A Tab:", 2, 12,
             mUiState.mSpacesPerTab, 1, groupBoxBackColor, "2–12");
-         mTabCheckBoxCluster = new ScalableCheckBoxCluster(mCurrentTheme, "&Keep Tabs", false, groupBoxBackColor);
-         mTabCheckBoxCluster.mScalableCheckBox.Checked = mUiState.mUseTabs;
          mSpaceUpDownCluster = new UpDownCluster(mCurrentTheme, "Spaces Per&/ Tab:", 2, 12,
             mUiState.mSpacesToBecomeTab, 1, groupBoxBackColor, "2–12");
          mCommentWidthUpDownCluster = new UpDownCluster(mCurrentTheme, "Ma&ximum Line Width:", 40, 300,
             mUiState.mMaximumCommentWidth, 1, groupBoxBackColor, "40–300");
-         mSpaceCheckBoxCluster = new ScalableCheckBoxCluster(mCurrentTheme, "Kee&p Spaces", false, groupBoxBackColor);
-         mSpaceCheckBoxCluster.mScalableCheckBox.Checked = mUiState.mUseSpaces;
          mAllIfNothingCheckBoxCluster = new ScalableCheckBoxCluster(mCurrentTheme, "All If &Nothing", false, groupBoxBackColor);
          mAllIfNothingCheckBoxCluster.mScalableCheckBox.Checked = mUiState.mAllIfNothing;
          mCommentConcatenateFirstCheckBoxCluster = new ScalableCheckBoxCluster(mCurrentTheme, "Concatenate First &When Re-flowing", false, groupBoxBackColor);
@@ -398,8 +396,7 @@
          mEnforceFormattingProtectionCheckBoxCluster = new ScalableCheckBoxCluster(mCurrentTheme, "Enforce &Formatting Protection", false,
             groupBoxBackColor);
          mEnforceFormattingProtectionCheckBoxCluster.mScalableCheckBox.Checked = mUiState.mEnforceFormattingProtection;
-         mWhitespaceGroupBox.Controls.AddRange([mWhitespaceRadioCluster, mTabUpDownCluster, mTabCheckBoxCluster,
-            mSpaceUpDownCluster, mSpaceCheckBoxCluster]);
+         mWhitespaceGroupBox.Controls.AddRange([mWhitespaceRadioCluster, mTabUpDownCluster, mSpaceUpDownCluster]);
          mBottomPanel = new BottomPanel(mCurrentTheme) {
             Anchor = AnchorStyles.None,
             Dock = DockStyle.Bottom
@@ -438,9 +435,9 @@
          mBottomPanel.AddRightControl(mOKButton);
          mBaseClusters.AddRange([mTopDraggerHeightUpDownCluster, mTopDraggerEdgeUpDownCluster, mActivationDelayUpDownCluster,
             mReactivationRateUpDownCluster, mClipboardDelayUpDownCluster, mSearchUpDownCluster, mReplaceUpDownCluster, mWhitespaceRadioCluster,
-            mPastingRadioCluster, mTabUpDownCluster, mTabCheckBoxCluster, mSpaceUpDownCluster, mSpaceCheckBoxCluster,
-            mAllIfNothingCheckBoxCluster, mCommentWidthUpDownCluster, mCommentConcatenateFirstCheckBoxCluster,
-            mCommentOutBlankLinesCheckBoxCluster, mUseThreeSpacesCheckBoxCluster, mEnforceFormattingProtectionCheckBoxCluster]);
+            mPastingRadioCluster, mTabUpDownCluster, mSpaceUpDownCluster, mAllIfNothingCheckBoxCluster, mCommentWidthUpDownCluster,
+            mCommentConcatenateFirstCheckBoxCluster, mCommentOutBlankLinesCheckBoxCluster, mUseThreeSpacesCheckBoxCluster,
+            mEnforceFormattingProtectionCheckBoxCluster]);
          mMagicNumbersGroupBox.Controls.AddRange([mTopDraggerHeightUpDownCluster,
             mTopDraggerEdgeUpDownCluster, mActivationDelayUpDownCluster, mReactivationRateUpDownCluster,
             mClipboardDelayUpDownCluster]);
@@ -660,9 +657,7 @@
          ThrowIfNull(mWhitespaceGroupBox, nameof(mWhitespaceGroupBox));
          ThrowIfNull(mWhitespaceRadioCluster, nameof(mWhitespaceRadioCluster));
          ThrowIfNull(mTabUpDownCluster, nameof(mTabUpDownCluster));
-         ThrowIfNull(mTabCheckBoxCluster, nameof(mTabCheckBoxCluster));
          ThrowIfNull(mSpaceUpDownCluster, nameof(mSpaceUpDownCluster));
-         ThrowIfNull(mSpaceCheckBoxCluster, nameof(mSpaceCheckBoxCluster));
          ThrowIfNull(mPastingGroupBox, nameof(mPastingGroupBox));
          ThrowIfNull(mPastingRadioCluster, nameof(mPastingRadioCluster));
          ThrowIfNull(mHistoryGroupBox, nameof(mHistoryGroupBox));
@@ -749,9 +744,7 @@
          int tabRowY = radioPanelOffsetY + mWhitespaceRadioCluster.mRadioPanel.mScalableRadioButtons[1].Top;
          int spaceRowY = radioPanelOffsetY + mWhitespaceRadioCluster.mRadioPanel.mScalableRadioButtons[2].Top;
          mTabUpDownCluster.Location = new Point(radioRight, tabRowY);
-         mTabCheckBoxCluster.Location = new Point(mTabUpDownCluster.Right + mEm, tabRowY);
          mSpaceUpDownCluster.Location = new Point(radioRight, spaceRowY);
-         mSpaceCheckBoxCluster.Location = new Point(mSpaceUpDownCluster.Right + mEm, spaceRowY);
          SizeGroupBox(mWhitespaceGroupBox);
          mEnforceFormattingProtectionCheckBoxCluster.Location = new Point(mIndent, mWhitespaceGroupBox.Bottom + mEm);
          mPastingGroupBox.Location = new Point(mMagicNumbersGroupBox.Right + mEm, mMagicNumbersGroupBox.Top);

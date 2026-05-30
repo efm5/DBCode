@@ -507,8 +507,7 @@
             pFont.Dispose();
       }
 
-      public static void DrawTabControlItem(VariableWidthTabControl pTabControl, DrawItemEventArgs pArgs,
-         Theme pTheme) {
+      public static void DrawTabControlItem(VariableWidthTabControl pTabControl, DrawItemEventArgs pArgs, Theme pTheme) {
          TabPage page = pTabControl.TabPages[pArgs.Index];
          Rectangle rect = pTabControl.GetTabRect(pArgs.Index);
          bool selected = pTabControl.SelectedIndex == pArgs.Index;
@@ -1027,43 +1026,69 @@
 
       public static void PopulateTargets() {
          List<string> allowedKeywords = TargetListManager.GetAllowed();
-         mTargets.Clear();
-         List<IntPtr> allowed = [];
-         List<IntPtr> neutral = [];
-         List<nint> debugging = GetAcceptableWindowsInZOrder();
+         List<TargetWindow> rawList = [];
          foreach (IntPtr handle in GetAcceptableWindowsInZOrder()) {
             string processName = GetProcessNameForWindow(handle);
+            string windowTitle = GetWindowTitle(handle);
             bool isAllowed = false;
+            string appName = string.Empty;
             foreach (string keyword in allowedKeywords) {
                if (processName.Contains(keyword, StringComparison.OrdinalIgnoreCase)) {
                   isAllowed = true;
+                  appName = keyword;
                   break;
                }
             }
-            if (isAllowed)
-               allowed.Add(handle);
-            else
-               neutral.Add(handle);
+            if (!isAllowed) {
+               string firstSegment = ExtractFirstTitleSegment(windowTitle);
+               foreach (string keyword in allowedKeywords) {
+                  if (string.Equals(firstSegment, keyword, StringComparison.OrdinalIgnoreCase)) {
+                     isAllowed = true;
+                     appName = keyword;
+                     break;
+                  }
+               }
+            }
+            if (isAllowed) {
+               if (string.Equals(appName, "devenv", StringComparison.OrdinalIgnoreCase))
+                  appName = "Visual Studio";
+               else if (string.Equals(appName, "code", StringComparison.OrdinalIgnoreCase))
+                  appName = "Visual Studio Code";
+            }
+            else {
+               appName = processName;
+            }
+            rawList.Add(new TargetWindow(handle, windowTitle, appName, isAllowed));
          }
-         allowed.Sort((pA, pB) => {
-            string keyA = GetMatchedAllowedKeyword(GetProcessNameForWindow(pA), allowedKeywords);
-            string keyB = GetMatchedAllowedKeyword(GetProcessNameForWindow(pB), allowedKeywords);
-            return string.Compare(keyA, keyB, StringComparison.OrdinalIgnoreCase);
+         HashSet<nint> seenHandles = [];
+         HashSet<(string, string)> seenTitleApp = [];
+         List<TargetWindow> dedupedList = [];
+         foreach (TargetWindow targetWindow in rawList) {
+            if (!seenHandles.Add(targetWindow.mWindowHandle))
+               continue;
+            if (!seenTitleApp.Add((targetWindow.mWindowTitle, targetWindow.mApplicationName)))
+               continue;
+            dedupedList.Add(targetWindow);
+         }
+         HashSet<string> appsWithRichEntry = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+         foreach (TargetWindow targetWindow in dedupedList) {
+            if (!string.Equals(targetWindow.mButtonText, targetWindow.mApplicationName, StringComparison.OrdinalIgnoreCase))
+               appsWithRichEntry.Add(targetWindow.mApplicationName);
+         }
+         List<TargetWindow> filteredList = [];
+         foreach (TargetWindow targetWindow in dedupedList) {
+            if (!string.Equals(targetWindow.mButtonText, targetWindow.mApplicationName, StringComparison.OrdinalIgnoreCase) ||
+                !appsWithRichEntry.Contains(targetWindow.mApplicationName))
+               filteredList.Add(targetWindow);
+         }
+         filteredList.Sort((pA, pB) => {
+            int comparison = string.Compare(pA.mApplicationName, pB.mApplicationName,
+               StringComparison.OrdinalIgnoreCase);
+            return comparison != 0 ? comparison :
+               string.Compare(pA.mButtonText, pB.mButtonText, StringComparison.OrdinalIgnoreCase);
          });
-         foreach (IntPtr handle in allowed) {
-            string fullTitle = GetWindowTitle(handle);
-            string appName = GetMatchedAllowedKeyword(GetProcessNameForWindow(handle), allowedKeywords);
-            if (string.Equals(appName, "devenv", StringComparison.OrdinalIgnoreCase))
-               appName = "Visual Studio";
-            else if (string.Equals(appName, "code", StringComparison.OrdinalIgnoreCase))
-               appName = "Visual Studio Code";
-            mTargets.Add(new Target(appName, handle, true, fullTitle));
-         }
-         foreach (IntPtr handle in neutral) {
-            string fullTitle = GetWindowTitle(handle);
-            string appName = GetProcessNameForWindow(handle);
-            mTargets.Add(new Target(fullTitle, handle, false, GetProcessNameForWindow(handle)));
-         }
+         mTargets.Clear();
+         mTargets.AddRange(filteredList);
       }
 
       public static string GetProcessNameForWindow(IntPtr pWindowHandle) {
@@ -1077,6 +1102,16 @@
          catch {
             return string.Empty;
          }
+      }
+
+      private static string ExtractFirstTitleSegment(string pWindowTitle) {
+         string[] separators = [" — ", " – ", " - "];
+         foreach (string separator in separators) {
+            int separatorIndex = pWindowTitle.IndexOf(separator, StringComparison.Ordinal);
+            if (separatorIndex >= 0)
+               return pWindowTitle[..separatorIndex].Trim('*', ' ');
+         }
+         return pWindowTitle.Trim('*', ' ');
       }
 
       private static string GetMatchedAllowedKeyword(string pTitle, List<string> pKeywords) {

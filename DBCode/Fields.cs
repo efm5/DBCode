@@ -281,7 +281,7 @@ namespace DBCode {
             "CurlyPad", "Eclipse", "Emacs", "IntelliJ", "NetBeans", "Particle", "PSPad", "Visual Studio",
             "devenv", //Visual Studio
             "vim", "Xcode"  ];
-      public static List<Target> mTargets = [];
+      public static List<TargetWindow> mTargets = [];
       public static List<Theme> mThemes = [];//efm5 This line and the next must be before any code that uses mThemes – Such as the next line
       public static Theme mCurrentTheme = ThemeBuiltIns.CreateDarkTheme(false);
       public static HelpContext mUIContext = HelpContext.Main;
@@ -331,6 +331,7 @@ namespace DBCode {
          mCodingCSSTSMI = null, mCodingXMLTSMI = null, mCodingJSONTSMI = null, mCodingPowerShellTSMI = null, mCodingBatchTSMI = null,
          mCodingSQLTSMI = null, mCodingMarkdownTSMI = null, mCodingPythonTSMI = null,
          mViewScrollingTSMI = null, mViewScrollingEdgeTSMI = null, mViewScrollingScrollTSMI = null, mViewScrollingPageTSMI = null,
+         mContextScrollingEdgeTSMI = null, mContextScrollingScrollTSMI = null, mContextScrollingPageTSMI = null,
       #endregion
       #region Are children and need shortcut keys
          mEditUndoTSMI = null, mEditRedoTSMI = null, mEditCutTSMI = null, mEditDeleteTSMI = null,
@@ -376,7 +377,6 @@ namespace DBCode {
          mMarkdownStrikethroughTSMI = null, mMarkdownCodeTSMI = null, mMarkdownCodeBlockTSMI = null,
          mPythonAddCommentTSMI = null, mPythonBlockCommentTSMI = null, mPythonRemoveCommentTSMI = null, mPythonToggleBooleanTSMI = null,
          mPythonConvertNullNoneTSMI = null,
-         mContextScrollingEdgeTSMI = null, mContextScrollingScrollTSMI = null, mContextScrollingPageTSMI = null,
          mContextScrollingEdgeTopTSMI = null, mContextScrollingEdgeBottomTSMI = null, mContextScrollingEdgeLeftTSMI = null,
          mContextScrollingEdgeRightTSMI = null, mContextScrollingScrollUpTSMI = null, mContextScrollingScrollDownTSMI = null,
          mContextScrollingScrollLeftTSMI = null, mContextScrollingScrollRightTSMI = null, mContextScrollingPageUpTSMI = null,

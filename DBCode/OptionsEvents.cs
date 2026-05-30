@@ -1,4 +1,6 @@
-﻿namespace DBCode {
+﻿using static DBCode.ScalableRadioButtons;
+
+namespace DBCode {
    internal partial class OptionsPanel : Panel {
       protected override void OnHandleCreated(EventArgs pEventArgs) {
          ThrowIfNull(mCFamilyTitleLabel, nameof(mCFamilyTitleLabel));
@@ -149,8 +151,6 @@
          ThrowIfNull(mActivationDelayUpDownCluster.mNumericUpDown, nameof(mActivationDelayUpDownCluster.mNumericUpDown));
          ThrowIfNull(mClipboardDelayUpDownCluster.mNumericUpDown, nameof(mClipboardDelayUpDownCluster.mNumericUpDown));
          ThrowIfNull(mReactivationRateUpDownCluster.mNumericUpDown, nameof(mReactivationRateUpDownCluster.mNumericUpDown));
-         ThrowIfNull(mTabCheckBoxCluster, nameof(mTabCheckBoxCluster));
-         ThrowIfNull(mSpaceCheckBoxCluster, nameof(mSpaceCheckBoxCluster));
          ThrowIfNull(mWhitespaceRadioCluster, nameof(mWhitespaceRadioCluster));
          ThrowIfNull(mTabUpDownCluster, nameof(mTabUpDownCluster));
          ThrowIfNull(mTabUpDownCluster.mNumericUpDown, nameof(mTabUpDownCluster.mNumericUpDown));
@@ -172,8 +172,19 @@
          mUiState.mActivationDelayMs = (int)mActivationDelayUpDownCluster.mNumericUpDown.Value;
          mUiState.mClipboardDelayMs = (int)mClipboardDelayUpDownCluster.mNumericUpDown.Value;
          mUiState.mReactivationDelayMs = (int)mReactivationRateUpDownCluster.mNumericUpDown.Value;
-         mUiState.mUseTabs = mTabCheckBoxCluster.mScalableCheckBox.Checked;
-         mUiState.mUseSpaces = mSpaceCheckBoxCluster.mScalableCheckBox.Checked;
+         mUiState.mUseTabs = false;
+         mUiState.mUseSpaces = false;
+         ScalableRadioButton? checkedWhitespaceButton = mWhitespaceRadioCluster.mRadioPanel.GetChecked();
+         if (checkedWhitespaceButton != null && !string.IsNullOrEmpty(checkedWhitespaceButton.Tag as string)) {
+            if (checkedWhitespaceButton.Tag.ToString() == "Tabs")
+               mUiState.mUseTabs = true;
+            else if (checkedWhitespaceButton.Tag.ToString() == "Spaces")
+               mUiState.mUseSpaces = true;
+            else if (checkedWhitespaceButton.Tag.ToString() == "Both") {
+               mUiState.mUseTabs = true;
+               mUiState.mUseSpaces = true;
+            }
+         }
          mUiState.mAllIfNothing = mAllIfNothingCheckBoxCluster.mScalableCheckBox.Checked;
          mUiState.mMaximumCommentWidth = (int)mCommentWidthUpDownCluster.mNumericUpDown.Value;
          mUiState.mConcatenateCommentFirst = mCommentConcatenateFirstCheckBoxCluster.mScalableCheckBox.Checked;

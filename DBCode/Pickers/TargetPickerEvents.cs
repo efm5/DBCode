@@ -31,10 +31,10 @@
          Button? button = pSender as Button;
          if (button == null)
             return;
-         Target? target = button.Tag as Target;
+         TargetWindow? target = button.Tag as TargetWindow;
          if (target != null) {
-            mTargetWindow = target.mHandle;
-            mTargetWindowName = target.mName;
+            mTargetWindow = target.mWindowHandle;
+            mTargetWindowName = target.ProposeDragonFriendlyName();
             mIsTargetingEnabled = true;
             mTargetSelected = true;
          }

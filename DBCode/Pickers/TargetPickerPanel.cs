@@ -1,20 +1,4 @@
 ﻿namespace DBCode {
-   public class Target {
-      internal bool mIsValid;
-      internal IntPtr mHandle;
-      internal string mName;
-      internal string mTooltip;
-
-#pragma warning disable IDE0290
-      public Target(string pName, IntPtr pHandle, bool pIsValid, string pTooltip) {
-         mName = pName;
-         mHandle = pHandle;
-         mIsValid = pIsValid;
-         mTooltip = pTooltip;
-      }
-#pragma warning restore IDE0290
-   }
-
    internal sealed partial class TargetPickerPanel : ScrollablePanel {
       internal readonly HeaderLabelCluster? mTitleLabel;
       internal readonly BottomPanel? mBottomPanel;
@@ -70,30 +54,28 @@
 
       private void CreateButtons() {
          ThrowIfNull(mTitleLabel, nameof(mTitleLabel));
-         foreach (Target target in mTargets.OfType<Target>()) {
+         foreach (TargetWindow target in mTargets) {
             ThrowIfNull(mButtonBaseClusters, nameof(mButtonBaseClusters));
             AddButtonCluster(mButtonBaseClusters, target);
          }
       }
 
-      private void AddButtonCluster(List<BaseCluster> pClusters, Target pTarget) {
+      private void AddButtonCluster(List<BaseCluster> pClusters, TargetWindow pTarget) {
          ThrowIfNull(mClusterContainer, nameof(mClusterContainer));
          ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
-         ButtonCluster cluster = new ButtonCluster(mCurrentTheme, pTarget.mName);
+         ButtonCluster cluster = new ButtonCluster(mCurrentTheme, pTarget.ProposeDragonFriendlyName());
          cluster.SuspendLayout();
          ThrowIfNull(cluster.mButton, nameof(cluster.mButton));
          cluster.mButton.Tag = pTarget;
-         if (pTarget.mIsValid) {
+         if (pTarget.mIsAllowed) {
             Font oldFont = cluster.mButton.Font;
             cluster.mButton.Font = new Font(oldFont, FontStyle.Bold);
             oldFont.Dispose();
             cluster.mButton.BackColor = ContrastingColor(cluster.mButton.BackColor);
-            if (!string.IsNullOrEmpty(pTarget.mTooltip)) {
-               ToolTip toolTip = new ToolTip();
-               toolTip.SetToolTip(cluster.mButton, pTarget.mTooltip);
-               mToolTips.Add(toolTip);
-            }
          }
+         ToolTip toolTip = new ToolTip();
+         toolTip.SetToolTip(cluster.mButton, pTarget.ProposedTooltip());
+         mToolTips.Add(toolTip);
          cluster.mButton.Click += PickTargetButton_Click;
          pClusters.Add(cluster);
          mClusterContainer.Controls.Add(cluster);

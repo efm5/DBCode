@@ -83,6 +83,8 @@ namespace DBCode {
             IntPtr pWindowHandle = pSnapshot[pIndex];
             if (!IsRealVisibleWindow(pWindowHandle) || IsDisallowedWindow(pWindowHandle))
                continue;
+            if (IsAllowedOnlyWindow(pWindowHandle) && !IsAllowedWindow(pWindowHandle))
+               continue;
             pResult.Add(pWindowHandle);
          }
          return pResult;
@@ -184,8 +186,9 @@ namespace DBCode {
          if ((pStyle & WS_VISIBLE) == 0)
             return false;
          int pExStyle = (int)GetWindowLongPtr(pWindowHandle, GWL_EXSTYLE);
-         if (((pExStyle & WS_EX_TOOLWINDOW) != 0) || ((pExStyle & WS_EX_NOACTIVATE) != 0) ||
-               ((pExStyle & WS_EX_LAYERED) != 0) || ((pExStyle & WS_EX_NOREDIRECTIONBITMAP) != 0))
+         if ((pExStyle & WS_EX_TOOLWINDOW) != 0)
+            return false;
+         if ((pExStyle & WS_EX_NOACTIVATE) != 0)
             return false;
          INT32 pOCloakedValue;
          int pResult = DwmGetWindowAttributeInt(pWindowHandle, (int)DWMWINDOWATTRIBUTE.DWMWA_CLOAKED, out pOCloakedValue, sizeof(int));
@@ -193,6 +196,11 @@ namespace DBCode {
          if ((pResult == 0) && (pCloaked != 0))
             return false;
          return true;
+      }
+
+      private static bool IsAllowedOnlyWindow(IntPtr pWindowHandle) {
+         int pExStyle = (int)GetWindowLongPtr(pWindowHandle, GWL_EXSTYLE);
+         return ((pExStyle & WS_EX_LAYERED) != 0) || ((pExStyle & WS_EX_NOREDIRECTIONBITMAP) != 0);
       }
 
       private static bool IsDisallowedWindow(IntPtr pWindowHandle) {
