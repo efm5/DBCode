@@ -482,7 +482,7 @@ All text appears in the default foreground color."
             fontDescription = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Menu].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Menu].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Menu].Style}";
             AddFontCluster(mFontsClusters, $"The Menu Font: {fontDescription}", "Menu", FontUsage.Menu, LabelPosition.Right);
             fontDescription = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Status].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Status].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Status].Style}";
-            AddFontCluster(mFontsClusters, $"The Status Strip Font: {fontDescription}", "Status Strip", FontUsage.Status, LabelPosition.Right);
+            AddFontCluster(mFontsClusters, $"The Bottom Panel Font: {fontDescription}", "Bottom Panel", FontUsage.Status, LabelPosition.Right);
             fontDescription = $"Family: {mTemporaryTheme.mFonts[(int)FontUsage.Text].FontFamily.Name}, Size: {mTemporaryTheme.mFonts[(int)FontUsage.Text].Size} Style: {mTemporaryTheme.mFonts[(int)FontUsage.Text].Style}";
             AddFontCluster(mFontsClusters, $"The Textbox Font: {fontDescription}", "Text Box", FontUsage.Text, LabelPosition.Right);
             mFontsContainer = new ClusterContainer(mPrimaryScrollPanel, mFontsClusters, ClusterLayoutMode.FixedRows, 0, 0, 0, 4) {
@@ -565,8 +565,8 @@ All text appears in the default foreground color."
             AddColorCluster(mInterfaceColorClusters, "Menu Font", ColorSwatchUsage.MenuFont);
             AddColorCluster(mInterfaceColorClusters, "Interface Background", ColorSwatchUsage.InterfaceBackground);
             AddColorCluster(mInterfaceColorClusters, "Interface Font", ColorSwatchUsage.InterfaceFont);
-            AddColorCluster(mInterfaceColorClusters, "Status Background", ColorSwatchUsage.StatusBackground);
-            AddColorCluster(mInterfaceColorClusters, "Status Font", ColorSwatchUsage.StatusFont);
+            AddColorCluster(mInterfaceColorClusters, "Status Background", ColorSwatchUsage.BottomPanelBackground);
+            AddColorCluster(mInterfaceColorClusters, "Status Font", ColorSwatchUsage.BottomPanelFont);
             AddColorCluster(mInterfaceColorClusters, "GroupBox Background", ColorSwatchUsage.GroupBoxBackground);
             AddColorCluster(mInterfaceColorClusters, "GroupBox Font", ColorSwatchUsage.GroupBoxFont);
             AddColorCluster(mInterfaceColorClusters, "Tab Header Unselected Font", ColorSwatchUsage.TabHeaderUnselectedFont);

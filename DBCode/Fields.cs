@@ -45,7 +45,7 @@ namespace DBCode {
       Interface,
       [DisplayText("Menu Font")]
       Menu,
-      [DisplayText("Status Strip Font")]
+      [DisplayText("Bottom Panel Font")]
       Status,
       [DisplayText("Text Box Font")]
       Text
@@ -66,10 +66,10 @@ namespace DBCode {
       MenuBackground,
       [DisplayText("Menu Font Color")]
       MenuFont,
-      [DisplayText("Status Bar Background Color")]
-      StatusBackground,
-      [DisplayText("Status Bar Font Color")]
-      StatusFont,
+      [DisplayText("Bottom Panel Background Color")]
+      BottomPanelBackground,
+      [DisplayText("Bottom Panel Font Color")]
+      BottomPanelFont,
       [DisplayText("Text Box Font Color")]
       TextBoxFont,
       [DisplayText("Text Box Color")]

@@ -14,8 +14,8 @@ namespace DBCode.Themes {
          theme.mInterfaceColors[(int)ColorSwatchUsage.MenuBackground] = ColorTranslator.FromHtml("#F0F0F0");
          theme.mInterfaceColors[(int)ColorSwatchUsage.MenuFont] = ColorTranslator.FromHtml("#1E1E1E");
          theme.mInterfaceColors[(int)ColorSwatchUsage.PanelBackground] = ColorTranslator.FromHtml("#F3F3F3");
-         theme.mInterfaceColors[(int)ColorSwatchUsage.StatusBackground] = ColorTranslator.FromHtml("#E5E5E5");
-         theme.mInterfaceColors[(int)ColorSwatchUsage.StatusFont] = ColorTranslator.FromHtml("#1E1E1E");
+         theme.mInterfaceColors[(int)ColorSwatchUsage.BottomPanelBackground] = ColorTranslator.FromHtml("#E5E5E5");
+         theme.mInterfaceColors[(int)ColorSwatchUsage.BottomPanelFont] = ColorTranslator.FromHtml("#1E1E1E");
          theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderSelectedBackground] = Color.White;
          theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderSelectedFont] = ColorTranslator.FromHtml("#007ACC");
          theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderUnselectedBackground] = ColorTranslator.FromHtml("#E5E5E5");
@@ -40,8 +40,8 @@ namespace DBCode.Themes {
          theme.mInterfaceColors[(int)ColorSwatchUsage.MenuBackground] = ColorTranslator.FromHtml("#2D2D30");
          theme.mInterfaceColors[(int)ColorSwatchUsage.MenuFont] = Color.White;
          theme.mInterfaceColors[(int)ColorSwatchUsage.PanelBackground] = ColorTranslator.FromHtml("#1E1E1E");
-         theme.mInterfaceColors[(int)ColorSwatchUsage.StatusBackground] = ColorTranslator.FromHtml("#001F3F"); // Navy blue
-         theme.mInterfaceColors[(int)ColorSwatchUsage.StatusFont] = Color.Yellow;
+         theme.mInterfaceColors[(int)ColorSwatchUsage.BottomPanelBackground] = ColorTranslator.FromHtml("#001F3F"); // Navy blue
+         theme.mInterfaceColors[(int)ColorSwatchUsage.BottomPanelFont] = Color.Yellow;
          theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderSelectedBackground] = ColorTranslator.FromHtml("#1E1E1E");
          theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderSelectedFont] = Color.White;
          theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderUnselectedBackground] = ColorTranslator.FromHtml("#2D2D30");
@@ -66,8 +66,8 @@ namespace DBCode.Themes {
          theme.mInterfaceColors[(int)ColorSwatchUsage.MenuBackground] = SystemColors.Menu;
          theme.mInterfaceColors[(int)ColorSwatchUsage.MenuFont] = SystemColors.MenuText;
          theme.mInterfaceColors[(int)ColorSwatchUsage.PanelBackground] = SystemColors.Control;
-         theme.mInterfaceColors[(int)ColorSwatchUsage.StatusBackground] = SystemColors.Control;
-         theme.mInterfaceColors[(int)ColorSwatchUsage.StatusFont] = SystemColors.ControlText;
+         theme.mInterfaceColors[(int)ColorSwatchUsage.BottomPanelBackground] = SystemColors.Control;
+         theme.mInterfaceColors[(int)ColorSwatchUsage.BottomPanelFont] = SystemColors.ControlText;
          theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderSelectedBackground] = SystemColors.Control;
          theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderSelectedFont] = SystemColors.ControlText;
          theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderUnselectedBackground] = SystemColors.Control;
@@ -92,8 +92,8 @@ namespace DBCode.Themes {
          theme.mInterfaceColors[(int)ColorSwatchUsage.MenuBackground] = Color.White;
          theme.mInterfaceColors[(int)ColorSwatchUsage.MenuFont] = Color.Black;
          theme.mInterfaceColors[(int)ColorSwatchUsage.PanelBackground] = Color.White;
-         theme.mInterfaceColors[(int)ColorSwatchUsage.StatusBackground] = Color.Black;
-         theme.mInterfaceColors[(int)ColorSwatchUsage.StatusFont] = Color.White;
+         theme.mInterfaceColors[(int)ColorSwatchUsage.BottomPanelBackground] = Color.Black;
+         theme.mInterfaceColors[(int)ColorSwatchUsage.BottomPanelFont] = Color.White;
          theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderSelectedBackground] = Color.Black;
          theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderSelectedFont] = Color.Yellow;
          theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderUnselectedBackground] = Color.White;
@@ -118,8 +118,8 @@ namespace DBCode.Themes {
          theme.mInterfaceColors[(int)ColorSwatchUsage.MenuBackground] = Color.Black;
          theme.mInterfaceColors[(int)ColorSwatchUsage.MenuFont] = Color.White;
          theme.mInterfaceColors[(int)ColorSwatchUsage.PanelBackground] = Color.Black;
-         theme.mInterfaceColors[(int)ColorSwatchUsage.StatusBackground] = Color.Yellow;
-         theme.mInterfaceColors[(int)ColorSwatchUsage.StatusFont] = Color.Black;
+         theme.mInterfaceColors[(int)ColorSwatchUsage.BottomPanelBackground] = Color.Yellow;
+         theme.mInterfaceColors[(int)ColorSwatchUsage.BottomPanelFont] = Color.Black;
          theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderSelectedBackground] = Color.Yellow;
          theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderSelectedFont] = Color.Black;
          theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderUnselectedBackground] = Color.Black;
@@ -144,8 +144,8 @@ namespace DBCode.Themes {
          theme.mInterfaceColors[(int)ColorSwatchUsage.MenuBackground] = ColorTranslator.FromHtml("#E4F0F0");       // pale teal-gray
          theme.mInterfaceColors[(int)ColorSwatchUsage.MenuFont] = ColorTranslator.FromHtml("#3A3A3A");             // charcoal
          theme.mInterfaceColors[(int)ColorSwatchUsage.PanelBackground] = ColorTranslator.FromHtml("#ECEBF3");      // soft lavender-white
-         theme.mInterfaceColors[(int)ColorSwatchUsage.StatusBackground] = ColorTranslator.FromHtml("#C9E4E7");     // pastel aqua
-         theme.mInterfaceColors[(int)ColorSwatchUsage.StatusFont] = ColorTranslator.FromHtml("#0066CC");           // strong blue
+         theme.mInterfaceColors[(int)ColorSwatchUsage.BottomPanelBackground] = ColorTranslator.FromHtml("#C9E4E7");     // pastel aqua
+         theme.mInterfaceColors[(int)ColorSwatchUsage.BottomPanelFont] = ColorTranslator.FromHtml("#0066CC");           // strong blue
          theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderSelectedBackground] = ColorTranslator.FromHtml("#FFFFFF");  // pure white
          theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderSelectedFont] = ColorTranslator.FromHtml("#5A7FA3"); // muted steel-blue
          theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderUnselectedBackground] = ColorTranslator.FromHtml("#DDE3EE"); // soft blue-gray
@@ -170,8 +170,8 @@ namespace DBCode.Themes {
          theme.mInterfaceColors[(int)ColorSwatchUsage.MenuBackground] = ColorTranslator.FromHtml("#252837");       // dark blue-gray
          theme.mInterfaceColors[(int)ColorSwatchUsage.MenuFont] = ColorTranslator.FromHtml("#C8C4D8");             // light lavender
          theme.mInterfaceColors[(int)ColorSwatchUsage.PanelBackground] = ColorTranslator.FromHtml("#27253A");      // dark soft purple
-         theme.mInterfaceColors[(int)ColorSwatchUsage.StatusBackground] = ColorTranslator.FromHtml("#3A4F5C");     // muted teal-gray
-         theme.mInterfaceColors[(int)ColorSwatchUsage.StatusFont] = ColorTranslator.FromHtml("#A3C9D6");           // soft cyan
+         theme.mInterfaceColors[(int)ColorSwatchUsage.BottomPanelBackground] = ColorTranslator.FromHtml("#3A4F5C");     // muted teal-gray
+         theme.mInterfaceColors[(int)ColorSwatchUsage.BottomPanelFont] = ColorTranslator.FromHtml("#A3C9D6");           // soft cyan
          theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderSelectedBackground] = ColorTranslator.FromHtml("#3A3548");  // dark purple
          theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderSelectedFont] = ColorTranslator.FromHtml("#B8A8D8"); // pastel lavender
          theme.mInterfaceColors[(int)ColorSwatchUsage.TabHeaderUnselectedBackground] = ColorTranslator.FromHtml("#2A2838"); // darker purple

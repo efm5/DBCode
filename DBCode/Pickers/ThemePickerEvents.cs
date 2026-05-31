@@ -16,6 +16,7 @@
             Size = new Size(mForm.Size.Width - 20, mForm.Size.Height - 20);
             CreateLayout();
             ApplyTheme();
+            BackColor = Color.FromArgb(128, 128, 128);//efm5 use a neutral gray background so that the themed buttons will stand out more
             Controls.AddRange([mClusterContainer, mTitleLabel, mBottomPanel]);
             mClusterContainer.PerformLayout();
             LayoutPanel();

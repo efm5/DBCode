@@ -133,8 +133,8 @@
                         PaintMenuItemsRecursive(tsmi, mTemporaryTheme);
                }
                else if (control is StatusStrip statusStrip)
-                  ApplyThemeToToolStrip(statusStrip, FontUsage.Status, ColorSwatchUsage.StatusFont,
-                     ColorSwatchUsage.StatusBackground);
+                  ApplyThemeToToolStrip(statusStrip, FontUsage.Status, ColorSwatchUsage.BottomPanelFont,
+                     ColorSwatchUsage.BottomPanelBackground);
                if (control is not BaseCluster) // let the cluster own its children entirely
                   ApplyThemeToControlTree(control);
             }

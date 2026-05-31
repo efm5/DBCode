@@ -650,7 +650,7 @@
          }
          ApplyThemeToSeparators(mMenuStrip.Items, separatorHeight, menuBackground);
          ApplyThemeToSeparators(mMainContextMenuStrip.Items, separatorHeight, menuBackground);
-         mMainBottomPanel.BackColor = theme.mInterfaceColors[(int)ColorSwatchUsage.StatusBackground];
+         mMainBottomPanel.BackColor = theme.mInterfaceColors[(int)ColorSwatchUsage.BottomPanelBackground];
          mMainBottomPanel.SetFontAndColor();
          LayoutMainBottomPanel();
          mMainBottomPanel.Invalidate(true);
@@ -754,64 +754,29 @@
       }
 
       private static async void SendAllAsync() {
-         ThrowIfNull(mForm, nameof(mForm));
-         ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
          ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
          string text = mRichTextBox.Text;
-         if (!string.IsNullOrEmpty(text)) {
+         if (string.IsNullOrEmpty(text)) {
             TimedMessage("There is no text to send.", "Nothing To Send", 2500);
             return;
          }
-         mScrollableMainPanel.Enabled = false;
-         try {
-            IntPtr target;
-            if (mIsTargetingEnabled) {
-               if (!IsValidTargetWindow(mTargetWindow)) {
-                  mIsTargetingEnabled = false;
-                  mTargetWindow = IntPtr.Zero;
-                  mTargetWindowName = string.Empty;
-                  if (mTargetingTargetedTSMI != null)
-                     mTargetingTargetedTSMI.Checked = false;
-                  UpdateTargetingStatusLabel();
-                  TimedMessage("The targeted window no longer exists. Targeting has been turned off.", "Target Lost");
-                  return;
-               }
-               target = mTargetWindow;
-            }
-            else {
-               target = GetMostSuitableWindowAllowedFirst();
-               if (target == IntPtr.Zero) {
-                  TimedMessage("No suitable target window was found.", "No Target");
-                  return;
-               }
-            }
-            ClipboardHelper.TrySetClipboardText(ApplyLineEnding(text));
-            await Task.Delay(mUiState.mClipboardDelayMs);
-            BringWindowToTop(target);
-            SetForegroundWindow(target);
-            await Task.Delay(mUiState.mActivationDelayMs);
-            SendKeys.Send("^v");
-            await Task.Delay(mUiState.mClipboardDelayMs);
-            mForm.BringToFront();
-            mForm.Show();
-            mForm.Activate();
-            await Task.Delay(mUiState.mReactivationDelayMs);
-            mRichTextBox.Clear();
-         }
-         finally {
-            mScrollableMainPanel.Enabled = true;
-         }
+         await PushAsync(text);
       }
 
       private static async void SendSelectedAsync() {
          ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
-         ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
-         ThrowIfNull(mForm, nameof(mForm));
          string text = mRichTextBox.SelectedText;
          if (string.IsNullOrEmpty(text)) {
             TimedMessage("There is no selected text to send.", "Nothing To Send", 2500);
             return;
          }
+         await PushAsync(text);
+      }
+
+      private static async Task PushAsync(string pContent) {
+         ThrowIfNull(mForm, nameof(mForm));
+         ThrowIfNull(mScrollableMainPanel, nameof(mScrollableMainPanel));
+         ThrowIfNull(mRichTextBox, nameof(mRichTextBox));
          mScrollableMainPanel.Enabled = false;
          try {
             IntPtr target;
@@ -835,7 +800,7 @@
                   return;
                }
             }
-            ClipboardHelper.TrySetClipboardText(ApplyLineEnding(text));
+            ClipboardHelper.TrySetClipboardText(ApplyLineEnding(pContent));
             await Task.Delay(mUiState.mClipboardDelayMs);
             BringWindowToTop(target);
             SetForegroundWindow(target);
