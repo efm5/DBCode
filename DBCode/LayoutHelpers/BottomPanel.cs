@@ -94,13 +94,18 @@
             Width = parentWidth - 2 - SystemInformation.VerticalScrollBarWidth;
             // Left pass: Help then mLeftControls
             mHelpButton.Left = mIndent;
+            mHelpButton.Anchor = mAnchorTopLeft;
             int leftEdge = mHelpButton.Right + mEm2;
             foreach (Control control in mLeftControls) {
                control.Left = leftEdge;
+               control.Anchor = mAnchorTopLeft;
                leftEdge += control.Width + mEm;
             }
             // Right pass: Cancel at far right, then mRightControls leftward
             PositionRightControls();
+            mCancelButton.Anchor = mAnchorTopRight;
+            foreach (Control control in mRightControls)
+               control.Anchor = mAnchorTopRight;
             int centerY = Height / 2;
             foreach (Control control in Controls)
                control.Top = centerY - (control.Height / 2);

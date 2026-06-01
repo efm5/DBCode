@@ -551,7 +551,6 @@ All text appears in the default foreground color."
             ThrowIfNull(mExampleBottomPanel, nameof(mExampleBottomPanel));
             ThrowIfNull(mExampleBottomPanel.mHelpButton, nameof(mExampleBottomPanel.mHelpButton));
             ThrowIfNull(mExampleBottomPanel.mCancelButton, nameof(mExampleBottomPanel.mCancelButton));
-            mExampleBottomPanel.Anchor = mAnchorTopLeft;
             mExampleBottomPanel.mHelpButton.Text = "NO Help";
             mExampleBottomPanel.mCancelButton.Text = "UN Canceled";
             mExampleBottomPanel.AddLeftControl(mBottomExampleButton);

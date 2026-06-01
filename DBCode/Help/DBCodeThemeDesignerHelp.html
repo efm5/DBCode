@@ -14,11 +14,6 @@
    <h2>Reference Manual</h2>
    <h3>Version 0.0.0.1</h3>
    <h4>Theme Designer/Editor</h4>
-   <div class="introdiv">
-      <p>
-
-      </p>
-   </div>
    <div class="imagecluster">
       <div class="imageLabel">
          <b>
@@ -65,11 +60,57 @@
          </td>
       </tr>
       <tr>
-         <td>
+         <td colspan="2">
+            <a href="#themeColorsInterface">Interface&nbsp;Colors</a>
+         </td>
+      </tr>
+      <tr>
+         <td colspan="2">
             <a href="#themeColorsLanguages">Languages</a>
          </td>
+      </tr>
+      <tr>
          <td>
-            <a href="#themeColorsSyntax">Syntax&nbsp;Highlighting&nbsp;Colors</a>
+            <a href="#themeCFamily">C&nbsp;Family&nbsp;Syntax&nbsp;Colors</a>
+         </td>
+         <td>
+            <a href="#themeBasic">Basic&nbsp;Syntax&nbsp;Colors</a>
+         </td>
+         <td>
+            <a href="#themeFSharp">F#&nbsp;Syntax&nbsp;Colors</a>
+         </td>
+      </tr>
+      <tr>
+         <td>
+            <a href="#themeHTML">HTML&nbsp;Syntax&nbsp;Colors</a>
+         </td>
+         <td>
+            <a href="#themeCSS">CSS&nbsp;Syntax&nbsp;Colors</a>
+         </td>
+         <td>
+            <a href="#themeXML">XML&nbsp;Syntax&nbsp;Colors</a>
+         </td>
+      </tr>
+      <tr>
+         <td>
+            <a href="#themeJSON">JSON&nbsp;Syntax&nbsp;Colors</a>
+         </td>
+         <td>
+            <a href="#themePowerShell">PowerShell&nbsp;Syntax&nbsp;Colors</a>
+         </td>
+         <td>
+            <a href="#themeBatch">Batch&nbsp;Syntax&nbsp;Colors</a>
+         </td>
+      </tr>
+      <tr>
+         <td>
+            <a href="#themeSQL">SQL&nbsp;Syntax&nbsp;Colors</a>
+         </td>
+         <td>
+            <a href="#themeMarkdown">Markdown&nbsp;Syntax&nbsp;Colors</a>
+         </td>
+         <td>
+            <a href="#themePython">Python&nbsp;Syntax&nbsp;Colors</a>
          </td>
       </tr>
       <tr>
@@ -96,9 +137,11 @@
          </td>
       </tr>
    </table>
-   <br>
    <!-- #endregion -->
    <!-- #region Fonts -->
+   <div class="largesectiondiv" id="themeFontsPage">
+      <p>The Fonts Page</p>
+   </div>
    <div class="imagecluster">
       <div class="imageLabel">
          <b>
@@ -108,10 +151,28 @@
       <img src="ThemeDesignerFonts.png" alt="DBCode&rsquo;s Theme Designer/Editor Dialog&rsquo;s Fonts page">
    </div>
    <p>
-      The Fonts page 
+      The Fonts page has four clusters: &ldquo;Interface&rdquo;; &ldquo;Menu&rdquo;; &ldquo;Bottom Panel&rdquo; and &ldquo;Text Box&rdquo;. Each cluster consists of a Button which brings up <a href="DBCodeFontPickerHelp.html">a Font Picker</a>, a TextBox with an example of the Font and a dynamic Label specifying the Font Family, Size and Style.
+   </p>
+   <p class="tab" id="themeInterfaceFonts">
+      The &ldquo;Interface&rdquo; Font is used for Controls (Buttons, Labels etc.).
+   </p>
+   <p class="tab" id="themeMenuFonts">
+      The &ldquo;Menu&rdquo; Font is used for Menus and Context Menus.
+   </p>
+   <p class="tab" id="themeBottomPanelFonts">
+      The Bottom Panel Font is used for the Bottom Panels which every dialog and the main GUI has.
+   </p>
+   <p class="tab" id="themeTextBoxFonts">
+      The Text Box Font is that which is used in the main GUI&rsquo;s RichTextBox. Currently, <span class="larger">DBCode</span> only transfers plain text.
    </p>
    <!-- #endregion -->
    <!-- #region Colors -->
+   <div class="largesectiondiv" id="themeColorsPage">
+      <p>The Colors Page</p>
+   </div>
+   <div class="mediumsectiondiv" id="themeColorsInterface">
+      <p>The Interface Colors Page</p>
+   </div>
    <div class="imagecluster">
       <div class="imageLabel">
          <b>
@@ -119,9 +180,15 @@
          </b>
       </div>
       <img src="ThemeEditorColorsInterface.png" alt="DBCode&rsquo;s Theme Designer/Editor Dialog&rsquo;s Interface Colors page">
+   </div>
+   <p><span class="tomatoSpan"> [TODO: Finish this]</span></p>
+   <div class="mediumsectiondiv" id="themeColorsLanguages">
+      <p>The Language Syntax Colors Pages</p>
+   </div>
+   <div class="imagecluster">
       <div class="imageLabel">
          <b>
-            <span class="larger">DBCode</span>&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors page:
+            <span class="larger">DBCode</span>&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors pages:
          </b>
       </div>
       <img src="ThemeEditorColorsSyntax.png" alt="DBCode&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors page">
@@ -132,56 +199,543 @@
    <p class="tab">
       The Interface page controls how the interface (Text, Buttons and other controls) will be themed color&ndash;wise. There are fifteen settings: &ldquo;Panel Background Color&rdquo;; &ldquo;Text Box Color&rdquo;; &ldquo;Text Box Font Color&rdquo;; &ldquo;Menu Background Color&rdquo;; &ldquo;Menu Font Color&rdquo;; &ldquo;Interface Background Color&rdquo;; &ldquo;Interface Font Color&rdquo;; &ldquo;Bottom Panel Background Color&rdquo;; &ldquo;Bottom Panel Font Color&rdquo;; &ldquo;GroupBox Background Color&rdquo;; &ldquo;GroupBox Font Color&rdquo;; &ldquo;Tab Header Unselected Color&rdquo;; &ldquo;Tab Header Selected Font Color&rdquo;; &ldquo;Tab Header Unselected Background Color&rdquo;; &ldquo;Tab Header Selected Background Color&rdquo;.
    </p>
+   <!-- #region C Family Colors -->
+   <div class="smallsectiondiv" id="themeCFamily">
+      <p>The C, C++ And C# Languages Syntax Colors Page</p>
+   </div>
+   <div class="imagecluster">
+      <div class="imageLabel">
+         <b><span class="larger">DBCode</span>&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors Page For The C Family Languages:</b>
+      </div>
+      <img src="ThemeEditorColorsSyntaxCFamily.png" alt="DBCode&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors page for the C Family languages">
+   </div>
+   <div class="notediv">
+      <p>
+         C, C++ and C# all have exactly the same tokens but their colors may differ.
+      </p>
+   </div>
    <p class="doubletab">
-      The XXX color is used
+      The Unknown token color is used to color any character that does not match any other token category&nbsp;&mdash;&nbsp;for example, unrecognized symbols or encoding artifacts.
    </p>
    <p class="doubletab">
-      The XXX color is used
+      The Whitespace token color is used to color spaces, tabs, and line breaks between tokens.
    </p>
    <p class="doubletab">
-      The XXX color is used
+      The Identifier token color is used to color variable names, method names, type names, and all other user-defined symbols.
    </p>
    <p class="doubletab">
-      The XXX color is used
+      The Keyword token color is used to color reserved language keywords such as int, class, if, return, and static.
    </p>
    <p class="doubletab">
-      The XXX color is used
+      The Number token color is used to color integer, floating-point, and hexadecimal numeric literals.
    </p>
    <p class="doubletab">
-      The XXX color is used
+      The String Literal token color is used to color text enclosed in double quotes ("...").
    </p>
    <p class="doubletab">
-      The XXX color is used
+      The Character Literal token color is used to color single-character literals enclosed in single quotes ('a').
    </p>
    <p class="doubletab">
-      The XXX color is used
+      The Comment token color is used to color // single-line comments and /* ... */ block comments.
    </p>
    <p class="doubletab">
-      The XXX color is used
+      The Preprocessor Directive token color is used to color # directives such as #include, #define, #if, and #pragma.
    </p>
    <p class="doubletab">
-      The XXX color is used
+      The Operator token color is used to color arithmetic, bitwise, logical, comparison, and assignment operators.
    </p>
    <p class="doubletab">
-      The XXX color is used
+      The Punctuation token color is used to color grouping and separator characters: parentheses, braces, brackets, commas, semicolons, and periods.
+   </p>
+   <!-- #endregion -->
+   <!-- #region Basic Colors -->
+   <div class="smallsectiondiv" id="themeBasic">
+      <p>The Basic Language Syntax Colors Page</p>
+   </div>
+   <div class="imagecluster">
+      <div class="imageLabel">
+         <b><span class="larger">DBCode</span>&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors Page For The Basic Language:</b>
+      </div>
+      <img src="ThemeEditorColorsSyntaxBasic.png" alt="DBCode&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors page for the Basic language">
+   </div>
+   <p class="doubletab">
+      The Unknown token color is used to color any character that does not match any other token category.
    </p>
    <p class="doubletab">
-      The XXX color is used
+      The Whitespace token color is used to color spaces, tabs, and line breaks.
    </p>
    <p class="doubletab">
-      The XXX color is used
+      The Identifier token color is used to color variable names, Sub names, Function names, and other user-defined symbols.
    </p>
    <p class="doubletab">
-      The XXX color is used
+      The Keyword token color is used to color reserved Basic keywords such as Dim, For, Next, If, Then, Sub, and Function.
    </p>
    <p class="doubletab">
-      The XXX color is used
+      The Number token color is used to color integer and floating-point numeric literals.
    </p>
-   <p class="tab">
-      All the other pages (C#, Python etc.) have controls to set the syntax highlighting colors for their respective languages. Some languages have more syntax highlighting colors than others.
+   <p class="doubletab">
+      The String Literal token color is used to color text enclosed in double quotes ("...").
+   </p>
+   <p class="doubletab">
+      The Character Literal token color is not used in Basic.
+   </p>
+   <p class="doubletab">
+      The Comment token color is used to color &rsquo; single-line comments and REM statements.
+   </p>
+   <p class="doubletab">
+      The Preprocessor Directive token color is not used in Basic.
+   </p>
+   <p class="doubletab">
+      The Operator token color is used to color arithmetic, comparison, and logical operators.
+   </p>
+   <p class="doubletab">
+      The Punctuation token color is used to color parentheses, commas, periods, and other separator characters.
+   </p>
+   <!-- #endregion -->
+   <!-- #region F# Colors -->
+   <div class="smallsectiondiv" id="themeFSharp">
+      <p>The F# Language Syntax Colors Page</p>
+   </div>
+   <div class="imagecluster">
+      <div class="imageLabel">
+         <b><span class="larger">DBCode</span>&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors Page For The F# Language:</b>
+      </div>
+      <img src="ThemeEditorColorsSyntaxFSharp.png" alt="DBCode&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors page for the F# language">
+   </div>
+   <p class="doubletab">
+      The Unknown token color is used to color any character that does not match any other token category.
+   </p>
+   <p class="doubletab">
+      The Whitespace token color is used to color spaces, tabs, and line breaks.
+   </p>
+   <p class="doubletab">
+      The Identifier token color is used to color value bindings, function names, type names, and module names.
+   </p>
+   <p class="doubletab">
+      The Keyword token color is used to color reserved F# keywords such as let, match, with, type, module, open, and fun.
+   </p>
+   <p class="doubletab">
+      The Number token color is used to color integer, floating-point, and other numeric literals.
+   </p>
+   <p class="doubletab">
+      The String Literal token color is used to color text enclosed in double quotes ("...").
+   </p>
+   <p class="doubletab">
+      The Character Literal token color is used to color single-character literals enclosed in single quotes ('a').
+   </p>
+   <p class="doubletab">
+      The Comment token color is used to color // single-line comments and (* ... *) block comments.
+   </p>
+   <p class="doubletab">
+      The Preprocessor Directive token color is not used in F#.
+   </p>
+   <p class="doubletab">
+      The Operator token color is used to color arithmetic, comparison, pipeline (|&gt;), and function composition (&gt;&gt;) operators.
+   </p>
+   <p class="doubletab">
+      The Punctuation token color is used to color parentheses, brackets, commas, semicolons, and periods.
+   </p>
+   <!-- #endregion -->
+   <!-- #region HTML Colors -->
+   <div class="smallsectiondiv" id="themeHTML">
+      <p>The HTML Language Syntax Colors Page</p>
+   </div>
+   <div class="imagecluster">
+      <div class="imageLabel">
+         <b><span class="larger">DBCode</span>&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors Page For The HTML Language:</b>
+      </div>
+      <img src="ThemeEditorColorsSyntaxHTML.png" alt="DBCode&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors page for the HTML language">
+   </div>
+   <p class="doubletab">
+      The Unknown token color is used to color any character that does not match any other token category.
+   </p>
+   <p class="doubletab">
+      The Whitespace token color is used to color spaces, tabs, and line breaks.
+   </p>
+   <p class="doubletab">
+      The Identifier token color is used to color tag names, attribute names, and other word-like tokens.
+   </p>
+   <p class="doubletab">
+      The Keyword token color is reserved for recognized HTML element and attribute keywords; not currently active as no keywords are defined.
+   </p>
+   <p class="doubletab">
+      The Number token color is used to color numeric attribute values.
+   </p>
+   <p class="doubletab">
+      The String Literal token color is used to color quoted attribute values enclosed in double quotes ("...").
+   </p>
+   <p class="doubletab">
+      The Character Literal token color is not used in HTML.
+   </p>
+   <p class="doubletab">
+      The Comment token color is used to color &lt;!-- ... --&gt; HTML comments.
+   </p>
+   <p class="doubletab">
+      The Preprocessor Directive token color is not used in HTML.
+   </p>
+   <p class="doubletab">
+      The Operator token color is used to color tag delimiters (&lt;, &gt;, /) and the attribute assignment operator (=).
+   </p>
+   <p class="doubletab">
+      The Punctuation token color is used to color parentheses, brackets, commas, and other separator characters.
+   </p>
+   <!-- #endregion -->
+   <!-- #region CSS Colors -->
+   <div class="smallsectiondiv" id="themeCSS">
+      <p>The CSS Language Syntax Colors Page</p>
+   </div>
+   <div class="imagecluster">
+      <div class="imageLabel">
+         <b><span class="larger">DBCode</span>&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors Page For The CSS Language:</b>
+      </div>
+      <img src="ThemeEditorColorsSyntaxCSS.png" alt="DBCode&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors page for the CSS language">
+   </div>
+   <p class="doubletab">
+      The Unknown token color is used to color any character that does not match any other token category.
+   </p>
+   <p class="doubletab">
+      The Whitespace token color is used to color spaces, tabs, and line breaks.
+   </p>
+   <p class="doubletab">
+      The Identifier token color is used to color selector names, property names, and unquoted value identifiers such as color names.
+   </p>
+   <p class="doubletab">
+      The Keyword token color is reserved for recognized CSS property names and keyword values; not currently active as no keywords are defined.
+   </p>
+   <p class="doubletab">
+      The Number token color is used to color numeric values such as the numeric portion of lengths and percentages.
+   </p>
+   <p class="doubletab">
+      The String Literal token color is used to color quoted strings, such as font family names enclosed in double quotes.
+   </p>
+   <p class="doubletab">
+      The Character Literal token color is not used in CSS.
+   </p>
+   <p class="doubletab">
+      The Comment token color is used to color /* ... */ block comments.
+   </p>
+   <p class="doubletab">
+      The Preprocessor Directive token color is not used in CSS.
+   </p>
+   <p class="doubletab">
+      The Operator token color is used to color the property-value colon (:) and comparison operators in media queries.
+   </p>
+   <p class="doubletab">
+      The Punctuation token color is used to color curly braces, parentheses, commas, and semicolons.
+   </p>
+   <!-- #endregion -->
+   <!-- #region XML Colors -->
+   <div class="smallsectiondiv" id="themeXML">
+      <p>The XML Language Syntax Colors Page</p>
+   </div>
+   <div class="imagecluster">
+      <div class="imageLabel">
+         <b><span class="larger">DBCode</span>&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors Page For The XML Language:</b>
+      </div>
+      <img src="ThemeEditorColorsSyntaxXML.png" alt="DBCode&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors page for the XML language">
+   </div>
+   <p class="doubletab">
+      The Unknown token color is used to color any character that does not match any other token category.
+   </p>
+   <p class="doubletab">
+      The Whitespace token color is used to color spaces, tabs, and line breaks.
+   </p>
+   <p class="doubletab">
+      The Identifier token color is used to color element names, attribute names, and namespace prefixes.
+   </p>
+   <p class="doubletab">
+      The Keyword token color is reserved for recognized XML element and attribute names; not currently active as no keywords are defined.
+   </p>
+   <p class="doubletab">
+      The Number token color is used to color numeric attribute values.
+   </p>
+   <p class="doubletab">
+      The String Literal token color is used to color quoted attribute values enclosed in double quotes ("...").
+   </p>
+   <p class="doubletab">
+      The Character Literal token color is not used in XML.
+   </p>
+   <p class="doubletab">
+      The Comment token color is used to color &lt;!-- ... --&gt; XML comments.
+   </p>
+   <p class="doubletab">
+      The Preprocessor Directive token color is used to color XML processing instructions (&lt;?...?&gt;), including the XML declaration (&lt;?xml version="1.0"?&gt;).
+   </p>
+   <p class="doubletab">
+      The Operator token color is used to color tag delimiters (&lt;, &gt;, /) and the attribute assignment operator (=).
+   </p>
+   <p class="doubletab">
+      The Punctuation token color is used to color parentheses, brackets, and other separator characters.
+   </p>
+   <!-- #endregion -->
+   <!-- #region JSON Colors -->
+   <div class="smallsectiondiv" id="themeJSON">
+      <p>The JSON Language Syntax Colors Page</p>
+   </div>
+   <div class="imagecluster">
+      <div class="imageLabel">
+         <b><span class="larger">DBCode</span>&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors Page For The JSON Language:</b>
+      </div>
+      <img src="ThemeEditorColorsSyntaxJSON.png" alt="DBCode&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors page for the JSON language">
+   </div>
+   <p class="doubletab">
+      The Unknown token color is used to color any character that does not match any other token category.
+   </p>
+   <p class="doubletab">
+      The Whitespace token color is used to color spaces, tabs, and line breaks.
+   </p>
+   <p class="doubletab">
+      The Identifier token color is used to color bare word tokens not recognized as keywords; not normally present in well-formed JSON.
+   </p>
+   <p class="doubletab">
+      The Keyword token color is used to color the JSON literal values true, false, and null.
+   </p>
+   <p class="doubletab">
+      The Number token color is used to color numeric values.
+   </p>
+   <p class="doubletab">
+      The String Literal token color is used to color both property names and string values, all enclosed in double quotes.
+   </p>
+   <p class="doubletab">
+      The Character Literal token color is not used in JSON.
+   </p>
+   <p class="doubletab">
+      The Comment token color is not used in JSON, which has no comment syntax.
+   </p>
+   <p class="doubletab">
+      The Preprocessor Directive token color is not used in JSON.
+   </p>
+   <p class="doubletab">
+      The Operator token color is used to color the property-value colon (:).
+   </p>
+   <p class="doubletab">
+      The Punctuation token color is used to color curly braces, square brackets, and commas.
+   </p>
+   <!-- #endregion -->
+   <!-- #region PowerShell Colors -->
+   <div class="smallsectiondiv" id="themePowerShell">
+      <p>The PowerShell Language Syntax Colors Page</p>
+   </div>
+   <div class="imagecluster">
+      <div class="imageLabel">
+         <b><span class="larger">DBCode</span>&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors Page For The PowerShell Language:</b>
+      </div>
+      <img src="ThemeEditorColorsSyntaxPowerShell.png" alt="DBCode&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors page for the PowerShell language">
+   </div>
+   <p class="doubletab">
+      The Unknown token color is used to color any character that does not match any other token category.
+   </p>
+   <p class="doubletab">
+      The Whitespace token color is used to color spaces, tabs, and line breaks.
+   </p>
+   <p class="doubletab">
+      The Identifier token color is used to color $variable names, cmdlet names, parameter names, and other user-defined or built-in symbols.
+   </p>
+   <p class="doubletab">
+      The Keyword token color is used to color reserved Power Shell keywords such as if, foreach, function, param, try, and switch.
+   </p>
+   <p class="doubletab">
+      The Number token color is used to color integer and floating-point numeric literals.
+   </p>
+   <p class="doubletab">
+      The String Literal token color is used to color text enclosed in double or single quotes.
+   </p>
+   <p class="doubletab">
+      The Character Literal token color is not used in Power Shell.
+   </p>
+   <p class="doubletab">
+      The Comment token color is used to color # single-line comments.
+   </p>
+   <p class="doubletab">
+      The Preprocessor Directive token color is not used in Power Shell.
+   </p>
+   <p class="doubletab">
+      The Operator token color is used to color arithmetic, comparison, and assignment operators.
+   </p>
+   <p class="doubletab">
+      The Punctuation token color is used to color parentheses, braces, brackets, commas, and semicolons.
+   </p>
+   <!-- #endregion -->
+   <!-- #region Batch Colors -->
+   <div class="smallsectiondiv" id="themeBatch">
+      <p>The Batch (Command Prompt) Language Syntax Colors Page</p>
+   </div>
+   <div class="imagecluster">
+      <div class="imageLabel">
+         <b><span class="larger">DBCode</span>&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors Page For The Batch (Command Prompt) Language:</b>
+      </div>
+      <img src="ThemeEditorColorsSyntaxBatch.png" alt="DBCode&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors page for the Batch (Command Prompt) language">
+   </div>
+   <p class="doubletab">
+      The Unknown token color is used to color any character that does not match any other token category.
+   </p>
+   <p class="doubletab">
+      The Whitespace token color is used to color spaces, tabs, and line breaks.
+   </p>
+   <p class="doubletab">
+      The Identifier token color is used to color %VARIABLE% environment variable references and other symbol names.
+   </p>
+   <p class="doubletab">
+      The Keyword token color is used to color Batch commands and keywords such as ECHO, SET, IF, FOR, GOTO, CALL, and EXIT.
+   </p>
+   <p class="doubletab">
+      The Number token color is used to color numeric literals.
+   </p>
+   <p class="doubletab">
+      The String Literal token color is used to color text enclosed in double quotes ("...").
+   </p>
+   <p class="doubletab">
+      The Character Literal token color is not used in Batch.
+   </p>
+   <p class="doubletab">
+      The Comment token color is used to color REM statements and :: comment lines.
+   </p>
+   <p class="doubletab">
+      The Preprocessor Directive token color is not used in Batch.
+   </p>
+   <p class="doubletab">
+      The Operator token color is used to color comparison and redirection operators (==, &gt;, &gt;&gt;, |, &amp;).
+   </p>
+   <p class="doubletab">
+      The Punctuation token color is used to color parentheses, commas, and semicolons.
+   </p>
+   <!-- #endregion -->
+   <!-- #region SQL Colors -->
+   <div class="smallsectiondiv" id="themeSQL">
+      <p>The SQL Language Syntax Colors Page</p>
+   </div>
+   <div class="imagecluster">
+      <div class="imageLabel">
+         <b><span class="larger">DBCode</span>&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors Page For The SQL Language:</b>
+      </div>
+      <img src="ThemeEditorColorsSyntaxSQL.png" alt="DBCode&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors page for the SQL language">
+   </div>
+   <p class="doubletab">
+      The Unknown token color is used to color any character that does not match any other token category.
+   </p>
+   <p class="doubletab">
+      The Whitespace token color is used to color spaces, tabs, and line breaks.
+   </p>
+   <p class="doubletab">
+      The Identifier token color is used to color table names, column names, alias names, and other database object names.
+   </p>
+   <p class="doubletab">
+      The Keyword token color is used to color reserved SQL keywords such as SELECT, FROM, WHERE, JOIN, INSERT, UPDATE, DELETE, and CREATE.
+   </p>
+   <p class="doubletab">
+      The Number token color is used to color integer and decimal numeric literals.
+   </p>
+   <p class="doubletab">
+      The String Literal token color is used to color text enclosed in single quotes (&rsquo;...&rsquo;).
+   </p>
+   <p class="doubletab">
+      The Character Literal token color is not used in SQL.
+   </p>
+   <p class="doubletab">
+      The Comment token color is used to color -- single-line comments and /* ... */ block comments.
+   </p>
+   <p class="doubletab">
+      The Preprocessor Directive token color is not used in SQL.
+   </p>
+   <p class="doubletab">
+      The Operator token color is used to color arithmetic, comparison, and logical operators.
+   </p>
+   <p class="doubletab">
+      The Punctuation token color is used to color parentheses, commas, periods (schema.table.column notation), and semicolons.
+   </p>
+   <!-- #endregion -->
+   <!-- #region Markdown Colors -->
+   <div class="smallsectiondiv" id="themeMarkdown">
+      <p>The Markdown Language Syntax Colors Page</p>
+   </div>
+   <div class="imagecluster">
+      <div class="imageLabel">
+         <b><span class="larger">DBCode</span>&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors Page For The Markdown Language:</b>
+      </div>
+      <img src="ThemeEditorColorsSyntaxMarkdown.png" alt="DBCode&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors page for the Markdown language">
+   </div>
+   <p class="doubletab">
+      The Unknown token color is not produced by the Markdown tokenizer.
+   </p>
+   <p class="doubletab">
+      The Whitespace token color is used to color blank and whitespace-only lines.
+   </p>
+   <p class="doubletab">
+      The Identifier token color is used to color ordinary paragraph and body text.
+   </p>
+   <p class="doubletab">
+      The Keyword token color is used to color headings (lines beginning with #), bold spans (**...**), and italic spans (*...*).
+   </p>
+   <p class="doubletab">
+      The Number token color is not produced by the Markdown tokenizer.
+   </p>
+   <p class="doubletab">
+      The String Literal token color is used to color hyperlinks in [text](url) syntax.
+   </p>
+   <p class="doubletab">
+      The Character Literal token color is not used in Markdown.
+   </p>
+   <p class="doubletab">
+      The Comment token color is used to color blockquote lines beginning with &gt;.
+   </p>
+   <p class="doubletab">
+      The Preprocessor Directive token color is used to color code fences (```) and inline code spans (`...`).
+   </p>
+   <p class="doubletab">
+      The Operator token color is used to color unordered list markers (- and *) and ordered list markers (1., 2., etc.).
+   </p>
+   <p class="doubletab">
+      The Punctuation token color is not produced by the Markdown tokenizer.
+   </p>
+   <!-- #endregion -->
+   <!-- #region Python Colors -->
+   <div class="smallsectiondiv" id="themePython">
+      <p>The Python Language Syntax Colors Page</p>
+   </div>
+   <div class="imagecluster">
+      <div class="imageLabel">
+         <b><span class="larger">DBCode</span>&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors Page For The Python Language:</b>
+      </div>
+      <img src="ThemeEditorColorsSyntaxPython.png" alt="DBCode&rsquo;s Theme Designer/Editor Dialog&rsquo;s Syntax Highlighting Colors page for the Python language">
+   </div>
+   <p class="doubletab">
+      The Unknown token color is used to color any character that does not match any other token category.
+   </p>
+   <p class="doubletab">
+      The Whitespace token color is used to color spaces, tabs, and line breaks, including significant indentation.
+   </p>
+   <p class="doubletab">
+      The Identifier token color is used to color variable names, function names, class names, and other user-defined symbols.
+   </p>
+   <p class="doubletab">
+      The Keyword token color is used to color reserved Python keywords such as def, class, if, for, while, import, return, and with.
+   </p>
+   <p class="doubletab">
+      The Number token color is used to color integer, floating-point, and complex numeric literals.
+   </p>
+   <p class="doubletab">
+      The String Literal token color is used to color text in single quotes ('...'), double quotes ("..."), and triple-quoted strings ("""...""").
+   </p>
+   <p class="doubletab">
+      The Character Literal token color is not used in Python; single-character strings use the String Literal token.
+   </p>
+   <p class="doubletab">
+      The Comment token color is used to color # single-line comments.
+   </p>
+   <p class="doubletab">
+      The Preprocessor Directive token color is not used in Python.
+   </p>
+   <p class="doubletab">
+      The Operator token color is used to color arithmetic, bitwise, logical, comparison, and assignment operators.
+   </p>
+   <p class="doubletab">
+      The Punctuation token color is used to color parentheses, brackets, braces, commas, colons, and semicolons.
    </p>
    <!-- #endregion -->
    <!-- #region Examples -->
+   <div class="mediumsectiondiv" id="themeExamples">
+      <p>The Examples Page</p>
+   </div>
    <div class="imagecluster">
       <div class="imageLabel">
          <b>
@@ -191,10 +745,13 @@
       <img src="ThemeEditorExamples.png" alt="DBCode&rsquo;s Theme Designer/Editor Dialog&rsquo;s Examples page">
    </div>
    <p>
-      The Examples page has numerous examples depicting how the Theme will look as applied to the various themable things. It has an examples for: a menu, with top level&ndash; and sub&ndash;item; it has a Panel which contains a GroupBox, Which itself contains a Button, a CheckBox, a TextBox and a RadioButton; it has a simulated Bottom Panel and it has RichTextBoxes to demonstrate all of the various syntax highlightings.
+      The Examples page has numerous examples depicting how the Theme will look as applied to the various themable things. it has examples for: a menu, with top level&ndash; and sub&ndash;item; it has a Panel which contains a GroupBox, which itself contains a Button, a CheckBox, a TextBox and a RadioButton; it has a simulated Bottom Panel and it has RichTextBoxes to demonstrate all of the various syntax highlightings.
    </p>
    <!-- #endregion -->
    <!-- #region Bottom panel -->
+   <div class="mediumsectiondiv" id="themeBottomPanel">
+      <p>The Bottom Panel</p>
+   </div>
    <div class="imagecluster">
       <div class="imageLabel">
          <b>
@@ -204,15 +761,30 @@
       <img src="ThemeDesignerBottomPanel.png" alt="DBCode&rsquo;s Theme Designer/Editor Dialog&rsquo;s Bottom Panel">
    </div>
    <p>
-      The XXX page 
+      The &ldquo;Bottom Panel&rdquo; has five Buttons: &ldquo;Help&rdquo;; &ldquo;New&rdquo;; &ldquo;Clone&rdquo;; &ldquo;Apply&rdquo; and &ldquo;Cancel&rdquo;.
+   </p>
+   <p class="tab">
+      The &ldquo;Help&rdquo; Button brings up this HTML document in the user&rsquo;s preferred browser.
+   </p>
+   <p class="tab">
+      The &ldquo;New&rdquo; Button creates a new unnamed Theme which has all default values.
+   </p>
+   <p class="tab">
+      The &ldquo;Clone&rdquo; Button creates a new unnamed Theme which is an identical clone of the current Theme.
+   </p>
+   <p class="tab">
+      The &ldquo;Apply&rdquo; Button immediately closes the dialog making all changes to the Theme and applying the new/edited theme.
+   </p>
+   <p class="tab">
+      The &ldquo;Cancel&rdquo; Button immediately closes the dialog without making any changes.
    </p>
    <!-- #endregion -->
    <div class="pageslinkdiv">
       <h3 id="pageLinks">Other Pages</h3>
-      <p> <a href="DBCodeHelp.html">DB Code Main Help Page</a>
+      <p> <a href="DBCodeHelp.html">DBCode Main Help Page</a>
             <a href="DBCodeConventionsHelp.html">Programming Conventions</a>
       </p>
-      <p> <a href="DBCodeMenuHelp.html">DB Code Menu Help Page</a> </p>
+      <p> <a href="DBCodeMenuHelp.html">DBCode Menu Help Page</a> </p>
       <p> <a href="DBCodeTargetingHelp.html">Targeting Help Page</a> </p>
       <p> <a href="DBCodeOptionsHelp.html">Options Help Page</a> </p>
       <p> <a href="DBCodeThemesHelp.html">Themes Help Page</a>

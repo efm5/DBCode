@@ -24,10 +24,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="ProjectAssets\Help\DBCodeMainTargeted.png" />
-    <None Remove="ProjectAssets\Help\DBCodeMainUntargeted.png" />
-    <None Remove="ProjectAssets\Help\DBCodeOptions.png" />
-    <None Remove="ProjectAssets\Help\Menu.png" />
+    <Compile Remove="ProjectAssets\Help\**" />
+    <EmbeddedResource Remove="ProjectAssets\Help\**" />
+    <None Remove="ProjectAssets\Help\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,10 +53,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ProjectAssets\Help\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -36,6 +36,9 @@
             mExamplesContainer.Height += mEmHalf;
             mExampleGroupBox.Location = new Point(mIndent, mExampleMenuStrip.Bottom + mEmHalf);
             mExampleBottomPanel.Location = new Point(mIndent, mExampleGroupBox.Bottom + mEmHalf);
+            mExampleBottomPanel.Anchor = mAnchorTopLeftRight;
+            mExampleBottomPanel.Width = mExampleScrollPanel.ClientSize.Width - (2 * mIndent);
+            mExampleBottomPanel.PositionRightControls();
             mExamplesContainer.Location = new Point(mIndent, mExampleBottomPanel.Bottom + mEmHalf);
             mPrimaryTabControl.Location = new Point(mIndent, mTitleLabel.Bottom + mEmHalf);
             mPrimaryTabControl.Width = ClientSize.Width - (2 * mIndent);
@@ -107,8 +110,10 @@
                   Font oldControlFont = control.Font;
                   Font newControlFont = CreateNewFont(mTemporaryTheme.mFonts[(int)FontUsage.Interface]);
                   control.Font = newControlFont;
-                  if (object.ReferenceEquals(control.Font, newControlFont))
-                     MainForm.DisposeFontIfOwned(oldControlFont);
+                  if (object.ReferenceEquals(control.Font, newControlFont)) {
+                     if (!object.ReferenceEquals(oldControlFont, pParent.Font))
+                        MainForm.DisposeFontIfOwned(oldControlFont);
+                  }
                   else
                      newControlFont.Dispose();
                }

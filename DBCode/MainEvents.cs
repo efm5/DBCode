@@ -176,6 +176,7 @@
       }
 
       private void ThemePickCurrent_Click(object? pSender, EventArgs pEventArgs) {
+         EnsureThemePickerPanel(PickMode.Use);
       }
 
       private void ThemeEditCurrent_Click(object? pSender, EventArgs pEventArgs) {

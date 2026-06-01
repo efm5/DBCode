@@ -252,7 +252,6 @@ namespace DBCode {
          pNumericUpDown.Height = (int)(boxHeight + mIndent);
       }
 
-
       internal static void SizePanel(Panel pPanel, int pLeftPad = 10, bool pScrollbarPad = true) {
          int right = 0;
          int bottom = 0;

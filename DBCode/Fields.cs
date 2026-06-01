@@ -214,6 +214,7 @@ namespace DBCode {
          mAnchorTopLeft = AnchorStyles.Top | AnchorStyles.Left,
          mAnchorTopLeftBottomRight =
          AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right,
+         mAnchorTopLeftRight = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
          mAnchorTopRight = AnchorStyles.Top | AnchorStyles.Right;
       public static bool mFirstGray = true, mForceActivation = true, mUseControlPasting,
          mIsTargetingEnabled = false, mPreMinimalControlBox = true, mUsePCRE = false;
