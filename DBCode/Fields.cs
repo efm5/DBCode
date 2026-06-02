@@ -252,7 +252,7 @@ namespace DBCode {
       public static ThemePanel? mThemePanel = null;
       public static ThemePickerPanel? mThemePickerPanel = null;
       public static string mPreMinimalText = string.Empty, mTargetWindowName = "Under construction",
-         mVersionString = "0.0.0.0", mUsingThemeName = string.Empty;
+         mVersionString = "0.0.0.2", mUsingThemeName = string.Empty;
       public static readonly string mUnicodeSampleString = "Unicode test: ÀÑÇ ÿ ɱ ǵ ʰ ā̋ ȇ ō̱ ╭╯ 🜁",
          mAppFolder = AppDomain.CurrentDomain.BaseDirectory,
          mMyDocumentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\",

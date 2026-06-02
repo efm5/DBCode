@@ -189,7 +189,7 @@
          mOptionsPanel.LayoutControls();
          mForm.SuspendClientSizeChanged();
          mActiveLayoutable = mOptionsPanel.mBottomPanel;
-         mForm.Bounds = mUiState.mOptionsBounds;
+         mForm.Bounds = mUiState.OptionsBounds;
          EnsureWindowFitsMonitor(mForm);
          TargetListManager.PopulateGrid(mOptionsPanel.mIncludeDataGridView, mAllowedTargetWindows);
          TargetListManager.PopulateGrid(mOptionsPanel.mExcludeDataGridView, mDisallowedTargetWindows);
@@ -224,7 +224,7 @@
          ThrowIfNull(mMainBottomPanel, nameof(mMainBottomPanel));
          double savedOpacity = mForm.Opacity;
          mForm.Opacity = 0;
-         mUiState.mOptionsBounds = mForm.Bounds;
+         mUiState.OptionsBounds = mForm.Bounds;
          TargetListManager.SaveGrid(mOptionsPanel.mIncludeDataGridView, mAllowedTargetWindows);
          TargetListManager.SaveGrid(mOptionsPanel.mExcludeDataGridView, mDisallowedTargetWindows);
          mOptionsPanel.Visible = false;

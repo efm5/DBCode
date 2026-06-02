@@ -16,7 +16,7 @@ namespace DBCode {
             if (string.IsNullOrWhiteSpace(line))
                continue;
             string[] parts = line.Split(mSSeparator, 12);
-            if (parts.Length < 12)
+            if (parts.Length < 11)
                continue;
             if (!int.TryParse(parts[0], out int sort))
                continue;
@@ -32,7 +32,7 @@ namespace DBCode {
                Key = parts[8],
                DisplayString = parts[9],
                ShortcutLocked = parts[10] == "1",
-               Notes = parts[11]
+               Notes = parts.Length > 11 ? parts[11] : ""
             });
          }
          CheckConflicts(entries);
@@ -81,11 +81,18 @@ namespace DBCode {
          foreach (ShortcutEntry entry in pEntries) {
             if (!pMenuDictionary.TryGetValue(entry.Id, out ToolStripMenuItem? menuItem))
                continue;
-            menuItem.ShortcutKeys = entry.ShortcutKeys;
-            menuItem.ShortcutKeyDisplayString = string.IsNullOrEmpty(entry.DisplayString)
-               ? null
-               : entry.DisplayString;
-            menuItem.Text = entry.ItemText;
+            if (menuItem.HasDropDownItems) {
+               menuItem.ShortcutKeys = Keys.None;
+               menuItem.ShortcutKeyDisplayString = null;
+            } else {
+               menuItem.ShortcutKeys = entry.ShortcutKeys;
+               menuItem.ShortcutKeyDisplayString = string.IsNullOrEmpty(entry.DisplayString)
+                  ? null
+                  : entry.DisplayString;
+            }
+            menuItem.Text = menuItem.OwnerItem == null && !string.IsNullOrEmpty(entry.DisplayString)
+               ? entry.ItemText + entry.DisplayString
+               : entry.ItemText;
          }
       }
 

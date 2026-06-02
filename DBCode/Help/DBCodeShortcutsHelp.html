@@ -1,40 +1,248 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Keyboard Shortcuts Help</title>
-      <meta name="description" content="Reference manual for DBCode&rsquo;s Accelerator and Shortcut Keys">
-      <meta name="keywords" content="DBCode">
-      <link rel="stylesheet" href="styles.css">
-      <link rel="icon" type="image/x-icon" href="helpIcon.ico">
-   </head>
-   <body style="margin:50px;padding:0">
-      <h1>DBCode&rsquo;s</h1>
-      <h2>Reference Manual</h2>
-      <h3>Version 0.0.0.1</h3>
-      <h4>Accelerator And Shortcut Keys</h4>
-      <div class="introdiv">
-         <p>[Real details] THIS IS JUST A PLACEHOLDER.</p>
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Shortcuts Help</title>
+   <meta name="description" content="Reference manual for DBCode&rsquo;s Accelerator and Shortcut Keys">
+   <meta name="keywords" content="DBCode">
+   <link rel="stylesheet" href="styles.css">
+   <link rel="icon" type="image/x-icon" href="helpIcon.ico">
+</head>
+<body style="margin:50px;padding:0">
+   <h1>DBCode&rsquo;s</h1>
+   <h2>Reference Manual</h2>
+   <h3>Version 0.0.0.1</h3>
+   <h4>Accelerator And Shortcut Keys</h4>
+   <div class="introdiv">
+      <p>
+         <span class="larger">DBCode</span>&rsquo;s Options dialog&rsquo;s Shortcuts page allows the user to modify the Menu in three important ways. By default, all menu items have accelerator keys and (where appropriate) keyboard shortcuts; these are all user&ndash;modifiable. The user may also change the word or phrase associated with any menu item or subitem.
+      </p>
+   </div>
+   <div class="imagecluster">
+      <div class="imageLabel">
+         <b>
+            <span class="larger">DBCode</span>&rsquo;s Options&rsquo;s Accelerator Keys And Keyboard Shortcuts Editor:
+         </b>
       </div>
-      <div class="pageslinkdiv">
-         <h3 id="pageLinks">Other Pages</h3>
-         <p> <a href="DBCodeHelp.html">DB Code Main Help Page</a>
-             <a href="DBCodeConventionsHelp.html">Programming Conventions</a>
+      <img src="AcceleratorsAndShortcuts.png" alt="DBCode&rsquo;s Options&rsquo;s accelerator keys and keyboard shortcuts editor">
+   </div>
+   <!-- #region table of contents -->
+   <h3>Table of Contents</h3>
+   <table class="center">
+      <tr>
+         <td colspan="4">
+            <span class="larger">
+               <b>The&nbsp;Columns</b>
+            </span>
+         </td>
+      </tr>
+      <tr>
+         <td colspan="1">
+            <a href="#rowNumber">Row&nbsp;Number</a>
+         </td>
+         <td colspan="1">
+            <a href="#variableID">Variable&nbsp;Identifier</a>
+         </td>
+      </tr>
+      <tr>
+         <td>
+            <a href="#parent">Parent&nbsp;Name</a>
+         </td>
+         <td>
+            <a href="#child">Child&nbsp;Name</a>
+         </td>
+         <td>
+            <a href="#grandchild">Grandchild&nbsp;Name</a>
+         </td>
+      </tr>
+      <tr>
+         <td>
+            <a href="#controlKey">Control&nbsp;(Ctrl)&nbsp;Key</a>
+         </td>
+         <td>
+            <a href="#shiftKey">Shift&nbsp;Key</a>
+         </td>
+         <td>
+            <a href="#alternateKey">Alternate&nbsp;(Alt)&nbsp;Key</a>
+         </td>
+         <td>
+            <a href="#key">Assigned&nbsp;Key</a>
+         </td>
+      </tr>
+      <tr>
+         <td colspan="1">
+            <a href="#displayText">Display&nbsp;Text</a>
+         </td>
+         <td colspan="1">
+            <a href="#notes">User&ndash;Supplied&nbsp;Notes</a>
+         </td>
+      </tr>
+      <tr>
+         <td colspan="4">
+            <a href="#pageLinks">Other&nbsp;Help&nbsp;Pages</a>
+         </td>
+      </tr>
+   </table>
+   <!-- #endregion -->
+   <!-- #region Row number and variable identifier -->
+   <div class="largesectiondiv">
+      <p>Row Number And Variable Identifier Section</p>
+   </div>
+   <p>
+      There are two cells on this row: &ldquo;Row Number&rdquo; and &ldquo;Variable Identifier&rdquo;.
+   </p>
+   <div class="mediumsectiondiv" id="rowNumber">
+      <p>Row Number</p>
+   </div>
+   <p>
+      The &ldquo;Row Number&rdquo; cell is not user&ndash;editable; it is there just to facilitate default sorting.
+   </p>
+   <div class="mediumsectiondiv" id="variableID">
+      <p>Variable Identifier</p>
+   </div>
+   <p>
+      The &ldquo;Variable Identifier&rdquo; cell is not user&ndash;editable; it is there so that the application knows which ToolStripMenuItem is affected by the various settings.
+   </p>
+   <!-- #endregion -->
+   <!-- #region Parent, Child And Grandchild Names -->
+   <div class="largesectiondiv">
+      <p>Parent, Child And Grandchild Names Section</p>
+   </div>
+   <div class="mediumsectiondiv" id="parent">
+      <p>Parent</p>
+   </div>
+   <p>
+      The &ldquo;Parent&rdquo; cell displays the ToolStripMenuItem&rsquo;s parent; if it is a top&ndash;level menu, it displays its own text. Unless it is a top&ndash;level menu, it is read&ndash;only.
+   </p>
+   <div class="mediumsectiondiv" id="child">
+      <p>Child</p>
+   </div>
+   <p>
+      The &ldquo;Child&rdquo; cell displays the child ToolStripMenuItem&rsquo;s name. If that child has sub&ndash;items (i.e., grandchildren exist beneath it), it acts as a submenu header and is read&ndash;only.
+   </p>
+   <div class="mediumsectiondiv" id="grandchild">
+      <p>Grandchild</p>
+   </div>
+   <p>
+      The &ldquo;Grandchild&rdquo; cell displays the grandchild ToolStripMenuItem; it is <b>never</b> read&ndash;only.
+   </p>
+   <!-- #endregion -->
+   <!-- #region Keys and modifiers -->
+   <div class="largesectiondiv">
+      <p>Key And Modifiers Section</p>
+   </div>
+   <div class="mediumsectiondiv" id="controlKey">
+      <p>Control (Ctrl)</p>
+   </div>
+   <p>
+      The &ldquo;Control (Ctrl)&rdquo; cell controls whether the keyboard shortcut modifiers contain the control (&langle;CTRL&rangle;) key. If checked, the shortcut does include the modifier.
+   </p>
+   <div class="mediumsectiondiv" id="shiftKey">
+      <p>Shift</p>
+   </div>
+   <p>
+      The &ldquo;Shift&rdquo; cell controls whether the keyboard shortcut modifiers contain the shift (&langle;SHIFT&rangle;) key. If checked, the shortcut does include the modifier.
+   </p>
+   <div class="mediumsectiondiv" id="alternateKey">
+      <p>Alternate (Alt)</p>
+   </div>
+   <p>
+      The &ldquo;Alternate (Alt)&rdquo; cell controls whether the keyboard shortcut modifiers contain the alternate (&langle;ALT&rangle;) key. If checked, the shortcut does include the modifier.
+   </p>
+   <div class="mediumsectiondiv" id="key">
+      <p>Key</p>
+   </div>
+   <p>
+      The &ldquo;Key&rdquo; cell controls which (probably modified) key is the actual shortcut key.
+   </p>
+   <div class="warningdiv">
+      <p>
+         Other than the function keys (F1&ndash;F12 [both Windows and Dragon allow F13&ndash;F24 but keyboards rarely include them&nbsp;&mdash;&nbsp; they can be used in Advanced Scripting commands]) the user is warned to be incredibly careful if assigning unmodified keyboard shortcuts.
+      </p>
+   </div>
+   <!-- #endregion -->
+   <!-- #region Display Text and Notes -->
+   <div class="largesectiondiv">
+      <p>Display Text And Notes Section</p>
+   </div>
+   <div class="mediumsectiondiv" id="displayText">
+      <p>Display Text</p>
+   </div>
+   <p>
+      The &ldquo;Display Text&rdquo; cell controls the actual string displayed on the ToolStripMenuItem. By default, Windows usually, but not always, presents a reasonably understandable description of the shortcut key:
+   </p>
+   <div class="codediv">
+      <table class="keytable">
+         <tr>
+            <td>Cut</td>
+            <td>Ctrl+X</td>
+         </tr>
+         <tr>
+            <td>Options</td>
+            <td>Ctrl+Oemcomma</td>
+         </tr>
+         <tr>
+            <td>Something</td>
+            <td>Alt+D0</td>
+         </tr>
+      </table>
+   </div>
+   <p>
+      Above, &ldquo;Ctrl+Oemcomma&rdquo; is probably comprehensible but clumsy at best; &ldquo;Alt+D0&rdquo; might better look like:
+   </p>
+   <div class="codediv">
+      <table class="keytable">
+         <tr>
+            <td>Options</td>
+            <td>Ctrl+,</td>
+         </tr>
+         <tr>
+            <td>Something</td>
+            <td>Alt+0 (zero)</td>
+         </tr>
+      </table>
+   </div>
+   <div class="mediumsectiondiv" id="notes">
+      <p>Notes</p>
+   </div>
+   <p>
+      The &ldquo;Notes&rdquo; cell is the place where the user may enter personal notes. These notes are effectively invisible to the application.
+   </p>
+   <div class="notediv">
+      <p>
+         Windows does not allow the display of keyboard shortcuts (even using Display Text) for top&ndash;level menu items, even when they have them. <span class="larger">DBCode</span> offers a workaround. If the user enters a string in the Display Text cell for a top&ndash;level menu item it will be automatically added to the actual Text. This does not change the way that Text is actually stored nor the way the Display Text is presented on the manager&nbsp;&mdash;&nbsp;it just shows up when the menu is created.
+      </p>
+      <p>
+         It is important to include a leading space in the Display Text and it is probably a good idea to include two or three leading spaces so that it looks like standard displayed text for the shortcut.
+      </p>
+      <div class="warningdiv">
+         <p>
+            This practice can to be a bit confusing to Dragon. If it sees “Option&nbsp;F2” it will stubbornly ignore “options” or “click options”, absolutely insisting on “option f2” or “click options f2”. However, if the Display Text is parenthetical: “Option&nbsp;(F2)” Dragon happily ignores the parenthetical part and is willing to accept “options” or “click options”
          </p>
-         <p> <a href="DBCodeMenuHelp.html">DB Code Menu Help Page</a> </p>
-         <p> <a href="DBCodeTargetingHelp.html">Targeting Help Page</a> </p>
-         <p> <a href="DBCodeOptionsHelp.html">Options Help Page</a> </p>
-         <p> <a href="DBCodeThemesHelp.html">Themes Help Page</a>
-             <a href="DBCodeThemePickerHelp.html">Theme Picker Help Page</a>
-             <a href="DBCodeThemeDesignerHelp.html">Theme Designer/Editor Help Page</a>
-         </p>
-         <p> <a href="DBCodeColorPickerHelp.html">Color Picker Help Page</a>
-             <a href="DBCodeFontPickerHelp.html">Font Picker Help Page</a> </p>
-         <p> <a href="DBCodeDialogsHelp.html">Dialogs Help Page</a>
-             <a href="DBCodeFindHelp.html">Find And Search/Replace Dialogs Help Page</a>
-         </p>
-         <p> <a href="DBCodeShortcutsHelp.html">Keyboard Shortcuts Help Page</a> </p>
       </div>
+</div>
+   <!-- #endregion -->
+   <div class="pageslinkdiv">
+      <h3 id="pageLinks">Other Pages</h3>
+      <p> <a href="DBCodeHelp.html">DB Code Main Help Page</a>
+            <a href="DBCodeConventionsHelp.html">Programming Conventions</a>
+      </p>
+      <p> <a href="DBCodeMenuHelp.html">DB Code Menu Help Page</a> </p>
+      <p> <a href="DBCodeTargetingHelp.html">Targeting Help Page</a> </p>
+      <p> <a href="DBCodeOptionsHelp.html">Options Help Page</a> </p>
+      <p>
+            <a href="DBCodeThemePickerHelp.html">Theme Picker Help Page</a>
+            <a href="DBCodeThemeDesignerHelp.html">Theme Designer/Editor Help Page</a>
+      </p>
+      <p> <a href="DBCodeColorPickerHelp.html">Color Picker Help Page</a>
+            <a href="DBCodeFontPickerHelp.html">Font Picker Help Page</a> </p>
+      <p> <a href="DBCodeDialogsHelp.html">Dialogs Help Page</a>
+            <a href="DBCodeFindHelp.html">Find And Search/Replace Dialogs Help Page</a>
+      </p>
+      <p> <a href="DBCodeShortcutsHelp.html">Keyboard Shortcuts Help Page</a> </p>
+   </div>
    </body>
 </html>
+
+

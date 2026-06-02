@@ -1,6 +1,5 @@
 ﻿namespace DBCode {
    public sealed partial class MainForm : Form {
-#if DEBUG
 #pragma warning disable CA2211
 #pragma warning disable IDE0028
 #pragma warning disable IDE0306
@@ -475,7 +474,6 @@
 #pragma warning restore CA2211
 #pragma warning restore IDE0028
 #pragma warning restore IDE0306
-#endif
 
       private static int MinimumMainBottomWidth() {
          Font font;

@@ -37,7 +37,7 @@
             mExampleGroupBox.Location = new Point(mIndent, mExampleMenuStrip.Bottom + mEmHalf);
             mExampleBottomPanel.Location = new Point(mIndent, mExampleGroupBox.Bottom + mEmHalf);
             mExampleBottomPanel.Anchor = mAnchorTopLeftRight;
-            mExampleBottomPanel.Width = mExampleScrollPanel.ClientSize.Width - (2 * mIndent);
+            mExampleBottomPanel.Width = mExampleScrollPanel!.ClientSize.Width - (2 * mIndent);
             mExampleBottomPanel.PositionRightControls();
             mExamplesContainer.Location = new Point(mIndent, mExampleBottomPanel.Bottom + mEmHalf);
             mPrimaryTabControl.Location = new Point(mIndent, mTitleLabel.Bottom + mEmHalf);

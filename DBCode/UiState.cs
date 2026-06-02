@@ -7,8 +7,8 @@ namespace DBCode {
       internal Color mBracePairColor0, mBracePairColor1, mBracePairColor2, mBracePairColor3, mBracePairColor4, mBracePairColor5,
          mBracePairColor6, mBracePairColor7, mBracePairColor8, mBracePairColor9;
       internal double mFormOpacity;
-      internal Point mFormLocation, mThemeLocation, mThemePickerLocation;
-      internal Size mFormSize, mThemeSize, mThemePickerSize;
+      internal Point mFormLocation, mThemeLocation, mThemePickerLocation, mOptionsLocation;
+      internal Size mFormSize, mThemeSize, mThemePickerSize, mOptionsSize;
       internal int mThemePrimaryTabPageIndex, mThemeTargetingTabIndexIndex, mThemeHighlightTabPageIndex, mOptionsCodingTabControlPageIndex,
          mTopDraggerHeight, mTopDraggerEdge, mActivationDelayMs, mClipboardDelayMs, mReactivationDelayMs,
          mWhitespace, mSpacesPerTab, mSpacesToBecomeTab, mOptionsGeneralTabControlPageIndex,
@@ -36,14 +36,16 @@ namespace DBCode {
          get => new Rectangle(mThemePickerLocation, mThemePickerSize);
          set { mThemePickerLocation = value.Location; mThemePickerSize = value.Size; }
       }
+      internal Rectangle OptionsBounds {
+         get => new Rectangle(mOptionsLocation, mOptionsSize);
+         set { mOptionsLocation = value.Location; mOptionsSize = value.Size; }
+      }
       // ───── Session-only geometry (not persisted) ─────
       internal Rectangle mGetStringBounds = new Rectangle(50, 50, 200, 300);
       internal Rectangle mColorPickerBounds = new Rectangle(50, 50, 450, 550);
       internal Rectangle mFontPickerBounds = new Rectangle(50, 50, 400, 400);
-      internal Rectangle mOptionsBounds = new Rectangle(200, 200, 500, 400);
       internal Rectangle mTargetPickerBounds = new Rectangle(50, 50, 800, 600);
       internal bool mTargetPickerFirstShow = true;
-      internal bool mOptionsFirstShow = true;
       internal bool mThemePickerFirstShow = true;
       internal bool mColorPickerFirstShow = true;
       internal bool mFontPickerFirstShow = true;
@@ -55,6 +57,8 @@ namespace DBCode {
          mThemeLocation = new Point(100, 100);
          mThemePickerSize = new Size(700, 500);
          mThemePickerLocation = new Point(610, 290);
+         mOptionsSize = new Size(1660, 1000);
+         mOptionsLocation = new Point(130, 40);
          mFormOpacity = 1.0;
          mThemePrimaryTabPageIndex = 0;
          mThemeTargetingTabIndexIndex = 0;
@@ -145,6 +149,8 @@ namespace DBCode {
          mUsingThemeName = Settings.Default.CurrentThemeName;
          mThemePickerSize = Settings.Default.ThemePickerSize;
          mThemePickerLocation = Settings.Default.ThemePickerLocation;
+         mOptionsSize = Settings.Default.OptionsSize;
+         mOptionsLocation = Settings.Default.OptionsLocation;
          mCurrentLanguage = (LanguageKind)Settings.Default.CurrentLanguage;
          mCurrentThemeName = Settings.Default.CurrentThemeName;
          mShortcutsColumnWidths = Settings.Default.ShortcutsColumnWidths;
@@ -199,6 +205,8 @@ namespace DBCode {
          Settings.Default.ThemeLocation = mThemeLocation;
          Settings.Default.ThemePickerSize = mThemePickerSize;
          Settings.Default.ThemePickerLocation = mThemePickerLocation;
+         Settings.Default.OptionsSize = mOptionsSize;
+         Settings.Default.OptionsLocation = mOptionsLocation;
          Settings.Default.FormOpacity = mFormOpacity;
          Settings.Default.ThemePrimaryTabPageIndex = mThemePrimaryTabPageIndex;
          Settings.Default.ThemeTargetingTabPageIndex = mThemeTargetingTabIndexIndex;

@@ -1,4 +1,4 @@
-h1 {
+﻿h1 {
    text-align: center;
    margin-top: 7px;
    margin-bottom: 6px;
@@ -334,3 +334,21 @@ table.center {
 .sextupletab {
    margin-left: 240px;
 }
+
+.keytable {
+   border: none;
+   margin-left: 0;
+   margin-right: 0;
+   margin-bottom: 0;
+}
+
+.keytable td {
+   border: none;
+   text-align: left;
+   vertical-align: middle;
+   padding-top: 0;
+   padding-bottom: 0;
+   padding-left: 0;
+   padding-right: 3em;
+}
+

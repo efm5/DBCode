@@ -252,12 +252,20 @@ namespace DBCode {
          if (row.Tag is not ShortcutEntry entry)
             return;
          switch (e.ColumnIndex) {
-            case ShortColTop:
+            case ShortColTop: {
+               string oldTop = entry.Top;
                entry.Top = row.Cells[ShortColTop].Value?.ToString() ?? "";
+               if (oldTop != entry.Top)
+                  PropagateTextChange(ShortColTop, oldTop, entry.Top);
                break;
-            case ShortColChild:
+            }
+            case ShortColChild: {
+               string oldChild = entry.Child;
                entry.Child = row.Cells[ShortColChild].Value?.ToString() ?? "";
+               if (oldChild != entry.Child)
+                  PropagateTextChange(ShortColChild, oldChild, entry.Child);
                break;
+            }
             case ShortColGrandchild:
                entry.Grandchild = row.Cells[ShortColGrandchild].Value?.ToString() ?? "";
                break;
@@ -284,6 +292,25 @@ namespace DBCode {
             ShortcutManager.CheckConflicts(mShortcutEntries);
             mShortcutsDgv.Invalidate();
          }
+      }
+
+      private void PropagateTextChange(int pColumnIndex, string pOldValue, string pNewValue) {
+         foreach (ShortcutEntry e in mShortcutEntries) {
+            if (pColumnIndex == ShortColTop && e.Top == pOldValue)
+               e.Top = pNewValue;
+            else if (pColumnIndex == ShortColChild && e.Child == pOldValue)
+               e.Child = pNewValue;
+         }
+         if (mShortcutsDgv == null)
+            return;
+         mShortcutsDgv.CurrentCellDirtyStateChanged -= ShortcutsDgv_CurrentCellDirtyStateChanged;
+         mShortcutsDgv.CellValueChanged -= ShortcutsDgv_CellValueChanged;
+         foreach (DataGridViewRow row in mShortcutsDgv.Rows) {
+            if ((row.Cells[pColumnIndex].Value?.ToString() ?? "") == pOldValue)
+               row.Cells[pColumnIndex].Value = pNewValue;
+         }
+         mShortcutsDgv.CellValueChanged += ShortcutsDgv_CellValueChanged;
+         mShortcutsDgv.CurrentCellDirtyStateChanged += ShortcutsDgv_CurrentCellDirtyStateChanged;
       }
 
       private void ShortcutsDgv_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e) {

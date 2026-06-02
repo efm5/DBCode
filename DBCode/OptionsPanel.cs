@@ -796,29 +796,6 @@
             row.Height = dgvRowHeight;
          if (mUiState.mShortcutsDgvAutoSize)
             mShortcutsDgv.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
-         int tabControlWidth = mHistoryGroupBox.Right + (mTabControlLeftPad * 2) + SystemInformation.VerticalScrollBarWidth + mEm;
-         int tabStripHeight = mGeneralTabControl.GetTabStripHeight(tabControlWidth);
-         int leftBottom = mTabControlTopPad
-            + mMagicNumbersGroupBox.Height + mEm
-            + mWhitespaceGroupBox.Height + mEm
-            + mEnforceFormattingProtectionCheckBoxCluster.Height;
-         int rightBottom = mTabControlTopPad
-            + mPastingGroupBox.Height + mEm
-            + mHistoryGroupBox.Height + mEm
-            + mCodingGroupBox.Height;
-         int contentBottom = Math.Max(leftBottom, rightBottom);
-         Size wantedSize = new Size(mHistoryGroupBox.Right + (mTabControlLeftPad * 2) + SystemInformation.VerticalScrollBarWidth + mEm,
-            mTitleLabel.Height + mTitleBarHeight + mBottomPanel.Height + tabStripHeight + mTabControlTopPad +
-            contentBottom + mEm3 + SystemInformation.HorizontalScrollBarHeight);
-         if (mUiState.mOptionsFirstShow) {
-            Screen screen = Screen.FromPoint(mUiState.FormBounds.Location);
-            Point location = new Point(((screen.WorkingArea.Width - wantedSize.Width) / 2) + screen.WorkingArea.Left,
-               ((screen.WorkingArea.Height - wantedSize.Height) / 2) + screen.WorkingArea.Top);
-            mUiState.mOptionsBounds = new Rectangle(location, wantedSize);
-            mUiState.mOptionsFirstShow = false;
-         }
-         else
-            mUiState.mOptionsBounds = new Rectangle(mUiState.mOptionsBounds.Location, wantedSize);
          mCFamilyTitleLabel.LayoutCluster();
          mBasicTitleLabel.LayoutCluster();
          mFSharpTitleLabel.LayoutCluster();
@@ -930,6 +907,12 @@
             ? BuildSortedShortcutEntries() : mShortcutEntries;
          if (mShortcutsAllCheckBox != null && !mShortcutsAllCheckBox.Checked)
             entriesToDisplay = FilterToUnassigned(entriesToDisplay);
+         Dictionary<string, int> topCounts = [], childCounts = [];
+         foreach (ShortcutEntry e in mShortcutEntries) {
+            topCounts[e.Top] = topCounts.TryGetValue(e.Top, out int tc) ? tc + 1 : 1;
+            if (!string.IsNullOrEmpty(e.Child))
+               childCounts[e.Child] = childCounts.TryGetValue(e.Child, out int cc) ? cc + 1 : 1;
+         }
          mShortcutsDgv.SuspendLayout();
          mShortcutsDgv.Rows.Clear();
          mShortcutsDgv.CurrentCellDirtyStateChanged -= ShortcutsDgv_CurrentCellDirtyStateChanged;
@@ -939,9 +922,22 @@
                entry.Sort, entry.Id, entry.Top, entry.Child, entry.Grandchild,
                entry.Ctrl, entry.Shift, entry.Alt, entry.Key,
                entry.DisplayString, entry.ShortcutLocked, entry.Notes);
-            mShortcutsDgv.Rows[rowIdx].Tag = entry;
-            if (entry.ShortcutLocked)
-               mShortcutsDgv.Rows[rowIdx].ReadOnly = true;
+            DataGridViewRow row = mShortcutsDgv.Rows[rowIdx];
+            row.Tag = entry;
+            bool topUnique = topCounts.TryGetValue(entry.Top, out int topCount) && topCount == 1;
+            bool childUnique = !string.IsNullOrEmpty(entry.Child)
+               && childCounts.TryGetValue(entry.Child, out int childCount) && childCount == 1;
+            bool hasGrandchild = !string.IsNullOrEmpty(entry.Grandchild);
+            row.Cells[ShortColTop].ReadOnly = !topUnique && !entry.ShortcutLocked;
+            row.Cells[ShortColChild].ReadOnly = string.IsNullOrEmpty(entry.Child)
+               || (!childUnique && !entry.ShortcutLocked);
+            bool shortcutLockable = !hasGrandchild && !childUnique && (!string.IsNullOrEmpty(entry.Child) || !topUnique);
+            if (shortcutLockable || entry.ShortcutLocked) {
+               row.Cells[ShortColCtrl].ReadOnly = true;
+               row.Cells[ShortColShift].ReadOnly = true;
+               row.Cells[ShortColAlt].ReadOnly = true;
+               row.Cells[ShortColKey].ReadOnly = true;
+            }
          }
          mShortcutsDgv.CurrentCellDirtyStateChanged += ShortcutsDgv_CurrentCellDirtyStateChanged;
          mShortcutsDgv.CellValueChanged += ShortcutsDgv_CellValueChanged;

@@ -41,6 +41,12 @@
     <Setting Name="ThemePickerSize" Type="System.Drawing.Size" Scope="User">
       <Value Profile="(Default)">1000, 600</Value>
     </Setting>
+    <Setting Name="OptionsLocation" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">130, 40</Value>
+    </Setting>
+    <Setting Name="OptionsSize" Type="System.Drawing.Size" Scope="User">
+      <Value Profile="(Default)">1660, 1000</Value>
+    </Setting>
     <Setting Name="CurrentLanguage" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>

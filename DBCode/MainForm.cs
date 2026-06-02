@@ -18,14 +18,14 @@ namespace DBCode {
          Assembly assembly = Assembly.GetExecutingAssembly();
          FileVersionInfo? fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
          if (fileVersionInfo == null)
-            mVersionString = "0.0.0.0";
+            mVersionString = "0.0.0.2";
          else {
             if (fileVersionInfo.FileVersion == null)
-               mVersionString = "0.0.0.0";
+               mVersionString = "0.0.0.2";
             else {
                mVersionString = fileVersionInfo.FileVersion;
                if (mVersionString == null)
-                  mVersionString = "0.0.0.0";
+                  mVersionString = "0.0.0.2";
             }
          }
          mVersionLabel?.Text = "v: " + mVersionString;

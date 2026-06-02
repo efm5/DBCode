@@ -181,6 +181,30 @@ namespace DBCode.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("130, 40")]
+        public global::System.Drawing.Point OptionsLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["OptionsLocation"]));
+            }
+            set {
+                this["OptionsLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1660, 1000")]
+        public global::System.Drawing.Size OptionsSize {
+            get {
+                return ((global::System.Drawing.Size)(this["OptionsSize"]));
+            }
+            set {
+                this["OptionsSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int CurrentLanguage {
             get {

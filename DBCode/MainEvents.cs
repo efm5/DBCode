@@ -24,94 +24,11 @@
          Opacity = mUiState.mFormOpacity;
          ActiveControl = mRichTextBox;
          ClientSizeChanged += OnClientSizeChanged;
-#if DEBUG
-         //ProposeAccelerators(mMenuStrip, [mSendAllButton, mPasteSelectedButton, mRevertButton,
-         //mGetAllButton, mGetSelectedButton, mMainBottomPanel.mCancelButton, mMainBottomPanel.mCancelButton]);
-         //RadioButtonClusterTestHarness.Show("RadioButton Cluster Test Harness");
-
-         //ScalableCheckBoxClusterTestHarness.Show("Scalable CheckBox Cluster Test Harness");
-
-         //ClusterTestHarness.Show("Cluster Test Harness");
-
-         //GetString.Show("GetString Test", "Please enter any string to test the GetString harness:", string.Empty, TestGetStringCallback);
-
-         //private void TestGetStringCallback(string? pResult, bool pWasCancelled) {
-         //   GetString.Restore();
-         //   if (pWasCancelled || pResult is null)
-         //      return;
-         //   TimedMessage(pResult, "GetString Test Result");
-         //}
-         //ExportMenuShortcuts();
-#endif
+         //#if DEBUG
+         //         ConfirmationDialog.ShowMe("Debug Build", "Is this a debug build?", "&Yes", "&No",
+         //            pConfirmed => { ConfirmationDialog.Restore(); TimedMessage(pConfirmed ? "Yes" : "No", "Answer"); });
+         //#endif
       }
-
-#if DEBUG
-      //private static void ExportMenuShortcuts() {
-      //   StringBuilder sb;
-      //   ToolStripMenuItem? topMenuItem;
-      //   ToolStripMenuItem? childMenuItem;
-      //   ToolStripMenuItem? grandMenuItem;
-      //   bool hasGrandchildren;
-      //   string ctrl;
-      //   string shift;
-      //   string alt;
-      //   string key;
-      //   string outputPath;
-      //   if (mMenuStrip == null)
-      //      return;
-      //   sb = new StringBuilder();
-      //   foreach (ToolStripItem topItem in mMenuStrip.Items) {
-      //      topMenuItem = topItem as ToolStripMenuItem;
-      //      if (topMenuItem == null)
-      //         continue;
-      //      sb.AppendLine($"{topMenuItem.Name}\t{topMenuItem.Text}");
-      //      foreach (ToolStripItem childItem in topMenuItem.DropDownItems) {
-      //         childMenuItem = childItem as ToolStripMenuItem;
-      //         if (childMenuItem == null)
-      //            continue;
-      //         hasGrandchildren = false;
-      //         foreach (ToolStripItem grandCheck in childMenuItem.DropDownItems) {
-      //            if (grandCheck is ToolStripMenuItem) {
-      //               hasGrandchildren = true;
-      //               break;
-      //            }
-      //         }
-      //         if (hasGrandchildren) {
-      //            sb.AppendLine($"{childMenuItem.Name}\t{topMenuItem.Text}\t{childMenuItem.Text}");
-      //            foreach (ToolStripItem grandItem in childMenuItem.DropDownItems) {
-      //               grandMenuItem = grandItem as ToolStripMenuItem;
-      //               if (grandMenuItem == null)
-      //                  continue;
-      //               (ctrl, shift, alt, key) = ParseShortcut(grandMenuItem.ShortcutKeys);
-      //               sb.AppendLine($"{grandMenuItem.Name}\t{topMenuItem.Text}\t{childMenuItem.Text}\t{grandMenuItem.Text}\t{ctrl}\t{shift}\t{alt}\t{key}");
-      //            }
-      //         }
-      //         else {
-      //            (ctrl, shift, alt, key) = ParseShortcut(childMenuItem.ShortcutKeys);
-      //            sb.AppendLine($"{childMenuItem.Name}\t{topMenuItem.Text}\t{childMenuItem.Text}\t{ctrl}\t{shift}\t{alt}\t{key}");
-      //         }
-      //      }
-      //   }
-      //   if (!Directory.Exists(@"Z:\DBCode"))
-      //      Directory.CreateDirectory(@"Z:\DBCode");
-      //   outputPath = Path.Combine(@"Z:\DBCode", "MenuShortcuts.tsv");
-      //   File.WriteAllText(outputPath, sb.ToString());
-      //}
-
-      //private static (string, string, string, string) ParseShortcut(Keys pKeys) {
-      //   string ctrl;
-      //   string shift;
-      //   string alt;
-      //   string key;
-      //   if (pKeys == Keys.None)
-      //      return ("NONE", "NONE", "NONE", "NONE");
-      //   ctrl = (pKeys & Keys.Control) != 0 ? "CTRL" : "NONE";
-      //   shift = (pKeys & Keys.Shift) != 0 ? "SHIFT" : "NONE";
-      //   alt = (pKeys & Keys.Alt) != 0 ? "ALT" : "NONE";
-      //   key = (pKeys & Keys.KeyCode) == Keys.None ? "NONE" : (pKeys & Keys.KeyCode).ToString();
-      //   return (ctrl, shift, alt, key);
-      //}
-#endif
 
       private void MainForm_FormClosing(object? pSender, FormClosingEventArgs pEventArgs) {
          ThrowIfNull(mCurrentTheme, nameof(mCurrentTheme));
