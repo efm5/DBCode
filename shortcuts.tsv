@@ -26,159 +26,165 @@ Sort	Id	Top	Child	Grandchild	Ctrl	Shift	Alt	Key	DisplayString	ShortcutLocked	Not
 26	mTargetingAppendCRTSMI	&Targeting	&Append CR		1	0	0	L	(\\n\\r)        Ctrl+L	0	
 27	mViewMenuItem	&View			0	0	0			1	
 28	mViewTransparentTSMI	&View	&Transparent		1	0	0	T		0	
-29	mViewThirtyTSMI	&View	&30%		1	0	0	D3		0	
-30	mViewFiftyTSMI	&View	&50%		1	0	0	D5		0	
-31	mViewSeventyFiveTSMI	&View	&75%		1	0	0	D7		0	
-32	mViewOpaqueTSMI	&View	&Opaque		1	0	0	O		0	
-33	mViewScrollingTSMI	&View	&Scrolling		0	0	0			1	
-34	mViewScrollingEdgeTSMI	&View	&Scrolling	&Edge	0	0	0			1	
-35	mViewScrollingEdgeTopTSMI	&View	&Edge	&Top	1	0	1	F1		0	
-36	mViewScrollingEdgeBottomTSMI	&View	&Edge	&Bottom	1	0	1	F2		0	
-37	mViewScrollingEdgeLeftTSMI	&View	&Edge	&Left	1	0	1	F3		0	
-38	mViewScrollingEdgeRightTSMI	&View	&Edge	&Right	1	0	1	F4		0	
-39	mViewScrollingScrollTSMI	&View	&Scrolling	&Scroll	0	0	0			1	
-40	mViewScrollingScrollUpTSMI	&View	&Scroll	&Up	1	0	1	F5		0	
-41	mViewScrollingScrollDownTSMI	&View	&Scroll	&Down	1	0	1	F6		0	
-42	mViewScrollingScrollLeftTSMI	&View	&Scroll	&Left	1	0	1	F7		0	
-43	mViewScrollingScrollRightTSMI	&View	&Scroll	&Right	1	0	1	F8		0	
-44	mViewScrollingPageTSMI	&View	&Scrolling	&Page	0	0	0			1	
-45	mViewScrollingPageUpTSMI	&View	&Page	&Up	1	0	1	F9		0	
-46	mViewScrollingPageDownTSMI	&View	&Page	&Down	1	0	1	F10		0	
-47	mViewScrollingPageLeftTSMI	&View	&Page	&Left	1	0	1	F11		0	
-48	mViewScrollingPageRightTSMI	&View	&Page	&Right	1	0	1	F12		0	
-49	mViewWordWrapTSMI	&View	&Wordwrap		1	0	0	W		0
-50	mViewLineNumbersTSMI	&View	Line &Numbers		1	0	0	N		0
-51	mModeMenuItem	Mo&de			0	0	0			1
-52	mModeMinimalTSMI	Mo&de	&Minimal		1	0	0	M		0	
-53	mModeFeaturesTSMI	Mo&de	&Features		1	1	0	G		0	
-54	mLanguageMenuItem	&Language			0	0	0			1	
-55	mLanguagePlainTextTSMI	&Language	Plain&text		1	0	1	G		0	
-56	mLanguageCSharpTSMI	&Language	CSha&rp		1	0	1	H		0	
-57	mLanguageCTSMI	&Language	&C		1	0	1	I		0	
-58	mLanguageCppTSMI	&Language	C&pp		1	0	1	J		0	
-59	mLanguageBasicTSMI	&Language	&Basic		1	0	1	K		0	
-60	mLanguageFSharpTSMI	&Language	&FSharp		1	0	1	L		0	
-61	mLanguageHTMLTSMI	&Language	&HTML		1	0	1	M		0	
-62	mLanguageCSSTSMI	&Language	C&SS		1	0	1	N		0	
-63	mLanguageXMLTSMI	&Language	&XML		1	0	1	O		0	
-64	mLanguageJSONTSMI	&Language	&JSON		1	0	1	P		0	
-65	mLanguagePowerShellTSMI	&Language	Po&werShell		1	0	1	Q		0	
-66	mLanguageBatchTSMI	&Language	B&atch		1	0	1	R		0	
-67	mLanguageSQLTSMI	&Language	S&QL		1	0	1	S		0	
-68	mLanguageMarkdownTSMI	&Language	&Markdown		1	0	1	T		0	
-69	mLanguagePythonTSMI	&Language	P&ython		1	0	1	U		0	
-70	mCodingMenuItem	&Coding			0	0	0			1	
-71	mCodingCFamilyTSMI	&Coding	&C Family		0	0	0			1	
-72	mCodingCSharpCommentAddDoubleTSMI	&Coding	&C Family	&Add Double	1	1	0	H		0	
-73	mCodingCSharpCommentAddTripleTSMI	&Coding	&C Family	Add &Triple	1	1	0	I		0	
-74	mCodingCPlusPlusCommentTSMI	&Coding	&C Family	&C++	1	1	0	J		0	
-75	mCodingCSharpCommentOutTSMI	&Coding	&C Family	Comment &Out	1	1	0	K		0	
-76	mCodingCSharpCommentRemoveTSMI	&Coding	&C Family	&Remove	1	1	0	L		0	
-77	mCodingCSharpWrapTSMI	&Coding	&C Family	&Wrap	1	1	0	M		0	
-78	mCodingConvertVBToCSharpCommentTSMI	&Coding	&C Family	&VB to C# Comment	1	1	0	B		0	
-79	mCodingCSharpAddNotImplementedTSMI	&Coding	&C Family	Add &Not Implemented	1	1	0	N		0	
-80	mCodingCSharpReverseEqualityTSMI	&Coding	&C Family	Reverse &Equality	1	1	0	O		0	
-81	mCodingCSharpExpressionBodiedMethodTSMI	&Coding	&C Family	Expression-&Bodied Method	1	0	1	A		0	
-82	mCodingBasicTSMI	&Coding	&Basic		0	0	0			1	
-83	mCodingBasicAddSingleQuoteTSMI	&Coding	&Basic	&Add Single Quote	1	1	0	Q		0	
-84	mCodingBasicConvertCSharpToVBCommentTSMI	&Coding	&Basic	&C# to VB Comment	1	1	0	R		0	
-85	mCodingBasicReverseEqualityTSMI	&Coding	&Basic	&Reverse Equality	1	1	0	S		0	
-86	mCodingBasicRemoveLineContinuationTSMI	&Coding	&Basic	Remove &Line Continuation	1	1	0	T		0	
-87	mCodingBasicConvertBooleansTSMI	&Coding	&Basic	Convert &Booleans	1	1	0	U		0	
-88	mCodingBasicConvertNullNothingTSMI	&Coding	&Basic	Convert &Null/Nothing	1	1	0	V		0	
-89	mCodingBasicConvertLogicalOperatorsTSMI	&Coding	&Basic	Convert Logical &Operators	1	1	0	W		0	
-90	mCodingFSharpTSMI	&Coding	&F#		0	0	0			1	
-91	mCodingFSharpBlockCommentTSMI	&Coding	&F#	&Block Comment (* *)	1	0	1	V		0	
-92	mCodingFSharpAddCommentTSMI	&Coding	&F#	&Add Comment (//)	1	0	1	W		0	
-93	mCodingFSharpAddMutableTSMI	&Coding	&F#	Add &Mutable	1	0	1	Y		0	
-94	mCodingFSharpAddIgnoreTSMI	&Coding	&F#	Add |> &ignore	1	1	0	X		0	
-95	mCodingFSharpConvertNullNoneTSMI	&Coding	&F#	&Convert null/None	1	1	0	Y		0	
-96	mCodingHTMLTSMI	&Coding	&HTML		0	0	0			1	
-97	mCodingHTMLCommentTSMI	&Coding	&HTML	&Comment	1	1	1	G		0	
-98	mCodingHTMLBoldTSMI	&Coding	&HTML	&Bold	1	1	1	H		0	
-99	mCodingHTMLItalicTSMI	&Coding	&HTML	&Italic	1	1	1	I		0	
-100	mCodingHTMLUnderlineTSMI	&Coding	&HTML	&Underline	1	1	1	J		0	
-101	mCodingHTMLStrikethroughTSMI	&Coding	&HTML	&Strikethrough	1	1	1	K		0	
-102	mCodingHTMLBigTSMI	&Coding	&HTML	Bi&g	1	1	1	L		0	
-103	mCodingHTMLBigBigTSMI	&Coding	&HTML	Bigg&er	1	1	1	M		0	
-104	mCodingHTMLSmallTSMI	&Coding	&HTML	S&mall	1	1	1	N		0	
-105	mCodingHTMLSmallSmallTSMI	&Coding	&HTML	Sm&aller	1	1	1	O		0	
-106	mCodingHTMLMarkTSMI	&Coding	&HTML	Ma&rk	1	1	1	P		0	
-107	mCodingHTMLSuperscriptTSMI	&Coding	&HTML	Su&perscript	1	1	1	Q		0	
-108	mCodingHTMLSubscriptTSMI	&Coding	&HTML	Subscrip&t	1	1	1	R		0	
-109	mCodingHTMLCodeTSMI	&Coding	&HTML	C&ode	1	1	1	S		0	
-110	mCodingHTMLPreformattedTSMI	&Coding	&HTML	Pre&formatted	1	1	1	T		0	
-111	mCodingHTMLColorizeTSMI	&Coding	&HTML	Co&lorize...	1	1	1	U		0	
-112	mCodingCSSTSMI	&Coding	C&SS		0	0	0			1	
-113	mCodingCSSBlockCommentTSMI	&Coding	C&SS	&Block Comment	1	0	0	P		0	
-114	mCodingCSSCommentRemoveTSMI	&Coding	C&SS	&Remove Comment	1	0	0	Q		0	
-115	mCodingCSSToggleImportantTSMI	&Coding	C&SS	&Toggle !important	1	0	0	R		0	
-116	mCodingCSSConvertColorFormatTSMI	&Coding	C&SS	&Convert Color Format	1	0	0	S		0	
-117	mCodingXMLTSMI	&Coding	&XML		0	0	0			1	
-118	mCodingXMLCommentTSMI	&Coding	&XML	&Comment	1	1	1	A		0	
-119	mCodingXMLRemoveCommentTSMI	&Coding	&XML	&Remove Comment	1	1	1	B		0	
-120	mCodingXMLEscapeEntitiesTSMI	&Coding	&XML	&Escape Entities	1	1	1	C		0	
-121	mCodingXMLWrapCDataTSMI	&Coding	&XML	&Wrap CDATA	1	1	1	D		0	
-122	mCodingXMLToggleSelfCloseTSMI	&Coding	&XML	&Toggle Self-Close	1	1	1	E		0	
-123	mCodingJSONTSMI	&Coding	&JSON		0	0	0			1	
-124	mCodingJSONAddCommentTSMI	&Coding	&JSON	&Add Comment	1	1	1	V		0	
-125	mCodingJSONBlockCommentTSMI	&Coding	&JSON	&Block Comment	1	1	1	W		0	
-126	mCodingJSONRemoveCommentTSMI	&Coding	&JSON	&Remove Comment	1	1	1	X		0	
-127	mCodingJSONToggleQuotesTSMI	&Coding	&JSON	&Toggle Quotes	1	1	1	Y		0	
-128	mCodingJSONEscapeStringTSMI	&Coding	&JSON	&Escape String	1	1	1	Z		0	
-129	mCodingJSONRemoveTrailingCommasTSMI	&Coding	&JSON	Remove Trailing &Commas	1	0	0	B		0	
-130	mCodingPowerShellTSMI	&Coding	&PowerShell		0	0	0			1	
-131	mCodingPowerShellAddCommentTSMI	&Coding	&PowerShell	&Add Comment	1	0	0	F1		0	
-132	mCodingPowerShellBlockCommentTSMI	&Coding	&PowerShell	&Block Comment	1	0	0	F2		0	
-133	mCodingPowerShellRemoveCommentTSMI	&Coding	&PowerShell	&Remove Comment	1	0	0	F3		0	
-134	mCodingPowerShellToggleBooleanTSMI	&Coding	&PowerShell	&Toggle Boolean	1	0	0	F4		0	
-135	mCodingPowerShellToggleQuotesTSMI	&Coding	&PowerShell	Toggle &Quotes	1	0	0	F5		0	
-136	mCodingBatchTSMI	&Coding	&Batch		0	0	0			1	
-137	mCodingBatchAddCommentTSMI	&Coding	&Batch	&Add Comment (REM)	1	0	0	F6		0	
-138	mCodingBatchAddColonCommentTSMI	&Coding	&Batch	Add &Comment (::)	1	0	0	F7		0	
-139	mCodingBatchRemoveCommentTSMI	&Coding	&Batch	&Remove Comment	1	0	0	F8		0	
-140	mCodingBatchToggleCommentStyleTSMI	&Coding	&Batch	&Toggle Comment Style	1	0	0	F9		0	
-141	mCodingSQLTSMI	&Coding	S&QL		0	0	0			1	
-142	mCodingSQLAddCommentTSMI	&Coding	S&QL	&Add Comment	1	1	0	F1		0	
-143	mCodingSQLBlockCommentTSMI	&Coding	S&QL	&Block Comment	1	1	0	F2		0	
-144	mCodingSQLRemoveCommentTSMI	&Coding	S&QL	&Remove Comment	1	1	0	F3		0	
-145	mCodingSQLToggleNullCheckTSMI	&Coding	S&QL	Toggle &NULL Check	1	1	0	F4		0	
-146	mCodingSQLToggleBooleanTSMI	&Coding	S&QL	&Toggle Boolean	1	1	0	F5		0	
-147	mCodingMarkdownTSMI	&Coding	&Markdown		0	0	0			1	
-148	mCodingMarkdownCommentTSMI	&Coding	&Markdown	&Comment	1	1	1	F1		0	
-149	mCodingMarkdownBoldTSMI	&Coding	&Markdown	&Bold	1	1	1	F2		0	
-150	mCodingMarkdownItalicTSMI	&Coding	&Markdown	&Italic	1	1	1	F3		0	
-151	mCodingMarkdownBoldItalicTSMI	&Coding	&Markdown	B&old Italic	1	1	1	F4		0	
-152	mCodingMarkdownStrikethroughTSMI	&Coding	&Markdown	&Strikethrough	1	1	1	F5		0	
-153	mCodingMarkdownCodeTSMI	&Coding	&Markdown	Co&de	1	1	1	F6		0	
-154	mCodingMarkdownCodeBlockTSMI	&Coding	&Markdown	Code B&lock	1	1	0	F6		0	
-155	mCodingPythonTSMI	&Coding	&Python		0	0	0			1	
-156	mCodingPythonAddCommentTSMI	&Coding	&Python	&Add Comment	1	1	0	F7		0	
-157	mCodingPythonBlockCommentTSMI	&Coding	&Python	&Block Comment	1	1	0	F8		0	
-158	mCodingPythonRemoveCommentTSMI	&Coding	&Python	&Remove Comment	1	1	0	F9		0	
-159	mCodingPythonToggleBooleanTSMI	&Coding	&Python	&Toggle Boolean	1	1	0	F10		0	
-160	mCodingPythonConvertNullNoneTSMI	&Coding	&Python	&Convert null/None	1	1	0	F11		0	
-161	mOptionsMenuItem	&Options			1	0	0	Oemcomma	"Ctrl+,  or  F2"	0	
-162	mThemeMenuItem	The&me			0	0	0			1	
-163	mThemeCurrentThemeIsTSMI	The&me			0	0	0			1	
-164	mThemePickTSMI	The&me	&Pick		0	0	0			1	
-165	mThemePickEditTSMI	The&me	&Pick	Pick To &Edit	1	1	0	P		0	
-166	mThemePickCurrentTSMI	The&me	&Pick	To &Use	1	1	0	C		0	
-167	mThemeDesignTSMI	The&me	&Design		1	1	0	D		0	
-168	mThemeEditTSMI	The&me	&Edit		1	1	0	E		0	
-169	mHelpMenuItem	&Help			0	0	0	F1		1
-170	mContextScrollingEdgeTSMI	Context Menu	&Scrolling	&Edge	0	0	0			1	
-171	mContextScrollingEdgeTopTSMI	Context Menu	&Edge	&Top	1	0	1	F1		1	
-172	mContextScrollingEdgeBottomTSMI	Context Menu	&Edge	&Bottom	1	0	1	F2		1	
-173	mContextScrollingEdgeLeftTSMI	Context Menu	&Edge	&Left	1	0	1	F3		1	
-174	mContextScrollingEdgeRightTSMI	Context Menu	&Edge	&Right	1	0	1	F4		1	
-175	mContextScrollingScrollTSMI	Context Menu	&Scrolling	&Scroll	0	0	0			1	
-176	mContextScrollingScrollUpTSMI	Context Menu	&Scroll	&Up	1	0	1	F5		1	
-177	mContextScrollingScrollDownTSMI	Context Menu	&Scroll	&Down	1	0	1	F6		1	
-178	mContextScrollingScrollLeftTSMI	Context Menu	&Scroll	&Left	1	0	1	F7		1	
-179	mContextScrollingScrollRightTSMI	Context Menu	&Scroll	&Right	1	0	1	F8		1	
-180	mContextScrollingPageTSMI	Context Menu	&Scrolling	&Page	0	0	0			1	
-181	mContextScrollingPageUpTSMI	Context Menu	&Page	&Up	1	0	1	F9		1	
-182	mContextScrollingPageDownTSMI	Context Menu	&Page	&Down	1	0	1	F10		1	
-183	mContextScrollingPageLeftTSMI	Context Menu	&Page	&Left	1	0	1	F11		1	
-184	mContextScrollingPageRightTSMI	Context Menu	&Page	&Right	1	0	1	F12		1	
+29	mViewTenTSMI	&View	&10%		1	0	0	D1		0	
+30	mViewTwentyTSMI	&View	&20%		1	0	0	D2		0	
+31	mViewThirtyTSMI	&View	&30%		1	0	0	D3		0	
+32	mViewFortyTSMI	&View	&40%		1	0	0	D4		0	
+33	mViewFiftyTSMI	&View	&50%		1	0	0	D5		0	
+34	mViewSixtyTSMI	&View	&60%		1	0	0	D6		0	
+35	mViewSeventyTSMI	&View	&70%		1	0	0	D7		0	
+36	mViewEightyTSMI	&View	&80%		1	0	0	D8		0	
+37	mViewNinetyTSMI	&View	&90%		1	0	0	D9		0	
+38	mViewOpaqueTSMI	&View	&Opaque		1	0	0	O		0	
+39	mViewScrollingTSMI	&View	&Scrolling		0	0	0			1	
+40	mViewScrollingEdgeTSMI	&View	&Scrolling	&Edge	0	0	0			1	
+41	mViewScrollingEdgeTopTSMI	&View	&Edge	&Top	1	0	1	F1		0	
+42	mViewScrollingEdgeBottomTSMI	&View	&Edge	&Bottom	1	0	1	F2		0	
+43	mViewScrollingEdgeLeftTSMI	&View	&Edge	&Left	1	0	1	F3		0	
+44	mViewScrollingEdgeRightTSMI	&View	&Edge	&Right	1	0	1	F4		0	
+45	mViewScrollingScrollTSMI	&View	&Scrolling	&Scroll	0	0	0			1	
+46	mViewScrollingScrollUpTSMI	&View	&Scroll	&Up	1	0	1	F5		0	
+47	mViewScrollingScrollDownTSMI	&View	&Scroll	&Down	1	0	1	F6		0	
+48	mViewScrollingScrollLeftTSMI	&View	&Scroll	&Left	1	0	1	F7		0	
+49	mViewScrollingScrollRightTSMI	&View	&Scroll	&Right	1	0	1	F8		0	
+50	mViewScrollingPageTSMI	&View	&Scrolling	&Page	0	0	0			1	
+51	mViewScrollingPageUpTSMI	&View	&Page	&Up	1	0	1	F9		0	
+52	mViewScrollingPageDownTSMI	&View	&Page	&Down	1	0	1	F10		0	
+53	mViewScrollingPageLeftTSMI	&View	&Page	&Left	1	0	1	F11		0	
+54	mViewScrollingPageRightTSMI	&View	&Page	&Right	1	0	1	F12		0	
+55	mViewWordWrapTSMI	&View	&Wordwrap		1	0	0	W		0	
+56	mViewLineNumbersTSMI	&View	Line &Numbers		1	0	0	N		0	
+57	mModeMenuItem	Mo&de			0	0	0			1	
+58	mModeMinimalTSMI	Mo&de	&Minimal		1	0	0	M		0	
+59	mModeFeaturesTSMI	Mo&de	&Features		1	1	0	G		0	
+60	mLanguageMenuItem	&Language			0	0	0			1	
+61	mLanguagePlainTextTSMI	&Language	Plain&text		1	0	1	G		0	
+62	mLanguageCSharpTSMI	&Language	CSha&rp		1	0	1	H		0	
+63	mLanguageCTSMI	&Language	&C		1	0	1	I		0	
+64	mLanguageCppTSMI	&Language	C&pp		1	0	1	J		0	
+65	mLanguageBasicTSMI	&Language	&Basic		1	0	1	K		0	
+66	mLanguageFSharpTSMI	&Language	&FSharp		1	0	1	L		0	
+67	mLanguageHTMLTSMI	&Language	&HTML		1	0	1	M		0	
+68	mLanguageCSSTSMI	&Language	C&SS		1	0	1	N		0	
+69	mLanguageXMLTSMI	&Language	&XML		1	0	1	O		0	
+70	mLanguageJSONTSMI	&Language	&JSON		1	0	1	P		0	
+71	mLanguagePowerShellTSMI	&Language	Po&werShell		1	0	1	Q		0	
+72	mLanguageBatchTSMI	&Language	B&atch		1	0	1	R		0	
+73	mLanguageSQLTSMI	&Language	S&QL		1	0	1	S		0	
+74	mLanguageMarkdownTSMI	&Language	&Markdown		1	0	1	T		0	
+75	mLanguagePythonTSMI	&Language	P&ython		1	0	1	U		0	
+76	mCodingMenuItem	&Coding			0	0	0			1	
+77	mCodingCFamilyTSMI	&Coding	&C Family		0	0	0			1	
+78	mCodingCSharpCommentAddDoubleTSMI	&Coding	&C Family	&Add Double	1	1	0	H		0	
+79	mCodingCSharpCommentAddTripleTSMI	&Coding	&C Family	Add &Triple	1	1	0	I		0	
+80	mCodingCPlusPlusCommentTSMI	&Coding	&C Family	&C++	1	1	0	J		0	
+81	mCodingCSharpCommentOutTSMI	&Coding	&C Family	Comment &Out	1	1	0	K		0	
+82	mCodingCSharpCommentRemoveTSMI	&Coding	&C Family	&Remove	1	1	0	L		0	
+83	mCodingCSharpWrapTSMI	&Coding	&C Family	&Wrap	1	1	0	M		0	
+84	mCodingConvertVBToCSharpCommentTSMI	&Coding	&C Family	&VB to C# Comment	1	1	0	B		0	
+85	mCodingCSharpAddNotImplementedTSMI	&Coding	&C Family	Add &Not Implemented	1	1	0	N		0	
+86	mCodingCSharpReverseEqualityTSMI	&Coding	&C Family	Reverse &Equality	1	1	0	O		0	
+87	mCodingCSharpExpressionBodiedMethodTSMI	&Coding	&C Family	Expression-&Bodied Method	1	0	1	A		0	
+88	mCodingBasicTSMI	&Coding	&Basic		0	0	0			1	
+89	mCodingBasicAddSingleQuoteTSMI	&Coding	&Basic	&Add Single Quote	1	1	0	Q		0	
+90	mCodingBasicConvertCSharpToVBCommentTSMI	&Coding	&Basic	&C# to VB Comment	1	1	0	R		0	
+91	mCodingBasicReverseEqualityTSMI	&Coding	&Basic	&Reverse Equality	1	1	0	S		0	
+92	mCodingBasicRemoveLineContinuationTSMI	&Coding	&Basic	Remove &Line Continuation	1	1	0	T		0	
+93	mCodingBasicConvertBooleansTSMI	&Coding	&Basic	Convert &Booleans	1	1	0	U		0	
+94	mCodingBasicConvertNullNothingTSMI	&Coding	&Basic	Convert &Null/Nothing	1	1	0	V		0	
+95	mCodingBasicConvertLogicalOperatorsTSMI	&Coding	&Basic	Convert Logical &Operators	1	1	0	W		0	
+96	mCodingFSharpTSMI	&Coding	&F#		0	0	0			1	
+97	mCodingFSharpBlockCommentTSMI	&Coding	&F#	&Block Comment (* *)	1	0	1	V		0	
+98	mCodingFSharpAddCommentTSMI	&Coding	&F#	&Add Comment (//)	1	0	1	W		0	
+99	mCodingFSharpAddMutableTSMI	&Coding	&F#	Add &Mutable	1	0	1	Y		0	
+100	mCodingFSharpAddIgnoreTSMI	&Coding	&F#	Add |> &ignore	1	1	0	X		0	
+101	mCodingFSharpConvertNullNoneTSMI	&Coding	&F#	&Convert null/None	1	1	0	Y		0	
+102	mCodingHTMLTSMI	&Coding	&HTML		0	0	0			1	
+103	mCodingHTMLCommentTSMI	&Coding	&HTML	&Comment	1	1	1	G		0	
+104	mCodingHTMLBoldTSMI	&Coding	&HTML	&Bold	1	1	1	H		0	
+105	mCodingHTMLItalicTSMI	&Coding	&HTML	&Italic	1	1	1	I		0	
+106	mCodingHTMLUnderlineTSMI	&Coding	&HTML	&Underline	1	1	1	J		0	
+107	mCodingHTMLStrikethroughTSMI	&Coding	&HTML	&Strikethrough	1	1	1	K		0	
+108	mCodingHTMLBigTSMI	&Coding	&HTML	Bi&g	1	1	1	L		0	
+109	mCodingHTMLBigBigTSMI	&Coding	&HTML	Bigg&er	1	1	1	M		0	
+110	mCodingHTMLSmallTSMI	&Coding	&HTML	S&mall	1	1	1	N		0	
+111	mCodingHTMLSmallSmallTSMI	&Coding	&HTML	Sm&aller	1	1	1	O		0	
+112	mCodingHTMLMarkTSMI	&Coding	&HTML	Ma&rk	1	1	1	P		0	
+113	mCodingHTMLSuperscriptTSMI	&Coding	&HTML	Su&perscript	1	1	1	Q		0	
+114	mCodingHTMLSubscriptTSMI	&Coding	&HTML	Subscrip&t	1	1	1	R		0	
+115	mCodingHTMLCodeTSMI	&Coding	&HTML	C&ode	1	1	1	S		0	
+116	mCodingHTMLPreformattedTSMI	&Coding	&HTML	Pre&formatted	1	1	1	T		0	
+117	mCodingHTMLColorizeTSMI	&Coding	&HTML	Co&lorize...	1	1	1	U		0	
+118	mCodingCSSTSMI	&Coding	C&SS		0	0	0			1	
+119	mCodingCSSBlockCommentTSMI	&Coding	C&SS	&Block Comment	1	0	0	P		0	
+120	mCodingCSSCommentRemoveTSMI	&Coding	C&SS	&Remove Comment	1	0	0	Q		0	
+121	mCodingCSSToggleImportantTSMI	&Coding	C&SS	&Toggle !important	1	0	0	R		0	
+122	mCodingCSSConvertColorFormatTSMI	&Coding	C&SS	&Convert Color Format	1	0	0	S		0	
+123	mCodingXMLTSMI	&Coding	&XML		0	0	0			1	
+124	mCodingXMLCommentTSMI	&Coding	&XML	&Comment	1	1	1	A		0	
+125	mCodingXMLRemoveCommentTSMI	&Coding	&XML	&Remove Comment	1	1	1	B		0	
+126	mCodingXMLEscapeEntitiesTSMI	&Coding	&XML	&Escape Entities	1	1	1	C		0	
+127	mCodingXMLWrapCDataTSMI	&Coding	&XML	&Wrap CDATA	1	1	1	D		0	
+128	mCodingXMLToggleSelfCloseTSMI	&Coding	&XML	&Toggle Self-Close	1	1	1	E		0	
+129	mCodingJSONTSMI	&Coding	&JSON		0	0	0			1	
+130	mCodingJSONAddCommentTSMI	&Coding	&JSON	&Add Comment	1	1	1	V		0	
+131	mCodingJSONBlockCommentTSMI	&Coding	&JSON	&Block Comment	1	1	1	W		0	
+132	mCodingJSONRemoveCommentTSMI	&Coding	&JSON	&Remove Comment	1	1	1	X		0	
+133	mCodingJSONToggleQuotesTSMI	&Coding	&JSON	&Toggle Quotes	1	1	1	Y		0	
+134	mCodingJSONEscapeStringTSMI	&Coding	&JSON	&Escape String	1	1	1	Z		0	
+135	mCodingJSONRemoveTrailingCommasTSMI	&Coding	&JSON	Remove Trailing &Commas	1	0	0	B		0	
+136	mCodingPowerShellTSMI	&Coding	&PowerShell		0	0	0			1	
+137	mCodingPowerShellAddCommentTSMI	&Coding	&PowerShell	&Add Comment	1	0	0	F1		0	
+138	mCodingPowerShellBlockCommentTSMI	&Coding	&PowerShell	&Block Comment	1	0	0	F2		0	
+139	mCodingPowerShellRemoveCommentTSMI	&Coding	&PowerShell	&Remove Comment	1	0	0	F3		0	
+140	mCodingPowerShellToggleBooleanTSMI	&Coding	&PowerShell	&Toggle Boolean	1	0	0	F4		0	
+141	mCodingPowerShellToggleQuotesTSMI	&Coding	&PowerShell	Toggle &Quotes	1	0	0	F5		0	
+142	mCodingBatchTSMI	&Coding	&Batch		0	0	0			1	
+143	mCodingBatchAddCommentTSMI	&Coding	&Batch	&Add Comment (REM)	1	0	0	F6		0	
+144	mCodingBatchAddColonCommentTSMI	&Coding	&Batch	Add &Comment (::)	1	0	0	F7		0	
+145	mCodingBatchRemoveCommentTSMI	&Coding	&Batch	&Remove Comment	1	0	0	F8		0	
+146	mCodingBatchToggleCommentStyleTSMI	&Coding	&Batch	&Toggle Comment Style	1	0	0	F9		0	
+147	mCodingSQLTSMI	&Coding	S&QL		0	0	0			1	
+148	mCodingSQLAddCommentTSMI	&Coding	S&QL	&Add Comment	1	1	0	F1		0	
+149	mCodingSQLBlockCommentTSMI	&Coding	S&QL	&Block Comment	1	1	0	F2		0	
+150	mCodingSQLRemoveCommentTSMI	&Coding	S&QL	&Remove Comment	1	1	0	F3		0	
+151	mCodingSQLToggleNullCheckTSMI	&Coding	S&QL	Toggle &NULL Check	1	1	0	F4		0	
+152	mCodingSQLToggleBooleanTSMI	&Coding	S&QL	&Toggle Boolean	1	1	0	F5		0	
+153	mCodingMarkdownTSMI	&Coding	&Markdown		0	0	0			1	
+154	mCodingMarkdownCommentTSMI	&Coding	&Markdown	&Comment	1	1	1	F1		0	
+155	mCodingMarkdownBoldTSMI	&Coding	&Markdown	&Bold	1	1	1	F2		0	
+156	mCodingMarkdownItalicTSMI	&Coding	&Markdown	&Italic	1	1	1	F3		0	
+157	mCodingMarkdownBoldItalicTSMI	&Coding	&Markdown	B&old Italic	1	1	1	F4		0	
+158	mCodingMarkdownStrikethroughTSMI	&Coding	&Markdown	&Strikethrough	1	1	1	F5		0	
+159	mCodingMarkdownCodeTSMI	&Coding	&Markdown	Co&de	1	1	1	F6		0	
+160	mCodingMarkdownCodeBlockTSMI	&Coding	&Markdown	Code B&lock	1	1	0	F6		0	
+161	mCodingPythonTSMI	&Coding	&Python		0	0	0			1	
+162	mCodingPythonAddCommentTSMI	&Coding	&Python	&Add Comment	1	1	0	F7		0	
+163	mCodingPythonBlockCommentTSMI	&Coding	&Python	&Block Comment	1	1	0	F8		0	
+164	mCodingPythonRemoveCommentTSMI	&Coding	&Python	&Remove Comment	1	1	0	F9		0	
+165	mCodingPythonToggleBooleanTSMI	&Coding	&Python	&Toggle Boolean	1	1	0	F10		0	
+166	mCodingPythonConvertNullNoneTSMI	&Coding	&Python	&Convert null/None	1	1	0	F11		0	
+167	mOptionsMenuItem	&Options			1	0	0	Oemcomma	 (F2)	0	
+168	mThemeMenuItem	The&me			0	0	0			1	
+169	mThemeCurrentThemeIsTSMI	The&me			0	0	0			1	
+170	mThemePickTSMI	The&me	&Pick		0	0	0			1	
+171	mThemePickEditTSMI	The&me	&Pick	Pick To &Edit	1	1	0	P		0	
+172	mThemePickCurrentTSMI	The&me	&Pick	To &Use	1	1	0	C		0	
+173	mThemeDesignTSMI	The&me	&Design		1	1	0	D		0	
+174	mThemeEditTSMI	The&me	&Edit		1	1	0	E		0	
+175	mHelpMenuItem	&Help			0	0	0	F1	 (F1)	0	
+176	mContextScrollingEdgeTSMI	Context Menu	&Scrolling	&Edge	0	0	0			1	
+177	mContextScrollingEdgeTopTSMI	Context Menu	&Edge	&Top	1	0	1	F1		1	
+178	mContextScrollingEdgeBottomTSMI	Context Menu	&Edge	&Bottom	1	0	1	F2		1	
+179	mContextScrollingEdgeLeftTSMI	Context Menu	&Edge	&Left	1	0	1	F3		1	
+180	mContextScrollingEdgeRightTSMI	Context Menu	&Edge	&Right	1	0	1	F4		1	
+181	mContextScrollingScrollTSMI	Context Menu	&Scrolling	&Scroll	0	0	0			1	
+182	mContextScrollingScrollUpTSMI	Context Menu	&Scroll	&Up	1	0	1	F5		1	
+183	mContextScrollingScrollDownTSMI	Context Menu	&Scroll	&Down	1	0	1	F6		1	
+184	mContextScrollingScrollLeftTSMI	Context Menu	&Scroll	&Left	1	0	1	F7		1	
+185	mContextScrollingScrollRightTSMI	Context Menu	&Scroll	&Right	1	0	1	F8		1	
+186	mContextScrollingPageTSMI	Context Menu	&Scrolling	&Page	0	0	0			1	
+187	mContextScrollingPageUpTSMI	Context Menu	&Page	&Up	1	0	1	F9		1	
+188	mContextScrollingPageDownTSMI	Context Menu	&Page	&Down	1	0	1	F10		1	
+189	mContextScrollingPageLeftTSMI	Context Menu	&Page	&Left	1	0	1	F11		1	
+190	mContextScrollingPageRightTSMI	Context Menu	&Page	&Right	1	0	1	F12		1	

@@ -70,7 +70,7 @@
          mActiveScrollablePanel = mScrollableMainPanel;
          mForm.ControlBox = true;
          mForm.Activate();
-         mScrollableMainPanel.Focus();
+         mRichTextBox.Focus();
          mForm.Opacity = savedOpacity;
          mActiveLayoutable = mMainBottomPanel;
          mMainBottomPanel.LayoutControls();
@@ -138,7 +138,7 @@
          mActiveScrollablePanel = mScrollableMainPanel;
          mForm.ControlBox = true;
          mForm.Activate();
-         mScrollableMainPanel.Focus();
+         mRichTextBox.Focus();
          mForm.Opacity = savedOpacity;
          mActiveLayoutable = mMainBottomPanel;
          mMainBottomPanel.LayoutControls();
@@ -245,7 +245,7 @@
          mActiveScrollablePanel = mScrollableMainPanel;
          mForm.ControlBox = true;
          mForm.Activate();
-         mScrollableMainPanel.Focus();
+         mRichTextBox.Focus();
          mForm.Opacity = savedOpacity;
          mActiveLayoutable = mMainBottomPanel;
          mMainBottomPanel.LayoutControls();
@@ -320,7 +320,7 @@
          mActiveScrollablePanel = mScrollableMainPanel;
          mForm.ControlBox = true;
          mForm.Activate();
-         mScrollableMainPanel.Focus();
+         mRichTextBox.Focus();
          mForm.Opacity = savedOpacity;
          mActiveLayoutable = mMainBottomPanel;
          mMainBottomPanel.LayoutControls();

@@ -140,6 +140,8 @@ namespace DBCode {
          mThemeSize = Settings.Default.ThemeSize;
          mThemeLocation = Settings.Default.ThemeLocation;
          mFormOpacity = Settings.Default.FormOpacity;
+         if (mFormOpacity < 0.3f)
+            mFormOpacity = 0.3f;
          mThemePrimaryTabPageIndex = Settings.Default.ThemePrimaryTabPageIndex;
          mThemeTargetingTabIndexIndex = Settings.Default.ThemeTargetingTabPageIndex;
          mThemeHighlightTabPageIndex = Settings.Default.ThemeHighlightTabPageIndex;

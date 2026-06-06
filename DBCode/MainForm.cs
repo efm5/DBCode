@@ -60,9 +60,15 @@ namespace DBCode {
          mTargetingInsertCRTSMI = new ToolStripMenuItem();
          mTargetingAppendCRTSMI = new ToolStripMenuItem();
          mViewTransparentTSMI = new ToolStripMenuItem();
+         mViewTenTSMI = new ToolStripMenuItem();
+         mViewTwentyTSMI = new ToolStripMenuItem();
          mViewThirtyTSMI = new ToolStripMenuItem();
+         mViewFortyTSMI = new ToolStripMenuItem();
          mViewFiftyTSMI = new ToolStripMenuItem();
-         mViewSeventyFiveTSMI = new ToolStripMenuItem();
+         mViewSixtyTSMI = new ToolStripMenuItem();
+         mViewSeventyTSMI = new ToolStripMenuItem();
+         mViewEightyTSMI = new ToolStripMenuItem();
+         mViewNinetyTSMI = new ToolStripMenuItem();
          mViewOpaqueTSMI = new ToolStripMenuItem();
          mViewScrollingTSMI = new ToolStripMenuItem();
          mViewScrollingEdgeTSMI = new ToolStripMenuItem();
@@ -292,9 +298,15 @@ namespace DBCode {
          //mTargetingInsertCRTSMI.ShortcutKeys = 
          //mTargetingAppendCRTSMI.ShortcutKeys = 
          mViewTransparentTSMI.ShortcutKeys = Keys.Control | Keys.T;
+         mViewTenTSMI.ShortcutKeys = Keys.Control | Keys.D1;
+         mViewTwentyTSMI.ShortcutKeys = Keys.Control | Keys.D2;
          mViewThirtyTSMI.ShortcutKeys = Keys.Control | Keys.D3;
+         mViewFortyTSMI.ShortcutKeys = Keys.Control | Keys.D4;
          mViewFiftyTSMI.ShortcutKeys = Keys.Control | Keys.D5;
-         mViewSeventyFiveTSMI.ShortcutKeys = Keys.Control | Keys.D7;
+         mViewSixtyTSMI.ShortcutKeys = Keys.Control | Keys.D6;
+         mViewSeventyTSMI.ShortcutKeys = Keys.Control | Keys.D7;
+         mViewEightyTSMI.ShortcutKeys = Keys.Control | Keys.D8;
+         mViewNinetyTSMI.ShortcutKeys = Keys.Control | Keys.D9;
          mViewOpaqueTSMI.ShortcutKeys = Keys.Control | Keys.O;
          mViewScrollingEdgeTopTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.F1;
          mViewScrollingEdgeBottomTSMI.ShortcutKeys = Keys.Control | Keys.Alt | Keys.F2;
@@ -933,20 +945,44 @@ namespace DBCode {
          mTargetingAppendCRTSMI.Click += LineEnding_Click;
          mViewTransparentTSMI.Name = "mTransparentTSMI";
          mViewTransparentTSMI.Text = "&Transparent";
-         mViewTransparentTSMI.Tag = 0.0;
+         mViewTransparentTSMI.Tag = 0.01;
          mViewTransparentTSMI.Click += ViewTSMI_Click;
+         mViewTenTSMI.Name = "mTenTSMI";
+         mViewTenTSMI.Text = "&10%";
+         mViewTenTSMI.Tag = 0.1;
+         mViewTenTSMI.Click += ViewTSMI_Click;
+         mViewTwentyTSMI.Name = "mTwentyTSMI";
+         mViewTwentyTSMI.Text = "&20%";
+         mViewTwentyTSMI.Tag = 0.2;
+         mViewTwentyTSMI.Click += ViewTSMI_Click;
          mViewThirtyTSMI.Name = "mThirtyTSMI";
          mViewThirtyTSMI.Text = "&30%";
          mViewThirtyTSMI.Tag = 0.3;
          mViewThirtyTSMI.Click += ViewTSMI_Click;
+         mViewFortyTSMI.Name = "mFortyTSMI";
+         mViewFortyTSMI.Text = "&40%";
+         mViewFortyTSMI.Tag = 0.4;
+         mViewFortyTSMI.Click += ViewTSMI_Click;
          mViewFiftyTSMI.Name = "mFiftyTSMI";
          mViewFiftyTSMI.Text = "&50%";
          mViewFiftyTSMI.Tag = 0.5;
          mViewFiftyTSMI.Click += ViewTSMI_Click;
-         mViewSeventyFiveTSMI.Name = "mSeventyFiveTSMI";
-         mViewSeventyFiveTSMI.Text = "&75%";
-         mViewSeventyFiveTSMI.Tag = 0.75;
-         mViewSeventyFiveTSMI.Click += ViewTSMI_Click;
+         mViewSixtyTSMI.Name = "mSixtyTSMI";
+         mViewSixtyTSMI.Text = "&60%";
+         mViewSixtyTSMI.Tag = 0.6;
+         mViewSixtyTSMI.Click += ViewTSMI_Click;
+         mViewSeventyTSMI.Name = "mSeventyTSMI";
+         mViewSeventyTSMI.Text = "&70%";
+         mViewSeventyTSMI.Tag = 0.7;
+         mViewSeventyTSMI.Click += ViewTSMI_Click;
+         mViewEightyTSMI.Name = "mEightyTSMI";
+         mViewEightyTSMI.Text = "&80%";
+         mViewEightyTSMI.Tag = 0.8;
+         mViewEightyTSMI.Click += ViewTSMI_Click;
+         mViewNinetyTSMI.Name = "mNinetyTSMI";
+         mViewNinetyTSMI.Text = "&90%";
+         mViewNinetyTSMI.Tag = 0.9;
+         mViewNinetyTSMI.Click += ViewTSMI_Click;
          mViewOpaqueTSMI.Name = "mOpaqueTSMI";
          mViewOpaqueTSMI.Text = "&Opaque";
          mViewOpaqueTSMI.Tag = 1.0;
@@ -1213,8 +1249,8 @@ namespace DBCode {
          mViewLineNumbersTSMI.CheckOnClick = true;
          mViewLineNumbersTSMI.Click += LineNumbers_Click;
          mThemePickTSMI.DropDownItems.AddRange([mThemePickEditTSMI, mThemePickCurrentTSMI]);
-         mViewMenuItem.DropDownItems.AddRange([mViewTransparentTSMI, mViewThirtyTSMI, mViewFiftyTSMI,
-            mViewSeventyFiveTSMI, mViewOpaqueTSMI, toolStripSeparator31, mViewScrollingTSMI,
+         mViewMenuItem.DropDownItems.AddRange([mViewTransparentTSMI, mViewTenTSMI, mViewTwentyTSMI, mViewThirtyTSMI, mViewFortyTSMI,
+            mViewFiftyTSMI, mViewSixtyTSMI, mViewSeventyTSMI, mViewEightyTSMI, mViewNinetyTSMI, mViewOpaqueTSMI, toolStripSeparator31, mViewScrollingTSMI,
             toolStripSeparator32, mViewWordWrapTSMI, mViewLineNumbersTSMI]);
          mViewScrollingTSMI.DropDownItems.AddRange([mViewScrollingEdgeTSMI, mViewScrollingScrollTSMI, mViewScrollingPageTSMI]);
          mViewScrollingEdgeTSMI.DropDownItems.AddRange([mViewScrollingEdgeTopTSMI, mViewScrollingEdgeBottomTSMI,
@@ -1375,9 +1411,15 @@ namespace DBCode {
          ThrowIfNull(mTargetingTargetedTSMI, nameof(mTargetingTargetedTSMI));
          ThrowIfNull(mTargetingRetargetTSMI, nameof(mTargetingRetargetTSMI));
          ThrowIfNull(mViewTransparentTSMI, nameof(mViewTransparentTSMI));
+         ThrowIfNull(mViewTenTSMI, nameof(mViewTenTSMI));
+         ThrowIfNull(mViewTwentyTSMI, nameof(mViewTwentyTSMI));
          ThrowIfNull(mViewThirtyTSMI, nameof(mViewThirtyTSMI));
+         ThrowIfNull(mViewFortyTSMI, nameof(mViewFortyTSMI));
          ThrowIfNull(mViewFiftyTSMI, nameof(mViewFiftyTSMI));
-         ThrowIfNull(mViewSeventyFiveTSMI, nameof(mViewSeventyFiveTSMI));
+         ThrowIfNull(mViewSixtyTSMI, nameof(mViewSixtyTSMI));
+         ThrowIfNull(mViewSeventyTSMI, nameof(mViewSeventyTSMI));
+         ThrowIfNull(mViewEightyTSMI, nameof(mViewEightyTSMI));
+         ThrowIfNull(mViewNinetyTSMI, nameof(mViewNinetyTSMI));
          ThrowIfNull(mViewOpaqueTSMI, nameof(mViewOpaqueTSMI));
          ThrowIfNull(mModeMinimalTSMI, nameof(mModeMinimalTSMI));
          ThrowIfNull(mModeFeaturesTSMI, nameof(mModeFeaturesTSMI));
@@ -1490,9 +1532,15 @@ namespace DBCode {
          ThrowIfNull(mTargetingTargetedTSMI, nameof(mTargetingTargetedTSMI));
          ThrowIfNull(mTargetingRetargetTSMI, nameof(mTargetingRetargetTSMI));
          ThrowIfNull(mViewTransparentTSMI, nameof(mViewTransparentTSMI));
+         ThrowIfNull(mViewTenTSMI, nameof(mViewTenTSMI));
+         ThrowIfNull(mViewTwentyTSMI, nameof(mViewTwentyTSMI));
          ThrowIfNull(mViewThirtyTSMI, nameof(mViewThirtyTSMI));
+         ThrowIfNull(mViewFortyTSMI, nameof(mViewFortyTSMI));
          ThrowIfNull(mViewFiftyTSMI, nameof(mViewFiftyTSMI));
-         ThrowIfNull(mViewSeventyFiveTSMI, nameof(mViewSeventyFiveTSMI));
+         ThrowIfNull(mViewSixtyTSMI, nameof(mViewSixtyTSMI));
+         ThrowIfNull(mViewSeventyTSMI, nameof(mViewSeventyTSMI));
+         ThrowIfNull(mViewEightyTSMI, nameof(mViewEightyTSMI));
+         ThrowIfNull(mViewNinetyTSMI, nameof(mViewNinetyTSMI));
          ThrowIfNull(mViewOpaqueTSMI, nameof(mViewOpaqueTSMI));
          ThrowIfNull(mViewLineNumbersTSMI, nameof(mViewLineNumbersTSMI));
          // Mode
